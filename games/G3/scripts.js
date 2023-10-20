@@ -1,18 +1,25 @@
 /* if there is no saved files create a new dave file
 */
 
-onload = function() {startup(lastLoadedGame)};
+onload = function() {startup(last_loaded_game)};
 
-function startup(latest_loaded_game):
+function startup(latest){
 
-    if (1+1 == 2) {
-        window.close();   
+    if (latest == '') {
+        newGame();
     }
-    if (confirm("Close Window?")) {
-        window.close();
-      }
+    else {
+        LoadGame(latest);
+    }
+}
 // newGame makes the prep for a new game
-function newGame():
+function newGame(){
     //idk
+    console.log('new game')
+}
+// load the latest game
+function loadGame(latest){
+    //idk
+}
 
-let lastLoadedGame = '0';
+var last_loaded_game = '';
