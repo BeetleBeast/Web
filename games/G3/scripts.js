@@ -8,6 +8,5 @@ function startup(latest_loaded_game):
 // newGame makes the prep for a new game
 function newGame():
     //idk
-/*
-latest_loaded_game = savefile.latest // full wrong
-*/
+
+latest_loaded_game = '';
