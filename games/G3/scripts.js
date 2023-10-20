@@ -20,6 +20,8 @@ function newGame(){
 // load the latest game
 function loadGame(latest){
     //idk
+    console.log('load game')
 }
 
+// initial latest loaded game
 var last_loaded_game = '';
