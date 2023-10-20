@@ -1,3 +1,3 @@
 # Web
 
-Makes a repository af all my web gamse
+Makes a repository af all my web games
