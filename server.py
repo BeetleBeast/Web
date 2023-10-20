@@ -80,7 +80,7 @@ port = 80  # You may need to configure port forwarding on your router
 
 
 
-if not os.path.exists("/Web"):
+if not os.path.exists("/Web/Main"):
     print('can not find It')
 else: print('can find It')
 
