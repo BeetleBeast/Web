@@ -75,7 +75,8 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
 
 
 # Specify the public IP address and port you want to use
-public_ip = "192.168.1.48"  # Replace with your public IP
+public_ip = "192.168.1.48"  #  your public IP
+public_ip2 = ""
 port = 80  # You may need to configure port forwarding on your router
 
 

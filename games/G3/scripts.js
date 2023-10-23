@@ -15,13 +15,27 @@ function startup(latest){
 // newGame makes the prep for a new game
 function newGame(){
     //idk
-    console.log('new game')
+    console.log('new game');
+
+    savefileNum = 1;
+    var saveFile[savefileNum] = [];
+    localStorage.setItem('saveFile'+savefileNum, saveFile);
+    
+
 }
 // load the latest game
 function loadGame(latest){
     //idk
-    console.log('load game')
+    console.log('load game');
+    
+    localStorage.getItem('saveFile'+savefileNum)
+    
 }
 
 // initial latest loaded game
+
+
+
 var last_loaded_game = '';
+var savefileNum = 1;
+
