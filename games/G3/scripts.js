@@ -20,7 +20,7 @@ function newGame(){
     savefileNum = 1;
     var saveFile[savefileNum] = [];
     localStorage.setItem('saveFile'+savefileNum, saveFile);
-story()
+    story()
     
 
 }
@@ -41,7 +41,7 @@ var last_loaded_game = '';
 var savefileNum = 1;
 
 function story(){
-// start of the story
-console.log("start story");
+    // start of the story
+    console.log("start story");
 }
 
