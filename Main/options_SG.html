@@ -102,6 +102,7 @@ display: none !important;
 </body>
 <script src="code.js"></script>
 <script src="main.js"></script>
+<script src="/games/G3/scripts.js"></script>
 <script lang="js">
 
     //--------------------- telse a basis
@@ -198,11 +199,20 @@ display: none !important;
             console.log(Save5);
             break;
         }
+
+        
+        // scripts G3
+        savefile()
+
+        
         //---------------------Set span page to i
         if(i){
             document.getElementById("Section"+NUMm+"_Name").innerHTML = "save "+i;
         }
-        else{
+        if (localStorage.getItem('saveFileG3 '+saveFileNum)){
+            document.getElementById("Section"+NUMm+"_Name").innerHTML = "saveG3 "+i;
+            
+        }else{
             document.getElementById("Section"+NUMm+"_Name").innerHTML = ' ';
         }
 
@@ -303,6 +313,11 @@ display: none !important;
         //remember 'save+i'
         
         console.log("Loading game "+ NUM);
+
+        // loading G3
+
+        loadGame()
+
     }
     function DEL_game(NUM){
         //--------------------Set basis variable

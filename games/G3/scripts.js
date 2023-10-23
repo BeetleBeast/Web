@@ -25,7 +25,7 @@ function newGame(){
 
     var saveFileNum = int(1);
     var saveFile = [];
-    localStorage.setItem('saveFile '+saveFileNum, saveFile);
+    localStorage.setItem('saveFileG3 '+saveFileNum, saveFile);
     story();
     
 
@@ -36,15 +36,15 @@ function loadGame(latest){
     console.log('load game');
     saveFileNum = latest;
     
-    localStorage.getItem('saveFile '+saveFileNum);
+    localStorage.getItem('saveFileG3 '+saveFileNum);
     
 }
 // save loaded game
 function savefile(saveFile){
     //idk
-    console.log('save game');
+    console.log('saving game');
     saveFileNum = prompt('number savefile');
-    localStorage.setItem('saveFile '+saveFileNum, saveFile);
+    localStorage.setItem('saveFileG3 '+saveFileNum, saveFile);
 }
 
 // initial latest loaded game
@@ -65,5 +65,10 @@ function story(){
 
 options.addEventListener('click', function(){
     options.href="./settings.html";
+})
+
+save.addEventListener('click', function(){
+    save.href="./Main\options_SG.html.html";
+})
 
 
