@@ -3,6 +3,7 @@ const main_section = document.getElementsByClassName('main_section');
 const main_content = document.getElementsByClassName('content');
 const bar = document.getElementsByClassName('bar');
 const extra = document.getElementsByClassName('extras');
+const options = document.getElementsByClassName('options');
 
 
 // if there is no saved files create a new dave file
@@ -10,7 +11,7 @@ onload = function() {startup(last_loaded_game)};
 
 function startup(latest){
 
-    if (latest == '') {
+    if (! latest) {
         newGame();
     }
     else {
@@ -22,36 +23,47 @@ function newGame(){
     //idk
     console.log('new game');
 
-    savefileNum = 1;
-    var saveFile[savefileNum] = [];
-    localStorage.setItem('saveFile'+savefileNum, saveFile);
+    var saveFileNum = int(1);
+    var saveFile = [];
+    localStorage.setItem('saveFile '+saveFileNum, saveFile);
     story();
     
 
 }
-// load the latest game
+// load the latest game                     unneeded????
 function loadGame(latest){
     //idk
     console.log('load game');
-    savefileNum = latest;
+    saveFileNum = latest;
     
-    localStorage.getItem('saveFile'+savefileNum);
+    localStorage.getItem('saveFile '+saveFileNum);
     
 }
 // save loaded game
 function savefile(saveFile){
     //idk
     console.log('save game');
-    savefileNum = prompt('number savefile');
-    localStorage.setItem('saveFile'+savefileNum, saveFile);
+    saveFileNum = prompt('number savefile');
+    localStorage.setItem('saveFile '+saveFileNum, saveFile);
 }
 
 // initial latest loaded game
 var last_loaded_game = '';
-var savefileNum = 1;
+var saveFileNum = 1;
 
 function story(){
     // start of the story
     console.log("start story");
+
+
+
+    // text dump
+    const Intro = "hello world"
+    const story_01 = "hello why are you here"
+    const title_story_01 = 'Into the new world'
 }
+
+options.addEventListener('click', function(){
+    options.href="./settings.html";
+
 

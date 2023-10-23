@@ -1,6 +1,7 @@
 import http.server
 import socketserver
 import os
+import socket
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -72,11 +73,24 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
 
 
    # directory = "Web"
-
+ 
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.settimeout(0)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.254.254.254', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+print(get_ip())
 
 # Specify the public IP address and port you want to use
 public_ip = "192.168.1.48"  #  your public IP
-public_ip2 = ""
+public_ip2 = get_ip()
 port = 80  # You may need to configure port forwarding on your router
 
 
