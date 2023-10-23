@@ -8,22 +8,89 @@
     <link rel="stylesheet" type="text/css" href="Main.css" >
 </head>
 <body>
-    <main class="main">
-        <header class="Quest_Title"><!--title dump --></header>
-        <section class="main_section"><!-- main info dump for quests --></section>
+    <div id="init-screen">
+        <div id="init-loading">
+            <div>Loading...</div>
+        </div>
+    </div>
+    <div id="ui-overlay" class="ui-close"></div>
+    <div id="ui-dialog" tabindex="0" role="dialog" aria-labelledby="ui-dialog-title">
+        <div id="ui-dialog-titlebar">
+            <h1 id="ui-dialog-title"></h1>
+            <button id="ui-dialog-close" class="ui-close" tabindex="0" aria-label="close"></button>
+        </div>
+        <div id="ui-dialog-body"></div>
+    </div>
+    <div id="ui-bar" aria-live="polite">
+        <div id="ui-bar-tray">
+            <button id="ui-bar-toggle" tabindex="0" title="Toggle the UI bar" aria-label="Toggle the UI bar" type="button" role="button"></button>
+        </div>
+        <div id="ui-bar-body">
+            <header id="title" role="banner">
+                <div id="story-banner"></div>
+                <h1 id="story-title">Gatcha_tower</h1>
+                <div id="story-subtitle"></div><div id="story-title-separator"></div>
+                <p id="story-author"></p>
+            </header>
+            <div id="story-caption">
+                <div onclick="Errors.Reporter.toggle()" class="hidden error-reporter-btn"></div>
+
+                <div id="startingPlayerImage" class="hidden"></div>
         
-        <div class="content"><!-- Game dump--></div>
-        
-        
-        
-        
-        
-        
-        <legend class="bar"></legend>
-    </main>
-    <aside class="extras">
-        <div class="options">options</div>
-    </aside>
+                <div id="overlayButtons">
+                        <button class="link-internal macro-button" type="button" role="button" tabindex="0">SAVES</button>
+                    <div class="sidebarButtonSplit">
+                        <button class="link-internal macro-button" type="button" role="button" tabindex="0">OPTIONS</button>
+                        <button class="link-internal macro-button" type="button" role="button" tabindex="0">FEATS</button>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <nav id="menu" role="navigation">
+                <ul id="menu-core">
+                    <li id="menu-item-saves">
+                        <a tabindex="0" role="button">Saves</a>
+                    </li>
+                    <li id="menu-item-restart">
+                        <a tabindex="0" role="button">Restart</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div id="story" role="main">
+        <div id="passages" aria-live="polite">
+            <div id="passage-start" data-passage="Start" data-tags="nosave exitCheckBypass" class="passage nosave exitcheckbypass">
+
+                                                                                                        
+                <div id="settingsExit">
+                    <a class="link-internal macro-link" role="link" tabindex="0">(1) Begin</a>
+                </div>
+                <br>
+                <br>
+                <div id="customOverlayContainer" class="customOverlayContainer no-numberify hidden" onclick="closeOverlay()"></div>
+                <div id="customOverlay" class="customOverlay hidden" onclick="event.stopPropagation()" data-overlay="options">
+                    <div id="customOverlayTitle"></div>
+                    <div id="overlayTabs" class="tab">
+                        <button class="link-internal macro-button tab-sellected" type="button" role="button" tabindex="0">General</button>
+                        <button class="link-internal macro-button" type="button" role="button" tabindex="0">Performance</button>
+                        <button class="link-internal macro-button" type="button" role="button" tabindex="0">Advanced</button>
+                    </div>
+                    <div class="customOverlayClose" onclick="closeOverlay()"></div>
+                </div>
+                <div id="customOverlayContent">
+                    <span class="gold">General</span>
+                    <br>
+                    " theme: "
+                    <label></label>
+                    "| "
+                    <label></label>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 <script src="scripts.js"></script>
