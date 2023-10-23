@@ -30,7 +30,7 @@ function newGame(){
     
 
 }
-// load the latest game                     unneeded????
+// load the latest game (goes to SG file to load and save the game)
 function loadGame(latest){
     //idk
     console.log('load game');
@@ -39,7 +39,7 @@ function loadGame(latest){
     localStorage.getItem('saveFileG3 '+saveFileNum);
     
 }
-// save loaded game
+// save loaded game (goes to SG file to load and save the game)
 function savefile(saveFile){
     //idk
     console.log('saving game');
