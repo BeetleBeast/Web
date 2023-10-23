@@ -2,6 +2,7 @@
 box-sizing: border-box;
 position:relative;
 cursor: default;
+-webkit-user-select: none;
 user-select: none;
 font-family: 'Orbitron', sans-serif;
 text-decoration: none;
@@ -306,6 +307,7 @@ animation: All-load 700ms ease-out 400ms;
 
 .back{
 border-radius: 5px;
+width: -moz-fit-content;
 width: fit-content;
 padding: 5px;
 right:calc(100vw - 55%);
@@ -340,6 +342,7 @@ border-radius: 50%;
 text-align: center;
 position: relative;
 height: fit-content;
+width: -moz-fit-content;
 width: fit-content;
 margin: 20px;
 padding: 20px;
@@ -400,6 +403,7 @@ button{
 }
 #a_backMain{
     border-radius: 5px;
+    width: -moz-fit-content;
     width: fit-content;
     padding: 5px;
     right:calc(100vw - 55%);
@@ -414,6 +418,7 @@ button{
 }
 #a_back{
     border-radius: 5px;
+    width: -moz-fit-content;
     width: fit-content;
     padding: 5px;
     right:calc(100vw - 55%);
@@ -538,15 +543,18 @@ button:active:not(.disable){
 }
 .section0{
     width: fit-content;
+    width: -moz-fit-content;
     height: fit-content;
 }
 .section1{
 
     width: fit-content;
+    width: -moz-fit-content;
     height: fit-content;
 }
 .section2{
     width: fit-content;
+    width: -moz-fit-content;
     height: fit-content;
 }
 .section3{
@@ -660,6 +668,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 /* end settings */
 .disable{
     cursor:not-allowed;
+    -webkit-user-select: none;
     user-select: none;
     font-family: 'Orbitron', sans-serif;
     text-decoration: none;
