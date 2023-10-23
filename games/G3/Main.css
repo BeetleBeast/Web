@@ -1,4 +1,10 @@
 *{
+    cursor: default;
+    -webkit-user-select: none;
+    user-select: none;
+    font-family: 'Orbitron', sans-serif;
+    text-decoration: none;
+
     --mainColor: linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
     --secondColor:rgba(228, 5, 128, 0.445);
 }
@@ -17,30 +23,41 @@ html{
     display: none !important;
 }
 body{
-
+    display: flexbox;
 }
 .Quest_Title{
-
+    color: white;
 }
 .main{
 
 }
 .main_section{
-
+    color: white;
 }
 .content{
-
+    color: white;
 }
 .bar{
 
 }
 .extras{
 
+    display: block;
+    float: left;
+
+}
+.options{
+    color: aqua;
+}
+.options:hover{
+    border: 1px solid lightgreen;
+    
 }
 .save{
     color: lightgreen;
-    border: 1px solid --mainColor;
+    border: 1px hidden lightgreen;
 }
 .save:hover{
     color: green;
+    border: 1px solid lightgreen;
 }

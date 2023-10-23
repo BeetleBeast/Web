@@ -1,9 +1,9 @@
-const Title = document.getElementsByClassName('Quest_Title');
-const main_section = document.getElementsByClassName('main_section');
-const main_content = document.getElementsByClassName('content');
-const bar = document.getElementsByClassName('bar');
-const extra = document.getElementsByClassName('extras');
-const options = document.getElementsByClassName('options');
+const Title = document.querySelector('.Quest_Title');
+const main_section = document.querySelector('.main_section');
+const main_content = document.querySelector('.content');
+const bar = document.querySelector('.bar');
+const extra = document.querySelector('.extras');
+const options = document.querySelector('.options');
 
 
 // if there is no saved files create a new dave file
@@ -23,8 +23,8 @@ function newGame(){
     //idk
     console.log('new game');
 
-    var saveFileNum = int(1);
-    var saveFile = [];
+    var saveFileNum = 1;
+    var saveFile = {};
     localStorage.setItem('saveFileG3 '+saveFileNum, saveFile);
     story();
     
@@ -59,16 +59,23 @@ function story(){
 
     // text dump
     const Intro = "hello world"
-    const story_01 = "hello why are you here"
-    const title_story_01 = 'Into the new world'
+    const story_0 = "hello why are you here"
+    const title_story_0 = 'Into the new world'
+
+    // input in game
+
+    Title.innerHTML = title_story_0;
+    main_content.innerHTML = Intro;
+    main_section.innerHTML = story_0;
+
+    var saveFile = {"saveFileNum" : saveFileNum,"story_Number" : 0, "title_story" : title_story_0, "choices_Made" : []}
+
 }
 
 options.addEventListener('click', function(){
     options.href="./settings.html";
 })
 
-save.addEventListener('click', function(){
-    save.href="./Main\options_SG.html.html";
-})
 
-
+// instead of local storage use json files
+//by using stringify and parce
