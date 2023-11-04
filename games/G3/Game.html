@@ -7,30 +7,33 @@
     <title>Gatcha_tower</title>
     <link rel="stylesheet" type="text/css" href="/games/G3/Main.css">
     <link rel="stylesheet" type="text/css" href="Main.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 </style>    
 
 </head>
 
 <body>
-    <canvas id="Main-Canvas">
-        <header class="Quest_Title"><!--Title giver--></header>
-        <main class="main">
-            <section class="main_section"><!-- main info dump for quests --></section>
-            
-            <canvas class="content-canvas"><!--Content dump-->
-    
-            </canvas>
-            
-            
-            
-            
-            
-            
-            <legend class="bar"></legend><!--Where the buttons are located-->
-        </main>
-    </canvas>
+    <div id="app">
+        <h1 class="Quest_Title">{{ questTitle }}</h1>
+        <div class="main">
+            <div class="main_section">{{ mainInfo }}</div>
+            <canvas class="content-canvas" ref="contentCanvas"></canvas>
+        </div>
+        <footer class="footer_section">{{ multichoice }}
+            <div id="Choice_1">{{ Choice_1 }}</div>
+            <div id="Choice_2">{{ Choice_2 }}</div>
+            <div id="Choice_3">{{ Choice_3 }}</div>
+            <div id="Choice_4">{{ Choice_4 }}</div>
+            <div id="Choice_5">{{ Choice_5 }}</div>
+        </footer>
+    </div>
     <div id="Side-Menu">
-
+        <div id="Side-image"></div>
+        <div id="Side-Title"></div>
+        <br>
+        <button type="button" role="button" class="Open-more">More</button>
+        <a href="Settings.html"><button type="button" role="button">Settings</button></a>
+        
     </div>
 </body>
 

@@ -6,7 +6,25 @@ const extra = document.querySelector('.extras');
 const options = document.querySelector('.options');
 
 
-// if there is no saved files create a new dave file
+// vue app
+new Vue({
+    el: '#app',
+    data: {
+        questTitle: 'Some Quest Title',
+        mainInfo: 'Some main information about the quest.',
+        multichoice: 'You have multiple choices',
+        choice_1: ' choice',
+        choice_2: ' choice',
+        choice_3: ' choice',
+        choice_4: ' choice',
+        choice_5: ' choice'
+    },
+    mounted() {
+        // Your code to manipulate the content-canvas element
+    }
+});
+
+// if there is no saved files create a new save file
 onload = function() {startup(last_loaded_game)};
 
 function startup(latest){
