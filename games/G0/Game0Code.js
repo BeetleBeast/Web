@@ -37,7 +37,7 @@ window.addEventListener("load", function () {
 
 //back button
 document.querySelector('.button-49').addEventListener('mousedown', function() {
-    window.location.href = './options_SG.html';
+    window.location.href = '/Web/Main/options_SG.html';
 });
 
 function story(){

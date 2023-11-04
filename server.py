@@ -8,8 +8,16 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         # Handle requests for the root URL ("/") by serving "index.html"
         if self.path == "/":
             self.path = "/Web/Main/index.html"
-        elif self.path == "/options_NG.html":
+        elif self.path == "/index.html":
             # Handle requests for html files in the "Main" directory
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+            with open(self.translate_path(self.path), "rb") as file:
+                self.wfile.write(file.read())
+            return
+        elif self.path.endswith(".html"):
+            # Handle html files
             self.send_response(200)
             self.send_header("Content-type", "text/html")
             self.end_headers()
@@ -63,7 +71,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def translate_path(self, path):
         # Map requested URLs to the "web_content" directory
 
-        web_content_dir = "../Web"
+        web_content_dir = "/Web"  #web_content_dir = "../Web"
         main_dir = "Main"
         new_path = os.path.normpath(path).lstrip("/")
         new_path = os.path.join(web_content_dir,main_dir, new_path)
@@ -86,17 +94,18 @@ def get_ip():
     finally:
         s.close()
     return IP
-print(get_ip())
+print('New Ip =>',get_ip())
 
 # Specify the public IP address and ports
-public_ip = "192.168.1.48"  #  your public IP
-public_ip2 = get_ip()
+public_ip = get_ip()  #  my public IP
 port = 80  #  port forwarding
 
 
 
-if not os.path.exists("/Web/Main"):
-    print('can not find It')
+if not os.path.exists("/Web/Main/index.html"):
+    print('can\'t find web main')
+elif not os.path.exists("/Web/Main/index.html"):
+    print('can\'t find index')
 else: print('can find It')
 
 # Create a socket server on the specified IP and port
