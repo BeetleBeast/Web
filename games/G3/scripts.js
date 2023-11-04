@@ -1,6 +1,6 @@
 const Title = document.querySelector('.Quest_Title');
 const main_section = document.querySelector('.main_section');
-const main_content = document.querySelector('.content');
+const main_content = document.querySelector('.content-canvas');
 const bar = document.querySelector('.bar');
 const extra = document.querySelector('.extras');
 const options = document.querySelector('.options');
