@@ -6,6 +6,7 @@ const extra = document.querySelector('.extras');
 const options = document.querySelector('.options');
 
 
+
 // vue app
 new Vue({
     el: '#app',
