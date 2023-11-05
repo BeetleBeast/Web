@@ -8,6 +8,7 @@ const options = document.querySelector('.options');
 
 
 // vue app
+/*
 new Vue({
     el: '#app',
     data: {
@@ -24,7 +25,7 @@ new Vue({
         // Your code to manipulate the content-canvas element
     }
 });
-
+*/
 // if there is no saved files create a new save file
 onload = function() {startup(last_loaded_game)};
 
@@ -91,10 +92,17 @@ function story(){
 
 }
 
-options.addEventListener('click', function(){
-    options.href="./settings.html";
-})
-
-
+document.querySelector('.Open-more').addEventListener('click', function() {
+    var open_more = true
+    if (open_more == true){
+        document.querySelector('.Side-extra').style.opacity = 0.5;
+        console.log('open extra side');
+        open_more = false;
+    }else if(open_more == false){
+        document.querySelector('.Side-extra').style.opacity = 0;
+        console.log('close extra side');
+        open_more = true;
+    }
+});
 // instead of local storage use json files
 //by using stringify and parce

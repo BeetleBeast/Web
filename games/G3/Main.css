@@ -14,16 +14,21 @@
 *:link{
     color: inherit;
 }
-html{
-    text-align: center;
-    overflow: hidden;
-    background-color:#232530;
-}
 #detach-button-host {
     display: none !important;
 }
+/*--Main-Canvas--*/
 body{
-    display: flexbox;
+    display: flex;
+	text-align: center;
+    overflow: hidden;
+    background-color:#232530;
+}
+#app{
+	display: block;
+	float: right;
+	width: calc(100% - 12em);
+	height: 99vh;
 }
 .Quest_Title{
     color: white;
@@ -34,25 +39,83 @@ body{
 .main_section{
     color: white;
 }
-.content{
+.footer_section{
     color: white;
 }
-.bar{
-
-}
-.extras{
-
+/*--Side-Menu--*/
+#Side-Menu{
+	background-color: var(--mainColor);
+	border: 2px solid gold;
     display: block;
     float: left;
+	width: 12em;
+	height: 99vh;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
 
 }
-.options{
-    color: aqua;
+#Side-image{
+	/*background-image:;*/
+	display: block;
 }
-.options:hover{
+#Side-Title{
+	text-align: center;
+	font-size: 1vw;
+	padding-top: 6%;
+	color: gold;
+	display: block;
+}
+.Open-more{
+    color: aqua;
+	background-color: black;
+	width: 5em;
+	display: block;
+	height: fit-content;
+	padding: 0.5em;
+	margin-left: 30%;
+}
+.Open-more:hover{
+	color: aqua;
     border: 1px solid lightgreen;
     
 }
+.settings{
+    color: aqua;
+	background-color: black;
+	display: block;
+	width: 5em;
+	height: fit-content;
+	padding: 0.5em;
+	margin-left: 30%;
+}
+.settings:hover{
+	color: aqua;
+    border: 1px solid lightgreen;
+    
+}
+.Side-extra{
+	background-color: gray;
+	opacity: 0;
+	margin-left: -12em;
+
+}
+.il,ul{
+	color: white;
+	opacity: 1;
+}
+.Side-gameplay{
+
+}
+.Side-grafics{
+
+}
+.Side-more{
+
+}
+
+
+/*--Settings--*/
 .save{
     color: lightgreen;
     border: 1px hidden lightgreen;
