@@ -30,7 +30,7 @@ body{
 	width: calc(100% - 12em);
 	height: 99vh;
 	display: flex;
-	/*flex-direction: column;*/
+	flex-direction: column;
 	z-index: 5;
 	
 }
