@@ -29,18 +29,32 @@ body{
 	float: right;
 	width: calc(100% - 12em);
 	height: 99vh;
+	display: flex;
+	/*flex-direction: column;*/
+	z-index: 5;
+	
 }
 .Quest_Title{
     color: white;
+	z-index: auto;
+	position: relative;
+	top: 0px;
+	text-align: center;
+	float: none;
+
 }
 .main{
+	z-index: auto;
 
+	position: relative;
 }
 .main_section{
     color: white;
 }
 .footer_section{
     color: white;
+	z-index: auto;
+	position: relative;
 }
 /*--Side-Menu--*/
 #Side-Menu{
@@ -97,7 +111,16 @@ body{
 .Side-extra{
 	background-color: gray;
 	opacity: 0;
-	margin-left: -12em;
+	height: 100%;
+	width: 95vw;
+	z-index: 9999999;
+	margin: 5px;
+	border: 5px transparent goldenrod;
+	display: block;
+	display: flex;
+	top: 0vh
+
+
 
 }
 .il,ul{
