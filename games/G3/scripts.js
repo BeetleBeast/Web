@@ -98,12 +98,12 @@ document.querySelector('.Open-more').addEventListener('click', function() {
         document.querySelector('.Side-extra').style.opacity = 0.5;
         console.log('open extra side');
         open_more = false;
- return open_more
+        return open_more;
     }else if(open_more == false){
         document.querySelector('.Side-extra').style.opacity = 0;
         console.log('close extra side');
         open_more = true;
- return open_more
+        return open_more;
     }
 });
 // instead of local storage use json files
