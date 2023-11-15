@@ -6,7 +6,7 @@ const extra = document.querySelector('.extras');
 const options = document.querySelector('.options');
 
 const fs = require('fs');
-
+import * as fs from 'node:fs/promises';
 // vue app
 /*
 new Vue({
