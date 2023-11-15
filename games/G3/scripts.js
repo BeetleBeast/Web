@@ -26,6 +26,16 @@ new Vue({
     }
 });
 */
+
+// initial latest loaded game
+(function() {
+    console.log('Initial function executed.');
+    var last_loaded_game = 'saveFile'+saveFileNum+'.json';
+    var saveFileNum = 1;
+    return last_loaded_game
+   })();
+
+
 // if there is no saved files create a new save file
 onload = function() {startup(last_loaded_game)};
 
@@ -75,12 +85,21 @@ function savefile(saveFile){
         if (err) throw err;
         console.log('JSON data is saved.');
        });
+    //  saves file
+    fs.readFile('person.json', 'utf8', (err, data) => {
+    if (err) throw err;
+        
+    let person = JSON.parse(data);
+    person.age = 31; // update the age
+        
+    // now save the updated person object back to the JSON file
+    // ...
+    });
     // TODO: set json file instead of localstorage (by using stringify and parce)
+    return saveFileNum
 }
 
-// initial latest loaded game
-var last_loaded_game = '';
-var saveFileNum = 1;
+
 
 function story(){
     // start of the story
