@@ -102,14 +102,19 @@ display: none !important;
     </table>
 </body>
 
-<script src="scripts.js"></script>
+<script src="scripts.js">
+        savefile()
+</script>
 <script lang="js">
+    var fs = require('fs');
 
     //--------------------- telse a basis
     var i = 1;
     var o = 1;
     var gameItem1 = 0;
 
+    //-- IMPORTANT needs to be changed every time there is a localstorage extra
+    const lenghtOfLocalStorage = 2;
         
     
     //console.log(LocalStorageS);
@@ -121,7 +126,7 @@ display: none !important;
     //--------------------- if storedI do not exist => do I = 1
     const storedI = localStorage.getItem('storedI');
 
-    if(localStorage.length >=1){                                   //change in time the length of the span-------------------------
+    if(localStorage.length >= lenghtOfLocalStorage){                                   //change in time the length of the span-------------------------
 
         // ---------------------make sure storedI is number not string /*AND*\ set i to storedI + 1
         console.log(storedI+' stored I in script ');
@@ -201,18 +206,20 @@ display: none !important;
         }
 
         
-        // scripts G3
-        savefile()
+        // scripts G3 was here
+        saveFileNum = 1
 
         
         //---------------------Set span page to i
         if(i){
             document.getElementById("Section"+NUMm+"_Name").innerHTML = "save "+i;
         }
-        if (localStorage.getItem('saveFileG3 '+saveFileNum)){
+        /*
+        if (fs.existsSync('saveFile'+saveFileNum+'.json')){
             document.getElementById("Section"+NUMm+"_Name").innerHTML = "saveG3 "+i;
-            
-        }else{
+        }
+        */
+        else{
             document.getElementById("Section"+NUMm+"_Name").innerHTML = ' ';
         }
 

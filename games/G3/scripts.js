@@ -28,24 +28,24 @@ new Vue({
 */
 
 // initial latest loaded game
-(function() {
+    if (! saveFileNum){
+        saveFileNum = '1';
+    }
     console.log('Initial function executed.');
     var last_loaded_game = 'saveFile'+saveFileNum+'.json';
     var saveFileNum = 1;
-    return last_loaded_game
-   })();
 
 
 // if there is no saved files create a new save file
 onload = function() {startup(last_loaded_game)};
 
-function startup(latest){
+function startup(latest_L_G){
 
-    if (! latest) {
+    if (! latest_L_G || latest_L_G == '' || latest_L_G == ' ') {
         newGame();
     }
-    else {
-        LoadGame(latest);
+    else{
+        LoadGame(latest_L_G);
     }
 }
 // newGame makes the prep for a new game
@@ -54,21 +54,28 @@ function newGame(){
     console.log('new game');
 
     var saveFileNum = 1;
-    var saveFile = {};
-    localStorage.setItem('saveFileG3 '+saveFileNum, saveFile);
+    var saveFile = {"saveFileNum" : saveFileNum,"story_Number" : 0, "title_story" : title_story_0, "choices_Made" : []};
+    var saveFileNum = prompt('number savefile');
+    // localStorage.setItem('saveFileG3 '+saveFileNum, saveFile); // FIXME: after json files made rzmove localstorage 
+    var saveFileJSON = JSON.stringify(saveFile)
+    fs.writeFile('saveFile'+saveFileNum+'.json', saveFileJSON, (err) => {
+        if (err) throw err;
+        console.log('JSON data is saved.');
+       });
+
+    // start story
     story();
-    document.createDocumentFragment
-    // TODO: set json file instead of localstorage (by using stringify and parce)
+    
 
 }
 // load the latest game (goes to SG file to load and save the game)
 
-function loadGame(latest){
+function LoadGame(latest){
     //idk
     console.log('load game');
     saveFileNum = latest;
     
-    localStorage.getItem('saveFileG3 '+saveFileNum);
+   
 
     last_loaded_game = ''
     return last_loaded_game
@@ -78,13 +85,6 @@ function loadGame(latest){
 function savefile(saveFile){
     //idk
     console.log('saving game');
-    saveFileNum = prompt('number savefile');
-    // localStorage.setItem('saveFileG3 '+saveFileNum, saveFile); // FIXME: after json files made rzmove localstorage 
-    var saveFileJSON = JSON.stringify(saveFile)
-    fs.writeFile('saveFile'+saveFileNum+'.json', saveFileJSON, (err) => {
-        if (err) throw err;
-        console.log('JSON data is saved.');
-       });
     //  saves file
     fs.readFile('person.json', 'utf8', (err, data) => {
     if (err) throw err;

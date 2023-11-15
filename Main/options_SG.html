@@ -201,18 +201,11 @@ display: none !important;
             break;
         }
 
-        
-        // scripts G3
-        savefile()
 
         
         //---------------------Set span page to i
         if(i){
             document.getElementById("Section"+NUMm+"_Name").innerHTML = "save "+i;
-        }
-        if (localStorage.getItem('saveFileG3 '+saveFileNum)){
-            document.getElementById("Section"+NUMm+"_Name").innerHTML = "saveG3 "+i;
-            
         }else{
             document.getElementById("Section"+NUMm+"_Name").innerHTML = ' ';
         }
@@ -315,9 +308,6 @@ display: none !important;
         
         console.log("Loading game "+ NUM);
 
-        // loading G3
-
-        loadGame()
 
     }
     function DEL_game(NUM){
