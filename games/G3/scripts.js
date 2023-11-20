@@ -99,11 +99,42 @@ function savefile(saveFile){
     return saveFileNum
 }
 
-
-
+class Player {
+    constructor({name, race, gender, profession, level, strength, intelligence, charisma, agility, luck, health, maxHealth}){
+        this.name = name, 
+        this.race = race, 
+        this.gender = gender, 
+        this.profession = profession, 
+        this.level = level, 
+        this.strength = strength, 
+        this.intelligence = intelligence, 
+        this.charisma = charisma, 
+        this.agility = agility, 
+        this.luck = luck, 
+        this.health = health, 
+        this.maxHealth = maxHealth
+    }
+}
+const character = new Player({
+    name: 'nana',
+    race: 'human',
+    gender: 'Male',
+    profession: 'protagonist',
+    level: '0',
+    strength: '0',
+    intelligence: '0',
+    charisma: '0',
+    agility: '0',
+    luck: '0',
+    health: '0',
+    maxHealth: '100'
+}) 
 function story(){
     // start of the story
     console.log("start story");
+
+    
+
 
 
 
@@ -118,7 +149,7 @@ function story(){
     main_content.innerHTML = Intro;
     main_section.innerHTML = story_0;
 
-    var saveFile = {"saveFileNum" : saveFileNum,"story_Number" : 0, "title_story" : title_story_0, "choices_Made" : []}
+    var saveFile = {"saveFileNumber" : saveFileNum,"storyLine_Number" : 0, "Player_charakter" : Player, "choices_Made" : []}
     return saveFile
 }
 
