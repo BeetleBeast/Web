@@ -29,23 +29,25 @@ new Vue({
 
 // initial latest loaded game
     if (! saveFileNum){
-        saveFileNum = '1';
+        var saveFileNum = '1';
+    }else if(saveFileNum){
+        console.log('Initial function executed.');
+        var last_loaded_game = 'saveFile'+saveFileNum+'.json';
     }
-    console.log('Initial function executed.');
-    var last_loaded_game = 'saveFile'+saveFileNum+'.json';
-    var saveFileNum = 1;
 
 
 // if there is no saved files create a new save file
 onload = function() {startup(last_loaded_game)};
 
-function startup(latest_L_G){
+function startup(last_loaded_game){
 
-    if (! latest_L_G || latest_L_G == '' || latest_L_G == ' ') {
+    if (! last_loaded_game || last_loaded_game == '' || last_loaded_game == ' ') {
         newGame();
+        console.log('new game!');
     }
     else{
-        LoadGame(latest_L_G);
+        LoadGame(last_loaded_game);
+        console.log('load game!')
     }
 }
 // newGame makes the prep for a new game
@@ -70,10 +72,21 @@ function newGame(){
 }
 // load the latest game (goes to SG file to load and save the game)
 
-function LoadGame(latest){
+function LoadGame(last_loaded_game){
     //idk
     console.log('load game');
-    saveFileNum = latest;
+    saveFileNum = last_loaded_game;
+
+    fs.readFile(last_loaded_game, 'utf8', (err, data) => {
+        if (err) throw err;
+            
+        let Player_ = JSON.parse(data);
+        Player_.Player.age = 22;
+        console.log(Player_.Player.age)
+                
+    // now save the updated person object back to the JSON file
+    // ...
+    });
     
    
 
@@ -99,11 +112,44 @@ function savefile(saveFile){
     return saveFileNum
 }
 
-
-
+class Player {
+    constructor({name, race, gender, age, profession, level, strength, intelligence, charisma, agility, luck, health, maxHealth}){
+        this.name = name, 
+        this.race = race, 
+        this.gender = gender, 
+        this.age = age,
+        this.profession = profession, 
+        this.level = level, 
+        this.strength = strength, 
+        this.intelligence = intelligence, 
+        this.charisma = charisma, 
+        this.agility = agility, 
+        this.luck = luck, 
+        this.health = health, 
+        this.maxHealth = maxHealth
+    }
+}
+const character = new Player({
+    name: 'nana',
+    race: 'human',
+    gender: 'Male',
+    age: '20',
+    profession: 'protagonist',
+    level: '0',
+    strength: '0',
+    intelligence: '0',
+    charisma: '0',
+    agility: '0',
+    luck: '0',
+    health: '0',
+    maxHealth: '100'
+}) 
 function story(){
     // start of the story
     console.log("start story");
+
+    
+
 
 
 
@@ -111,6 +157,8 @@ function story(){
     const Intro = "hello world"
     const story_0 = "hello why are you here"
     const title_story_0 = 'Into the new world'
+    const title_story_1 = 'Lost in ghe forest'
+    const title_story_2 =  'Old cabbin'
 
     // input in game
 
@@ -118,7 +166,7 @@ function story(){
     main_content.innerHTML = Intro;
     main_section.innerHTML = story_0;
 
-    var saveFile = {"saveFileNum" : saveFileNum,"story_Number" : 0, "title_story" : title_story_0, "choices_Made" : []}
+    var saveFile = {"saveFileNumber" : saveFileNum,"storyLine_Number" : 0, "Player_character" : Player, "choices_Made" : {title_story_0:0,title_story_1:0,title_story_2:0}}
     return saveFile
 }
 
