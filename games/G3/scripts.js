@@ -5,35 +5,31 @@ const bar = document.querySelector('.bar');
 const extra = document.querySelector('.extras');
 const options = document.querySelector('.options');
 
-const fs = require('fs');
-import * as fs from 'node:fs/promises';
-// vue app
-/*
-new Vue({
-    el: '#app',
-    data: {
-        questTitle: 'Some Quest Title',
-        mainInfo: 'Some main information about the quest.',
-        multichoice: 'You have multiple choices',
-        choice_1: ' choice',
-        choice_2: ' choice',
-        choice_3: ' choice',
-        choice_4: ' choice',
-        choice_5: ' choice'
-    },
-    mounted() {
-        // Your code to manipulate the content-canvas element
-    }
-});
-*/
+
 
 // initial latest loaded game
-    if (! saveFileNum){
-        var saveFileNum = '1';
-    }else if(saveFileNum){
-        console.log('Initial function executed.');
-        var last_loaded_game = 'saveFile'+saveFileNum+'.json';
-    }
+if (! saveFileNum){
+    var saveFileNum = 1;
+}else if(saveFileNum){
+    console.log('Initial function executed.');
+    var last_loaded_game = 'saveFile'+saveFileNum+'.json';
+}
+// saves a local version instead of a web storage
+function Save_LOCAL(last_loaded_game) {
+    document.addEventListener('DOMContentLoaded', function() {
+        var data = last_loaded_game;
+        var json = JSON.stringify(data);
+        var blob = new Blob([json], {type: 'application/json'});
+        var a = document.createElement('a');
+        a.download = 'saveFile.json';
+        a.href = URL.createObjectURL(blob);
+        a.textContent = 'Download saveFile.json';
+        a.dataset.downloadurl = ['application/json', a.download, a.href].join(':');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    });
+}
 
 
 // if there is no saved files create a new save file
@@ -51,24 +47,28 @@ function startup(last_loaded_game){
     }
 }
 // newGame makes the prep for a new game
-function newGame(){
+function newGame(saveFileNum){
     //idk
     console.log('new game');
 
-    var saveFileNum = 1;
-    var saveFile = {"saveFileNum" : saveFileNum,"story_Number" : 0, "title_story" : title_story_0, "choices_Made" : []};
-    var saveFileNum = prompt('number savefile');
-    // localStorage.setItem('saveFileG3 '+saveFileNum, saveFile); // FIXME: after json files made rzmove localstorage 
-    var saveFileJSON = JSON.stringify(saveFile)
-    fs.writeFile('saveFile'+saveFileNum+'.json', saveFileJSON, (err) => {
-        if (err) throw err;
-        console.log('JSON data is saved.');
-       });
-
-    // start story
-    story();
+    let saveFile = {
+        "saveFileNumber" : saveFileNum,
+        "storyLine_Number" : 0,
+        "Player_character" : Player,
+        "choices_Made" : {"title_story_0::Into the new world" : 0,'title_story_1::Lost in ghe forest' : 0,'title_story_2::Old cabbin' : 0}
+    }
     
-
+    // localStorage.setItem('saveFileG3 '+saveFileNum, saveFile); // FIXME: after json files made rzmove localstorage 
+    /*
+    var saveFileJSON = JSON.stringify(saveFile)
+    ('saveFile'+saveFileNum+'.json', saveFileJSON)
+        .then(() => console.log('File saved.'))
+        .catch(err => console.error('Error saving file:', err));
+    */
+    // start story
+    story(saveFile);
+    
+    
 }
 // load the latest game (goes to SG file to load and save the game)
 
@@ -98,16 +98,12 @@ function LoadGame(last_loaded_game){
 function savefile(saveFile){
     //idk
     console.log('saving game');
-    //  saves file
-    fs.readFile('person.json', 'utf8', (err, data) => {
-    if (err) throw err;
+    //  saves file 
+    let saveFileJSON = JSON.parse(saveFile);
         
-    let person = JSON.parse(data);
-    person.age = 31; // update the age
-        
-    // now save the updated person object back to the JSON file
-    // ...
-    });
+
+    /*Save_LOCAL(saveFile)*/
+
     // TODO: set json file instead of localstorage (by using stringify and parce)
     return saveFileNum
 }
@@ -128,61 +124,68 @@ class Player {
         this.health = health, 
         this.maxHealth = maxHealth
     }
+
+    character = new Player({
+        name: 'nana',
+        race: 'human',
+        gender: 'Male',
+        age: '20',
+        profession: 'protagonist',
+        level: '0',
+        strength: '0',
+        intelligence: '0',
+        charisma: '0',
+        agility: '0',
+        luck: '0',
+        health: '0',
+        maxHealth: '100'
+    })
 }
-const character = new Player({
-    name: 'nana',
-    race: 'human',
-    gender: 'Male',
-    age: '20',
-    profession: 'protagonist',
-    level: '0',
-    strength: '0',
-    intelligence: '0',
-    charisma: '0',
-    agility: '0',
-    luck: '0',
-    health: '0',
-    maxHealth: '100'
-}) 
-function story(){
+
+function story(saveFile){
     // start of the story
     console.log("start story");
-
-    
-
-
-
-
     // text dump
     const Intro = "hello world"
     const story_0 = "hello why are you here"
-    const title_story_0 = 'Into the new world'
-    const title_story_1 = 'Lost in ghe forest'
-    const title_story_2 =  'Old cabbin'
-
+    let title_story_0 = 'Into the new world'
+    let title_story_1 = 'Lost in the forest'
+    let title_story_2 =  'Old cabbin'
     // input in game
-
-    Title.innerHTML = title_story_0;
-    main_content.innerHTML = Intro;
-    main_section.innerHTML = story_0;
-
-    var saveFile = {"saveFileNumber" : saveFileNum,"storyLine_Number" : 0, "Player_character" : Player, "choices_Made" : {title_story_0:0,title_story_1:0,title_story_2:0}}
+    /*
+    let saveFile = {
+        "saveFileNumber" : saveFileNum,
+        "storyLine_Number" : 0,
+        "Player_character" : Player,
+        "choices_Made" : {
+            "title_story_0::Into the new world" : 0,
+            'title_story_1::Lost in ghe forest' : 0,
+            'title_story_2::Old cabbin' : 0
+        }
+    }
+    */
+ 
+   for (let i in saveFile){
+    let title_story = saveFile[i]
+    slowTypingText(title_story,'.Quest_Title');
+   }
+    
     return saveFile
 }
+function slowTypingText(text, elementId, index = 0, speed = 200) {
+    if (index < text.length) {
+       document.querySelector(elementId).innerText += text[index];
+       index += 1; // update index for the next character
 
-document.querySelector('.Open-more').addEventListener('click', function() {
-    var open_more = true
-    if (open_more == true){
-        document.querySelector('.Side-extra').style.opacity = 0.5;
-        console.log('open extra side');
-        open_more = false;
-        return open_more;
-    }else if(open_more == false){
-        document.querySelector('.Side-extra').style.opacity = 0;
-        console.log('close extra side');
-        open_more = true;
-        return open_more;
+       // If the current character is a space, replace it with a space character
+       if (text[index - 1] === " ") {
+           setTimeout(() => {
+               document.querySelector(elementId).innerText += " "+text[index];
+                index += 1;
+               slowTypingText(text, elementId, index, speed);
+           }, speed);
+       } else {
+           setTimeout(() => slowTypingText(text, elementId, index, speed), speed);
+       }
     }
-});
-// instead of local storage use json files
-//by using stringify and parce
+}

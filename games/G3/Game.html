@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </style>    
-
+<script src="scripts.js"></script>
 </head>
 
 <body>
@@ -18,25 +18,26 @@
         <div id="Side-image"></div>
         <div id="Side-Title">Gatcha_tower</div>
         <br>
-        <button type="button" role="button" class="Open-more">More</button>
+        <button type="button" role="button" class="Open-more" onclick="openMoreSettings()">More</button>
         <a href="Settings.html"><button type="button" role="button" class="settings">Settings</button></a>
     </div>
     <div id="app">
-        <h1 class="Quest_Title">{{ questTitle }}</h1>
+        <h1 class="Quest_Title"></h1>
         <div class="main">
-            <div class="main_section">{{ mainInfo }}</div>
+            <div class="main_section"></div>
             <canvas class="content-canvas" ref="contentCanvas"></canvas>
         </div>
-        <footer class="footer_section">{{ multichoice }}
-            <div id="Choice_1">{{ Choice_1 }}</div>
-            <div id="Choice_2">{{ Choice_2 }}</div>
-            <div id="Choice_3">{{ Choice_3 }}</div>
-            <div id="Choice_4">{{ Choice_4 }}</div>
-            <div id="Choice_5">{{ Choice_5 }}</div>
+        <footer class="footer_section">footer_section
+            <br>
+            <div class="Choices Sh_1"></div>
+            <div class="Choices Sh_2"></div>
+            <div class="Choices Sh_3"></div>
+            <div class="Choices Sh_4"></div>
+            <div class="Choices Sh_5"></div>
         </footer>
-        <div class="Side-extra">
+        <div class="Side-extra parent">
             <ul class="Side-extra ul">
-                <li class="Side-extra il Side-gameplay">gameplay</li>
+                <li class="Side-extra il Side-gameplay">gamepla</li>
                 <li class="Side-extra il Side-grafics">grafics</li>
                 <li class="Side-extra il Side-more">more
                     <ol>
@@ -49,6 +50,19 @@
 
 </body>
 
-<script src="scripts.js"></script>
 
+<script>
+    let Anumber = 1;
+    function openMoreSettings(){
+        console.log('opened MoreSettings Tab',Anumber)
+        if (Anumber % 2 == 1){
+            document.querySelector('.Side-extra').style.opacity = 0.5;
+            Anumber += 1;
+        }else if(Anumber % 2 == 0){
+            document.querySelector('.Side-extra').style.opacity = 0;
+            Anumber += 1;
+        }
+}
+
+</script>
 </html>
