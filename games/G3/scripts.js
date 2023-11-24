@@ -15,9 +15,9 @@ if (! saveFileNum){
     var last_loaded_game = 'saveFile'+saveFileNum+'.json';
 }
 // saves a local version instead of a web storage
-function Save_LOCAL(last_loaded_game) {
+function Save_LOCAL(saveFile) {
     document.addEventListener('DOMContentLoaded', function() {
-        var data = last_loaded_game;
+        var data = saveFile;
         var json = JSON.stringify(data);
         var blob = new Blob([json], {type: 'application/json'});
         var a = document.createElement('a');
@@ -55,7 +55,12 @@ function newGame(saveFileNum){
         "saveFileNumber" : saveFileNum,
         "storyLine_Number" : 0,
         "Player_character" : Player,
-        "choices_Made" : {"title_story_0::Into the new world" : 0,'title_story_1::Lost in ghe forest' : 0,'title_story_2::Old cabbin' : 0}
+        "current_title_progress" : 0,
+        "title_progress" : { 
+            0 : { "title_story_0" : 'Into the new world'},
+            1 : {'title_story_1' : 'Lost in the forest'}, 
+            2 : {'title_story_2' : 'Old cabbin'}
+        }
     }
     
     // localStorage.setItem('saveFileG3 '+saveFileNum, saveFile); // FIXME: after json files made rzmove localstorage 
@@ -98,13 +103,10 @@ function LoadGame(last_loaded_game){
 function savefile(saveFile){
     //idk
     console.log('saving game');
+    saveFileNum = prompt('Save file number')
     //  saves file 
-    let saveFileJSON = JSON.parse(saveFile);
-        
-
-    /*Save_LOCAL(saveFile)*/
-
-    // TODO: set json file instead of localstorage (by using stringify and parce)
+    let saveFileJSON = JSON.stringify(saveFile);
+        localStorage.setItem('saveFile'+saveFileNum,saveFileJSON)
     return saveFileNum
 }
 
@@ -157,35 +159,44 @@ function story(saveFile){
         "saveFileNumber" : saveFileNum,
         "storyLine_Number" : 0,
         "Player_character" : Player,
-        "choices_Made" : {
+        "title_progress" : {
             "title_story_0::Into the new world" : 0,
             'title_story_1::Lost in ghe forest' : 0,
             'title_story_2::Old cabbin' : 0
         }
     }
     */
- 
-   for (let i in saveFile){
-    let title_story = saveFile[i]
+    console.log('title_progress',saveFile.title_progress)
+    console.log('current_title_progress',saveFile.current_title_progress)
+    let current_title_progress = saveFile.current_title_progress        // make a var van dit 
+    let current_title = saveFile.title_progress[current_title_progress]
+    title_progress(current_title,current_title_progress)
+
+function title_progress(current_title,current_title_progress) {
+    let title_story = current_title['title_story_'+current_title_progress]
     slowTypingText(title_story,'.Quest_Title');
-   }
+    console.log('title_story',title_story)
+    console.log('current_title',current_title);
+}
+
     
+
     return saveFile
 }
 function slowTypingText(text, elementId, index = 0, speed = 200) {
     if (index < text.length) {
-       document.querySelector(elementId).innerText += text[index];
-       index += 1; // update index for the next character
+        document.querySelector(elementId).innerText += text[index];
+        index += 1; // update index for the next character
 
-       // If the current character is a space, replace it with a space character
-       if (text[index - 1] === " ") {
-           setTimeout(() => {
-               document.querySelector(elementId).innerText += " "+text[index];
-                index += 1;
-               slowTypingText(text, elementId, index, speed);
-           }, speed);
-       } else {
-           setTimeout(() => slowTypingText(text, elementId, index, speed), speed);
-       }
+        // If the current character is a space, replace it with a space character
+        if (text[index - 1] === " ") {
+            setTimeout(() => {
+                document.querySelector(elementId).innerText += " "+text[index];
+                    index += 1;
+                slowTypingText(text, elementId, index, speed);
+            }, speed);
+        } else {
+            setTimeout(() => slowTypingText(text, elementId, index, speed), speed);
+        }
     }
 }

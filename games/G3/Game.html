@@ -37,12 +37,21 @@
         </footer>
         <div class="Side-extra parent">
             <ul class="Side-extra ul">
-                <li class="Side-extra il Side-gameplay">gamepla</li>
+                <li class="Side-extra il Side-Saving Save">Saving</li>
+                    <ul class="Side-extra Save">
+                        <li class="Side-extra Save">
+                            <button type="button" role="button" class="Side-extra local Save Button" onclick="Save_LOCAL(saveFile)">Download the latest save</button>
+                        </li>
+                        <li>
+                            <button type="button" role="button" class="Side-extra Save Button" onclick="savefile(saveFile)">Save the latest save</button>
+                        </li>
+                    </ul>
+                <li class="Side-extra il Side-gameplay">gameplay</li>
                 <li class="Side-extra il Side-grafics">grafics</li>
                 <li class="Side-extra il Side-more">more
-                    <ol>
-                        <li>Fist</li>
-                    </ol>
+                    <ul class="Side-extra">
+                        <li class="Side-extra">Fist</li>
+                    </ul>
                 </li>
             </ul>
         </div>
@@ -53,13 +62,16 @@
 
 <script>
     let Anumber = 1;
+    document.querySelector('.parent').style.opacity = 0
     function openMoreSettings(){
         console.log('opened MoreSettings Tab',Anumber)
         if (Anumber % 2 == 1){
-            document.querySelector('.Side-extra').style.opacity = 0.5;
+            document.querySelector('.parent').style.opacity = 0.5;
+            document.querySelector('.il').style.opacity = 1;
+            document.querySelector('.Save').style.opacity = 1;
             Anumber += 1;
         }else if(Anumber % 2 == 0){
-            document.querySelector('.Side-extra').style.opacity = 0;
+            document.querySelector('.parent').style.opacity = 0;
             Anumber += 1;
         }
 }
