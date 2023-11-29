@@ -29,9 +29,9 @@ const c = canvas.getContext('2d');
 
 canvas.width = 1024//was 1024
 canvas.height = 576//was 576
-const gravity = 0.7 // was 0.5
+const gravity = 0.5 // was 0.5      //was ooit 0.7
 let gameFrame = 1;
-const staggerFrames = 1.5; // how heigher how slower game frames
+const staggerFrames = 1; // how heigher how slower game frames        // was ooit 1.5
 class Player {
     constructor() {
         this.speed = 5
@@ -324,23 +324,23 @@ init()
 addEventListener('keydown', ({keyCode}) => {
     
     switch (keyCode) {
-        case 81:
+        case 97:
             console.log('left')
             keys.left.pressed = true
             LastKey = 'left'
         break
 
-        case 83:
+        case 40:
             console.log('down')
         break
 
-        case 68:
+        case 39:
             console.log('right')
             keys.right.pressed = true
             LastKey = 'right'
         break
 
-        case 90:
+        case 38:
             console.log('up')
             if (event.repeat) { return }
 
@@ -355,23 +355,23 @@ addEventListener('keydown', ({keyCode}) => {
 addEventListener('keyup', ({keyCode}) => {
     
     switch (keyCode) {
-        case 81:
+        case 97:
             console.log('left')
             keys.left.pressed = false
             
         break
 
-        case 83:
+        case 40:
             console.log('down')
         break
 
-        case 68:
+        case 39:
             console.log('right')
             keys.right.pressed = false
             
         break
 
-        case 90:
+        case 38:
             console.log('up')
         break
     }
