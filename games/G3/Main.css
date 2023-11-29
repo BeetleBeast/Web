@@ -7,6 +7,7 @@
 
     --mainColor: linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
     --secondColor:rgba(228, 5, 128, 0.445);
+	--thirdColor: #232530;
 }
 *:visited{
     color: inherit;
@@ -78,19 +79,6 @@ body{
 }
 
 /*--Side-Menu--*/
-.Side-extra .parent{
-	background-color: var(--mainColor);
-	border: 2px solid gold;
-    display: block;
-    float: left;
-	width: 12em;
-	height: 99vh;
-	text-align: left;
-	display: flex;
-	flex-direction: column;
-
-	border: 2px dashed yellow;
-}
 #Side-Menu{
 	background-color: var(--mainColor);
 	border: 2px solid gold;
@@ -104,17 +92,6 @@ body{
 
 	border: 2px dashed red;
 
-}
-#Side-image{
-	/*background-image:;*/
-	display: block;
-}
-#Side-Title{
-	text-align: center;
-	font-size: 1vw;
-	padding-top: 6%;
-	color: gold;
-	display: block;
 }
 .Open-more{
     color: aqua;
@@ -147,57 +124,79 @@ body{
     border: 1px solid lightgreen;
     
 }
+#Side-image{
+	/*background-image:;*/
+	display: block;
+}
+#Side-Title{
+	text-align: center;
+	font-size: 1vw;
+	padding-top: 6%;
+	color: gold;
+	display: block;
+
+	/* --Side Extra-- */
+}.Side-extra , .parent{
+	background-color: var(--thirdColor);
+	width: 12em;
+	height: 99vh;
+	text-align: left;
+
+	display: flex;
+	flex-direction: column;
+
+	border: 5px double goldenrod;
+}
 .Side-extra{
 	background-color: transparent;
 	
-
 	z-index: 9999999;
 	margin: 15px;
 	border-radius: 5px;
-	float: left;
 	width:100%;
 	height: 100vh;
 	top: 0px;
 	position: fixed;
 	
 
-
-}
-.Side-extra .parent{
-	opacity: 0;
-
-	float: right;
-
-	border: 5px double goldenrod;
-	
-	display: flex;
-
-
 }
 .il,ul{
 	color: white;
 	opacity: 1;
+	margin: 0;
 	
 }
 .ul{
-	flex-direction: column;
+	display: flexbox;
+	flex-direction: row;
+	border: 5px solid red;
+	padding: 0;
+	margin: 0;
 }
 .il{
 	width: 25%;
-	height: 100%;
+	height:inherit;
+	top: 15px;
 	
+
+	border: 5px dotted green;
 }
 .Side-Saving{
 	opacity: 1;
+	border: 5px dotted blue;
+	
 }
 .Side-gameplay{
 	opacity: 1;
+	border: 5px dotted blue;
 }
 .Side-grafics{
 	opacity: 1;
+	border: 5px dotted blue;
 }
 .Side-more{
 	opacity: 1;
+	border: 5px dotted blue;
 }
 .Button{
 	color: white;

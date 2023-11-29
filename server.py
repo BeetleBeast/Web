@@ -103,8 +103,6 @@ port = 80  #  port forwarding
 
 
 if not os.path.exists("/Web/Main/index.html"):
-    print('can\'t find web main')
-elif not os.path.exists("/Web/Main/index.html"):
     print('can\'t find index')
 else: print('can find It')
 

@@ -5,15 +5,34 @@ const bar = document.querySelector('.bar');
 const extra = document.querySelector('.extras');
 const options = document.querySelector('.options');
 
-
+var saveFileNum = 0;
+var last_loaded_game = '';
+var typeOfGame = 'New_Game';
 
 // initial latest loaded game
-if (! saveFileNum){
-    var saveFileNum = 1;
+if (saveFileNum == 0){
+    saveFileNum = 1;
 }else if(saveFileNum){
     console.log('Initial function executed.');
-    var last_loaded_game = 'saveFile'+saveFileNum+'.json';
+    last_loaded_game = 'saveFile'+saveFileNum+'.json';
+    typeOfGame = 'Continue_Game';
 }
+ // if there is no saved files create a new save file
+ onload = function() {startup(last_loaded_game)};
+
+ function startup(last_loaded_game){
+
+     if (! last_loaded_game || last_loaded_game == '' || last_loaded_game == ' ') {
+         newGame();
+         console.log('new game!');
+     }
+     else{
+         LoadGame(last_loaded_game);
+         console.log('load game!')
+     }
+ }
+
+
 // saves a local version instead of a web storage
 function Save_LOCAL(saveFile) {
     document.addEventListener('DOMContentLoaded', function() {
@@ -32,20 +51,6 @@ function Save_LOCAL(saveFile) {
 }
 
 
-// if there is no saved files create a new save file
-onload = function() {startup(last_loaded_game)};
-
-function startup(last_loaded_game){
-
-    if (! last_loaded_game || last_loaded_game == '' || last_loaded_game == ' ') {
-        newGame();
-        console.log('new game!');
-    }
-    else{
-        LoadGame(last_loaded_game);
-        console.log('load game!')
-    }
-}
 // newGame makes the prep for a new game
 function newGame(saveFileNum){
     //idk
@@ -199,4 +204,18 @@ function slowTypingText(text, elementId, index = 0, speed = 200) {
             setTimeout(() => slowTypingText(text, elementId, index, speed), speed);
         }
     }
+}
+INIT()
+function INIT(){
+    
+    if (typeOfGame == 'New_Game'){
+        newGame();
+    }
+    else if(typeOfGame == 'Continue_Game'){
+        LoadGame(last_loaded_game);
+        console.log('load game!')
+    }else{
+        alert("Error: Invalid Game Type");
+    }
+    return saveFileNum
 }

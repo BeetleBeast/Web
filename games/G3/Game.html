@@ -37,7 +37,7 @@
         </footer>
         <div class="Side-extra parent">
             <ul class="Side-extra ul">
-                <li class="Side-extra il Side-Saving Save">Saving</li>
+                <li class="Side-extra il Side-Saving Save">Saving
                     <ul class="Side-extra Save">
                         <li class="Side-extra Save">
                             <button type="button" role="button" class="Side-extra local Save Button" onclick="Save_LOCAL(saveFile)">Download the latest save</button>
@@ -46,6 +46,7 @@
                             <button type="button" role="button" class="Side-extra Save Button" onclick="savefile(saveFile)">Save the latest save</button>
                         </li>
                     </ul>
+                </li>
                 <li class="Side-extra il Side-gameplay">gameplay</li>
                 <li class="Side-extra il Side-grafics">grafics</li>
                 <li class="Side-extra il Side-more">more
@@ -66,7 +67,7 @@
     function openMoreSettings(){
         console.log('opened MoreSettings Tab',Anumber)
         if (Anumber % 2 == 1){
-            document.querySelector('.parent').style.opacity = 0.5;
+            document.querySelector('.parent').style.opacity = 1;
             document.querySelector('.il').style.opacity = 1;
             document.querySelector('.Save').style.opacity = 1;
             Anumber += 1;
