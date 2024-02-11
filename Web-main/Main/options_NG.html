@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" class="scrollbar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#750101"> <!--change color of text in tabs-->
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#750101"> <!--change color of text in tabs-->
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#750101"> <!--change color of text in tabs-->
+    <link rel="icon" href="Main/assets\icons\main\web_icon.svg" type="image/icon type">  <!-- links icon to website-->
+    <title>new game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  <!--Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet"> <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  <!--Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Orbitron&display=swap" rel="stylesheet"> <!--Fonts-->
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <!-- links video-->
+    <video autoplay muted loop id="myVideo">  
+      <source src="assets/background/video/video.mp4" type="video/mp4">
+      <track label="none" kind="captions" srclang="en" default>
+      Your browser does not support HTML5 video.
+      <style body:background-color: rgb(43, 43, 43);></style>
+    </video>
+    <audio autoplay loop id="AudioMAin">
+      <source src="assets/background/audio/adven.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+    </audio>
+    <script>
+      var audio = document.getElementById("AudioMAin");
+      audio.volume = localStorage.getItem("AudioVolume");
+      audio.currentTime = localStorage.getItem('AudioMAin');
+      console.log(audio.volume);
+      console.log(audio.currentTime);
+      onunload = function() {localStorage.setItem('AudioMAin', audio.currentTime);}
+      
+    </script>
+    <style>
+      *{
+        position:relative;
+        cursor: default;
+        user-select: none;
+        -webkit-user-select: none;
+        font-family: 'Orbitron', sans-serif;
+        text-decoration: none;
+      }
+      *:visited{
+          color: inherit;
+      }
+      *:link{
+          color: inherit;
+      }
+      html{
+      text-align: center;
+      background-color:#232530;
+      }
+      #detach-button-host {
+      display: none !important;
+      }
+      *{
+        --mainColor: linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
+        --secondColor:rgba(228, 5, 128, 0.445);
+      }
+      html{
+        --scrollbarBG: #232530;
+        --thumbBG: var(--secondColor);
+        overflow: hidden;
+      }
+      .st::-webkit-scrollbar {
+        width: 11px;
+      }
+      .st {
+        scrollbar-width: thin;
+        scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+      }
+      .st::-webkit-scrollbar-track {
+        background: var(--scrollbarBG);
+      }
+      .st::-webkit-scrollbar-thumb {
+        background-color: var(--thumbBG) ;
+        border-radius: 6px;
+        border: 3px solid var(--scrollbarBG);
+      }
+      .st{
+        overflow-y: scroll;
+      }
+      .container{
+        overflow-y: none;
+        overflow-x: none;
+      }
+    </style>
+</head>
+<body>
+    <div class="st">
+        <h1 id="H1_title" class="titleH1F">Chose a Game</h1>
+        <a href="/" class="back" role="button" onclick="go_back()" aria-label="back-button">Back </a>
+        <div class="container">
+            <a href="../games/G0/Game0.html" class=" options3 cvt Game0" role="button" onclick="GameSelection(0)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection0">Text-Based Game</h4></a>
+            <a href="../games/G1/Game.html" class="options3 cvt Game1" role="button" onclick="GameSelection(1)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection1">Shooter A</h4></a>
+            <a href="../games/G2/Game2.html" class=" options3 cvt Game2" role="button" onclick="GameSelection(2)"><img src="assets/foreground/game_2/Screenshot_2023-11-30.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection2">Parkour Game</h4></a>
+            <a href="../games/G3/index.html" class=" options3 cvt Game3" role="button" onclick="GameSelection(3)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection3">Gatch_Tower</h4></a>
+            <a href="#.html" class=" options3 cvt Game4" role="button" onclick="GameSelection(4)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection4">Game Title</h4></a>
+            <a href="#.html" class=" options3 cvt Game5" role="button" onclick="GameSelection(5)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection5">Game Title</h4></a>
+            <a href="#.html" class=" options3 cvt Game6" role="button" onclick="GameSelection(6)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection6">Game Title</h4></a>
+            <a href="#.html" class=" options3 cvt Game7" role="button" onclick="GameSelection(7)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection7">Game Title</h4></a>
+            <a href="#.html" class=" options3 cvt Game8" role="button" onclick="GameSelection(8)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection8">Game Title</h4></a>
+            <a href="#.html" class=" options3 cvt Game9" role="button" onclick="GameSelection(9)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection9">Game Title</h4></a>
+            <a href="#.html" class="options3 cvt Game10" role="button"onclick="GameSelection(10)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection10">Game Title</h4></a>
+            <a href="#.html" class="options3 cvt Game11" role="button"onclick="GameSelection(11)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection11">Game Title</h4></a>
+            <a href="#.html" class="options3 cvt Game12" role="button"onclick="GameSelection(12)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection12">Game Title</h4></a>
+            <a href="#.html" class="options3 cvt Game13" role="button"onclick="GameSelection(13)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection13">Game Title</h4></a>
+            <a href="#.html" class="options3 cvt Game14" role="button"onclick="GameSelection(14)"><img src="assets/foreground/game_1/Testimage.png" class="GameSelection" default alt="Try reloading page"><style body:background-color: rgb(43, 43, 43);></style><h4 class="h4classGameSelection14">Game Title</h4></a>
+
+        </div>
+    </div>
+    <script src="Web/Main/main.js"></script>
+    <script src="Web/Main/code.js"></script>
+    <script type="text/javascript">
+      //-------------------- Secter game ===> press title then 147
+      document.addEventListener("keypress", function(event) {console.log(event.key);})
+      console.stdlog = console.log.bind(console);
+      console.logs = [];
+      console.log = function(){
+        console.logs.push(Array.from(arguments));
+        console.stdlog.apply(console, arguments);
+      }
+      function unF1(NUMBERG, NUMBERH, NUMBERJ) {
+        var NUMBERK = NUMBERG + NUMBERH + NUMBERJ;
+        if(NUMBERK == 147){
+          let Gmas = document.querySelector('.Game0');
+          Gmas.href="./secret.html";
+        }
+      }
+
+      document.querySelector('.titleH1F').addEventListener('click', function(event){
+          unF1(console.logs[0], console.logs[1] , console.logs[2]);
+        })
+
+    </script>
+</body>
+</html>

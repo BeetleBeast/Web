@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="color-scheme" content="#750101"> <!--change color of text in tabs-->
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#750101"> <!--change color of text in tabs-->
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#750101"> <!--change color of text in tabs-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Quest</title>
+    <link rel="icon" href="Web/Main/assets\icons\main\web_icon.svg" type="image/icon type">  <!-- links icon to website-->
+    <link href="Web/Main/news.html" type="website--">
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  <!--Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet"> <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  <!--Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Orbitron&display=swap" rel="stylesheet"> <!--Fonts-->
+    <link rel="stylesheet" type="text/css" href="Web/Main/style.css" >
+     <!-- links video-->
+    <video autoplay muted loop id="myVideo">  
+      <source src="Web/Main/assets/background/video/video.mp4" type="video/mp4">
+      <track label="none" kind="captions" srclang="en" default>
+      Your browser does not support HTML5 video.
+      <style body:background-color: rgb(43, 43, 43);></style>
+    </video>
+    <audio autoplay loop id="AudioMAin">
+      <source src="Web\Main\assets\background\audio\adven.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+    </audio>
+    <style>
+      *{
+        box-sizing: border-box;
+        position:relative;
+        cursor: default;
+        -webkit-user-select: none;
+        user-select: none;
+        font-family: 'Orbitron', sans-serif;
+        text-decoration: none;
+      }
+      *:visited{
+        color: inherit;
+      }
+      *:link{
+        color: inherit;
+      }
+      html{
+        text-align: center;
+        overflow: hidden;
+        background-color:#232530;
+      }
+      #detach-button-host {
+        display: none !important;
+      }
+      body{
+        background-color: rgb(43, 43, 43);
+      }
+    </style>
+
+  </head>
+
+  <body id="body">
+    <everything>
+      <div id="topbar">
+        <h1 id="titel">The Quest</h1>
+      </div>
+      
+      <diva id="menu_News_autlet" class="h">
+        <nav class="menu" aria-label="menu">
+          <a href='Web/Main/options_NG.html'><div id="new_game" class="new_game toggle"onclick="options_NG()" role="button">List of Sites</div></a>
+          <a href="Web/Main/options_LG.html"><div id="load_game" class="load_game toggle" onclick="options_LG()"role="button">Load game</div></a>
+          <a href="Web/Main/options_S.html"><div id="settings" class="settings toggle" onclick="options_S()"role="button">Settings</div></a>
+          <div id="Exit" class="Exit toggle" role="button">Exit</div>
+        </nav>
+
+        <div id="News_autlet" class="news">
+          <div id="News">
+            <h3 id="h3_news">news</h3>
+            <span id='iframe_news' href="Web/Main/news.html" onclick="console.log('trying to open news')">Latest version is: 0.0.10</span>
+            <div id="news_B"  onclick="latest_news()">press to see more</div>
+          </div>
+        </div>
+      </diva>
+    </everything>
+  </body>
+  <script>
+  //self made
+  
+  var audio = document.getElementById("AudioMAin");
+  console.log(audio.volume);
+  audio.currentTime = localStorage.getItem('AudioMAin');
+  audio.volume = localStorage.getItem('AudioVolume');
+  document.getElementById('Exit').addEventListener('click', function(){
+    close_window();
+    localStorage.removeItem('AudioMAin');
+    function close_window() {
+      if (confirm("Close Window?")) {
+        window.close();
+      }
+    }
+  })
+
+
+  function options_NG() {
+    onunload = function() {localStorage.setItem('AudioMAin', audio.currentTime);}
+    console.log(audio.currentTime);
+    console.log("launch option new game");
+
+  }
+  function options_LG() {
+    onunload = function() {localStorage.setItem('AudioMAin', audio.currentTime);}
+    console.log(audio.currentTime);
+    console.log("launch option load game");
+    //getcookie
+  }
+  function options_S() {
+    onunload = function() {localStorage.setItem('AudioMAin', audio.currentTime);}
+    console.log(audio.currentTime);
+    console.log("launch option settings");
+    //getcookie
+  }
+
+  function latest_news() {
+    /*window.open("C:/everything/vsc_map/Projects/textgame/news.html");*/
+    window.open("Web/Main/news.html","_blank","toolbar=no, location=yes, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=yes");     
+    console.log("launch latest news");
+    console.log("get more info");
+  }
+
+
+
+  function go_back() {
+    /*const stv = document.getElementsByClassName("st");
+    stv[0].style.width = "0%";
+    stv[0].style.opacity = "0";*/
+    console.log("went back");
+    //location.reload();
+  }
+
+
+  </script>
+</html>

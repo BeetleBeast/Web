@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gatcha_tower</title>
+    <link rel="stylesheet" type="text/css" href="/games/G3/Main.css">
+    <link rel="stylesheet" type="text/css" href="Main.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</style>    
+<script src="scripts.js"></script>
+</head>
+
+<body>
+    <div id="Side-Menu">
+        <div id="Side-image"></div>
+        <div id="Side-Title">Gatcha_tower</div>
+        <br>
+        <button type="button" role="button" class="Open-more" onclick="openMoreSettings()">More</button>
+        <a href="Settings.html"><button type="button" role="button" class="settings">Settings</button></a>
+    </div>
+    <div id="app">
+        <h1 class="Quest_Title"></h1>
+        <div class="main">
+            <div class="main_section"></div>
+            <canvas class="content-canvas" ref="contentCanvas"></canvas>
+        </div>
+        <footer class="footer_section">footer_section
+            <br>
+            <div class="Choices Sh_1"></div>
+            <div class="Choices Sh_2"></div>
+            <div class="Choices Sh_3"></div>
+            <div class="Choices Sh_4"></div>
+            <div class="Choices Sh_5"></div>
+        </footer>
+        <div class="Side-extra parent">
+                <div class="Side-extra child1 Side-Saving">Saving
+                    <ul class="Side-extra Save-ul">
+                        <li class="Side-extra Save-li">
+                            <button type="button" role="button" class="Side-extra local Button" onclick="Save_LOCAL(saveFile)">Download the latest save</button>
+                        
+                        
+                            <button type="button" role="button" class="Side-extra Save Button" onclick="savefile(saveFile)">Save the latest save</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="Side-extra child1 Side-gameplay">gameplay</div>
+                <div class="Side-extra child1 Side-grafics">grafics</div>
+                <div class="Side-extra child1 Side-more">more
+                    <ul class="Side-extra Side-more-ul">
+                        <li class="Side-extra Side-more-li">Fist</li>
+                    </ul>
+                </div>
+        </div>
+    </div>
+
+</body>
+
+
+<script>
+    let Anumber = 1;
+    document.querySelector('.parent').style.opacity = 0;
+    function openMoreSettings(){
+        console.log('opened MoreSettings Tab',Anumber)
+        if (Anumber % 2 == 1){
+            document.querySelector('.parent').style.opacity = 1;
+            document.querySelector('.child1').style.opacity = 1;
+            document.querySelector('.Save-li').style.opacity = 1;
+            Anumber += 1;
+        }else if(Anumber % 2 == 0){
+            document.querySelector('.parent').style.opacity = 0;
+            Anumber += 1;
+        }
+}
+
+</script>
+</html>

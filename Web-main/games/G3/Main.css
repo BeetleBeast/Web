@@ -1,0 +1,269 @@
+*{
+    cursor: default;
+    -webkit-user-select: none;
+    user-select: none;
+    font-family: 'Orbitron', sans-serif;
+    text-decoration: none;
+
+    --mainColor: linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
+    --secondColor:rgba(228, 5, 128, 0.445);
+	--thirdColor: #232530;
+}
+*:visited{
+    color: inherit;
+}
+*:link{
+    color: inherit;
+}
+#detach-button-host {
+    display: none !important;
+}
+/*--Main-Canvas--*/
+body{
+    display: flex;
+	text-align: center;
+    overflow: hidden;
+    background-color:#232530;
+}
+#app{
+	display: block;
+	float: right;
+	width: calc(100% - 12em);
+	height: 99vh;
+	display: flex;
+	flex-direction: column;
+	z-index: 5;
+	
+}
+.Quest_Title{
+    color: white;
+	z-index: auto;
+	position: relative;
+	top: 0px;
+	text-align: center;
+	float: none;
+	margin-bottom: 0;
+	box-sizing:content-box;
+
+	border: 2px dashed red;
+
+
+}
+.main{
+	z-index: 5;
+	padding-top: 5px;
+	position: relative;
+
+	border: 2px dashed rgb(17, 0, 255);
+	top: 0;
+	height: 100%;
+	width: 100%;
+	margin: auto;
+}
+.main_section{
+    color: white;
+}
+.footer_section{
+    color: white;
+	z-index: auto;
+	position: fixed;
+
+	
+	bottom: 0px;
+	width: 100%;
+	margin: auto;
+	text-align: center;
+	padding: 20px;
+	padding-bottom: 20px;
+
+	border: 2px dashed red;
+}
+.Choices{
+	float: left;
+}
+
+/*--Side-Menu--*/
+#Side-Menu{
+	background-color: var(--mainColor);
+	border: 2px solid gold;
+    display: block;
+    float: left;
+	width: 12em;
+	height: 99vh;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+
+	border: 2px dashed red;
+
+}
+.Open-more{
+    color: aqua;
+	background-color: black;
+	width: 5em;
+	display: block;
+	height: fit-content;
+	padding: 0.5em;
+	margin-left: 30%;
+}
+.Open-more:hover{
+	color: aqua;
+    border: 1px solid lightgreen;
+    
+}.Open-more:active{
+    box-shadow: none;
+    transform: translateY(5px);
+}
+.settings{
+    color: aqua;
+	background-color: black;
+	display: block;
+	width: 5em;
+	height: fit-content;
+	padding: 0.5em;
+	margin-left: 30%;
+}
+.settings:hover{
+	color: aqua;
+    border: 1px solid lightgreen;
+    
+}
+#Side-image{
+	/*background-image:;*/
+	display: block;
+}
+#Side-Title{
+	text-align: center;
+	font-size: 1vw;
+	padding-top: 6%;
+	color: gold;
+	display: block;
+
+	/* --Side Extra-- */
+}.Side-extra , .parent{
+	background-color: var(--thirdColor);
+	width: 12em;
+	height: 99vh;
+	text-align: left;
+	
+	display: flex;
+	flex-direction: column;
+	
+	border: 5px double goldenrod;
+}
+.Side-extra{
+	background-color: transparent;
+	z-index: 9999999;
+	position: fixed;
+	margin: 15px auto;
+	border-radius: 5px;
+	width:100%;
+	height: 98dvh;
+	
+	
+	
+
+}
+.child1,.parent{
+	color: white;
+	opacity: 1;
+	margin: 0;
+	position: relative;
+	text-align: center;
+	background-color: var(--thirdColor);
+	
+}
+.parent{
+	display: flexbox;
+	flex-direction: row;
+	border: 5px solid red;
+	padding: 0;
+	margin: 0;
+	
+}
+.child1{
+	width: 25%;
+	height:inherit;
+	top: 15px;
+	
+
+	border: 5px dotted green;
+}
+.Side-Saving{
+	opacity: 1;
+	border: 5px dotted blue;
+}
+.Save-ul{
+    color: lightgreen;
+    border: 1px hidden lightgreen;
+	position: relative;
+	width: 90%;
+	height: 100%;
+	padding: 0;
+	margin: auto;
+	
+}
+.Save-li{
+	color: lightgreen;
+    border: 1px hidden lightgreen;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	display:block;
+}
+.local{
+	font-size: 2em;
+	border: 5px dotted rgb(0, 255, 234);
+	
+	width: auto;
+	height: 2em;
+}
+.Save{
+	font-size: 2em;
+	border: 5px dotted rgb(0, 255, 234);
+	flex-direction: column;
+	width: auto;
+	height: 2em;
+}
+.Button{
+	color: white;
+}
+.Button:hover{
+	cursor: pointer;
+	color: blueviolet;
+}
+.Side-gameplay{
+	opacity: 1;
+	border: 5px dotted blue;
+}
+.Side-grafics{
+	opacity: 1;
+	border: 5px dotted blue;
+}
+.Side-more{
+	opacity: 1;
+	border: 5px dotted blue;
+}
+.Side-more-ul{
+	position: relative;
+	width: 80%;
+	padding: 0;
+	margin: auto;
+}
+.Side-more-li{
+	position: relative;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+
+
+/*--Settings--*/
+.save{
+    color: green;
+    border: 1px solid lightgreen;
+	position: relative;
+}
