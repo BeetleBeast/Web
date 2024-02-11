@@ -26,6 +26,7 @@ body{
 
 .back{
   border-radius: 5px;
+  width: -moz-fit-content;  /* Firefox */
   width: fit-content;
   padding: 5px;
   right:calc(100vw - 55%);
@@ -45,6 +46,7 @@ body{
   position: absolute;
   top: 45vw;
   left: 0%;
+  width: -moz-fit-content;  /* Firefox */
   width: fit-content;
   color: transparent;
 }

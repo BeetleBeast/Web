@@ -8,6 +8,7 @@
 }
 .back{
   border-radius: 5px;
+  width: -moz-fit-content;
   width: fit-content;
   padding: 5px;
   right:calc(100vw - 57%);
