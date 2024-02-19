@@ -68,7 +68,7 @@ function newGame(saveFileNum){
         }
     }
     
-    // localStorage.setItem('saveFileG3 '+saveFileNum, saveFile); // FIXME: after json files made rzmove localstorage 
+    // localStorage.setItem('saveFileG3 '+saveFileNum, saveFile); // FIXME: after json files made remove localstorage 
     /*
     var saveFileJSON = JSON.stringify(saveFile)
     ('saveFile'+saveFileNum+'.json', saveFileJSON)
