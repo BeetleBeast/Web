@@ -19,6 +19,7 @@
 box-sizing: border-box;
 position:relative;
 cursor: default;
+-webkit-user-select:none;  /* Chrome all / Safari all */
 user-select: none;
 font-family: 'Orbitron', sans-serif;
 text-decoration: none;
@@ -45,10 +46,10 @@ display: none !important;
     <div class="Timer">0.0</div>
     <canvas id="canvas" class="canvas">    
         <div id="PresonMain">
-            <img src="assets\foreground\game_1\Main-man\drawing.svg">
+            <img src="assets\foreground\game_1\Main-man\drawing.svg" default alt="Try reloading page">
         </div>
         <div id="Projectile">
-            <img src="assets\foreground\game_1\Main-projectile\projectile.svg">
+            <img src="assets\foreground\game_1\Main-projectile\projectile.svg" default alt="Try reloading page">
         </div>
     </canvas>
     <div class="container0">
