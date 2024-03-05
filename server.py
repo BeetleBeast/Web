@@ -7,7 +7,31 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         # Handle requests for the root URL ("/") by serving "index.html"
         if self.path == "/":
-            self.path = "/Web/Main/index.html"
+            if not os.path.exists("/Web/Main/index.html"):
+                print('can\'t find index')
+                print('trying to scan files...')
+                
+                if os.path.exists("/Main/index.html"):
+                    print ('found files in main!')
+                    self.path = "/Main/index.html"
+            
+                elif os.path.exists("Main/index.html"):
+                    print('found in  lower case Main folder')
+                    self.path = "Main/index.html"
+                elif os.path.exists("WEB-MAIN/Main/index.html"):
+                    print('found in  lower case Main folder')
+                    self.path = "WEB-MAIN/Main/index.html"
+                elif os.path.exists("/WEB-MAIN/Main/index.html"):
+                    print('found in  lower case Main folder')
+                    self.path = "/WEB-MAIN/Main/index.html"
+                else: 
+                    print('done scanning!')
+                    print('no file found in Main folder')
+            else: 
+                print('found File\'s and Starting Server')
+                self.path = "/Web/Main/index.html"
+            
+            
         elif self.path == "/index.html":
             # Handle requests for html files in the "Main" directory
             self.send_response(200)
@@ -67,6 +91,8 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         # Add more conditions to handle other file types as necessary
 
         super().do_GET()
+        
+
 
     def translate_path(self, path):
         # Map requested URLs to the "web_content" directory
@@ -102,9 +128,7 @@ port = 80  #  port forwarding
 
 
 
-if not os.path.exists("/Web/Main/index.html"):
-    print('can\'t find index')
-else: print('can find It')
+
 
 # Create a socket server on the specified IP and port
 with socketserver.TCPServer((public_ip, port), CustomHandler) as httpd:
