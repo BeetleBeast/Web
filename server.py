@@ -7,23 +7,24 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         # Handle requests for the root URL ("/") by serving "index.html"
         if self.path == "/":
+            self.path = "Main/index.html"
             if not os.path.exists("/Web/Main/index.html"):
                 print('can\'t find index')
                 print('trying to scan files...')
                 
                 if os.path.exists("/Main/index.html"):
-                    print ('found files in main!')
+                    print ('found files in main!(/Main/)')
                     self.path = "/Main/index.html"
             
                 elif os.path.exists("Main/index.html"):
-                    print('found in  lower case Main folder')
-                    self.path = "Main/index.html"
-                elif os.path.exists("WEB-MAIN/Main/index.html"):
-                    print('found in  lower case Main folder')
-                    self.path = "WEB-MAIN/Main/index.html"
-                elif os.path.exists("/WEB-MAIN/Main/index.html"):
-                    print('found in  lower case Main folder')
-                    self.path = "/WEB-MAIN/Main/index.html"
+                    print('found in  lower case Main folder (Main/)')
+                    #hererer #TODO
+                elif os.path.exists("Web-main/Main/index.html"):
+                    print('found in  lower case Main folder (Web-main/Main/)')
+                    self.path = "Web-main/Main/index.html"
+                elif os.path.exists("/Web-main/Main/index.html"):
+                    print('found in  lower case Main folder (/Web-main/Main/)')
+                    self.path = "/Web-main/Main/index.html"
                 else: 
                     print('done scanning!')
                     print('no file found in Main folder')
