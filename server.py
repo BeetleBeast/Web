@@ -4,26 +4,19 @@ import socketserver
 import os
 import socket
 
-
-web_content_dir = os.path.join(os.getcwd())
-main_content_dir = os.path.join(os.getcwd(), "Main")
-Game_content_dir = os.path.join(os.getcwd(), "games")
-assets_content_dir = os.path.join(os.getcwd(), "Main", "assets")
-
-
-# Parse command-line arguments
-parser = argparse.ArgumentParser()
-parser.add_argument("--web_dir", help="Web directory path", default=os.getcwd())
-parser.add_argument("--main_dir", help="Main directory path", default=os.path.join(os.getcwd(), "Main"))
-parser.add_argument("--game_dir", help="Games directory path", default=os.path.join(os.getcwd(), "games"))
-parser.add_argument("--assets_dir", help="Assets directory path", default=os.path.join(os.getcwd(), "Main", "assets"))
-args = parser.parse_args()
-
-web_content_dir = args.web_dir
-main_content_dir = args.main_dir
-game_content_dir = args.game_dir
-main_dir = "Main"
-        
+S_Web_dir = "S:\\Web"
+if os.path.exists(S_Web_dir):
+    web_content_dir = os.path.join(S_Web_dir)
+    main_content_dir = os.path.join(S_Web_dir, "Main")
+    Game_content_dir = os.path.join(S_Web_dir, "games")
+    assets_content_dir = os.path.join(S_Web_dir, "Main", "assets")
+    main_dir = "Main"
+else:
+    web_content_dir = os.path.join(os.getcwd())
+    main_content_dir = os.path.join(os.getcwd(), "Main")
+    Game_content_dir = os.path.join(os.getcwd(), "games")
+    assets_content_dir = os.path.join(os.getcwd(), "Main", "assets")
+    main_dir = "Main"
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
