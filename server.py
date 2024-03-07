@@ -3,24 +3,24 @@ import socketserver
 import os
 import socket
 
+
+web_content_dir = os.path.join(os.getcwd())
+main_content_dir = os.path.join(os.getcwd(), "Main")
+Game_content_dir = os.path.join(os.getcwd(), "games")
+main_dir = "Main"
+        
+
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        web_content_dir = os.path.join(os.getcwd()) #os.path.join(os.path.dirname(__file__), "Web" )  os.getcwd()
-        main_dir = "Main"
-
+        print("Web_content::",web_content_dir,"\n"
+            "main_content::",main_content_dir,"\n"
+            "game_content::", Game_content_dir)
+        print("self.path::",self.path)
+        
         if self.path == "/":
             if os.path.exists(os.path.join(web_content_dir, main_dir, "index.html")):
                 print('found File\'s and Starting Server')
                 self.path = web_content_dir+"\\"+main_dir+"\\"+"index.html"
-                #if os.path.exists(os.path.join("Web", main_dir, "index.html")):
-                #    print("Found in "+ web_content_dir, main_dir,"index.html")
-                #    self.path = "Web", main_dir,"index.html"
-                #elif os.path.exists(os.path.join(web_content_dir, main_dir, "index.html")):
-                #    print("Found in "+ web_content_dir+"\\"+ main_dir+"\\"+"index.html")
-                #    self.path = web_content_dir+"\\"+ main_dir+"\\"+"index.html"
-                #else:
-                #    print('done scanning!')
-                #    print('no file found in Main folder')
             else: 
                 print("Can't find index.html")
 
@@ -103,15 +103,10 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def translate_path(self, path):
         print("path:", path)
         web_content_dir = os.path.join(os.path.dirname(__file__))
-        main_dir = "Main"
         new_path = os.path.normpath(path).lstrip("/")
         new_path = os.path.join(web_content_dir,main_dir, new_path)
         print("new_path:", new_path)
         return new_path
-
-
-
-   # directory = "Web"
  
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -131,10 +126,6 @@ print('New Ip =>',get_ip())
 public_ip = get_ip()  #  my public IP
 port = 80  #  port forwarding
 
-
-
-
-
 # Create a socket server on the specified IP and port
 with socketserver.TCPServer((public_ip, port), CustomHandler) as httpd:
     print(f"Serving at {public_ip}:{port}")
@@ -145,6 +136,3 @@ with socketserver.TCPServer((public_ip, port), CustomHandler) as httpd:
     except KeyboardInterrupt:
         print("\nServer stopped.")
 
-
-# Add this code at the end of your script
-input("Press Enter to exit...")
