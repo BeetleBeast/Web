@@ -5,12 +5,12 @@ import socket
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path is None or not any(self.path.endswith(ext) for ext in (".html", ".js", ".css", ".png", ".mp4", ".mp3")):
-            self.send_response(404)
-            self.send_header("Content-type", "text/plain")
-            self.end_headers()
-            return
-        web_content_dir = os.path.join(os.path.dirname(__file__), "Web")
+        #if self.path is None or not any(self.path.endswith(ext) for ext in (".html", ".js", ".css", ".png", ".mp4", ".mp3")):
+        #    self.send_response(404)
+        #    self.send_header("Content-type", "text/plain")
+        #    self.end_headers()
+        #    return
+        web_content_dir = os.path.join(os.path.dirname(__file__)) #, "Web" )
         main_dir = "Main"
 
         if self.path == "/":
@@ -95,10 +95,11 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     #    return new_path
     
     def translate_path(self, path):
-        web_content_dir = os.path.join(os.path.dirname(__file__), "Web")
+        web_content_dir = os.path.join(os.path.dirname(__file__))
         main_dir = "Main"
         new_path = os.path.normpath(path).lstrip("/")
-       
+        new_path = os.path.join(web_content_dir,main_dir, new_path)
+        return new_path
 
 
 
