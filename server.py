@@ -1,11 +1,7 @@
-import argparse
 import http.server
 import socketserver
 import os
 import socket
-import webbrowser
-
-
 
 S_Web_dir = "S:\\Web"
 index_html = "index.html"
@@ -92,27 +88,18 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         super().do_GET()
         
 
-
-
     def translate_path(self, path):
-        print("DEBUG==> new_path before before (x2)change ", path)
         new_path = os.path.normpath(path).lstrip("/")
         if new_path.startswith(index_html):
             new_path = new_path[len(index_html) + 1:]
         if "games" in new_path:
             # new_path is a subdirectory of Game_content_dir
-            print("DEBUG==> new_path before change ", new_path)
             new_path = web_content_dir  + new_path
             print("new_path via Game")
-            print("DEBUG==>  web_content_dir ", web_content_dir)
-            print("DEBUG==> new_path ", new_path)
         else:
             # new_path is a subdirectory of main_content_dir wich is default
-            print("DEBUG==> new_path before change ", new_path)
             new_path = main_content_dir + new_path
             print("new_path via Main")
-            print("DEBUG==>  main_content_dir ", main_content_dir)
-            print("DEBUG==> new_path ", new_path)
         return new_path
         
  
