@@ -146,8 +146,9 @@ if  __name__ == '__main__':
     public_ip = get_ip()  #  my public IP
     port = 80  #  port forwarding
 
-    # Starts the web sitz
-    webbrowser.open(public_ip) 
+    # Starts the web site
+    operagx = webbrowser.get('operagx')
+    operagx.open(public_ip) 
     # Create a socket server on the specified IP and port
     with socketserver.TCPServer((public_ip, port), CustomHandler) as httpd:
         print(f"Serving at {public_ip}:{port}")
