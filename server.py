@@ -7,7 +7,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         # Handle requests for the root URL ("/") by serving "index.html"
         if self.path == "/":
-            self.path = "Main/index.html"
+            
             if not os.path.exists("/Web/Main/index.html"):
                 print('can\'t find index')
                 print('trying to scan files...')
