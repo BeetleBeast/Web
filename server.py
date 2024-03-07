@@ -3,6 +3,9 @@ import http.server
 import socketserver
 import os
 import socket
+import webbrowser
+
+
 
 S_Web_dir = "S:\\Web"
 if os.path.exists(S_Web_dir):
@@ -138,10 +141,13 @@ if  __name__ == '__main__':
     
     print('New Ip =>',get_ip())
 
+
     # Specify the public IP address and ports
     public_ip = get_ip()  #  my public IP
     port = 80  #  port forwarding
 
+    # Starts the web sitz
+    webbrowser.open(public_ip) 
     # Create a socket server on the specified IP and port
     with socketserver.TCPServer((public_ip, port), CustomHandler) as httpd:
         print(f"Serving at {public_ip}:{port}")
