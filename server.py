@@ -1,14 +1,18 @@
+import argparse
 import http.server
 import socketserver
 import os
 import socket
 
 
-web_content_dir = os.path.join(os.getcwd())
-main_content_dir = os.path.join(os.getcwd(), "Main")
-Game_content_dir = os.path.join(os.getcwd(), "games")
-assets_content_dir = os.path.join(os.getcwd(), "Main", "assets")
-main_dir = "Main"
+
+# Parse command-line arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("--web_dir", help="Web directory path", default=os.getcwd())
+parser.add_argument("--main_dir", help="Main directory path", default=os.path.join(os.getcwd(), "Main"))
+parser.add_argument("--game_dir", help="Games directory path", default=os.path.join(os.getcwd(), "games"))
+parser.add_argument("--assets_dir", help="Assets directory path", default=os.path.join(os.getcwd(), "Main", "assets"))
+args = parser.parse_args()
         
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
