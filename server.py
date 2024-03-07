@@ -15,7 +15,6 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 if os.path.exists("/Main/index.html"):
                     print ('found files in main!(/Main/)')
                     self.path = "/Main/index.html"
-            
                 elif os.path.exists("Main/index.html"):
                     print('found in  lower case Main folder (Main/)')
                     self.path = "Main/index.html"
