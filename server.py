@@ -10,7 +10,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         #    self.send_header("Content-type", "text/plain")
         #    self.end_headers()
         #    return
-        web_content_dir = os.path.join(os.path.dirname(__file__)) #, "Web" )
+        web_content_dir = os.path.join(os.getcwd(), "Web") #os.path.join(os.path.dirname(__file__), "Web" )  os.getcwd()
         main_dir = "Main"
 
         if self.path == "/":
@@ -38,6 +38,8 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-type", "text/html")
             self.end_headers()
+            file_path = self.translate_path(self.path)
+            print("file_path:", file_path)
             with open(self.translate_path(self.path), "rb") as file:
                 self.wfile.write(file.read())
             return
@@ -46,6 +48,8 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-type", "application/javascript")
             self.end_headers()
+            file_path = self.translate_path(self.path)
+            print("file_path:", file_path)
             with open(self.translate_path(self.path), "rb") as file:
                 self.wfile.write(file.read())
             return
@@ -54,30 +58,38 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-type", "text/css")
             self.end_headers()
+            file_path = self.translate_path(self.path)
+            print("file_path:", file_path)
             with open(self.translate_path(self.path), "rb") as file:
                 self.wfile.write(file.read())
             return
         elif self.path.endswith((".png")):
-            # Handle png images (you can add more extensions as needed)
+            # Handle png images 
             self.send_response(200)
             self.send_header("Content-type", "image/png")
             self.end_headers()
+            file_path = self.translate_path(self.path)
+            print("file_path:", file_path)
             with open(self.translate_path(self.path), "rb") as file:
                 self.wfile.write(file.read())
             return
         elif self.path.endswith((".mp4")):
-            # Handle png images (you can add more extensions as needed)
+            # Handle MP4 video 
             self.send_response(200)
             self.send_header("Content-type", "video/mp4")
             self.end_headers()
+            file_path = self.translate_path(self.path)
+            print("file_path:", file_path)
             with open(self.translate_path(self.path), "rb") as file:
                 self.wfile.write(file.read())
             return
         elif self.path.endswith((".mp3")):
-            # Handle png images (you can add more extensions as needed)
+            # Handle MP3 audio 
             self.send_response(200)
             self.send_header("Content-type", "audio/mp3")
             self.end_headers()
+            file_path = self.translate_path(self.path)
+            print("file_path:", file_path)
             with open(self.translate_path(self.path), "rb") as file:
                 self.wfile.write(file.read())
             return
@@ -96,10 +108,12 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     #    return new_path
     
     def translate_path(self, path):
+        print("path:", path)
         web_content_dir = os.path.join(os.path.dirname(__file__))
         main_dir = "Main"
         new_path = os.path.normpath(path).lstrip("/")
         new_path = os.path.join(web_content_dir,main_dir, new_path)
+        print("new_path:", new_path)
         return new_path
 
 
