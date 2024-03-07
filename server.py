@@ -7,6 +7,7 @@ import socket
 web_content_dir = os.path.join(os.getcwd())
 main_content_dir = os.path.join(os.getcwd(), "Main")
 Game_content_dir = os.path.join(os.getcwd(), "games")
+assets_content_dir = os.path.join(os.getcwd(), "Main", "assets")
 main_dir = "Main"
         
 
@@ -18,9 +19,9 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         print("self.path::",self.path)
         
         if self.path == "/":
-            if os.path.exists(os.path.join(web_content_dir, main_dir, "index.html")):
+            if os.path.exists(os.path.join( main_content_dir, "index.html")):
                 print('found File\'s and Starting Server')
-                self.path = web_content_dir+"\\"+main_dir+"\\"+"index.html"
+                self.path = "/index.html"
             else: 
                 print("Can't find index.html")
 
@@ -102,10 +103,10 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     
     def translate_path(self, path):
         print("path:", path)
-        web_content_dir = os.path.join(os.path.dirname(__file__))
         new_path = os.path.normpath(path).lstrip("/")
-        new_path = os.path.join(web_content_dir,main_dir, new_path)
-        print("new_path:", new_path)
+        new_path = main_content_dir + new_path
+        print("main_content_dir inside translate_path ==>", main_content_dir)
+        print("new_path ==>", new_path)
         return new_path
  
 def get_ip():
