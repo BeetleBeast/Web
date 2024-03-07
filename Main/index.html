@@ -10,24 +10,24 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="#750101"> <!--change color of text in tabs-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>The Quest</title>
-    <link rel="icon" href="assets\icons\main\web_icon.svg" type="image/icon type">  <!-- links icon to website-->
-    <link href="news.html" type="website--">
+    <link rel="icon" href="/assets\icons\main\web_icon.svg" type="image/icon type">  <!-- links icon to website-->
+    <link href="/news.html" type="website--">
     <link rel="preconnect" href="https://fonts.googleapis.com"> <!--Fonts-->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  <!--Fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet"> <!--Fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com"> <!--Fonts-->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  <!--Fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Orbitron&display=swap" rel="stylesheet"> <!--Fonts-->
-    <link rel="stylesheet" type="text/css" href="style.css" >
+    <link rel="stylesheet" type="text/css" href="/style.css" >
      <!-- links video-->
     <video autoplay muted loop id="myVideo">  
-      <source src="assets/background/video/video.mp4" type="video/mp4">
+      <source src="/assets/background/video/video.mp4" type="video/mp4">
       <track label="none" kind="captions" srclang="en" default>
       Your browser does not support HTML5 video.
       <style body:background-color: rgb(43, 43, 43);></style>
     </video>
     <audio autoplay loop id="AudioMAin">
-      <source src="assets\background\audio\adven.mp3" type="audio/mpeg">
+      <source src="/assets\background\audio\adven.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
     </audio>
     <style>
@@ -69,16 +69,16 @@
       
       <diva id="menu_News_autlet" class="h">
         <nav class="menu" aria-label="menu">
-          <a href='options_NG.html'><div id="new_game" class="new_game toggle"onclick="options_NG()" role="button">List of Sites</div></a>
-          <a href="options_LG.html"><div id="load_game" class="load_game toggle" onclick="options_LG()"role="button">Load game</div></a>
-          <a href="options_S.html"><div id="settings" class="settings toggle" onclick="options_S()"role="button">Settings</div></a>
+          <a href='/options_NG.html'><div id="new_game" class="new_game toggle"onclick="options_NG()" role="button">List of Sites</div></a>
+          <a href="/options_LG.html"><div id="load_game" class="load_game toggle" onclick="options_LG()"role="button">Load game</div></a>
+          <a href="/options_S.html"><div id="settings" class="settings toggle" onclick="options_S()"role="button">Settings</div></a>
           <div id="Exit" class="Exit toggle" role="button">Exit</div>
         </nav>
 
         <div id="News_autlet" class="news">
           <div id="News">
             <h3 id="h3_news">news</h3>
-            <span id='iframe_news' href="news.html" onclick="console.log('trying to open news')">Latest version is: 0.0.10</span>
+            <span id='iframe_news' href="/news.html" onclick="console.log('trying to open news')">Latest version is: 0.0.10</span>
             <div id="news_B"  onclick="latest_news()">press to see more</div>
           </div>
         </div>
@@ -124,7 +124,7 @@
 
   function latest_news() {
     /*window.open("C:/everything/vsc_map/Projects/textgame/news.html");*/
-    window.open("Web/Main/news.html","_blank","toolbar=no, location=yes, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=yes");     
+    window.open("/news.html","_blank","toolbar=no, location=yes, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=yes");     
     console.log("launch latest news");
     console.log("get more info");
   }

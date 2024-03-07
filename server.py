@@ -20,20 +20,15 @@ else:
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        print("Web_content::",web_content_dir,"\n"
-            "main_content::",main_content_dir,"\n"
-            "game_content::", Game_content_dir)
         print("self.path::",self.path)
-        
         if self.path == "/":
             if os.path.exists(os.path.join( main_content_dir, "index.html")):
-                print('found File\'s and Starting Server')
                 self.path = "/index.html"
             else: 
                 print("Can't find index.html")
-
-            
-            
+        elif self.path == "/index.html":
+            # Handle the case when self.path is '/index.html'
+            self.path = "/"      
         elif self.path.endswith(".html"):
             # Handle html files
             self.send_response(200)
@@ -102,13 +97,28 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
 
 
     def translate_path(self, path):
-        print("path:", path)
+        print("DEBUG==> new_path before before (x2)change ", path)
         new_path = os.path.normpath(path).lstrip("/")
-        new_path = main_content_dir + new_path
-        print("main_content_dir inside translate_path ==>", main_content_dir)
-        print("new_path ==>", new_path)
+        if new_path.startswith("index.html"):
+            new_path = new_path[len("index.html") + 1:]
+        if "games" in new_path:
+            # new_path is a subdirectory of Game_content_dir
+            print("DEBUG==> new_path before change ", new_path)
+            new_path = web_content_dir  + new_path
+            print("new_path via Game")
+            print("DEBUG==>  web_content_dir ", web_content_dir)
+            print("DEBUG==> new_path ", new_path)
+        else:
+            # new_path is a subdirectory of main_content_dir wich is default
+            print("DEBUG==> new_path before change ", new_path)
+            new_path = main_content_dir + new_path
+            print("new_path via Main")
+            print("DEBUG==>  main_content_dir ", main_content_dir)
+            print("DEBUG==> new_path ", new_path)
         return new_path
+        
  
+
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.settimeout(0)
@@ -121,19 +131,25 @@ def get_ip():
     finally:
         s.close()
     return IP
-print('New Ip =>',get_ip())
+if  __name__ == '__main__':
+    print("Web_content::",web_content_dir,"\n"
+    "main_content::",main_content_dir,"\n"
+    "game_content::", Game_content_dir)
+    
+    print('New Ip =>',get_ip())
 
-# Specify the public IP address and ports
-public_ip = get_ip()  #  my public IP
-port = 80  #  port forwarding
+    # Specify the public IP address and ports
+    public_ip = get_ip()  #  my public IP
+    port = 80  #  port forwarding
 
-# Create a socket server on the specified IP and port
-with socketserver.TCPServer((public_ip, port), CustomHandler) as httpd:
-    print(f"Serving at {public_ip}:{port}")
+    # Create a socket server on the specified IP and port
+    with socketserver.TCPServer((public_ip, port), CustomHandler) as httpd:
+        print(f"Serving at {public_ip}:{port}")
 
-    # Start the server
-    try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        print("\nServer stopped.")
+        # Start the server
+        try:
+            httpd.serve_forever()
+            print("press any key to stop")
+        except KeyboardInterrupt:
+            print("\nServer stopped.")
 

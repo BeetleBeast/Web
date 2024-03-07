@@ -1,11 +1,11 @@
-const platform = '/Web/Main/assets/foreground/game_2/platform.png'
-const hills = '/Web/Main/assets/foreground/game_2/hills.png'
-const background = '/Web/Main/assets/foreground/game_2/background.png'
-const platformSmallTall = '/Web/Main/assets/foreground/game_2/platformSmallTall.png'
-const spriteRunLeft = '/Web/Main/assets/foreground/game_2/spriteRunLeft.png'
-const spriteRunRight = '/Web/Main/assets/foreground/game_2/spriteRunRight.png'
-const spriteStandLeft = '/Web/Main/assets/foreground/game_2/spriteStandLeft.png'
-const spriteStandRight = '/Web/Main/assets/foreground/game_2/spriteStandRight.png'
+const platform = '/assets/foreground/game_2/platform.png'
+const hills = '/assets/foreground/game_2/hills.png'
+const background = '/assets/foreground/game_2/background.png'
+const platformSmallTall = '/assets/foreground/game_2/platformSmallTall.png'
+const spriteRunLeft = '/assets/foreground/game_2/spriteRunLeft.png'
+const spriteRunRight = '/assets/foreground/game_2/spriteRunRight.png'
+const spriteStandLeft = '/assets/foreground/game_2/spriteStandLeft.png'
+const spriteStandRight = '/assets/foreground/game_2/spriteStandRight.png'
 
 
 
