@@ -7,11 +7,10 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         # Handle requests for the root URL ("/") by serving "index.html"
         if self.path == "/":
-            
             if not os.path.exists("/Web/Main/index.html"):
                 print('can\'t find index')
                 print('trying to scan files...')
-                
+                # http://192.168.129.16/Users/xkell/Documents/VSC/Projects/Web/Main/index.html
                 if os.path.exists("/Main/index.html"):
                     print ('found files in main!(/Main/)')
                     self.path = "/Main/index.html"
@@ -21,9 +20,9 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 elif os.path.exists("/Web-main/Main/index.html"):
                     print('found in  lower case Main folder (/Web-main/Main/)')
                     self.path = "/Web-main/Main/index.html"
-                elif os.path.exists("Main/index.html"):
-                    print('found in  lower case Main folder (Main/)')
-                    self.path = "Main/index.html"
+                #elif os.path.exists("Main/index.html"):
+                #    print('found in  lower case Main folder (Main/)')
+                #    self.path = "Main/index.html"
                 else: 
                     print('done scanning!')
                     print('no file found in Main folder')
