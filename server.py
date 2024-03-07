@@ -13,28 +13,17 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 print("Can't find index.html")
                 print("Trying to scan files...")
 
-                if os.path.exists(os.path.join("C:/Users/xkell/Documents/VSC/Projects/Web/Main/", "index.html")):
-                    print("Found files in C:/Users/xkell/Documents/VSC/Projects/Web/Main/")
-                    self.path = os.path.join("C:/Users/xkell/Documents/VSC/Projects/Web/Main/", "index.html")
-                #elif os.path.exists(os.path.join("#Put your path here#", "index.html")):
+                #if os.path.exists(os.path.join("#Put your path here#", "index.html")):
                 #    print("Found in #Put your path here#')
                 #    self.path = "#Put your path here#"
-                else: 
-                    print('done scanning!')
-                    print('no file found in Main folder')
+                #else: 
+                #    print('done scanning!')
+                #    print('no file found in Main folder')
             else: 
                 print('found File\'s and Starting Server')
                 self.path = "/Web/Main/index.html"
             
             
-        elif self.path == "/index.html":
-            # Handle requests for html files in the "Main" directory
-            self.send_response(200)
-            self.send_header("Content-type", "text/html")
-            self.end_headers()
-            with open(self.translate_path(self.path), "rb") as file:
-                self.wfile.write(file.read())
-            return
         elif self.path.endswith(".html"):
             # Handle html files
             self.send_response(200)
