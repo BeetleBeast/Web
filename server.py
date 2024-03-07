@@ -17,19 +17,20 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             print("web_content_dir:", web_content_dir)
             print("main_dir:", main_dir)
             print("self.path:", self.path)
-            if not os.path.exists(os.path.join(web_content_dir, main_dir, "index.html")):
-                print("Can't find index.html")
-                print("Trying to scan files...")
-
-                if os.path.exists(os.path.join(web_content_dir, main_dir, "index.html")):
+            if os.path.exists(os.path.join(web_content_dir, main_dir, "index.html")):
+                print('found File\'s and Starting Server')
+                if os.path.exists(os.path.join("Web", main_dir, "index.html")):
                     print("Found in "+ web_content_dir, main_dir,"index.html")
-                    self.path = web_content_dir, main_dir,"index.html"
+                    self.path = "Web", main_dir,"index.html"
+                elif os.path.exists(os.path.join(web_content_dir, main_dir, "index.html")):
+                    print("Found in "+ web_content_dir+"\\"+ main_dir+"\\"+"index.html")
+                    self.path = web_content_dir+"\\"+ main_dir+"\\"+"index.html"
                 else:
                     print('done scanning!')
                     print('no file found in Main folder')
             else: 
-                print('found File\'s and Starting Server')
-                self.path = "/Web/Main/index.html"
+                print("Can't find index.html")
+
             
             
         elif self.path.endswith(".html"):
