@@ -8,6 +8,7 @@ import webbrowser
 
 
 S_Web_dir = "S:\\Web"
+index_html = "index.html"
 if os.path.exists(S_Web_dir):
     web_content_dir = os.path.join(S_Web_dir)
     main_content_dir = os.path.join(S_Web_dir, "Main")
@@ -25,7 +26,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         print("self.path::",self.path)
         if self.path == "/":
-            if os.path.exists(os.path.join( main_content_dir, "index.html")):
+            if os.path.exists(os.path.join( main_content_dir, index_html)):
                 self.path = "/index.html"
             else: 
                 print("Can't find index.html")
@@ -38,8 +39,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-type", "text/html")
             self.end_headers()
             file_path = self.translate_path(self.path)
-            print("file_path:", file_path)
-            with open(self.translate_path(self.path), "rb") as file:
+            with open(file_path, "rb") as file:
                 self.wfile.write(file.read())
             return
         elif self.path.endswith(".js"):
@@ -48,8 +48,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-type", "application/javascript")
             self.end_headers()
             file_path = self.translate_path(self.path)
-            print("file_path:", file_path)
-            with open(self.translate_path(self.path), "rb") as file:
+            with open(file_path, "rb") as file:
                 self.wfile.write(file.read())
             return
         elif self.path.endswith(".css"):
@@ -58,8 +57,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-type", "text/css")
             self.end_headers()
             file_path = self.translate_path(self.path)
-            print("file_path:", file_path)
-            with open(self.translate_path(self.path), "rb") as file:
+            with open(file_path, "rb") as file:
                 self.wfile.write(file.read())
             return
         elif self.path.endswith((".png")):
@@ -68,8 +66,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-type", "image/png")
             self.end_headers()
             file_path = self.translate_path(self.path)
-            print("file_path:", file_path)
-            with open(self.translate_path(self.path), "rb") as file:
+            with open(file_path, "rb") as file:
                 self.wfile.write(file.read())
             return
         elif self.path.endswith((".mp4")):
@@ -78,8 +75,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-type", "video/mp4")
             self.end_headers()
             file_path = self.translate_path(self.path)
-            print("file_path:", file_path)
-            with open(self.translate_path(self.path), "rb") as file:
+            with open(file_path, "rb") as file:
                 self.wfile.write(file.read())
             return
         elif self.path.endswith((".mp3")):
@@ -88,8 +84,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-type", "audio/mp3")
             self.end_headers()
             file_path = self.translate_path(self.path)
-            print("file_path:", file_path)
-            with open(self.translate_path(self.path), "rb") as file:
+            with open(file_path, "rb") as file:
                 self.wfile.write(file.read())
             return
         # Add more conditions to handle other file types as necessary
@@ -102,8 +97,8 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def translate_path(self, path):
         print("DEBUG==> new_path before before (x2)change ", path)
         new_path = os.path.normpath(path).lstrip("/")
-        if new_path.startswith("index.html"):
-            new_path = new_path[len("index.html") + 1:]
+        if new_path.startswith(index_html):
+            new_path = new_path[len(index_html) + 1:]
         if "games" in new_path:
             # new_path is a subdirectory of Game_content_dir
             print("DEBUG==> new_path before change ", new_path)
