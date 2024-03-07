@@ -147,8 +147,7 @@ if  __name__ == '__main__':
     port = 80  #  port forwarding
 
     # Starts the web site
-    operagx = webbrowser.get('operagx')
-    operagx.open(public_ip) 
+    #to much work
     # Create a socket server on the specified IP and port
     with socketserver.TCPServer((public_ip, port), CustomHandler) as httpd:
         print(f"Serving at {public_ip}:{port}")
