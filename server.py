@@ -5,6 +5,11 @@ import os
 import socket
 
 
+web_content_dir = os.path.join(os.getcwd())
+main_content_dir = os.path.join(os.getcwd(), "Main")
+Game_content_dir = os.path.join(os.getcwd(), "games")
+assets_content_dir = os.path.join(os.getcwd(), "Main", "assets")
+main_dir = "Main"
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser()
