@@ -10,7 +10,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         #    self.send_header("Content-type", "text/plain")
         #    self.end_headers()
         #    return
-        web_content_dir = os.path.join(os.getcwd(), "Web") #os.path.join(os.path.dirname(__file__), "Web" )  os.getcwd()
+        web_content_dir = os.path.join(os.getcwd()) #os.path.join(os.path.dirname(__file__), "Web" )  os.getcwd()
         main_dir = "Main"
 
         if self.path == "/":
