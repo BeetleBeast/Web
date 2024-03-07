@@ -5,20 +5,28 @@ import socket
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
+        if self.path is None or not any(self.path.endswith(ext) for ext in (".html", ".js", ".css", ".png", ".mp4", ".mp3")):
+            self.send_response(404)
+            self.send_header("Content-type", "text/plain")
+            self.end_headers()
+            return
         web_content_dir = os.path.join(os.path.dirname(__file__), "Web")
         main_dir = "Main"
 
         if self.path == "/":
+            print("web_content_dir:", web_content_dir)
+            print("main_dir:", main_dir)
+            print("self.path:", self.path)
             if not os.path.exists(os.path.join(web_content_dir, main_dir, "index.html")):
                 print("Can't find index.html")
                 print("Trying to scan files...")
 
-                #if os.path.exists(os.path.join("#Put your path here#", "index.html")):
-                #    print("Found in #Put your path here#')
-                #    self.path = "#Put your path here#"
-                #else: 
-                #    print('done scanning!')
-                #    print('no file found in Main folder')
+                if os.path.exists(os.path.join(web_content_dir, main_dir, "index.html")):
+                    print("Found in "+ web_content_dir, main_dir,"index.html")
+                    self.path = web_content_dir, main_dir,"index.html"
+                else:
+                    print('done scanning!')
+                    print('no file found in Main folder')
             else: 
                 print('found File\'s and Starting Server')
                 self.path = "/Web/Main/index.html"
