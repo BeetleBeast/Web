@@ -18,7 +18,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             
                 elif os.path.exists("Main/index.html"):
                     print('found in  lower case Main folder (Main/)')
-                    #hererer #TODO
+                    self.path = "Main/index.html"
                 elif os.path.exists("Web-main/Main/index.html"):
                     print('found in  lower case Main folder (Web-main/Main/)')
                     self.path = "Web-main/Main/index.html"
