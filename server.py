@@ -9,7 +9,7 @@ web_content_dir = os.path.join(os.getcwd())
 main_content_dir = os.path.join(os.getcwd(), "Main")
 Game_content_dir = os.path.join(os.getcwd(), "games")
 assets_content_dir = os.path.join(os.getcwd(), "Main", "assets")
-main_dir = "Main"
+
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser()
@@ -18,6 +18,11 @@ parser.add_argument("--main_dir", help="Main directory path", default=os.path.jo
 parser.add_argument("--game_dir", help="Games directory path", default=os.path.join(os.getcwd(), "games"))
 parser.add_argument("--assets_dir", help="Assets directory path", default=os.path.join(os.getcwd(), "Main", "assets"))
 args = parser.parse_args()
+
+web_content_dir = args.web_dir
+main_content_dir = args.main_dir
+game_content_dir = args.game_dir
+main_dir = "Main"
         
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
@@ -102,14 +107,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         
 
 
-    #def translate_path(self, path):
-    #    # Map requested URLs to the "web_content" directory
-    #    web_content_dir = "/Web"  #web_content_dir = "../Web"
-    #    main_dir = "Main"
-    #    new_path = os.path.normpath(path).lstrip("/")
-    #    new_path = os.path.join(web_content_dir,main_dir, new_path)
-    #    return new_path
-    
+
     def translate_path(self, path):
         print("path:", path)
         new_path = os.path.normpath(path).lstrip("/")
