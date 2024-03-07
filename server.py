@@ -7,30 +7,24 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         # Handle requests for the root URL ("/") by serving "index.html"
         if self.path == "/":
-            if not os.path.exists("/Web/Main/index.html"):
+            if not os.path.exists("Main/index.html"):
                 print('can\'t find index')
                 print('trying to scan files...')
-                # http://192.168.129.16/Users/xkell/Documents/VSC/Projects/Web/Main/index.html
-                if os.path.exists("/Main/index.html"):
-                    print ('found files in main!(/Main/)')
-                    self.path = "/Main/index.html"
-                elif os.path.exists("Web-main/Main/index.html"):
-                    print('found in  lower case Main folder (Web-main/Main/)')
-                    self.path = "Web-main/Main/index.html"
-                elif os.path.exists("/Web-main/Main/index.html"):
-                    print('found in  lower case Main folder (/Web-main/Main/)')
-                    self.path = "/Web-main/Main/index.html"
-                #elif os.path.exists("Main/index.html"):
-                #    print('found in  lower case Main folder (Main/)')
-                #    self.path = "Main/index.html"
-                else: 
+                # Get a list of all directories in the current directory
+                directories = [d for d in os.listdir('.') if os.path.isdir(d)]
+                for directory in directories:
+                    # Check if the "index.html" file exists in the "Main" directory
+                    index_path = os.path.join(directory, 'index.html')
+                    if os.path.exists(index_path) and directory == "Main":
+                        print(f'found in {directory}!')
+                        self.path = "/Web/Main/index.html"  # Serve the "index.html" file in the "Main" directory
+                        break
+                else:
                     print('done scanning!')
                     print('no file found in Main folder')
-            else: 
-                print('found File\'s and Starting Server')
-                self.path = "/Web/Main/index.html"
-            
-            
+            else:
+                print('found Files and Starting Server')
+                self.path = "/Web/Main/index.html"  # Serve the "index.html" file in the "Main" directory
         elif self.path == "/index.html":
             # Handle requests for html files in the "Main" directory
             self.send_response(200)
@@ -93,15 +87,24 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         
 
 
-    def translate_path(self, path):
-        # Map requested URLs to the "web_content" directory
-
-        web_content_dir = "/Web"  #web_content_dir = "../Web"
-        main_dir = "Main"
-        new_path = os.path.normpath(path).lstrip("/")
-        new_path = os.path.join(web_content_dir,main_dir, new_path)
-        return new_path
+    #def translate_path(self, path):
+    #    # Map requested URLs to the "web_content" directory
+    #
+    #    web_content_dir = "/Web"  #web_content_dir = "../Web"
+    #    main_dir = "Main"
+    #    new_path = os.path.normpath(path).lstrip("/")
+    #    new_path = os.path.join(web_content_dir,main_dir, new_path)
+    #    return new_path
     
+def translate_path(self, path):
+    # Map requested URLs to the "Web" directory
+    web_content_dir = "/Web"
+    main_dir = "Main"
+    new_path = os.path.normpath(path).lstrip("/")
+    new_path = os.path.join(web_content_dir, main_dir, new_path)
+    if not new_path.startswith(web_content_dir):
+        new_path = os.path.join(web_content_dir, new_path)
+    return new_path
 
 
 
