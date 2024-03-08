@@ -5,6 +5,9 @@
     font-family: 'Orbitron', sans-serif;
     text-decoration: none;
 
+	padding: 0%;
+	margin: 0%;
+
     --mainColor: linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
     --secondColor:rgba(228, 5, 128, 0.445);
 	--thirdColor: #232530;
@@ -24,6 +27,8 @@ body{
 	text-align: center;
     overflow: hidden;
     background-color:#232530;
+	height: 100vh;
+	width: 100vw;
 }
 #app{
 	display: block;
@@ -44,7 +49,9 @@ body{
 	float: none;
 	margin-bottom: 0;
 	box-sizing:content-box;
-
+	margin: 0;
+	padding: .5em;
+	width: 100%;
 	border: 2px dashed red;
 
 
@@ -76,7 +83,7 @@ body{
 	padding: 20px;
 	padding-bottom: 20px;
 
-	border: 2px dashed red;
+	background-color: rgb(34, 33, 33);
 }
 .Choices{
 	float: left;
@@ -85,16 +92,16 @@ body{
 /*--Side-Menu--*/
 #Side-Menu{
 	background-color: var(--mainColor);
-	border: 2px solid gold;
-    display: block;
+	border-right: 2px solid rgb(185, 0, 62);
     float: left;
-	width: 12em;
-	height: 99vh;
-	text-align: left;
-	display: flex;
+	width: 15em;
+	height: 100%;
+	text-align: center;
+	display: flexbox;
 	flex-direction: column;
+	
 
-	border: 2px dashed red;
+
 
 }
 .Open-more{
@@ -104,7 +111,8 @@ body{
 	display: block;
 	height: fit-content;
 	padding: 0.5em;
-	margin-left: 30%;
+	margin-left: auto;
+	margin-right: auto;
 }
 .Open-more:hover{
 	color: aqua;
@@ -121,7 +129,8 @@ body{
 	width: 5em;
 	height: fit-content;
 	padding: 0.5em;
-	margin-left: 30%;
+	margin-left: auto;
+	margin-right: auto;
 }
 .settings:hover{
 	color: aqua;
@@ -140,12 +149,14 @@ body{
 	display: block;
 
 	/* --Side Extra-- */
-}.Side-extra , .parent{
+}
+.Side-extra , .parent{
+	position: absolute;
 	background-color: var(--thirdColor);
 	width: 12em;
 	height: 99vh;
 	text-align: left;
-	
+	visibility: hidden;
 	display: flex;
 	flex-direction: column;
 	
@@ -159,10 +170,6 @@ body{
 	border-radius: 5px;
 	width:100%;
 	height: 98dvh;
-	
-	
-	
-
 }
 .child1,.parent{
 	color: white;
@@ -179,7 +186,16 @@ body{
 	border: 5px solid red;
 	padding: 0;
 	margin: 0;
-	
+	transition: opacity 0.5s ease-in-out;
+}
+.visible {
+	opacity: 1;
+	visibility: visible;
+}
+  
+.invisible {
+	opacity: 0;
+	visibility: hidden;
 }
 .child1{
 	width: 25%;

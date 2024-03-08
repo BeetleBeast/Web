@@ -4,6 +4,7 @@ const main_content = document.querySelector('.content-canvas');
 const bar = document.querySelector('.bar');
 const extra = document.querySelector('.extras');
 const options = document.querySelector('.options');
+const app = document.querySelector('#app'); // all the app (right and center includin title)
 
 var saveFileNum = 0;
 var last_loaded_game = '';
