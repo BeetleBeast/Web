@@ -11,6 +11,7 @@ const Button_Choice2 = document.querySelector('.Sh_2');
 const Button_Choice3 = document.querySelector('.Sh_3');
 const Button_Choice4 = document.querySelector('.Sh_4');
 const Button_Choice5 = document.querySelector('.Sh_5');
+const savefileId = document.getElementById('savefileId');
 
 var saveFileNum = 0;
 var last_loaded_game = '';
@@ -122,17 +123,10 @@ function LoadGame(last_loaded_game){
     return last_loaded_game
     // TODO: set json file instead of localstorage (by using stringify and parce)
 }
-// save loaded game (goes to SG file to load and save the game)
-function savefile(saveFile){
-    //idk
-    console.log('saving game');
-    saveFileNum = prompt('Save file number')
-    //  saves file 
-    let saveFileJSON = JSON.stringify(saveFile);
-        localStorage.setItem('saveFile'+saveFileNum,saveFileJSON)
-    return saveFileNum
-}
 */
+
+
+
 class Player {
     constructor({name, race, gender, age, profession, level, strength, intelligence, charisma, agility, luck, health, maxHealth}){
         this.name = name, 
@@ -182,6 +176,7 @@ function story(saveFile){
     const Button_Choice3 = document.querySelector('.Sh_3');
     const Button_Choice4 = document.querySelector('.Sh_4');
     const Button_Choice5 = document.querySelector('.Sh_5');
+    const savefileId = document.getElementById('savefileId');
 
 
 
@@ -220,6 +215,28 @@ function story(saveFile){
             nextScene(saveFile);
         })
     }
+
+    // save loaded game (goes to SG file to load and save the game)
+    if (savefileId && !savefileId.hasAttribute('data-listener-added')) {
+      savefileId.addEventListener("click", function() {
+        console.log('Saving game');
+        saveFileNum = prompt('Save file number');
+    
+        if (saveFileNum !== null) {
+          console.log('saving game id-1', saveFile);
+          savefileId.innerHTML = "Save Succesful";
+          let saveFileJSON = saveFile; // You may want to stringify the saveFile object if it's complex
+          localStorage.setItem('saveFile' + saveFileNum, JSON.stringify(saveFileJSON));
+          console.log('Save file ' + saveFileNum + ' saved');
+          return saveFileNum;
+        }
+      });
+    
+      savefileId.setAttribute('data-listener-added', 'true');
+    } else {
+      savefileId.removeEventListener("click", savefileId.addEventListener("click"));
+    }
+
     
 
 

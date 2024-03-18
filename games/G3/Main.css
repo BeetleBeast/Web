@@ -11,7 +11,7 @@
     --mainColor: linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
 	--side-Color: rgb(30, 30, 44);
     --secondColor:rgba(228, 5, 128, 0.445);
-	--thirdColor: #232530;
+	--thirdColor: rgba(35, 37, 48, 0.521);
 }
 *:visited{
     color: inherit;
@@ -207,7 +207,7 @@ body{
 	display: flex;
 	flex-direction: column;
 	
-	border: 5px double goldenrod;
+
 }
 .Side-extra[data-visible=true] * {
 	visibility: visible;
@@ -244,7 +244,7 @@ body{
 .parent{
 	z-index: 9999999;
 	flex-direction: row;
-	border: 2px solid rgb(68, 68, 68);
+	border: 2px solid rgba(68, 68, 68, 0.418);
 	padding: 0;
 	margin: 0;
 	transition: opacity 0.5s ease-in-out;
@@ -259,16 +259,16 @@ body{
 	opacity: 1;
 	
 
-	border: 5px dotted green;
+
 }
 .Side-Saving{
 	opacity: 1;
-	border: 5px dotted rgb(0, 255, 157);
+
 	z-index: inherit;
 }
 .Save-ul{
-    color: lightgreen;
-    border: 1px hidden lightgreen;
+    color: rgb(238, 144, 144);
+
 	position: relative;
 	width: 90%;
 	height: 100%;
@@ -278,7 +278,16 @@ body{
 }
 .Save-li{
 	color: lightgreen;
-    border: 1px hidden lightgreen;
+
+	position: relative;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	display:block;
+}.Save-li2{
+	color: lightgreen;
+
 	position: relative;
 	width: 100%;
 	height: 100%;
@@ -288,17 +297,19 @@ body{
 }
 .local{
 	font-size: 2em;
-	border: 5px dotted rgb(0, 255, 234);
+
 	
 	width: auto;
-	height: 2em;
+	padding: 5px;
+	height: auto;
 }
 .Save{
 	font-size: 2em;
-	border: 5px dotted rgb(0, 255, 234);
+
 	flex-direction: column;
 	width: auto;
-	height: 2em;
+	padding: 5px;
+	height: auto;
 }
 .Button{
 	color: white;
@@ -309,15 +320,16 @@ body{
 }
 .Side-gameplay{
 	opacity: 1;
-	border: 5px dotted rgb(200, 255, 0);
+	border-left: 3px solid  --thirdColor;
+	border-right: 3px solid  --thirdColor;
 }
 .Side-grafics{
 	opacity: 1;
-	border: 5px dotted rgb(0, 255, 21);
+	border-right: 3px solid  --thirdColor;
 }
 .Side-more{
 	opacity: 1;
-	border: 5px dotted rgb(255, 0, 200);
+	
 }
 .Side-more-ul{
 	position: relative;
