@@ -9,6 +9,7 @@
 	margin: 0%;
 
     --mainColor: linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
+	--side-Color: rgb(30, 30, 44);
     --secondColor:rgba(228, 5, 128, 0.445);
 	--thirdColor: #232530;
 }
@@ -31,13 +32,14 @@ body{
 	width: 100vw;
 }
 #app{
-	display: block;
+	display: flexbox;
 	float: right;
-	width: calc(100% - 12em);
-	height: 99vh;
-	display: flex;
+	width: calc(100vw - 15em);
+	height: 100%;
+	min-height: 100%;
 	flex-direction: column;
 	z-index: 5;
+	margin: auto 10px;
 	
 }
 .Quest_Title{
@@ -49,10 +51,8 @@ body{
 	float: none;
 	margin-bottom: 0;
 	box-sizing:content-box;
-	margin: 0;
 	padding: .5em;
-	width: 100%;
-	border: 2px dashed red;
+	
 
 
 }
@@ -61,48 +61,69 @@ body{
 	padding-top: 5px;
 	position: relative;
 
-	border: 2px dashed rgb(17, 0, 255);
+	
 	top: 0;
 	height: 100%;
-	width: 100%;
-	margin: auto;
 }
 .main_section{
     color: white;
+	text-align: center;
+	font-size: large;
+	width: 80em;
+	margin: auto;
+	padding-top: 20em;
 }
-.footer_section{
+.choices_section{
     color: white;
 	z-index: auto;
-	position: fixed;
-
-	
-	bottom: 0px;
-	width: 100%;
-	margin: auto;
 	text-align: center;
 	padding: 20px;
 	padding-bottom: 20px;
+
+	height: 5em;
+	
+
 
 	background-color: rgb(34, 33, 33);
 }
 .Choices{
 	float: left;
+	width: auto 2em;
+	height: auto;
+	padding: auto 5px;
+	text-align: center;
+	margin: 0%;
+
+}
+.Sh_5{
+	float: right;
+	padding-right: 20%;
+}
+.Choices:hover{
+	text-decoration: underline;
+	cursor: pointer;
+	color: #8f2950;
 }
 
 /*--Side-Menu--*/
-#Side-Menu{
-	background-color: var(--mainColor);
+
+#Side-Menu {
+	background-color: var(--side-Color);
 	border-right: 2px solid rgb(185, 0, 62);
-    float: left;
 	width: 15em;
 	height: 100%;
 	text-align: center;
-	display: flexbox;
-	flex-direction: column;
-	
-
-
-
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* this will create space between the elements */
+}
+.bottom-links {
+    display: flex;
+    justify-content: flex-end; /* this will align the elements to the bottom */
+}
+#side-Title{
+	/* existing styles */
+	margin-bottom: 50px;
 }
 .Open-more{
     color: aqua;
@@ -113,10 +134,13 @@ body{
 	padding: 0.5em;
 	margin-left: auto;
 	margin-right: auto;
+	/* existing styles */
+	margin-top: -10px;
 }
 .Open-more:hover{
 	color: aqua;
     border: 1px solid lightgreen;
+	cursor: pointer;
     
 }.Open-more:active{
     box-shadow: none;
@@ -131,10 +155,21 @@ body{
 	padding: 0.5em;
 	margin-left: auto;
 	margin-right: auto;
+	bottom: 0px;
+}
+.asettings{
+
+	justify-content: flex-end;
+
+	margin-left: auto;
+	margin-right: auto;
+	padding-bottom: 10em;
+	
 }
 .settings:hover{
 	color: aqua;
     border: 1px solid lightgreen;
+	cursor: pointer;
     
 }
 #Side-image{
@@ -143,7 +178,7 @@ body{
 }
 #Side-Title{
 	text-align: center;
-	font-size: 1vw;
+	font-size: 25px;
 	padding-top: 6%;
 	color: gold;
 	display: block;
@@ -163,15 +198,19 @@ body{
 	border: 5px double goldenrod;
 }
 .Side-extra{
-	background-color: transparent;
+	background-color: rgba(0, 0, 0, 0.253);
 	z-index: 9999999;
 	position: fixed;
-	margin: 15px auto;
+	padding: 5px auto;
 	border-radius: 5px;
 	width:100%;
 	height: 98dvh;
+	top: 0;
+	left: 15em;
+
 }
-.child1,.parent{
+.parent .child1 {
+	z-index: inherit;
 	color: white;
 	opacity: 1;
 	margin: 0;
@@ -181,6 +220,7 @@ body{
 	
 }
 .parent{
+	z-index: inherit;
 	display: flexbox;
 	flex-direction: row;
 	border: 5px solid red;
@@ -188,16 +228,17 @@ body{
 	margin: 0;
 	transition: opacity 0.5s ease-in-out;
 }
-.visible {
+[data-visible=true] {
 	opacity: 1;
 	visibility: visible;
 }
-  
-.invisible {
+
+[data-visible=false] {
 	opacity: 0;
 	visibility: hidden;
 }
 .child1{
+	z-index: inherit;
 	width: 25%;
 	height:inherit;
 	top: 15px;

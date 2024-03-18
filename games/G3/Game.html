@@ -15,33 +15,36 @@
 
 <body>
     <div id="Side-Menu">
-        <div id="Side-image"></div>
-        <div id="Side-Title">Gatcha_tower</div>
-        <br>
-        <button type="button" role="button" class="Open-more" onclick="openMoreSettings()">More</button>
-        <a href="Settings.html"><button type="button" role="button" class="settings">Settings</button></a>
+        <div id="Side-Menu1">
+            <div id="Side-image"></div>
+            <div id="Side-Title">Gatcha tower</div>
+            <br>
+            <button type="button" role="button" class="Open-more" onclick="openMoreSettings()">More</button>
+        </div>
+        <div class="bottom-links">
+            <a href="/index.html" class="asettings"><button type="button" role="button" class="settings">Exit</button></a>
+        </div>
     </div>
     <div id="app">
         <h1 class="Quest_Title"></h1>
         <div class="main">
             <div class="main_section"></div>
             <canvas class="content-canvas" ref="contentCanvas"></canvas>
+            <div class="choices_section">
+                <div class="choices_section_title">choices_section</div>
+                <br>
+                <div class="Choices Sh_1"></div>
+                <div class="Choices Sh_2"></div>
+                <div class="Choices Sh_3"></div>
+                <div class="Choices Sh_4"></div>
+                <div class="Choices Sh_5"></div>
+            </div>
         </div>
-        <footer class="footer_section">footer_section
-            <br>
-            <div class="Choices Sh_1"></div>
-            <div class="Choices Sh_2"></div>
-            <div class="Choices Sh_3"></div>
-            <div class="Choices Sh_4"></div>
-            <div class="Choices Sh_5"></div>
-        </footer>
         <div class="Side-extra parent" data-visible="false">
                 <div class="Side-extra child1 Side-Saving">Saving
                     <ul class="Side-extra Save-ul">
                         <li class="Side-extra Save-li">
                             <button type="button" role="button" class="Side-extra local Button" onclick="Save_LOCAL(saveFile)">Download the latest save</button>
-                        
-                        
                             <button type="button" role="button" class="Side-extra Save Button" onclick="savefile(saveFile)">Save the latest save</button>
                         </li>
                     </ul>
@@ -63,9 +66,8 @@
 function openMoreSettings() {
   const parent = document.querySelector('.parent');
   const isVisible = parent.dataset.visible === 'true';
-  parent.dataset.visible = !isVisible;
   parent.classList.toggle('visible');
-  parent.classList.toggle('invisible');
+  parent.dataset.visible = !isVisible;
 }
 
 </script>

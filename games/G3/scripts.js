@@ -5,6 +5,12 @@ const bar = document.querySelector('.bar');
 const extra = document.querySelector('.extras');
 const options = document.querySelector('.options');
 const app = document.querySelector('#app'); // all the app (right and center includin title)
+const choices_section_title = document.querySelector('.choices_section_title');
+const Button_Choice1 = document.querySelector('.Sh_1');
+const Button_Choice2 = document.querySelector('.Sh_2');
+const Button_Choice3 = document.querySelector('.Sh_3');
+const Button_Choice4 = document.querySelector('.Sh_4');
+const Button_Choice5 = document.querySelector('.Sh_5');
 
 var saveFileNum = 0;
 var last_loaded_game = '';
@@ -32,7 +38,7 @@ if (saveFileNum == 0){
          console.log('load game!')
      }
  }
-
+/*
 
 // saves a local version instead of a web storage
 function Save_LOCAL(saveFile) {
@@ -50,22 +56,33 @@ function Save_LOCAL(saveFile) {
         document.body.removeChild(a);
     });
 }
-
+*/
 
 // newGame makes the prep for a new game
 function newGame(saveFileNum){
-    //idk
     console.log('new game');
 
     let saveFile = {
         "saveFileNumber" : saveFileNum,
-        "storyLine_Number" : 0,
+        "curent_storyLine_progress" : 0,
+        "storyLine_progress" : {
+            0 :  {"sceneName": "Start", "playerText": "In the heart of a bustling metropolis lies the foundation of a towering ambition. Welcome to Tower's Edge, where strategic minds converge to erect the mightiest structures the skyline has ever witnessed. Assemble your team, fortify your defenses, and rise above the competition in this thrilling test of engineering prowess and tactical mastery. Will you reach new heights or crumble beneath the weight of your rivals' ascent? The choice is yours in Tower's Edge."},
+            1 :  {"sceneName": "First_step", "playerText": "Your first step in Tower's Edge begins with a single blueprint and a vision to reach the heavens. Survey the landscape, choose your plot wisely, and lay the cornerstone of your empire. As construction commences, every decision shapes the fate of your tower, from selecting materials to orchestrating the placement of each floor. With each level you ascend, challenges will emerge, but with cunning strategy and meticulous planning, you'll forge your path towards architectural supremacy. Welcome to the foundation of your legacy in Tower's Edge."},
+            /* ADD EXTRA SCENES */
+        },
         "Player_character" : Player,
+        "Buttons_section_title" : {0 : " ",},
+        "AmountOfButtonsForSceneDefault" : 2,
+        "AmountOfButtonsForScene" : {
+            0: 1, // scene number : amount of buttons in that scene
+            1: 2,
+        },
         "current_title_progress" : 0,
         "title_progress" : { 
             0 : { "title_story_0" : 'Into the new world'},
             1 : {'title_story_1' : 'Lost in the forest'}, 
-            2 : {'title_story_2' : 'Old cabbin'}
+            2 : {'title_story_2' : 'Old cabbin'},
+            /* ADD EXTRA TITLES */
         }
     }
     
@@ -82,7 +99,7 @@ function newGame(saveFileNum){
     
 }
 // load the latest game (goes to SG file to load and save the game)
-
+/*
 function LoadGame(last_loaded_game){
     //idk
     console.log('load game');
@@ -115,7 +132,7 @@ function savefile(saveFile){
         localStorage.setItem('saveFile'+saveFileNum,saveFileJSON)
     return saveFileNum
 }
-
+*/
 class Player {
     constructor({name, race, gender, age, profession, level, strength, intelligence, charisma, agility, luck, health, maxHealth}){
         this.name = name, 
@@ -151,41 +168,119 @@ class Player {
 }
 
 function story(saveFile){
-    // start of the story
     console.log("start story");
-    // text dump
-    const Intro = "hello world"
-    const story_0 = "hello why are you here"
-    let title_story_0 = 'Into the new world'
-    let title_story_1 = 'Lost in the forest'
-    let title_story_2 =  'Old cabbin'
-    // input in game
-    /*
-    let saveFile = {
-        "saveFileNumber" : saveFileNum,
-        "storyLine_Number" : 0,
-        "Player_character" : Player,
-        "title_progress" : {
-            "title_story_0::Into the new world" : 0,
-            'title_story_1::Lost in ghe forest' : 0,
-            'title_story_2::Old cabbin' : 0
-        }
-    }
-    */
+    const Title = document.querySelector('.Quest_Title');
+    const main_section = document.querySelector('.main_section');
+    const main_content = document.querySelector('.content-canvas');
+    const bar = document.querySelector('.bar');
+    const extra = document.querySelector('.extras');
+    const options = document.querySelector('.options');
+    const app = document.querySelector('#app'); // all the app (right and center includin title)
+    const choices_section_title = document.querySelector('.choices_section_title');
+    const Button_Choice1 = document.querySelector('.Sh_1');
+    const Button_Choice2 = document.querySelector('.Sh_2');
+    const Button_Choice3 = document.querySelector('.Sh_3');
+    const Button_Choice4 = document.querySelector('.Sh_4');
+    const Button_Choice5 = document.querySelector('.Sh_5');
+
+
+
     console.log('title_progress',saveFile.title_progress)
     console.log('current_title_progress',saveFile.current_title_progress)
     let current_title_progress = saveFile.current_title_progress        // make a var van dit 
     let current_title = saveFile.title_progress[current_title_progress]
     title_progress(current_title,current_title_progress)
 
+    console.log('storyLine_progress',saveFile.storyLine_progress)
+    console.log('curent_storyLine_progress',saveFile.curent_storyLine_progress)
+    let curent_storyLine_progress = saveFile.curent_storyLine_progress        // make a var van dit 
+    let current_storyLine = saveFile.storyLine_progress[curent_storyLine_progress]
+    console.log('current_storyLine',current_storyLine);
+    scene_progress(current_storyLine,curent_storyLine_progress)
+
+
+    choices_section_title.innerHTML = saveFile.Buttons_section_title[0];  // change if needed be                                   
+
+    if (saveFile.AmountOfButtonsForScene[curent_storyLine_progress] == 1){
+        let Button = Button_Choice5;
+        Button.innerHTML = 'Next';
+        Button.addEventListener("click", function() {
+            nextScene(saveFile);
+        })
+    }
+    if (saveFile.AmountOfButtonsForScene[curent_storyLine_progress] == 2) {
+        let Button1 = Button_Choice1;
+        let Button2 = Button_Choice5;
+        Button2.innerHTML = 'Next';  
+        Button1.innerHTML = 'Previously';
+        Button1.addEventListener("click", function(){
+            previousScene(saveFile);
+        })
+        Button2.addEventListener("click", function() {
+            nextScene(saveFile);
+        })
+    }
+    
+
+
 function title_progress(current_title,current_title_progress) {
     let title_story = current_title['title_story_'+current_title_progress]
-    slowTypingText(title_story,'.Quest_Title');
+    slowTypingText(title_story,'.Quest_Title');         // Put the content on the left and the place where it needs to go on the right
     console.log('title_story',title_story)
     console.log('current_title',current_title);
 }
+function scene_progress(current_storyLine,curent_storyLine_progress,AmountOfButtonsForScene) {
+    let title_scene = current_storyLine['sceneName']
+    let scene_text = current_storyLine['playerText']
+    slowTypingText(scene_text,'.main_section', 0, 35);     // Put the content on the left and the place where it needs to go on the right + index + speed
+    console.log('title_scene',title_scene)
+    console.log('scene_text',scene_text)
+    console.log('current_storyLine',current_storyLine);
 
-    
+}
+function nextScene(saveFile){
+    saveFile.curent_storyLine_progress++ ;
+    Title.innerHTML = " ";
+    main_section.innerHTML = " ";
+    choices_section_title.innerHTML = " ";
+    Button_Choice1.innerHTML = " ";  
+    Button_Choice5.innerHTML = " ";
+    story(saveFile);
+    console.log('nextScene');
+}
+function  previousScene(saveFile){
+    saveFile.curent_storyLine_progress-- ;
+    Title.innerHTML = " ";
+    main_section.innerHTML = " ";
+    choices_section_title.innerHTML = " ";
+    Button_Choice1.innerHTML = " ";  
+    Button_Choice5.innerHTML = " ";
+    story(saveFile);
+    console.log('previousScene');
+}
+function nextchapter(saveFile){
+    saveFile.curent_storyLine_progress++ ;
+    saveFile.current_title_progress++ ;
+    Title.innerHTML = " ";
+    main_section.innerHTML = " ";
+    choices_section_title.innerHTML = " ";
+    Button_Choice1.innerHTML = " ";  
+    Button_Choice5.innerHTML = " ";
+    story(saveFile);
+    console.log('nextChapter');
+}
+function  previouschapter(saveFile){
+    saveFile.curent_storyLine_progress-- ;
+    saveFile.current_title_progress-- ;
+    Title.innerHTML = " ";
+    main_section.innerHTML = " ";
+    choices_section_title.innerHTML = " ";
+    Button_Choice1.innerHTML = " ";  
+    Button_Choice5.innerHTML = " ";
+    story(saveFile);
+    console.log('previousChapter');
+}
+
 
     return saveFile
 }
