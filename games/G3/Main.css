@@ -183,12 +183,24 @@ body{
 	color: gold;
 	display: block;
 
+
+}
 	/* --Side Extra-- */
+.Side-extra{
+	background-color: rgba(0, 0, 0, 0.575);
+	z-index: 9999999;
+	position: fixed;
+	padding: auto 5px;
+	border-radius: 5px;
+	width: calc(100% - 16em);		/*calcl*/
+	height: 98dvh;
+	top: 4em;
+	transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-out;
 }
 .Side-extra , .parent{
 	position: absolute;
 	background-color: var(--thirdColor);
-	width: 12em;
 	height: 99vh;
 	text-align: left;
 	visibility: hidden;
@@ -197,20 +209,30 @@ body{
 	
 	border: 5px double goldenrod;
 }
-.Side-extra{
-	background-color: rgba(0, 0, 0, 0.253);
-	z-index: 9999999;
-	position: fixed;
-	padding: 5px auto;
-	border-radius: 5px;
-	width:100%;
-	height: 98dvh;
-	top: 0;
-	left: 15em;
-
+.Side-extra[data-visible=true] * {
+	visibility: visible;
+	opacity: 1;
+  }
+  
+  .Side-more-ul[data-visible=true] > * {
+	visibility: visible;
+	opacity: 1;
+  }
+  
+  .Save-ul[data-visible=true] > * {
+	visibility: visible;
+	opacity: 1;
+  }
+[data-visible=true] {
+	opacity: 1;
+	visibility: visible; 
+}
+[data-visible=false] {
+	opacity: 0;
+	visibility:hidden; 
 }
 .parent .child1 {
-	z-index: inherit;
+	z-index: 9999999;
 	color: white;
 	opacity: 1;
 	margin: 0;
@@ -220,35 +242,29 @@ body{
 	
 }
 .parent{
-	z-index: inherit;
-	display: flexbox;
+	z-index: 9999999;
 	flex-direction: row;
-	border: 5px solid red;
+	border: 2px solid rgb(68, 68, 68);
 	padding: 0;
 	margin: 0;
 	transition: opacity 0.5s ease-in-out;
 }
-[data-visible=true] {
-	opacity: 1;
-	visibility: visible;
-}
 
-[data-visible=false] {
-	opacity: 0;
-	visibility: hidden;
-}
 .child1{
-	z-index: inherit;
 	width: 25%;
 	height:inherit;
 	top: 15px;
+	z-index: 9999999;
+	color: white;
+	opacity: 1;
 	
 
 	border: 5px dotted green;
 }
 .Side-Saving{
 	opacity: 1;
-	border: 5px dotted blue;
+	border: 5px dotted rgb(0, 255, 157);
+	z-index: inherit;
 }
 .Save-ul{
     color: lightgreen;
@@ -293,15 +309,15 @@ body{
 }
 .Side-gameplay{
 	opacity: 1;
-	border: 5px dotted blue;
+	border: 5px dotted rgb(200, 255, 0);
 }
 .Side-grafics{
 	opacity: 1;
-	border: 5px dotted blue;
+	border: 5px dotted rgb(0, 255, 21);
 }
 .Side-more{
 	opacity: 1;
-	border: 5px dotted blue;
+	border: 5px dotted rgb(255, 0, 200);
 }
 .Side-more-ul{
 	position: relative;
@@ -314,13 +330,4 @@ body{
 	width: 100%;
 	height: 100%;
 	margin: 0;
-}
-
-
-
-/*--Settings--*/
-.save{
-    color: green;
-    border: 1px solid lightgreen;
-	position: relative;
 }
