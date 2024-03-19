@@ -239,6 +239,14 @@ function story(saveFile){
 
     
 
+    /*
+    saveFile = {
+        "saveFileNumber" : saveFileNum,
+        "curent_storyLine_progress" : 0,
+        "storyLine_progress" : {
+            0 :  {"sceneName": "Start",
+    */
+
 
 function title_progress(current_title,current_title_progress) {
     let title_story = current_title['title_story_'+current_title_progress]
@@ -249,7 +257,7 @@ function title_progress(current_title,current_title_progress) {
 function scene_progress(current_storyLine,curent_storyLine_progress,AmountOfButtonsForScene) {
     let title_scene = current_storyLine['sceneName']
     let scene_text = current_storyLine['playerText']
-    slowTypingText(scene_text,'.main_section', 0, 35);     // Put the content on the left and the place where it needs to go on the right + index + speed
+    slowTypingText(scene_text,'.main_section',0, 35);     // Put the content on the left and the place where it needs to go on the right + index + speed
     console.log('title_scene',title_scene)
     console.log('scene_text',scene_text)
     console.log('current_storyLine',current_storyLine);
@@ -318,6 +326,36 @@ function slowTypingText(text, elementId, index = 0, speed = 200) {
         }
     }
 }
+/*
+function slowType(text, elementId, index = 0, speed = 200, printImmediately = false) {
+    if (printImmediately) {
+        document.querySelector(elementId).innerText = text;
+    } else {
+        if (index < text.length) {
+            document.querySelector(elementId).innerText += text[index];
+            index += 1; // update index for the next character
+
+            // If the current character is a space, replace it with a space character
+            if (text[index - 1] === " ") {
+                setTimeout(() => {
+                    document.querySelector(elementId).innerText += " " + text[index];
+                    index += 1;
+                    slowType(text, elementId, index, speed, printImmediately);
+                }, speed);
+            } else {
+                setTimeout(() => slowType(text, elementId, index, speed, printImmediately), speed);
+            }
+        }
+    }
+}
+*/
+// Usage example
+const button = document.querySelector("#myButton");
+button.addEventListener("click", () => {
+    slowType("Hello, World!", "#myElement", undefined, undefined, true);
+});
+
+
 INIT()
 function INIT(){
     
