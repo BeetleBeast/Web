@@ -301,7 +301,7 @@ function story(saveFile){
      else {
         savefileId.removeEventListener("click", savefileId.addEventListener("click"));
     }
-    
+    // FIXME code gets repeated such that it gets scrampled up a lot AND the title gets mixt in the text
     function ButtonPressed(saveFile) {
         for (const buttonValue of saveFile.Buttons) {
             const chapter = saveFile.Choices_Possible[saveFile.curent_chapter_progress];
