@@ -160,14 +160,7 @@ function newGame(saveFileNum){
             /* ADD EXTRA TITLES */
         }
     }
-    
-    // localStorage.setItem('saveFileG3 '+saveFileNum, saveFile); // FIXME: after json files made remove localstorage 
-    /*
-    var saveFileJSON = JSON.stringify(saveFile)
-    ('saveFile'+saveFileNum+'.json', saveFileJSON)
-        .then(() => console.log('File saved.'))
-        .catch(err => console.error('Error saving file:', err));
-    */
+
 
     // start story
     story(saveFile);
@@ -480,114 +473,28 @@ function story(saveFile){
         let ButtonPressed = saveFile.Choices_Made[saveFile.curent_chapter_progress][listOfChoiceNUM]; //    wich button was pressed (num)
         let value = scene[ButtonPressed];    // the final value
         console.log(character);
-        switch(listOfChoiceNUM){
-            case 2:
-                character.eye_Color = value;
-                break;
-            case 3:
-                character.hair_style = value;
-                break;
-            case 4:
-                character.skin_complexion = value;
-                break;
-            case 5:
-                character.stature = value;
-                break;
-            case 6:
-                character.attire = value;
-                break;
-            case 7:
-                character.gender = value;
-                break;
+        if (listOfChoiceNUM == 2) {
+            character.eye_Color = value;
+        } else if (listOfChoiceNUM == 3) {
+            character.hair_style = value;
+        } else if (listOfChoiceNUM == 4) {
+            character.skin_complexion = value;
+        } else if (listOfChoiceNUM == 5) {
+            character.stature = value;
+        } else if (listOfChoiceNUM == 6) {
+            character.attire = value;
+        } else if (listOfChoiceNUM == 7) {
+            character.gender = value;
+        } else {
+            // Handle any other cases if needed
         }
         
+        
     }
-    
-    
-/*
-NOTES
-    buttonOptions save inside charachter
-    but not always there
-
-    if (scene) {
-        const value = scene[buttonValue];
-        if (value) {
-        const button = document.querySelector('.Sh_' + buttonValue);
-        if (button) {
-            button.innerHTML = value;
-
-
-    "curent_storyLine_progress" : 0,
-    "curent_chapter_progress" : 0,
-    "Choices_Possible" : {
-    //  chapter number : { scene number : { Button option : Text }}
-    0 : {
-        0 : { 7 : "Next"},
-        1 : { 1 : "Previously", 7 : "Next"},
-        2 : { 1 : "Previously", 2 : "piercing blue", 3 : "deep brown", 4 : "striking green", 5 : "captivating hazel", 6 : "intense grey"},
-        3 : { 1 : "Previously", 2 : "cascading waves", 3 : "cropped short", 4 : "braided intricately", 5 : " sophisticated bun", 6 : "left wild and free"},
-        4 : { 1 : "Previously", 2 : "Porcelain fair", 3 : "Sun-kissed bronze", 4 : "Olive-toned", 5 : "Rosy-pink", 6 : "Deep ebony"},
-        5 : { 1 : "Previously", 2 : "Petite and delicate", 3 : "Tall and statuesque", 4 : "Somewhere in between", 5 : "Lean and athletic", 6 : "Muscular and imposing"},
-        6 : { 1 : "Previously", 4 : "Weathered and worn, marked by dirt and grime, reflecting a seasoned traveler", 7 : "Pristine and clean, untouched by the trials of the cavern, hinting at a recent arrival"},
-        7 : { 1 : "Previously", 4 : "Feminine", 7 : "Masculine"},
-        8 : { 1 : "Previously", 7 : "Next"},
-        9 : { 1 : "Previously", 7 : "Next"},
-        10 : { 1 : "Previously", 7 : "Next"},
-
-
-
-
-        //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : ""},
-        //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : ""},
-        //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : "Next"},
-        //  : { 1 : "Previously", 7 : "Next"},
-    },
-    "Choices_Made" : {
-        //  chapter number : string of Button NUM Choices made // EXAMPLE 1,5,3 first CH, fith CH , third CH
-        0 : [], 
-        //  ADD EXTRA chapters
-    },
-
-                "AmountOfButtonsForScene" : {
-            // scene number : amount of buttons in that scene
-            0: 1, 
-            1: 2,
-            2: 6,
-            3: 6,
-            4: 6,
-            5: 6,
-            6: 3,
-            7: 3,
-            8: 2,
-            9: 2,
-            10: 2,
-
-        character = new Player({
-        name: 'nana',
-        age: '20',
-        profession: 'protagonist',
-        eye_Color: '',
-        hair_style: '',
-        skin_complexion: '',
-        stature: '',
-        attire: '',
-        gender: '',
-        race: 'human',
-        level: '0',
-        strength: '0',
-        intelligence: '0',
-        charisma: '0',
-        agility: '0',
-        luck: '0',
-        health: '0',
-        maxHealth: '100'
-    })
-*/
 
     return saveFile
 }
 //isCurrentlyPrinting = true
-// FIXME prob error is somewhere else (tries to print twice)
 
 function slowTypingText(text, elementId, index = 0, speed = 200, printImmediately = false) {
     
