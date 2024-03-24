@@ -72,6 +72,12 @@ body{
 	width: 80em;
 	margin: auto;
 	padding-top: 20em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+	text-align: center;
+}
+#text{
+	white-space: pre-wrap;
 }
 .choices_section{
     color: white;
@@ -95,10 +101,15 @@ body{
 	margin: 0%;
 
 }
+.Sh_2{
+	float: left;
+	margin-left: 20%;
+}
 .Sh_7{
 	float: right;
-	padding-right: 20%;
+	margin-right: 20%;
 }
+
 .Choices:hover{
 	text-decoration: underline;
 	cursor: pointer;

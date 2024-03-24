@@ -93,7 +93,7 @@ function newGame(saveFileNum){
         },
         "Chapter_num" : {
             // chapter num : scene in chapter num
-            0 : [0,1,2,3,4,5,6,7],
+            0 : [0,1,2,3,4,5,6,7,8,9],
             /*  ADD EXTRA chapters and scene's in chapter*/
         },
         "Choices_Possible" : {
@@ -190,13 +190,13 @@ class Player {
         this.health = health, 
         this.maxHealth = maxHealth
     }
+}
 
-    character = new Player({
+    let character = new Player({
         name: 'nana',
-        race: 'human',
-        gender: 'Male',
         age: '20',
         profession: 'protagonist',
+        race: 'human',
         level: '0',
         strength: '0',
         intelligence: '0',
@@ -205,8 +205,7 @@ class Player {
         luck: '0',
         health: '0',
         maxHealth: '100'
-    })
-}
+    });
 
 function story(saveFile){
     console.log("start story");
@@ -256,21 +255,21 @@ function story(saveFile){
             if(isCurrentlyPrinting){
                 stopTyping = true
                 slowTypingText(current_storyLine['playerText'], '.main_section',undefined,undefined,true)
-                slowTypingText(current_title['title_story_'+current_title_progress], '.main_section',undefined,undefined,true)
-                stopTyping = true
+                slowTypingText(current_title['title_story_'+current_title_progress], '.Quest_Title',undefined,undefined,true)
             }else{
-                stopTyping = true
+                
                 console.log("previous progress id=257 ",saveFile.Choices_Made[saveFile.curent_chapter_progress]);
                 saveFile.Choices_Made[saveFile.curent_chapter_progress].pop();
                 console.log("curent progress id=258 ",saveFile.Choices_Made[saveFile.curent_chapter_progress]);
                 previousScene(saveFile);
             }
         })
-        Button7.addEventListener("click", function() {
+        Button7.addEventListener("click", function() {  // FIXME : gets activated imidiatly ????? 
             if(isCurrentlyPrinting){
-                slowTypingText(current_storyLine['playerText'], '.main_section',undefined,undefined,true)
-                slowTypingText(current_title['title_story_'+current_title_progress], '.main_section',undefined,undefined,true)
                 stopTyping = true
+                slowTypingText(current_storyLine['playerText'], '.main_section',undefined,undefined,true)
+                slowTypingText(current_title['title_story_'+current_title_progress], '.Quest_Title',undefined,undefined,true) 
+                
             }else{
                 console.log("previous progress id=259 ",saveFile.Choices_Made[saveFile.curent_chapter_progress]);
                 saveFile.Choices_Made[saveFile.curent_chapter_progress].push(7);
@@ -279,7 +278,7 @@ function story(saveFile){
                 
             }
         })
-
+        return;
     }else{
         ButtonPressed(saveFile)
     }
@@ -305,7 +304,7 @@ function story(saveFile){
      else {
         savefileId.removeEventListener("click", savefileId.addEventListener("click"));
     }
-    // FIXME code gets repeated such that it gets scrampled up a lot AND the title gets mixt in the text
+    // FIXME code gets repeated such that it gets scrampled up a lot
     function ButtonPressed(saveFile) {
         for (const buttonValue of saveFile.Buttons) {
             const chapter = saveFile.Choices_Possible[saveFile.curent_chapter_progress];
@@ -320,6 +319,8 @@ function story(saveFile){
                     const buttonClickHandler = () => {
                     if (isCurrentlyPrinting) {
                         stopTyping = true
+                        //slowTypingText(undefined,undefined, undefined, undefined, true);
+                        //slowTypingText(undefined,undefined, undefined, undefined, true);
                         slowTypingText(current_storyLine['playerText'], '.main_section', undefined, undefined, true);
                         slowTypingText(current_title['title_story_' + current_title_progress], '.Quest_Title', undefined, undefined, true);
                         stopTyping = true
@@ -327,20 +328,55 @@ function story(saveFile){
                         console.log('isCurrentlyPrinting',isCurrentlyPrinting)
                         console.log('buttonvalue',buttonValue);
                         console.log('typeof',typeof(buttonValue));
-                        if (buttonValue == "7") {
-                        console.log("test id=255 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
-                        saveFile.Choices_Made[saveFile.curent_chapter_progress].push(7);
-                        console.log("test id=256 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
-                        nextScene(saveFile);
-                        }
                         if (buttonValue == "1") {
-                        console.log("test id=255 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
-                        saveFile.Choices_Made[saveFile.curent_chapter_progress].pop();
-                        console.log("test id=256 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
-                        previousScene(saveFile);
+                            console.log("test id=253 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            saveFile.Choices_Made[saveFile.curent_chapter_progress].pop();
+                            console.log("test id=254 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                        }
+                        if (buttonValue == "2"){
+                            console.log("test id=261 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            saveFile.Choices_Made[saveFile.curent_chapter_progress].push(2);
+                            Choices_calculator(saveFile);
+                            console.log("test id=262 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            nextScene(saveFile);
+                        }
+                        if (buttonValue == "3"){
+                            console.log("test id=263 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            saveFile.Choices_Made[saveFile.curent_chapter_progress].push(3);
+                            Choices_calculator(saveFile);
+                            console.log("test id=264 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            nextScene(saveFile);
+                        }
+                        if (buttonValue == "4"){
+                            console.log("test id=265 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            saveFile.Choices_Made[saveFile.curent_chapter_progress].push(4);
+                            Choices_calculator(saveFile);
+                            console.log("test id=266 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            nextScene(saveFile);
+                        }
+                        if (buttonValue == "5"){
+                            console.log("test id=267 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            saveFile.Choices_Made[saveFile.curent_chapter_progress].push(5);
+                            Choices_calculator(saveFile);
+                            console.log("test id=268 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            nextScene(saveFile);
+                        }
+                        if (buttonValue == "6"){
+                            console.log("test id=269 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            saveFile.Choices_Made[saveFile.curent_chapter_progress].push(6);
+                            Choices_calculator(saveFile);
+                            console.log("test id=270 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            nextScene(saveFile);
+                        }
+                        if (buttonValue == "7") {
+                            console.log("test id=255 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            saveFile.Choices_Made[saveFile.curent_chapter_progress].push(7);
+                            console.log("test id=256 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            nextScene(saveFile);
                         } else {
-                        console.log('else buttonvalue', buttonValue);
-                        return;
+                            console.log('else buttonvalue', buttonValue);
+                            //previousScene(saveFile);
+                            return;
                         }
                     }
                     };
@@ -354,6 +390,7 @@ function story(saveFile){
             }
         }
     }
+    
 
     function title_progress(current_title,current_title_progress) {
         let title_story = current_title['title_story_'+current_title_progress]
@@ -375,8 +412,13 @@ function story(saveFile){
         Title.innerHTML = " ";
         main_section.innerHTML = " ";
         choices_section_title.innerHTML = " ";
-        Button_Choice1.innerHTML = " ";  
+        Button_Choice1.innerHTML = " ";
+        Button_Choice2.innerHTML = " ";
+        Button_Choice3.innerHTML = " ";
+        Button_Choice4.innerHTML = " ";
         Button_Choice5.innerHTML = " ";
+        Button_Choice6.innerHTML = " ";
+        Button_Choice7.innerHTML = " ";
         console.log('before pressed story')
         story(saveFile);
         console.log('nextScene "after pressed story"');
@@ -386,8 +428,13 @@ function story(saveFile){
         Title.innerHTML = " ";
         main_section.innerHTML = " ";
         choices_section_title.innerHTML = " ";
-        Button_Choice1.innerHTML = " ";  
+        Button_Choice1.innerHTML = " ";
+        Button_Choice2.innerHTML = " ";
+        Button_Choice3.innerHTML = " ";
+        Button_Choice4.innerHTML = " ";
         Button_Choice5.innerHTML = " ";
+        Button_Choice6.innerHTML = " ";
+        Button_Choice7.innerHTML = " ";
         console.log('before pressed story')
         story(saveFile);
         console.log('previousScene "after pressed story"');
@@ -398,8 +445,13 @@ function story(saveFile){
         Title.innerHTML = " ";
         main_section.innerHTML = " ";
         choices_section_title.innerHTML = " ";
-        Button_Choice1.innerHTML = " ";  
+        Button_Choice1.innerHTML = " ";
+        Button_Choice2.innerHTML = " ";
+        Button_Choice3.innerHTML = " ";
+        Button_Choice4.innerHTML = " ";
         Button_Choice5.innerHTML = " ";
+        Button_Choice6.innerHTML = " ";
+        Button_Choice7.innerHTML = " ";
         story(saveFile);
         console.log('nextChapter');
     }
@@ -409,12 +461,128 @@ function story(saveFile){
         Title.innerHTML = " ";
         main_section.innerHTML = " ";
         choices_section_title.innerHTML = " ";
-        Button_Choice1.innerHTML = " ";  
+        Button_Choice1.innerHTML = " ";
+        Button_Choice2.innerHTML = " ";
+        Button_Choice3.innerHTML = " ";
+        Button_Choice4.innerHTML = " ";
         Button_Choice5.innerHTML = " ";
+        Button_Choice6.innerHTML = " ";
+        Button_Choice7.innerHTML = " ";
         story(saveFile);
         console.log('previousChapter');
     }
+    
+    function Choices_calculator(saveFile){      // FIXME : values are all the same
+        let chapter = saveFile.Choices_Possible[saveFile.curent_chapter_progress];
+        let scene = chapter[saveFile.curent_storyLine_progress];
+        let listOfChoiceNUM = saveFile.Choices_Made[saveFile.curent_chapter_progress].length;   // NUM of objects in array
+        listOfChoiceNUM = listOfChoiceNUM -1 ;
+        let ButtonPressed = saveFile.Choices_Made[saveFile.curent_chapter_progress][listOfChoiceNUM]; //    wich button was pressed (num)
+        let value = scene[ButtonPressed];    // the final value
+        console.log(character);
+        switch(listOfChoiceNUM){
+            case 2:
+                character.eye_Color = value;
+                break;
+            case 3:
+                character.hair_style = value;
+                break;
+            case 4:
+                character.skin_complexion = value;
+                break;
+            case 5:
+                character.stature = value;
+                break;
+            case 6:
+                character.attire = value;
+                break;
+            case 7:
+                character.gender = value;
+                break;
+        }
+        
+    }
+    
+    
+/*
+NOTES
+    buttonOptions save inside charachter
+    but not always there
 
+    if (scene) {
+        const value = scene[buttonValue];
+        if (value) {
+        const button = document.querySelector('.Sh_' + buttonValue);
+        if (button) {
+            button.innerHTML = value;
+
+
+    "curent_storyLine_progress" : 0,
+    "curent_chapter_progress" : 0,
+    "Choices_Possible" : {
+    //  chapter number : { scene number : { Button option : Text }}
+    0 : {
+        0 : { 7 : "Next"},
+        1 : { 1 : "Previously", 7 : "Next"},
+        2 : { 1 : "Previously", 2 : "piercing blue", 3 : "deep brown", 4 : "striking green", 5 : "captivating hazel", 6 : "intense grey"},
+        3 : { 1 : "Previously", 2 : "cascading waves", 3 : "cropped short", 4 : "braided intricately", 5 : " sophisticated bun", 6 : "left wild and free"},
+        4 : { 1 : "Previously", 2 : "Porcelain fair", 3 : "Sun-kissed bronze", 4 : "Olive-toned", 5 : "Rosy-pink", 6 : "Deep ebony"},
+        5 : { 1 : "Previously", 2 : "Petite and delicate", 3 : "Tall and statuesque", 4 : "Somewhere in between", 5 : "Lean and athletic", 6 : "Muscular and imposing"},
+        6 : { 1 : "Previously", 4 : "Weathered and worn, marked by dirt and grime, reflecting a seasoned traveler", 7 : "Pristine and clean, untouched by the trials of the cavern, hinting at a recent arrival"},
+        7 : { 1 : "Previously", 4 : "Feminine", 7 : "Masculine"},
+        8 : { 1 : "Previously", 7 : "Next"},
+        9 : { 1 : "Previously", 7 : "Next"},
+        10 : { 1 : "Previously", 7 : "Next"},
+
+
+
+
+        //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : ""},
+        //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : ""},
+        //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : "Next"},
+        //  : { 1 : "Previously", 7 : "Next"},
+    },
+    "Choices_Made" : {
+        //  chapter number : string of Button NUM Choices made // EXAMPLE 1,5,3 first CH, fith CH , third CH
+        0 : [], 
+        //  ADD EXTRA chapters
+    },
+
+                "AmountOfButtonsForScene" : {
+            // scene number : amount of buttons in that scene
+            0: 1, 
+            1: 2,
+            2: 6,
+            3: 6,
+            4: 6,
+            5: 6,
+            6: 3,
+            7: 3,
+            8: 2,
+            9: 2,
+            10: 2,
+
+        character = new Player({
+        name: 'nana',
+        age: '20',
+        profession: 'protagonist',
+        eye_Color: '',
+        hair_style: '',
+        skin_complexion: '',
+        stature: '',
+        attire: '',
+        gender: '',
+        race: 'human',
+        level: '0',
+        strength: '0',
+        intelligence: '0',
+        charisma: '0',
+        agility: '0',
+        luck: '0',
+        health: '0',
+        maxHealth: '100'
+    })
+*/
 
     return saveFile
 }
@@ -422,33 +590,53 @@ function story(saveFile){
 // FIXME prob error is somewhere else (tries to print twice)
 
 function slowTypingText(text, elementId, index = 0, speed = 200, printImmediately = false) {
-    isCurrentlyPrinting = true; // Text is being printed
-
+    
     if (printImmediately) {
-        document.querySelector(elementId).innerText = text;
-        isCurrentlyPrinting = false; // Printing finished
+        ///isCurrentlyPrinting = true; // Set printing flag
+        document.querySelector(elementId).innerText = ''; // Clear the element before printing
+        // Immediately print the entire text
+        ///document.querySelector(elementId).innerHTML = text.replace(/\n/g, '<br>'); // Replace newline characters with <br> tags
+        // Reset printing flag
+        //isCurrentlyPrinting = false;
+
+        document.querySelector(elementId).innerText = text; // Set the text immediately
         return;
     }
 
-    if (index < text.length) {
-        if (index === 0) {
-            document.querySelector(elementId).innerText = ''; // Clear the element before printing
-        }
-        document.querySelector(elementId).innerText += text[index];
-        index++;
-        if (text[index - 1] === " ") {
-            setTimeout(() => {
-                document.querySelector(elementId).innerText += " " + text[index];
-                index += 1;
-                slowTypingText(text, elementId, index, speed);
-            }, speed);
-        } else {
-            setTimeout(() => slowTypingText(text, elementId, index, speed), speed);
-        }
-    } else {
-        isCurrentlyPrinting = false; // Printing finished
+    if (isCurrentlyPrinting) {
+        // If currently printing, stop the ongoing printing process
+        stopTyping = true;
     }
+
+    isCurrentlyPrinting = true; // Set printing flag
+
+    function printCharacter() {
+        if (index < text.length) {
+            // Print each character with a delay
+            let char = text[index];
+            if (char === " ") {
+                // For space character, include it in the output string with an extra space
+                document.querySelector(elementId).innerText += String.fromCharCode(160) ; // + (char1 - char1);
+            } else {
+                document.querySelector(elementId).innerText += char;
+            }
+            index++;
+            setTimeout(printCharacter, speed);
+        } else {
+            // If all characters have been printed, reset printing flag
+            isCurrentlyPrinting = false;
+        }
+    }
+
+    // Start printing characters
+    printCharacter();
 }
+// Set CSS to allow text wrapping
+//document.querySelector('.main_section').style.whiteSpace = 'pre-wrap';
+//document.querySelector('.main_section').style.wordWrap = 'break-word';
+
+
+
 
 
 
