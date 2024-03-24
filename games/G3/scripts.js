@@ -18,7 +18,7 @@ var last_loaded_game = '';
 var typeOfGame = 'New_Game';
 
 let isCurrentlyPrinting = false; // set true if is printing and false if not curently printing if true and printImmediately is also true stop slowTypingText and print everything 
-
+let stopTyping = false;
 // initial latest loaded game
 if (saveFileNum == 0){
     saveFileNum = 1;
@@ -254,9 +254,12 @@ function story(saveFile){
         Button1.innerHTML = 'Previously';
         Button1.addEventListener("click", function(){
             if(isCurrentlyPrinting){
+                stopTyping = true
                 slowTypingText(current_storyLine['playerText'], '.main_section',undefined,undefined,true)
                 slowTypingText(current_title['title_story_'+current_title_progress], '.main_section',undefined,undefined,true)
+                stopTyping = true
             }else{
+                stopTyping = true
                 console.log("previous progress id=257 ",saveFile.Choices_Made[saveFile.curent_chapter_progress]);
                 saveFile.Choices_Made[saveFile.curent_chapter_progress].pop();
                 console.log("curent progress id=258 ",saveFile.Choices_Made[saveFile.curent_chapter_progress]);
@@ -267,6 +270,7 @@ function story(saveFile){
             if(isCurrentlyPrinting){
                 slowTypingText(current_storyLine['playerText'], '.main_section',undefined,undefined,true)
                 slowTypingText(current_title['title_story_'+current_title_progress], '.main_section',undefined,undefined,true)
+                stopTyping = true
             }else{
                 console.log("previous progress id=259 ",saveFile.Choices_Made[saveFile.curent_chapter_progress]);
                 saveFile.Choices_Made[saveFile.curent_chapter_progress].push(7);
@@ -315,9 +319,12 @@ function story(saveFile){
                     button.innerHTML = value;
                     const buttonClickHandler = () => {
                     if (isCurrentlyPrinting) {
+                        stopTyping = true
                         slowTypingText(current_storyLine['playerText'], '.main_section', undefined, undefined, true);
-                        slowTypingText(current_title['title_story_' + current_title_progress], '.main_section', undefined, undefined, true);
+                        slowTypingText(current_title['title_story_' + current_title_progress], '.Quest_Title', undefined, undefined, true);
+                        stopTyping = true
                     } else {
+                        console.log('isCurrentlyPrinting',isCurrentlyPrinting)
                         console.log('buttonvalue',buttonValue);
                         console.log('typeof',typeof(buttonValue));
                         if (buttonValue == "7") {
@@ -358,7 +365,7 @@ function story(saveFile){
         let title_scene = current_storyLine['sceneName']
         let scene_text = current_storyLine['playerText']
         slowTypingText(scene_text,'.main_section',undefined, 35);     // Put the content on the left and the place where it needs to go on the right + index + speed
-        console.log('title_scene',title_scene)
+        console.log('title_scene',title_scene)                          
         console.log('scene_text',scene_text)
         console.log('current_storyLine',current_storyLine);
 
@@ -411,34 +418,39 @@ function story(saveFile){
 
     return saveFile
 }
+//isCurrentlyPrinting = true
+// FIXME prob error is somewhere else (tries to print twice)
 
 function slowTypingText(text, elementId, index = 0, speed = 200, printImmediately = false) {
+    isCurrentlyPrinting = true; // Text is being printed
+
     if (printImmediately) {
         document.querySelector(elementId).innerText = text;
-        isCurrentlyPrinting = false;
+        isCurrentlyPrinting = false; // Printing finished
         return;
     }
+
     if (index < text.length) {
+        if (index === 0) {
+            document.querySelector(elementId).innerText = ''; // Clear the element before printing
+        }
         document.querySelector(elementId).innerText += text[index];
         index++;
-        // replace it with a space character
         if (text[index - 1] === " ") {
-            isCurrentlyPrinting = true;
             setTimeout(() => {
-                document.querySelector(elementId).innerText += " "+text[index];
-                    index += 1;
+                document.querySelector(elementId).innerText += " " + text[index];
+                index += 1;
                 slowTypingText(text, elementId, index, speed);
             }, speed);
         } else {
             setTimeout(() => slowTypingText(text, elementId, index, speed), speed);
-            isCurrentlyPrinting = true;
         }
+    } else {
+        isCurrentlyPrinting = false; // Printing finished
     }
-    if (index == text.length){
-        isCurrentlyPrinting = false;
-    }
-    return isCurrentlyPrinting;
 }
+
+
 
 INIT()
 function INIT(){
