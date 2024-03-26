@@ -506,6 +506,7 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
             console.log(index);
             console.log(text.length);
             isCurrentlyPrinting = false;
+            // FIXME isCurrentlyPrinting stays true on the story 2 or 3
         }
     }
 
