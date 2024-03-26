@@ -465,7 +465,7 @@ function story(saveFile){
         console.log('previousChapter');
     }
     
-    function Choices_calculator(saveFile){      // FIXME : values are all the same
+    function Choices_calculator(saveFile){      
         let chapter = saveFile.Choices_Possible[saveFile.curent_chapter_progress];
         let scene = chapter[saveFile.curent_storyLine_progress];
         let listOfChoiceNUM = saveFile.Choices_Made[saveFile.curent_chapter_progress].length;   // NUM of objects in array
@@ -473,20 +473,26 @@ function story(saveFile){
         let ButtonPressed = saveFile.Choices_Made[saveFile.curent_chapter_progress][listOfChoiceNUM]; //    wich button was pressed (num)
         let value = scene[ButtonPressed];    // the final value
         console.log(character);
-        if (listOfChoiceNUM == 2) {
-            character.eye_Color = value;
-        } else if (listOfChoiceNUM == 3) {
-            character.hair_style = value;
-        } else if (listOfChoiceNUM == 4) {
-            character.skin_complexion = value;
-        } else if (listOfChoiceNUM == 5) {
-            character.stature = value;
-        } else if (listOfChoiceNUM == 6) {
-            character.attire = value;
-        } else if (listOfChoiceNUM == 7) {
-            character.gender = value;
-        } else {
-            // Handle any other cases if needed
+        console.log(typeof(listOfChoiceNUM));
+        if (listOfChoiceNUM <= 8 ){ // only charachter creation
+            if (listOfChoiceNUM == 2) {
+                character.eye_Color = value;
+            }if (listOfChoiceNUM == 3) {
+                character.hair_style = value;
+            }if (listOfChoiceNUM == 4) {
+                character.skin_complexion = value;
+            }if (listOfChoiceNUM == 5) {
+                character.stature = value;
+            }if (listOfChoiceNUM == 6) {
+                character.attire = value;
+            }if (listOfChoiceNUM == 7) {
+                character.gender = value;
+            }else {
+                // Handle any other cases if needed
+            }
+            console.log(typeof(listOfChoiceNUM));
+            console.log(typeof(2));
+            console.log(listOfChoiceNUM + 2);
         }
         
         
