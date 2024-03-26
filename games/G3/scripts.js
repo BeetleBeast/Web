@@ -239,42 +239,8 @@ function story(saveFile){
 
     choices_section_title.innerHTML = saveFile.Buttons_section_title[0];  // change if needed be
     
-    if (saveFile.AmountOfButtonsForScene[curent_storyLine_progress] == saveFile.AmountOfButtonsForSceneDefault){
-        let Button1 = Button_Choice1;
-        let Button7 = Button_Choice7;
-        Button7.innerHTML = 'Next';  
-        Button1.innerHTML = 'Previously';
-        Button1.addEventListener("click", function(){
-            if(isCurrentlyPrinting){
-                stopTyping = true
-                slowTypingText(current_storyLine['playerText'], '.main_section',undefined,undefined,true)
-                slowTypingText(current_title['title_story_'+current_title_progress], '.Quest_Title',undefined,undefined,true)
-            }else{
-                
-                console.log("previous progress id=257 ",saveFile.Choices_Made[saveFile.curent_chapter_progress]);
-                saveFile.Choices_Made[saveFile.curent_chapter_progress].pop();
-                console.log("curent progress id=258 ",saveFile.Choices_Made[saveFile.curent_chapter_progress]);
-                previousScene(saveFile);
-            }
-        })
-        Button7.addEventListener("click", function() {  // FIXME : gets activated imidiatly ????? 
-            if(isCurrentlyPrinting){
-                stopTyping = true
-                slowTypingText(current_storyLine['playerText'], '.main_section',undefined,undefined,true)
-                slowTypingText(current_title['title_story_'+current_title_progress], '.Quest_Title',undefined,undefined,true) 
-                
-            }else{
-                console.log("previous progress id=259 ",saveFile.Choices_Made[saveFile.curent_chapter_progress]);
-                saveFile.Choices_Made[saveFile.curent_chapter_progress].push(7);
-                console.log("curent progress id=260 ",saveFile.Choices_Made[saveFile.curent_chapter_progress]);
-                nextScene(saveFile);
-                
-            }
-        })
-        return;
-    }else{
-        ButtonPressed(saveFile)
-    }
+    ButtonPressed(saveFile)
+    
 
     // save loaded game (goes to SG file to load and save the game)
     if (savefileId && !savefileId.hasAttribute('data-listener-added')) {
@@ -325,6 +291,7 @@ function story(saveFile){
                             console.log("test id=253 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
                             saveFile.Choices_Made[saveFile.curent_chapter_progress].pop();
                             console.log("test id=254 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                            previousScene(saveFile);
                         }
                         if (buttonValue == "2"){
                             console.log("test id=261 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
@@ -490,9 +457,6 @@ function story(saveFile){
             }else {
                 // Handle any other cases if needed
             }
-            console.log(typeof(listOfChoiceNUM));
-            console.log(typeof(2));
-            console.log(listOfChoiceNUM + 2);
         }
         
         
@@ -535,8 +499,12 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
             }
             index++;
             setTimeout(printCharacter, speed);
+            console.log(index);
+            console.log(text.length);
         } else {
             // If all characters have been printed, reset printing flag
+            console.log(index);
+            console.log(text.length);
             isCurrentlyPrinting = false;
         }
     }
