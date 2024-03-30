@@ -265,6 +265,7 @@ width: fit-content;
 padding: 5px;
 right:calc(100vw - 55%);
 margin-left: 1%;
+height: -moz-fit-content;
 height: fit-content;
 top: -50px;
 color: rgb(67, 0, 129);
@@ -286,14 +287,13 @@ align-items: center;
 .cnt {
 text-align: center;
 position: relative;
-/*width: 50px;
-height: 50px;*/
 margin: 20px;
 border-radius: 50%;
 }
 .cvt{
 text-align: center;
 position: relative;
+height: -moz-fit-content;
 height: fit-content;
 width: -moz-fit-content;
 width: fit-content;
@@ -361,6 +361,7 @@ button{
     padding: 5px;
     right:calc(100vw - 55%);
     margin-left: 1%;
+    height: -moz-fit-content;
     height: fit-content;
     top: -50px;
     color: rgb(67, 0, 129);
@@ -376,6 +377,7 @@ button{
     padding: 5px;
     right:calc(100vw - 55%);
     margin-left: 1%;
+    height: -moz-fit-content;
     height: fit-content;
     top: -50px;
     color: rgb(67, 0, 129);
@@ -400,7 +402,8 @@ button:active:not(.disable){
     align-items: center;
     justify-content:flex-start;
     flex-direction: column;
-    height:fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
     margin-bottom: 20px;
 }
 
@@ -495,22 +498,25 @@ button:active:not(.disable){
     color: red;
 }
 .section0{
-    width: fit-content;
     width: -moz-fit-content;
+    width: fit-content;
+    height: -moz-fit-content;
     height: fit-content;
 }
 .section1{
-
-    width: fit-content;
     width: -moz-fit-content;
+    width: fit-content;
+    height: -moz-fit-content;
     height: fit-content;
 }
 .section2{
-    width: fit-content;
     width: -moz-fit-content;
+    width: fit-content;
+    height: -moz-fit-content;
     height: fit-content;
 }
 .section3{
+    height: -moz-fit-content;
     height: fit-content;
 }
 
@@ -553,8 +559,8 @@ margin: 0;
     padding-right: 50px;
 }
 input[type=range] {
+    -webkit-appearance: none;
     appearance: auto;
-	-webkit-appearance: none;
 	margin: 20px 0;
 	width: 100%;
 }
@@ -728,6 +734,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
         padding: 5px;
         right:calc(100% - 55%);
         margin-left: 5px;
+        height: -moz-fit-content;
         height: fit-content;
         top: -50px;
         color: rgb(67, 0, 129);

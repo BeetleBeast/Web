@@ -53,7 +53,7 @@ body{
 	box-sizing:content-box;
 	padding: .5em;
 	
-
+	margin-right: 15rem;
 
 }
 .main{
@@ -64,6 +64,8 @@ body{
 	
 	top: 0;
 	height: 100%;
+
+	margin-right: 15em;
 }
 .main_section{
     color: white;
@@ -74,7 +76,6 @@ body{
 	padding-top: 20em;
     white-space: pre-wrap;
     word-wrap: break-word;
-	text-align: center;
 }
 #text{
 	white-space: pre-wrap;
@@ -98,23 +99,32 @@ body{
 	height: auto;
 	padding: auto 5px;
 	text-align: center;
-	margin: 0%;
+	margin-left: 5em;
+	margin-right: 5em;
 
 }
-.Sh_2{
-	float: left;
-	margin-left: 20%;
-}
-.Sh_7{
-	float: right;
-	margin-right: 20%;
-}
-
 .Choices:hover{
 	text-decoration: underline;
 	cursor: pointer;
 	color: #8f2950;
 }
+.Sh_1{
+	color: #ff8686;
+}
+.Sh_1:hover{
+	color: #ff0000;
+}
+.Sh_2{
+	float: left;
+	margin-left: 10%;
+}
+.Sh_7{
+	float: right;
+	margin-right: 20%;
+	margin-left: 0;
+}
+
+
 
 /*--Side-Menu--*/
 
@@ -127,6 +137,95 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* this will create space between the elements */
+}
+#Side-Menu1{
+	margin: auto 5px;
+	padding: auto 5px;
+}
+
+#Side-Menu2 {
+	background-color: var(--side-Color);
+	border-right: 2px solid rgb(185, 0, 62);
+	width: 15em;
+	height: 100%;
+	text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* this will create space between the elements */
+	color: azure;
+	margin-top: auto 15px;
+}
+#Side-Menu3 {
+	background-color: var(--side-Color);
+	border-right: 2px solid rgb(185, 0, 62);
+	width: 15em;
+	height: 100%;
+	text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* this will create space between the elements */
+	color: azure;
+}
+#Side-Menu4 {
+	background-color: var(--side-Color);
+	border-right: 2px solid rgb(185, 0, 62);
+	width: 15em;
+	height: 100%;
+	text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* this will create space between the elements */
+	color: azure;
+	margin-bottom: 3em;
+	margin-top: 15px;
+}
+.Side-Influences{
+	width: 100%;
+	height: 5px;
+	background-color: rgb(61, 61, 61);
+}
+.Side-Influences_Bar{
+	width: 50%;
+	height: 5px;
+	background-color: green;
+
+}
+.Pain{
+	width: 1%;
+	background-color: rgb(128, 0, 0);
+}
+.Fatigue{
+	width: 1%;
+	background-color: rgb(0, 192, 166);
+}
+.Fear{
+	width: 1%;
+	background-color: rgb(128, 0, 0);
+}
+.Stress{
+	width: 1%;
+	background-color: rgb(0, 192, 166);
+}
+
+.Trauma{
+	width: 1%;
+	background-color: rgb(0, 192, 166);
+}
+.Addiction{
+	width: 1%;
+	background-color: rgb(255, 208, 0);
+}
+.Sickness{
+	width: 1%;
+	background-color: rgb(134, 172, 0);
+}
+.Bleed{
+	width: 1%;
+	background-color: rgb(54, 0, 0);
+}
+.Control{
+	width: 100%;
+	background-color: green;
 }
 .bottom-links {
     display: flex;
@@ -141,15 +240,17 @@ body{
 	background-color: black;
 	width: 5em;
 	display: block;
+	height: -moz-fit-content;
 	height: fit-content;
 	padding: 0.5em;
 	margin-left: auto;
 	margin-right: auto;
 	/* existing styles */
 	margin-top: -10px;
+	margin-bottom: 15px;
+	border: 1px solid rgba(0, 0, 0, 0);
 }
 .Open-more:hover{
-	color: aqua;
     border: 1px solid lightgreen;
 	cursor: pointer;
     
@@ -162,26 +263,24 @@ body{
 	background-color: black;
 	display: block;
 	width: 5em;
+	height: -moz-fit-content;
 	height: fit-content;
 	padding: 0.5em;
 	margin-left: auto;
 	margin-right: auto;
 	bottom: 0px;
+	border: 1px solid rgba(0, 0, 0, 0);
 }
 .asettings{
-
 	justify-content: flex-end;
-
 	margin-left: auto;
 	margin-right: auto;
-	padding-bottom: 10em;
-	
+	margin-bottom: 10em;
 }
 .settings:hover{
 	color: aqua;
     border: 1px solid lightgreen;
 	cursor: pointer;
-    
 }
 #Side-image{
 	/*background-image:;*/
