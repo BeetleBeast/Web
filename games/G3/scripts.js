@@ -12,6 +12,7 @@ const Button_Choice3 = document.querySelector('.Sh_3');
 const Button_Choice4 = document.querySelector('.Sh_4');
 const Button_Choice5 = document.querySelector('.Sh_5');
 const savefileId = document.getElementById('savefileId');
+const loadfileId = document.getElementById('loadfileId');
 const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  (in words)
 const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debuff)
 const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
@@ -76,8 +77,9 @@ function newGame(saveFileNum){
         "title_progress" : { 
             //  title / chapter num : { title_story_[current_title_progress] : title}
             0 : { "title_story_0" : 'Into the new world'},
-            1 : {'title_story_1' : 'Lost in the forest'}, 
-            2 : {'title_story_2' : 'Old cabbin'},
+            1 : { "title_story_1" : 'Finding an exit'},
+            2 : {'title_story_2' : 'Lost in the forest'}, 
+            3 : {'title_story_3' : 'Old cabbin'},
         },
         "storyLine_progress" : {
             //  chapter num : { Scene num : {"sceneName" : "placeholder", "playerText": "placeholder"}, },
@@ -91,7 +93,16 @@ function newGame(saveFileNum){
                 6 :  {"sceneName" : "charachterDefining5", "playerText" : "Your attire, a reflection of your journey through the rugged terrain, appears weathered and worn, bearing the marks of your passage through the cave's unforgiving landscape. You notice that your clothing carries either the rugged authenticity of a seasoned traveler, marked by dirt and grime, or the pristine cleanliness that hints at your recent arrival, untouched by the trials of the cavern."},
                 7 :  {"sceneName" : "charachterDefining6", "playerText" : "Gazing into the rippling waters of the cave's puddle, the figure contemplates their gender, recognizing it as a deeply personal truth. Whether they perceive themselves as aligning with the feminine or masculine, their identity crystallizes as a reflection of their inner self, not merely a narrative waiting to be written."},
                 8 :  {"sceneName" : "charachterDefining7", "playerText" : "As the light begins to dim within the cavern, the figure gazes into the fading reflections of the puddle, contemplating their essence. In the obscurity, their species becomes shrouded in uncertainty, a mysterious aspect of their being that defies classification. Their identity transcends the confines of known races, leaving their true nature obscured in the fading light."},
-                9 :  {"sceneName" : "FindingExit-0", "playerText" : "Navigating the damp walls of the cavern, you seek an exit, fingers tracing the rough texture in search of escape. With each step, your determination grows, fueled by the desire to break free from the confines of this underground labyrinth."},
+                9 :  {"sceneName" : "seekExit", "playerText" : "Navigating the damp walls of the cavern, you seek an exit, fingers tracing the rough texture in search of escape. With each step, your determination grows, fueled by the desire to break free from the confines of this underground labyrinth."},
+            },
+            1 : {
+                0 :  {"sceneName" : "seekExit0", "playerText": "As you wander through the cave's labyrinthine passages, you encounter a variety of pathways, each offering its own unique allure. One path is adorned with vibrant green moss, another lined with glittering crystals, while another disappears into shadowed depths. Further along, you find yourself following the course of an underground stream, and eventually, you stumble upon a cavern illuminated by bioluminescent fungi. Each pathway beckons with its own mysteries, inviting you to explore deeper into the heart of the cave's secrets."},
+                1 :  {"sceneName" : "The Mossy Passage", "playerText": "placeholder"},
+                2 :  {"sceneName" : "The Crystal Tunnel", "playerText": "placeholder"},
+                3 :  {"sceneName" : "The Shadowed Corridor", "playerText": "placeholder"},
+                4 :  {"sceneName" : "The Subterranean Stream", "playerText": "placeholder"},
+                5 :  {"sceneName" : "he Fungal Grove", "playerText": "placeholder"},
+                6 :  {"sceneName" : "seekExit6", "playerText": "placeholder"},
             },
         },
         "Choices_Possible" : {
@@ -107,13 +118,22 @@ function newGame(saveFileNum){
                 7 : { 1 : "Previously", 4 : "Feminine", 7 : "Masculine"},
                 8 : { 1 : "Previously", 7 : "Next"},
                 9 : { 1 : "Previously", 7 : "Next"},
-                10 : { 1 : "Previously", 7 : "Next"},
-
+            },
+            1 : {
+                0 : { 1 : "Previously", 2 : "The Mossy Passage", 3 : "The Crystal Tunnel", 4 : "The Shadowed Corridor", 5 : "The Subterranean Stream", 6 : "he Fungal Grove"},
+                1 : { 1 : "Previously", 7 : "Next"},
+                2 : { 1 : "Previously", 7 : "Next"},
+                3 : { 1 : "Previously", 7 : "Next"},
+                4 : { 1 : "Previously", 7 : "Next"},
+                5 : { 1 : "Previously", 7 : "Next"},
+                6 : { 1 : "Previously", 7 : "Next"},
+                7 : { 1 : "Previously", 7 : "Next"},
+                8 : { 1 : "Previously", 7 : "Next"},
                 //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : ""},
                 //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : ""},
                 //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : "Next"},
                 //  : { 1 : "Previously", 7 : "Next"},
-            },
+            }
         },
         "Buttons_section_title" : {
             //  chapter num : {   Scene num : text }
@@ -128,12 +148,32 @@ function newGame(saveFileNum){
                 7 : " ",
                 8 : " ",
                 9 : " ",
-                10 : " ",
             },
+            1 : {
+                0 : "Which Dierction shall you chose",
+                1 : " ",
+                2 : " ",
+                3 : " ",
+                4 : " ",
+                5 : " ",
+                6 : " ",
+                7 : " ",
+                8 : " ",
+                9 : " ",
+            }
         },
         "Choices_Made" : {
             //  chapter number : string of num defined by Buttons order
             0 : [], 
+            1 : [],
+            2 : [],
+            3 : [],
+            4 : [],
+            5 : [],
+            6 : [],
+            7 : [],
+            8 : [],
+            9 : [],
         },
         "Player_character" : Player,
         "Buttons" : [1,2,3,4,5,6,7],
@@ -183,22 +223,49 @@ class Player {
         this.health = health
         this.maxHealth = maxHealth
     }
+    attack(enemy) {
+        // Perform attack logic here
+        console.log(`${this.name} attacks ${enemy}!`);
+    }
+
+    heal(amount) {
+        // Perform healing logic here
+        this.health += amount;
+        if (this.health > this.maxHealth) {
+            this.health = this.maxHealth;
+        }
+        console.log(`${this.name} heals for ${amount} health.`);
+    }
+
+    levelUp() {
+        // Perform level up logic here
+        this.level++;
+        console.log(`${this.name} levels up to level ${this.level}!`);
+    }
 }
 
-    let character = new Player({
-        name: 'nana',
-        age: '20',
-        profession: 'protagonist',
-        race: 'human',
-        level: '0',
-        strength: '0',
-        intelligence: '0',
-        charisma: '0',
-        agility: '0',
-        luck: '0',
-        health: '0',
-        maxHealth: '100'
-    });
+let character = new Player({
+    name: 'unknown',
+    profession: 'none',
+    level: 0,
+    strength: 0,
+    intelligence: 0,
+    charisma: 0,
+    agility: 0,
+    luck: 0,
+    health: 80,
+    maxHealth: 100
+});
+
+
+/*
+    EXAMPLE 
+
+    character.attack("monster");
+    character.heal(20);
+    character.levelUp();
+*/
+
 
 function story(saveFile){
     console.log("Begin of story");
@@ -218,25 +285,11 @@ function story(saveFile){
     const Button_Choice6 = document.querySelector('.Sh_6');
     const Button_Choice7 = document.querySelector('.Sh_7');
     const savefileId = document.getElementById('savefileId');
+    const loadfileId = document.getElementById('loadfileId');
     const Side_Menu2 = document.getElementById('Side-Menu2');
-    const Side_Menu3 = document.getElementById('Side-Menu3');
-    const Side_Menu4 = document.getElementById('Side-Menu4');
+    //const Side_Menu3 = document.getElementById('Side-Menu3');
+    //const Side_Menu4 = document.getElementById('Side-Menu4');
     //const buttonsArray = [Button_Choice1,Button_Choice2,Button_Choice3,Button_Choice4,Button_Choice5,Button_Choice6,Button_Choice7]
-
-    ButtonPressed(saveFile)
-
-    
-    let current_title_progress = saveFile.current_title_progress        // make a var van dit 
-    let current_title = saveFile.title_progress[current_title_progress]
-    title_progress(current_title,current_title_progress)
-
-    
-    let curent_storyLine_progress = saveFile.curent_storyLine_progress        // make a var van dit 
-    let current_storyLine = saveFile.storyLine_progress[saveFile.curent_chapter_progress][curent_storyLine_progress]
-    scene_progress(current_storyLine,curent_storyLine_progress)
-
-
-    choices_section_title.innerHTML = saveFile.Buttons_section_title[saveFile.curent_chapter_progress][saveFile.curent_storyLine_progress];  // change if needed be
 
     // save loaded game (goes to SG file to load and save the game)
     if (savefileId && !savefileId.hasAttribute('data-listener-added')) {
@@ -259,8 +312,61 @@ function story(saveFile){
             return saveFileNum;
         }
     }
+        // save loaded game (goes to SG file to load and save the game)
+        if (loadfileId && !loadfileId.hasAttribute('data-listener-added')) {
+            loadfileId.addEventListener("click", loadFileClickHandler);
+            loadfileId.setAttribute('data-listener-added', 'true');
+        } else if (loadfileId && loadfileId.hasAttribute('data-listener-added')) {
+            loadfileId.removeEventListener("click", loadFileClickHandler);
+        }
+        
+        function loadFileClickHandler() {
+            console.log('Loading game');
+            let saveFileNum = prompt('Which Save file number');
+        
+            if (saveFileNum !== null) {
+                console.log('Loading game id=0', saveFileNum);
+                loadfileId.innerHTML = "Load Successful";
+                let loadedSaveFile = JSON.parse(localStorage.getItem('saveFile' + saveFileNum));
+                console.log('Save file ' + saveFileNum + ' loaded');
+        
+                // Update saveFile with loaded data
+                if (loadedSaveFile) {
+                    // Assuming saveFile and loadedSaveFile have similar structure
+                    Object.assign(saveFile, loadedSaveFile);
+                    console.log('Save file updated:', saveFile);
+                    choices_section_title.innerHTML = " ";
+                    Button_Choice1.innerHTML = " ";
+                    Button_Choice2.innerHTML = " ";
+                    Button_Choice3.innerHTML = " ";
+                    Button_Choice4.innerHTML = " ";
+                    Button_Choice5.innerHTML = " ";
+                    Button_Choice6.innerHTML = " ";
+                    Button_Choice7.innerHTML = " ";
+                    story(saveFile)
+                } else {
+                    console.error('Error: Loaded save file is invalid');
+                }
+            }
+        }
+        
+        
+
+    //  Start of story by initialising progress
+    ButtonPressed(saveFile)
+
+    let current_title_progress = saveFile.current_title_progress        // make a var van dit 
+    let current_title = saveFile.title_progress[current_title_progress]
+    title_progress(current_title,current_title_progress)
+
+    let curent_storyLine_progress = saveFile.curent_storyLine_progress        // make a var van dit 
+    let current_storyLine = saveFile.storyLine_progress[saveFile.curent_chapter_progress][curent_storyLine_progress]
+    scene_progress(current_storyLine,curent_storyLine_progress)
+
+    choices_section_title.innerHTML = saveFile.Buttons_section_title[saveFile.curent_chapter_progress][saveFile.curent_storyLine_progress];  // change if needed be
     
-    
+
+
     function getButtonValues(saveFile) {
         const buttonValues = [];
         for (const buttonValue of saveFile.Buttons) {
@@ -275,7 +381,6 @@ function story(saveFile){
         return buttonValues;
     }
     
-
     function buttonClickHandler(buttonValue, saveFile) {
         return () => {
             console.log('Button ' + buttonValue + ' pressed'); // Log button press
@@ -375,6 +480,7 @@ function story(saveFile){
         } else {
             // Handle the case when there are no more scenes in the current chapter
             console.log('No more scenes available in this chapter');
+            nextChapter(saveFile)
         }
         // Re-render the story with updated saveFile
         console.log('id=9')
@@ -414,6 +520,7 @@ function story(saveFile){
         // Increment the current chapter progress only if there are more chapters available
         if (saveFile.curent_chapter_progress < Object.keys(saveFile.storyLine_progress).length - 1) {
             saveFile.curent_chapter_progress++;
+            saveFile.current_title_progress++;
             saveFile.curent_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
             console.log('Next Chapter');
         } else {
@@ -421,6 +528,14 @@ function story(saveFile){
             console.log('No more chapters available');
         }
         // Re-render the story with updated saveFile
+        choices_section_title.innerHTML = " ";
+        Button_Choice1.innerHTML = " ";
+        Button_Choice2.innerHTML = " ";
+        Button_Choice3.innerHTML = " ";
+        Button_Choice4.innerHTML = " ";
+        Button_Choice5.innerHTML = " ";
+        Button_Choice6.innerHTML = " ";
+        Button_Choice7.innerHTML = " ";
         story(saveFile);
     }
     
@@ -442,13 +557,12 @@ function story(saveFile){
     function Choices_calculator(saveFile){      
         let chapter = saveFile.Choices_Possible[saveFile.curent_chapter_progress];
         let scene = chapter[saveFile.curent_storyLine_progress];
-        let listOfChoiceNUM = saveFile.Choices_Made[saveFile.curent_chapter_progress].length;   // NUM of objects in array
-        listOfChoiceNUM = listOfChoiceNUM -1 ;
-        let ButtonPressed = saveFile.Choices_Made[saveFile.curent_chapter_progress][listOfChoiceNUM]; //    wich button was pressed (num)
-        let value = scene[ButtonPressed];    // the final value
+        let lastChoiceIndex = saveFile.Choices_Made[saveFile.curent_chapter_progress].length - 1;
+        let ButtonPressed = saveFile.Choices_Made[saveFile.curent_chapter_progress][lastChoiceIndex];
+        let value = scene[ButtonPressed];
         console.log(character);
-        console.log(typeof(listOfChoiceNUM));
-        switch ( listOfChoiceNUM ){
+        console.log(typeof(lastChoiceIndex));
+        switch (lastChoiceIndex && saveFile.curent_chapter_progress == 0) {
             case 2:
                 character.eye_Color = value;
                 Side_Menu2.innerHTML = "Your "+value+" eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery."
@@ -479,8 +593,83 @@ function story(saveFile){
                 Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+valueSTRING[4]+" attire collectively emanate a captivating essence. While your gender is "+value+", your race remains a mystery, awaiting discovery."
                 valueSTRING.push(value);
                 break;
-
         }
+        if (saveFile.curent_chapter_progress == 1 && lastChoiceIndex == 0){
+            switch (ButtonPressed){  // wich button was pressed
+                case 2:
+                    saveFile.curent_storyLine_progress = 1 //from 1 to 5 are scene other area
+                    console.log('id=10')
+                    choices_section_title.innerHTML = " ";
+                    Button_Choice1.innerHTML = " ";
+                    Button_Choice2.innerHTML = " ";
+                    Button_Choice3.innerHTML = " ";
+                    Button_Choice4.innerHTML = " ";
+                    Button_Choice5.innerHTML = " ";
+                    Button_Choice6.innerHTML = " ";
+                    Button_Choice7.innerHTML = " ";
+                    story(saveFile);
+                    break;
+                case 3:
+                    saveFile.curent_storyLine_progress = 2 //from 1 to 5 are scene other area
+                    console.log('id=11')
+                    choices_section_title.innerHTML = " ";
+                    Button_Choice1.innerHTML = " ";
+                    Button_Choice2.innerHTML = " ";
+                    Button_Choice3.innerHTML = " ";
+                    Button_Choice4.innerHTML = " ";
+                    Button_Choice5.innerHTML = " ";
+                    Button_Choice6.innerHTML = " ";
+                    Button_Choice7.innerHTML = " ";
+                    story(saveFile);
+                    break;
+                case 4:
+                    saveFile.curent_storyLine_progress = 3 //from 1 to 5 are scene other area
+                    console.log('id=12')
+                    choices_section_title.innerHTML = " ";
+                    Button_Choice1.innerHTML = " ";
+                    Button_Choice2.innerHTML = " ";
+                    Button_Choice3.innerHTML = " ";
+                    Button_Choice4.innerHTML = " ";
+                    Button_Choice5.innerHTML = " ";
+                    Button_Choice6.innerHTML = " ";
+                    Button_Choice7.innerHTML = " ";
+                    story(saveFile);
+                    break;
+                case 5:
+                    saveFile.curent_storyLine_progress = 4 //from 1 to 5 are scene other area
+                    console.log('id=13')
+                    choices_section_title.innerHTML = " ";
+                    Button_Choice1.innerHTML = " ";
+                    Button_Choice2.innerHTML = " ";
+                    Button_Choice3.innerHTML = " ";
+                    Button_Choice4.innerHTML = " ";
+                    Button_Choice5.innerHTML = " ";
+                    Button_Choice6.innerHTML = " ";
+                    Button_Choice7.innerHTML = " ";
+                    story(saveFile);
+                    break;
+                case 6:
+                    saveFile.curent_storyLine_progress = 5 //from 1 to 5 are scene other area
+                    console.log('id=14')
+                    choices_section_title.innerHTML = " ";
+                    Button_Choice1.innerHTML = " ";
+                    Button_Choice2.innerHTML = " ";
+                    Button_Choice3.innerHTML = " ";
+                    Button_Choice4.innerHTML = " ";
+                    Button_Choice5.innerHTML = " ";
+                    Button_Choice6.innerHTML = " ";
+                    Button_Choice7.innerHTML = " ";
+                    story(saveFile);
+                    break;
+            }
+        }
+        /*
+        switch (lastChoiceIndex && saveFile.curent_chapter_progress == 1) {
+            case 1:
+                Side_Menu3.innerHTML = character;
+                break;
+        }
+        */
     }
 
     return saveFile
@@ -527,18 +716,9 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
     // Start printing characters
     printCharacter();
 }
+//  FIXME : chaper 1 is buggy in print character normal ( it prints everyletter twice)
 
-
-
-
-/*
-  TODO : Make more text
-  TODO : Make more options
-  TODO : Make image's
-
-*/
-
-
+// TODO instead of starting already make a start page
 
 INIT()
 function INIT(){

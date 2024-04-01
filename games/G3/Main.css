@@ -76,6 +76,7 @@ body{
 	padding-top: 20em;
     white-space: pre-wrap;
     word-wrap: break-word;
+	word-break: keep-all;
 }
 #text{
 	white-space: pre-wrap;
@@ -106,7 +107,7 @@ body{
 .Choices:hover{
 	text-decoration: underline;
 	cursor: pointer;
-	color: #8f2950;
+	color: #298f76;
 }
 .Sh_1{
 	color: #ff8686;
@@ -151,7 +152,7 @@ body{
 	text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* this will create space between the elements */
+    justify-content: center; /* this will create space between the elements */
 	color: azure;
 	margin-top: auto 15px;
 }
@@ -372,7 +373,7 @@ body{
 
 }
 .Side-Saving{
-	opacity: 1;
+	/*opacity: 1;*/
 
 	z-index: inherit;
 }
@@ -405,7 +406,7 @@ body{
 	margin: 0;
 	display:block;
 }
-.local{
+.load{
 	font-size: 2em;
 
 	
