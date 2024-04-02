@@ -7,6 +7,9 @@
     <title>Gatcha_tower</title>
     <link rel="stylesheet" type="text/css" href="/games/G3/Main.css">
     <link rel="stylesheet" type="text/css" href="Main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><!--Redacted--><!--paint like protest-->
+    <link href="https://fonts.googleapis.com/css2?family=Alike+Angular&family=Foldit:wght@100..900&family=Fondamento:ital@0;1&family=Protest+Revolution&family=Redacted+Script:wght@300;400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </style>    
@@ -14,64 +17,64 @@
 </head>
 
 <body>
-    <div id="Side-Menu">
-        <div id="Side-Menu1">
-            <div id="Side-image"></div>
-            <div id="Side-Title">Gatcha tower</div>
+    <div id="Side-Menu" class="Side-Menu_Class">
+        <div id="Side-Menu1" class="Side-Menu_Class">
+            <div id="Side-image" class="Side-Menu_Class"></div>
+            <div id="Side-Title" class="Side-Menu_Class">Gatcha tower</div>
             <br>
-            <button type="button" role="button" class="Open-more" onclick="openMoreSettings()">More</button>
+            <button type="button" role="button" class="Open-more" onclick="openMoreSettings()" class="Side-Menu_Class">More</button>
         </div>
         <hr/>
-        <div id="Side-Menu2">
+        <div id="Side-Menu2" class="Side-Menu_Class">
             <!--    Character list  (in words)-->
         </div>
         <hr/>
-        <div id="Side-Menu3">
+        <div id="Side-Menu3" class="Side-Menu_Class">
             <!--    effects    (Debuff) -->
         </div>
         <hr/>
-        <div id="Side-Menu4">
+        <div id="Side-Menu4" class="Side-Menu_Class">
             <!--    influences  (Bar)-->
             
-            <div class="Side-Influences_Title">Pain</div>
-            <div class="Side-Influences">
-                <div class="Side-Influences_Bar Pain"></div>
+            <div class="Side-Influences_Title Side-Menu_Class">Pain</div>
+            <div class="Side-Influences Side-Menu_Class">
+                <div class="Side-Influences_Bar Pain Side-Menu_Class"></div>
             </div>            
-            <div class="Side-Influences_Title">Fatigue</div>
-            <div class="Side-Influences">
-                <div class="Side-Influences_Bar Fatigue"></div>
+            <div class="Side-Influences_Title Side-Menu_Class">Fatigue</div>
+            <div class="Side-Influences Side-Menu_Class">
+                <div class="Side-Influences_Bar Fatigue Side-Menu_Class"></div>
             </div>            
-            <div class="Side-Influences_Title">Fear</div>
-            <div class="Side-Influences">
-                <div class="Side-Influences_Bar Fear"></div>
+            <div class="Side-Influences_Title Side-Menu_Class">Fear</div>
+            <div class="Side-Influences Side-Menu_Class">
+                <div class="Side-Influences_Bar Fear Side-Menu_Class"></div>
             </div>            
-            <div class="Side-Influences_Title">Stress</div>
-            <div class="Side-Influences">
-                <div class="Side-Influences_Bar Stress"></div>
+            <div class="Side-Influences_Title Side-Menu_Class">Stress</div>
+            <div class="Side-Influences Side-Menu_Class">
+                <div class="Side-Influences_Bar Stress Side-Menu_Class"></div>
             </div>            
-            <div class="Side-Influences_Title">Trauma</div>
-            <div class="Side-Influences">
-                <div class="Side-Influences_Bar Trauma"></div>
+            <div class="Side-Influences_Title Side-Menu_Class">Trauma</div>
+            <div class="Side-Influences Side-Menu_Class">
+                <div class="Side-Influences_Bar Trauma Side-Menu_Class"></div>
             </div>            
-            <div class="Side-Influences_Title">Addiction</div>
-            <div class="Side-Influences">
-                <div class="Side-Influences_Bar Addiction"></div>
+            <div class="Side-Influences_Title Side-Menu_Class">Addiction</div>
+            <div class="Side-Influences Side-Menu_Class">
+                <div class="Side-Influences_Bar Addiction Side-Menu_Class"></div>
             </div>            
-            <div class="Side-Influences_Title">Sickness</div>
-            <div class="Side-Influences">
-                <div class="Side-Influences_Bar Sickness"></div>
+            <div class="Side-Influences_Title Side-Menu_Class">Sickness</div>
+            <div class="Side-Influences Side-Menu_Class">
+                <div class="Side-Influences_Bar Sickness Side-Menu_Class"></div>
             </div>            
-            <div class="Side-Influences_Title">Bleed</div>
-            <div class="Side-Influences">
-                <div class="Side-Influences_Bar Bleed"></div>
+            <div class="Side-Influences_Title Side-Menu_Class">Bleed</div>
+            <div class="Side-Influences Side-Menu_Class">
+                <div class="Side-Influences_Bar Bleed Side-Menu_Class"></div>
             </div>            
-            <div class="Side-Influences_Title">Control</div>
-            <div class="Side-Influences">
-                <div class="Side-Influences_Bar Control"></div>
+            <div class="Side-Influences_Title Side-Menu_Class">Control</div>
+            <div class="Side-Influences Side-Menu_Class">
+                <div class="Side-Influences_Bar Control Side-Menu_Class"></div>
             </div>
         </div>
-        <div class="bottom-links">
-            <a href="/index.html" class="asettings"><button type="button" role="button" class="settings">Exit</button></a>
+        <div class="bottom-links Side-Menu_Class">
+            <a href="/index.html" class="asettings Side-Menu_Class"><button type="button" role="button" class="settings">Exit</button></a>
         </div>
     </div>
     <div id="app">
@@ -89,6 +92,9 @@
                 <div class="Choices Sh_5"></div>
                 <div class="Choices Sh_6"></div>
                 <div class="Choices Sh_7"></div>
+            </div>
+            <div class="Inventory" id="Inventory_parent">
+                
             </div>
         </div>
         <div class="Side-extra parent" data-visible="false">

@@ -11,6 +11,8 @@ const Button_Choice2 = document.querySelector('.Sh_2');
 const Button_Choice3 = document.querySelector('.Sh_3');
 const Button_Choice4 = document.querySelector('.Sh_4');
 const Button_Choice5 = document.querySelector('.Sh_5');
+const Button_Choice6 = document.querySelector('.Sh_6');
+const Button_Choice7 = document.querySelector('.Sh_7');
 const savefileId = document.getElementById('savefileId');
 const loadfileId = document.getElementById('loadfileId');
 const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  (in words)
@@ -23,6 +25,7 @@ var typeOfGame = 'New_Game';
 let valueSTRING = [];
 let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
+
 // initial latest loaded game
 if (saveFileNum == 0){
     saveFileNum = 1;
@@ -45,25 +48,7 @@ if (saveFileNum == 0){
          console.log('load game!')
      }
  }
-/*
 
-// saves a local version instead of a web storage
-function Save_LOCAL(saveFile) {
-    document.addEventListener('DOMContentLoaded', function() {
-        var data = saveFile;
-        var json = JSON.stringify(data);
-        var blob = new Blob([json], {type: 'application/json'});
-        var a = document.createElement('a');
-        a.download = 'saveFile.json';
-        a.href = URL.createObjectURL(blob);
-        a.textContent = 'Download saveFile.json';
-        a.dataset.downloadurl = ['application/json', a.download, a.href].join(':');
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    });
-}
-*/
 
 // newGame makes the prep for a new game
 function newGame(saveFileNum){
@@ -71,15 +56,15 @@ function newGame(saveFileNum){
 
     let saveFile = {
         "saveFileNumber" : saveFileNum,
-        "curent_storyLine_progress" : 0,
-        "curent_chapter_progress" : 0,
+        "current_storyLine_progress" : 0,
+        "current_chapter_progress" : 0,
         "current_title_progress" : 0,
         "title_progress" : { 
             //  title / chapter num : { title_story_[current_title_progress] : title}
             0 : { "title_story_0" : 'Into the new world'},
             1 : { "title_story_1" : 'Finding an exit'},
-            2 : {'title_story_2' : 'Lost in the forest'}, 
-            3 : {'title_story_3' : 'Old cabbin'},
+            2 : { "title_story_2" : 'Lost in the forest'}, 
+            3 : { "title_story_3" : 'Old cabbin'},
         },
         "storyLine_progress" : {
             //  chapter num : { Scene num : {"sceneName" : "placeholder", "playerText": "placeholder"}, },
@@ -97,12 +82,25 @@ function newGame(saveFileNum){
             },
             1 : {
                 0 :  {"sceneName" : "seekExit0", "playerText": "As you wander through the cave's labyrinthine passages, you encounter a variety of pathways, each offering its own unique allure. One path is adorned with vibrant green moss, another lined with glittering crystals, while another disappears into shadowed depths. Further along, you find yourself following the course of an underground stream, and eventually, you stumble upon a cavern illuminated by bioluminescent fungi. Each pathway beckons with its own mysteries, inviting you to explore deeper into the heart of the cave's secrets."},
-                1 :  {"sceneName" : "The Mossy Passage", "playerText": "placeholder"},
-                2 :  {"sceneName" : "The Crystal Tunnel", "playerText": "placeholder"},
-                3 :  {"sceneName" : "The Shadowed Corridor", "playerText": "placeholder"},
-                4 :  {"sceneName" : "The Subterranean Stream", "playerText": "placeholder"},
-                5 :  {"sceneName" : "he Fungal Grove", "playerText": "placeholder"},
-                6 :  {"sceneName" : "seekExit6", "playerText": "placeholder"},
+                1 :  {"sceneName" : "The Mossy Passage", "playerText": "The current area is enveloped in a verdant embrace, with lush green moss covering every surface. The air is cool and fresh, carrying the earthy scent of vegetation. Shafts of dim light filter through the canopy above, casting dappled patterns on the moss-covered ground."},
+                2 :  {"sceneName" : "The Crystal Tunnel", "playerText": "In this area, the walls sparkle with the mesmerizing glow of crystals, illuminating the surroundings with a soft, ethereal light. The air feels charged with energy, and the ground beneath your feet shimmers with crystalline formations. Every step echoes softly in the cavernous space, creating a sense of wonder and awe."},
+                3 :  {"sceneName" : "The Shadowed Corridor", "playerText": "As you navigate this area, darkness presses in from all sides, enveloping you in an oppressive gloom. The air feels heavy and stifling, and the sound of your own footsteps echoes eerily in the silence. Shapes shift and morph in the shadows, playing tricks on your senses and heightening your sense of unease."},
+                4 :  {"sceneName" : "The Subterranean Stream", "playerText": "Here, the area is defined by the presence of a crystal-clear stream that meanders through the cavern. The sound of rushing water fills the air, accompanied by the gentle drip of stalactites above. The walls are slick with moisture, and patches of bioluminescent fungi cast a soft, eerie glow on the surroundings."},
+                5 :  {"sceneName" : "he Fungal Grove", "playerText": "In this area, the cavern is alive with the soft glow of bioluminescent fungi, casting an otherworldly light on the surroundings. The air is thick with the earthy scent of mushrooms, and strange shapes loom in the shadows. The ground beneath your feet is spongy with fungal growth, adding to the surreal atmosphere of the grove."},
+                6 :  {"sceneName" : "Mossy1", "playerText": "As you traverse the mossy passage, you stumble upon a hidden alcove where a delicate flower blooms amidst the verdant foliage. Its petals shimmer with an otherworldly glow, emitting a faint, melodic hum. The flower seems to beckon to you, offering a sense of peace and serenity amidst the chaos of the cave."},
+                7 :  {"sceneName" : "Crystal1", "playerText": "In the heart of the crystal tunnel, you discover a shimmering pool of water, its surface reflecting the myriad hues of the surrounding crystals. As you approach, you notice a faint figure standing at the water's edge, its form obscured by the dancing light."},
+                8 :  {"sceneName" : "Shadowed1", "playerText": "Within the shadowed corridor, you come across a series of ancient runes etched into the cavern walls, their meanings lost to time. As you study the intricate symbols, you sense a faint stirring in the darkness, as if the very shadows themselves are alive with unseen energy."},
+                9 :  {"sceneName" : "Subterranean1", "playerText": "Along the banks of the subterranean stream, you encounter a family of glowing fish, their scales shimmering with iridescent light as they dart through the crystal-clear waters. They seem to be communicating with one another through a series of intricate patterns and movements, creating a mesmerizing display of aquatic ballet."},
+                10 :  {"sceneName" : "Fungal1", "playerText": "Deep within the fungal grove, you stumble upon a cluster of luminous mushrooms, their caps pulsating with a soft, ethereal light. As you approach, you feel a sense of peace wash over you, as if the mushrooms are emitting a calming energy that soothes your weary soul."},
+                11 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
+                12 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
+                13 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
+                14 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
+                15 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
+                16 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
+                17 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
+                18 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
+                19 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
             },
         },
         "Choices_Possible" : {
@@ -126,13 +124,17 @@ function newGame(saveFileNum){
                 3 : { 1 : "Previously", 7 : "Next"},
                 4 : { 1 : "Previously", 7 : "Next"},
                 5 : { 1 : "Previously", 7 : "Next"},
-                6 : { 1 : "Previously", 7 : "Next"},
-                7 : { 1 : "Previously", 7 : "Next"},
-                8 : { 1 : "Previously", 7 : "Next"},
+                6 : { 1 : "Leave the area undisturbed", 2 : "Investigate the hidden alcove.", 3 : "Listen to the soothing melody of the flower.", 4 : "Continue exploring the passage", 5 : "Sit quietly and observe the surroundings", 6 : "Feel the texture of the moss beneath your fingertips."},
+                7 : { 1 : "Leave the area undisturbed", 2 : "Approach the figure cautiously.", 3 : "Sit quietly by the pool and observe.", 4 : "Cast a stone into the pool.", 5 : "Attempt to communicate with the figure.", 6 : "Feel the cool crystal walls with your hands."},
+                8 : { 1 : "Leave the area undisturbed", 2 : "Reach out to touch the ancient runes.", 3 : "Atempt to read the chant or incantation.", 4 : "Continue down the corridor.", 5 : "Meditate in front of the runes.", 6 : "Feel the texture of the walls for any irregularities."},
+                9 : { 1 : "Leave the area undisturbed", 2 : "Follow the stream to its source.", 3 : "Offer a small offering of food to the fish.", 4 : "Take a moment to admire the surroundings.", 5 : "Feel the water with your hands.", 6 : "Listen to the soothing sound of the rushing stream."},
+                10 : { 1 : "Leave the area undisturbed", 2 : "Sit amongst the mushrooms and observe.", 3 : "Reach out to touch the mushrooms.", 4 : "Inhale deeply, breathing in the aroma.", 5 : "Feel the texture of the ground beneath your feet.", 6 : "Listen for any sounds emanating from the grove."},
                 //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : ""},
+                //  : { 1 : "Leave the area undisturbed", 2 : "", 3 : "", 4 : "", 5 : "", 6 : ""},
                 //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : ""},
                 //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : "Next"},
                 //  : { 1 : "Previously", 7 : "Next"},
+                // Leave the area undisturbed
             }
         },
         "Buttons_section_title" : {
@@ -198,6 +200,19 @@ function newGame(saveFileNum){
             17 :  {  Rooted: "Character is immobilized and unable to move."},
             18 :  {  Pacified: "Character is unable to use aggressive actions or abilities."},
             19 :  {  Cursed: "Character is afflicted with a curse that causes various negative effects over time."}
+        },
+        "Inventory" : {
+            //  ID number : {"Name" : Name of item ,"quantity" : 0,"quality" : "common"}
+            0 : {"Name" : "Soul Redeemer", "quantity" : 1, "quality" : "Legendary"},
+        },
+        "ListOfAllItems" : {
+            //  ID number : {"Name" : Name of item ,"quantity" : number of item inside iventory , "quality" : choose between common/uncomon/rare/unique/Legendary}
+            0 : {"Name" : "Soul Redeemer", "quantity" : 0, "quality" : "Legendary"},
+            1 : {"Name" : "rock", "quantity" : 0, "quality" : "common"},
+            2 : {"Name" : "stick", "quantity" : 0, "quality" : "common"},
+
+
+            //  : {"Name" : "PlaceHolder","quantity" : "PlaceHolder" , "quality" : "PlaceHolder"},
         }
     }
 
@@ -269,9 +284,9 @@ let character = new Player({
 
 function story(saveFile){
     console.log("Begin of story");
-    //const Title = document.querySelector('.Quest_Title');
+    const Title = document.querySelector('.Quest_Title');
     //const main_section = document.querySelector('.main_section');
-    //const main_content = document.querySelector('.content-canvas');
+    const main_content = document.querySelector('.content-canvas');
     //const bar = document.querySelector('.bar');
     //const extra = document.querySelector('.extras');
     //const options = document.querySelector('.options');
@@ -287,9 +302,8 @@ function story(saveFile){
     const savefileId = document.getElementById('savefileId');
     const loadfileId = document.getElementById('loadfileId');
     const Side_Menu2 = document.getElementById('Side-Menu2');
-    //const Side_Menu3 = document.getElementById('Side-Menu3');
-    //const Side_Menu4 = document.getElementById('Side-Menu4');
-    //const buttonsArray = [Button_Choice1,Button_Choice2,Button_Choice3,Button_Choice4,Button_Choice5,Button_Choice6,Button_Choice7]
+    const Side_Menu3 = document.getElementById('Side-Menu3');
+    const Side_Menu4 = document.getElementById('Side-Menu4');
 
     // save loaded game (goes to SG file to load and save the game)
     if (savefileId && !savefileId.hasAttribute('data-listener-added')) {
@@ -359,19 +373,17 @@ function story(saveFile){
     let current_title = saveFile.title_progress[current_title_progress]
     title_progress(current_title,current_title_progress)
 
-    let curent_storyLine_progress = saveFile.curent_storyLine_progress        // make a var van dit 
-    let current_storyLine = saveFile.storyLine_progress[saveFile.curent_chapter_progress][curent_storyLine_progress]
-    scene_progress(current_storyLine,curent_storyLine_progress)
+    let current_storyLine_progress = saveFile.current_storyLine_progress        // make a var van dit 
+    let current_storyLine = saveFile.storyLine_progress[saveFile.current_chapter_progress][current_storyLine_progress]
+    scene_progress(current_storyLine,current_storyLine_progress)
 
-    choices_section_title.innerHTML = saveFile.Buttons_section_title[saveFile.curent_chapter_progress][saveFile.curent_storyLine_progress];  // change if needed be
+    choices_section_title.innerHTML = saveFile.Buttons_section_title[saveFile.current_chapter_progress][saveFile.current_storyLine_progress];  // change if needed be
     
-
-
     function getButtonValues(saveFile) {
         const buttonValues = [];
         for (const buttonValue of saveFile.Buttons) {
-            const chapter = saveFile.Choices_Possible[saveFile.curent_chapter_progress];
-            const scene = chapter[saveFile.curent_storyLine_progress];
+            const chapter = saveFile.Choices_Possible[saveFile.current_chapter_progress];
+            const scene = chapter[saveFile.current_storyLine_progress];
             const value = scene[buttonValue];
             if (value) {
                 console.log('value id=12',value)
@@ -390,9 +402,9 @@ function story(saveFile){
                 stopTyping = false;
                 switch (buttonValue) {
                     case 1:
-                        console.log("Choices_Made before change id=253 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
-                        saveFile.Choices_Made[saveFile.curent_chapter_progress].pop();
-                        console.log("Choices_Made after change id=254 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                        console.log("Choices_Made before change id=253 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
+                        saveFile.Choices_Made[saveFile.current_chapter_progress].pop();
+                        console.log("Choices_Made after change id=254 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
                         previousScene(saveFile);
                         break;
                     case 2:
@@ -400,26 +412,26 @@ function story(saveFile){
                     case 4:
                     case 5:
                     case 6:
-                        console.log("Choices_Made before change id=261 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
-                        saveFile.Choices_Made[saveFile.curent_chapter_progress].push(buttonValue);
+                        console.log("Choices_Made before change id=261 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
+                        saveFile.Choices_Made[saveFile.current_chapter_progress].push(buttonValue);
                         Choices_calculator(saveFile);
-                        console.log("Choices_Made after change id=262 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                        console.log("Choices_Made after change id=262 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
                         nextScene(saveFile);
                         break;
                     case 7:
-                        console.log("Choices_Made before change id=255 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
-                        saveFile.Choices_Made[saveFile.curent_chapter_progress].push(buttonValue);
-                        console.log("Choices_Made after change id=256 ", saveFile.Choices_Made[saveFile.curent_chapter_progress]);
+                        console.log("Choices_Made before change id=255 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
+                        saveFile.Choices_Made[saveFile.current_chapter_progress].push(buttonValue);
+                        console.log("Choices_Made after change id=256 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
                         nextScene(saveFile);
                         break;
                 }
             } else {
                 stopTyping = true;
-                console.log('curent_storyLine_progress id=8', saveFile.curent_storyLine_progress);
-                slowTypingText(saveFile.storyLine_progress[saveFile.curent_chapter_progress][saveFile.curent_storyLine_progress]['playerText'], '.main_section', undefined, undefined, true);
+                console.log('current_storyLine_progress id=8', saveFile.current_storyLine_progress);
+                slowTypingText(saveFile.storyLine_progress[saveFile.current_chapter_progress][saveFile.current_storyLine_progress]['playerText'], '.main_section', undefined, undefined, true);
                 slowTypingText(saveFile.title_progress[saveFile.current_title_progress]['title_story_' + saveFile.current_title_progress], '.Quest_Title', undefined, undefined, true);
                 isCurrentlyPrinting = false;
-                console.log('Print everything for scene number ', saveFile.curent_storyLine_progress);
+                console.log('Print everything for scene number ', saveFile.current_storyLine_progress);
                 
             }
         }
@@ -431,8 +443,8 @@ function story(saveFile){
             const button = document.querySelector('.Sh_' + buttonValue);
             if (button) {
                 // Get the value of the button from the scene
-                const chapter = saveFile.Choices_Possible[saveFile.curent_chapter_progress];
-                const scene = chapter[saveFile.curent_storyLine_progress];
+                const chapter = saveFile.Choices_Possible[saveFile.current_chapter_progress];
+                const scene = chapter[saveFile.current_storyLine_progress];
                 const value = scene[buttonValue];
     
                 // Set the inner HTML of the button
@@ -448,13 +460,6 @@ function story(saveFile){
         }
     }
 
-    
-    
-    
-    
-
-    
-
     function title_progress(current_title,current_title_progress) {
         let title_story = current_title['title_story_'+current_title_progress]
         slowTypingText(title_story,'.Quest_Title');         // Put the content on the left and the place where it needs to go on the right
@@ -462,21 +467,36 @@ function story(saveFile){
         console.log('current_title',current_title);
         console.log('current_title_progress', current_title_progress);
     }
-    function scene_progress(current_storyLine,curent_storyLine_progress) {
+    function scene_progress(current_storyLine,current_storyLine_progress) {
         let title_scene = current_storyLine['sceneName']
         let scene_text = current_storyLine['playerText']
         slowTypingText(scene_text,'.main_section',undefined, 35);     // Put the content on the left and the place where it needs to go on the right + index + speed
         console.log('title Scene',title_scene)                          
         //console.log('scene_text',scene_text)
         console.log('current_storyLine',current_storyLine);
-        console.log('curent_storyLine_progress', curent_storyLine_progress);
+        console.log('current_storyLine_progress', current_storyLine_progress);
 
     }
     function nextScene(saveFile) {
         // Increment the current scene progress only if there are more scenes available
-        if (saveFile.curent_storyLine_progress < Object.keys(saveFile.storyLine_progress[saveFile.curent_chapter_progress]).length - 1) {
-            saveFile.curent_storyLine_progress++;
+        if (saveFile.current_storyLine_progress < Object.keys(saveFile.storyLine_progress[saveFile.current_chapter_progress]).length - 1 && saveFile.current_chapter_progress == 0) {
+            saveFile.current_storyLine_progress++;
             console.log('pressed NextScene id=5')
+        }else if(saveFile.current_storyLine_progress < Object.keys(saveFile.storyLine_progress[saveFile.current_chapter_progress]).length - 1 && saveFile.current_chapter_progress == 1){
+            switch(saveFile.current_storyLine_progress){
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                   saveFile.current_storyLine_progress += 4;
+                   break;
+            }
         } else {
             // Handle the case when there are no more scenes in the current chapter
             console.log('No more scenes available in this chapter');
@@ -497,12 +517,31 @@ function story(saveFile){
     
     function previousScene(saveFile) {
         // Decrement the current scene progress only if it's not the first scene
-        if (saveFile.curent_storyLine_progress > 0) {
-            saveFile.curent_storyLine_progress--;
+        if (saveFile.current_storyLine_progress > 0 && saveFile.current_chapter_progress == 0) {
+            saveFile.current_storyLine_progress--;
             console.log('pressed previousScene')
-        } else {
+        }else if(saveFile.current_storyLine_progress > 0 && saveFile.current_chapter_progress == 1){
+            switch(saveFile.current_storyLine_progress){
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                   saveFile.current_storyLine_progress = 0;
+                   break;
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                   saveFile.current_storyLine_progress -= 4;
+                   break;
+            }
+                
+        }else {
             // Handle the case when it's already the first scene
             console.log('Already at the beginning of the chapter');
+            previousChapter();
         }
         // Re-render the story with updated saveFile
         choices_section_title.innerHTML = " ";
@@ -518,10 +557,10 @@ function story(saveFile){
     
     function nextChapter(saveFile) {
         // Increment the current chapter progress only if there are more chapters available
-        if (saveFile.curent_chapter_progress < Object.keys(saveFile.storyLine_progress).length - 1) {
-            saveFile.curent_chapter_progress++;
+        if (saveFile.current_chapter_progress < Object.keys(saveFile.storyLine_progress).length - 1) {
+            saveFile.current_chapter_progress++;
             saveFile.current_title_progress++;
-            saveFile.curent_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
+            saveFile.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
             console.log('Next Chapter');
         } else {
             // Handle the case when there are no more chapters
@@ -541,9 +580,10 @@ function story(saveFile){
     
     function previousChapter(saveFile) {
         // Decrement the current chapter progress only if it's not the first chapter
-        if (saveFile.curent_chapter_progress > 0) {
-            saveFile.curent_chapter_progress--;
-            saveFile.curent_storyLine_progress = 0; // Reset the scene progress to start of the previous chapter
+        if (saveFile.current_chapter_progress > 0) {
+            saveFile.current_chapter_progress--;
+            saveFile.current_title_progress--;
+            saveFile.current_storyLine_progress = 0; // Reset the scene progress to start of the previous chapter
             console.log('Previous Chapter');
         } else {
             // Handle the case when it's already the first chapter
@@ -553,126 +593,96 @@ function story(saveFile){
         story(saveFile);
     }
     
-    
-    function Choices_calculator(saveFile){      
-        let chapter = saveFile.Choices_Possible[saveFile.curent_chapter_progress];
-        let scene = chapter[saveFile.curent_storyLine_progress];
-        let lastChoiceIndex = saveFile.Choices_Made[saveFile.curent_chapter_progress].length - 1;
-        let ButtonPressed = saveFile.Choices_Made[saveFile.curent_chapter_progress][lastChoiceIndex];
-        let value = scene[ButtonPressed];
-        console.log(character);
-        console.log(typeof(lastChoiceIndex));
-        switch (lastChoiceIndex && saveFile.curent_chapter_progress == 0) {
-            case 2:
-                character.eye_Color = value;
-                Side_Menu2.innerHTML = "Your "+value+" eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery."
-                valueSTRING.push(value);
-                break;
-            case 3:
-                character.hair_style = value;
-                Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes and your "+value+" stylish hair reveal a captivating essence, yet the remainder of you remains veiled in mystery."
-                valueSTRING.push(value);
-                break;
-            case 4:
-                character.skin_complexion = value;
-                Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, and your "+value+" complexion exude a captivating essence, leaving the rest of you shrouded in mystery."
-                valueSTRING.push(value);
-                break;
-            case 5:
-                character.stature = value;
-                Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, and your "+value+" stature combine to present a captivating essence, yet the remainder of you remains shrouded in mystery."
-                valueSTRING.push(value);
-                break;
-            case 6:
-                character.attire = value;
-                Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+value+" attire collectively emanate a captivating essence, leaving the rest of you unexplored."
-                valueSTRING.push(value);
-                break;
-            case 7:
-                character.gender = value;
-                Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+valueSTRING[4]+" attire collectively emanate a captivating essence. While your gender is "+value+", your race remains a mystery, awaiting discovery."
-                valueSTRING.push(value);
-                break;
-        }
-        if (saveFile.curent_chapter_progress == 1 && lastChoiceIndex == 0){
-            switch (ButtonPressed){  // wich button was pressed
-                case 2:
-                    saveFile.curent_storyLine_progress = 1 //from 1 to 5 are scene other area
-                    console.log('id=10')
-                    choices_section_title.innerHTML = " ";
-                    Button_Choice1.innerHTML = " ";
-                    Button_Choice2.innerHTML = " ";
-                    Button_Choice3.innerHTML = " ";
-                    Button_Choice4.innerHTML = " ";
-                    Button_Choice5.innerHTML = " ";
-                    Button_Choice6.innerHTML = " ";
-                    Button_Choice7.innerHTML = " ";
-                    story(saveFile);
-                    break;
-                case 3:
-                    saveFile.curent_storyLine_progress = 2 //from 1 to 5 are scene other area
-                    console.log('id=11')
-                    choices_section_title.innerHTML = " ";
-                    Button_Choice1.innerHTML = " ";
-                    Button_Choice2.innerHTML = " ";
-                    Button_Choice3.innerHTML = " ";
-                    Button_Choice4.innerHTML = " ";
-                    Button_Choice5.innerHTML = " ";
-                    Button_Choice6.innerHTML = " ";
-                    Button_Choice7.innerHTML = " ";
-                    story(saveFile);
-                    break;
-                case 4:
-                    saveFile.curent_storyLine_progress = 3 //from 1 to 5 are scene other area
-                    console.log('id=12')
-                    choices_section_title.innerHTML = " ";
-                    Button_Choice1.innerHTML = " ";
-                    Button_Choice2.innerHTML = " ";
-                    Button_Choice3.innerHTML = " ";
-                    Button_Choice4.innerHTML = " ";
-                    Button_Choice5.innerHTML = " ";
-                    Button_Choice6.innerHTML = " ";
-                    Button_Choice7.innerHTML = " ";
-                    story(saveFile);
-                    break;
-                case 5:
-                    saveFile.curent_storyLine_progress = 4 //from 1 to 5 are scene other area
-                    console.log('id=13')
-                    choices_section_title.innerHTML = " ";
-                    Button_Choice1.innerHTML = " ";
-                    Button_Choice2.innerHTML = " ";
-                    Button_Choice3.innerHTML = " ";
-                    Button_Choice4.innerHTML = " ";
-                    Button_Choice5.innerHTML = " ";
-                    Button_Choice6.innerHTML = " ";
-                    Button_Choice7.innerHTML = " ";
-                    story(saveFile);
-                    break;
-                case 6:
-                    saveFile.curent_storyLine_progress = 5 //from 1 to 5 are scene other area
-                    console.log('id=14')
-                    choices_section_title.innerHTML = " ";
-                    Button_Choice1.innerHTML = " ";
-                    Button_Choice2.innerHTML = " ";
-                    Button_Choice3.innerHTML = " ";
-                    Button_Choice4.innerHTML = " ";
-                    Button_Choice5.innerHTML = " ";
-                    Button_Choice6.innerHTML = " ";
-                    Button_Choice7.innerHTML = " ";
-                    story(saveFile);
-                    break;
-            }
-        }
-        /*
-        switch (lastChoiceIndex && saveFile.curent_chapter_progress == 1) {
-            case 1:
-                Side_Menu3.innerHTML = character;
-                break;
-        }
-        */
-    }
 
-    return saveFile
+    function Choices_calculator(saveFile){
+        // current place > next place
+        let current_storyLine_progress = saveFile.current_storyLine_progress;
+        let current_chapter = saveFile.current_chapter_progress;
+        let lastChoiceIndex = saveFile.Choices_Made[saveFile.current_chapter_progress].length - 1;
+        let LastButtonPressed = saveFile.Choices_Made[saveFile.current_chapter_progress][lastChoiceIndex];
+        let value = saveFile.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
+        let Choices_Possible = saveFile.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed]
+        switch (current_chapter){
+            case 0:
+                switch (lastChoiceIndex) {
+                    case 2:
+                        character.eye_Color = value;
+                        Side_Menu2.innerHTML = "Your "+value+" eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery."
+                        valueSTRING.push(value);
+                        break;
+                    case 3:
+                        character.hair_style = value;
+                        Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes and your "+value+" stylish hair reveal a captivating essence, yet the remainder of you remains veiled in mystery."
+                        valueSTRING.push(value);
+                        break;
+                    case 4:
+                        character.skin_complexion = value;
+                        Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, and your "+value+" complexion exude a captivating essence, leaving the rest of you shrouded in mystery."
+                        valueSTRING.push(value);
+                        break;
+                    case 5:
+                        character.stature = value;
+                        Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, and your "+value+" stature combine to present a captivating essence, yet the remainder of you remains shrouded in mystery."
+                        valueSTRING.push(value);
+                        break;
+                    case 6:
+                        character.attire = value;
+                        Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+value+" attire collectively emanate a captivating essence, leaving the rest of you unexplored."
+                        valueSTRING.push(value);
+                        break;
+                    case 7:
+                        character.gender = value;
+                        Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+valueSTRING[4]+" attire collectively emanate a captivating essence. While your gender is "+value+", your race remains a mystery, awaiting discovery."
+                        valueSTRING.push(value);
+                        break;
+                }
+                break;
+            case 1:
+                switch(current_storyLine_progress){
+                    case 0:
+                        saveFile.current_storyLine_progress = LastButtonPressed--; //from 1 to 5 are scene other area
+                        console.log('id=10-14');
+                        break;
+                    case 6:
+
+                        break;
+                    case 7:
+                        
+                        break;
+                    case 8:
+                        
+                        break;
+                    case 9:
+                        
+                        break;
+                    case 10:
+                        
+                        break;
+                }
+                break;
+                //  TODO add special sircumstances for 6 to 10 (sometimes go to other scene or add to inventory )
+                /*
+                    6 : { 1 : "Leave the area undisturbed", 2 : "Investigate the hidden alcove.", 3 : "Listen to the soothing melody of the flower.", 4 : "Continue exploring the passage", 5 : "Sit quietly and observe the surroundings", 6 : "Feel the texture of the moss beneath your fingertips."},
+                    7 : { 1 : "Leave the area undisturbed", 2 : "Approach the figure cautiously.", 3 : "Sit quietly by the pool and observe.", 4 : "Cast a stone into the pool.", 5 : "Attempt to communicate with the figure.", 6 : "Feel the cool crystal walls with your hands."},
+                    8 : { 1 : "Leave the area undisturbed", 2 : "Reach out to touch the ancient runes.", 3 : "Atempt to read the chant or incantation.", 4 : "Continue down the corridor.", 5 : "Meditate in front of the runes.", 6 : "Feel the texture of the walls for any irregularities."},
+                    9 : { 1 : "Leave the area undisturbed", 2 : "Follow the stream to its source.", 3 : "Offer a small offering of food to the fish.", 4 : "Take a moment to admire the surroundings.", 5 : "Feel the water with your hands.", 6 : "Listen to the soothing sound of the rushing stream."},
+                    10 : { 1 : "Leave the area undisturbed", 2 : "Sit amongst the mushrooms and observe.", 3 : "Reach out to touch the mushrooms.", 4 : "Inhale deeply, breathing in the aroma.", 5 : "Feel the texture of the ground beneath your feet.", 6 : "Listen for any sounds emanating from the grove."},
+                */
+        }
+    }
+    function SetinnerHTMLToZero() {
+        if (choices_section_title)  choices_section_title.innerHTML = " ";
+        if (Button_Choice1)         Button_Choice1.innerHTML = " ";
+        if (Button_Choice2)         Button_Choice2.innerHTML = " ";
+        if (Button_Choice3)         Button_Choice3.innerHTML = " ";
+        if (Button_Choice4)         Button_Choice4.innerHTML = " ";
+        if (Button_Choice5)         Button_Choice5.innerHTML = " ";
+        if (Button_Choice6)         Button_Choice6.innerHTML = " ";
+        if (Button_Choice7)         Button_Choice7.innerHTML = " ";
+    }
+    
+
+return saveFile
 }
 
 function slowTypingText(text, elementId, index = 0, speed = 200, printImmediately = false) {
@@ -716,9 +726,8 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
     // Start printing characters
     printCharacter();
 }
-//  FIXME : chaper 1 is buggy in print character normal ( it prints everyletter twice)
+//  FIXME : chaper 1 is buggy in print character normal ( it prints everyletter twice only scene 0 )
 
-// TODO instead of starting already make a start page
 
 INIT()
 function INIT(){
