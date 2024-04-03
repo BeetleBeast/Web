@@ -6,6 +6,7 @@ const extra = document.querySelector('.extras');
 const options = document.querySelector('.options');
 const app = document.querySelector('#app'); // all the app (right and center includin title)
 const choices_section_title = document.querySelector('.choices_section_title');
+const choices_section = document.querySelectorAll('.choices_section');
 const Button_Choice1 = document.querySelector('.Sh_1');
 const Button_Choice2 = document.querySelector('.Sh_2');
 const Button_Choice3 = document.querySelector('.Sh_3');
@@ -25,6 +26,7 @@ var typeOfGame = 'New_Game';
 let valueSTRING = [];
 let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
+let amount = 0;
 
 // initial latest loaded game
 if (saveFileNum == 0){
@@ -104,7 +106,7 @@ function newGame(saveFileNum){
             },
         },
         "Choices_Possible" : {
-            //  chapter number : { scene number : { Button option : Text }}
+            //  chapter number : { scene number : { Button number : Text }}
             0 : {
                 0 : { 7 : "Next"},
                 1 : { 1 : "Previously", 7 : "Next"},
@@ -158,10 +160,11 @@ function newGame(saveFileNum){
                 3 : " ",
                 4 : " ",
                 5 : " ",
-                6 : " ",
-                7 : " ",
-                8 : " ",
-                9 : " ",
+                6 : "What shall you do",
+                7 : "What shall you do",
+                8 : "What shall you do",
+                9 : "What shall you do",
+                10 : "What shall you do",
             }
         },
         "Choices_Made" : {
@@ -180,26 +183,46 @@ function newGame(saveFileNum){
         "Player_character" : Player,
         "Buttons" : [1,2,3,4,5,6,7],
         "Debuff_Effects" : {
-            0  :  {  Weakened : "Character's strength or attack power is reduced."},
-            1  :  {  Slowed : "Character's movement speed is decreased."},
-            2  :  {  Blinded: "Character's vision is impaired, affecting accuracy or perception."},
-            3  :  {  Confused: "Character's actions become randomized or uncontrollable."},
-            4  :  {  Silenced: "Character is unable to use verbal abilities or spells."},
-            5  :  {  Crippled: "Character's agility or dexterity is decreased, affecting evasion or finesse."},
-            6  :  {  Vulnerable: "Character takes increased damage from attacks."},
-            7  :  {  Disarmed: "Character is unable to use weapons or equipment."},
-            8  :  {  Diseased: "Character suffers from a temporary illness, reducing health or attributes."},
-            9  :  {  Fear: "Character is afflicted with fear, causing them to flee or become hesitant in combat."},
-            10 :  {  Stunned: "Character is temporarily incapacitated, unable to act."},
-            11 :  {  Hexed: "Character is cursed with negative magical effects, such as reduced resistances or altered abilities."},
-            12 :  {  Drained: "Character's energy or mana reserves are depleted, hindering spellcasting or special abilities."},
-            13 :  {  Sapped: "Character's vitality is drained, reducing maximum health temporarily."},
-            14 :  {  Marked: "Character becomes the target of increased aggression from enemies."},
-            15 :  {  Burning: "Character suffers from ongoing fire damage."},
-            16 :  {  Chilled: "Character's movement speed is reduced due to extreme cold."},
-            17 :  {  Rooted: "Character is immobilized and unable to move."},
-            18 :  {  Pacified: "Character is unable to use aggressive actions or abilities."},
-            19 :  {  Cursed: "Character is afflicted with a curse that causes various negative effects over time."}
+            Weakened :  {  Description : `Character's strength or attack power is reduced by`},
+            Slowed :  {  Description : `Character's movement speed is decreased by`},
+            Blinded :  {  Description : `Character's vision is impaired, affecting accuracy or perception by`},
+            Confused :  {  Description : `Character's actions become randomized or uncontrollable by`},
+            Silenced :  {  Description : `Character is unable to use verbal abilities or spells by`},
+            Crippled :  {  Description : `Character's agility or dexterity is decreased, affecting evasion or finesse by`},
+            Vulnerable :  {  Description : `Character takes increased damage from attacks by`},
+            Disarmed :  {  Description : `Character is unable to use weapons or equipment by`},
+            Diseased :  {  Description : `Character suffers from a temporary illness, reducing health or attributes by`},
+            Fear :  {  Description : `Character is afflicted with fear, causing them to flee or become hesitant in combat by`},
+            Stunned :  {  Description : `Character is temporarily incapacitated, unable to act by`},
+            Hexed :  {  Description : `Character is cursed with negative magical effects, such as reduced resistances or altered abilities by`},
+            Drained :  {  Description : `Character's energy or mana reserves are depleted, hindering spellcasting or special abilities by`},
+            Sapped :  {  Description : `Character's vitality is drained, reducing maximum health temporarily by`},
+            Marked :  {  Description : `Character becomes the target of increased aggression from enemies by`},
+            Burning :  {  Description : `Character suffers from ongoing fire damage of temperture's of`},
+            Chilled :  {  Description : `Character's movement speed is reduced due to extreme cold by`},
+            Rooted :  {  Description : `Character is immobilized and unable to move.`},
+            Pacified :  {  Description : `Character is unable to use aggressive actions or abilities by`},
+            Cursed :  {  Description : `Character is afflicted with a curse that causes various negative effects over time by`},
+            Fatigue :  {  Description : `Reduces energy levels and slows down character movement or actions by`},
+            Confusion :  {  Description : `Causes disorientation, making character actions unpredictable or uncontrollable by`},
+        },
+        "Buff_Effects" : {
+            Strength :  { Description : `Increases physical power and damage output by`},
+            Speed :  { Description : `Boosts movement speed, allowing characters to navigate the game world more quickly by`},
+            Protection :  { Description : `Provides increased defense or resistance against incoming attacks by`},
+            Regeneration :  { Description : `Grants the ability to slowly regain health over time by`},
+            Evasion :  { Description : `Improves the chance to dodge or evade incoming attacks by`},
+            Attack :  { Description : `Damage Boost: Temporarily increases the damage dealt by attacks by`},
+            Critical :  { Description : `Hit Chance: Raises the likelihood of landing critical hits, dealing extra damage by`},
+            Healing :  { Description : `Provides instant restoration of health points by`},
+            Stamina :  { Description : `Increases endurance and reduces fatigue, allowing for prolonged activity by`},
+            Elemental_fire :  { Description : `Resistance: Grants resistance against specific types of elemental damage, such as fir by`},
+            Elemental_ice :  { Description : `Resistance: Grants resistance against specific types of elemental damage, such as ice, or electricity by`},
+            Elemental_water :  { Description : `Resistance: Grants resistance against specific types of elemental damage, such as wate by`},
+            Elemental_electricity :  { Description : `Resistance: Grants resistance against specific types of elemental damage, such as electricity by`},
+            Elemental_earth :  { Description : `Resistance: Grants resistance against specific types of elemental damage, such as eart by`},
+            Elemental_holy :  { Description : `Resistance: Grants resistance against specific types of elemental damage, such as holy by`},
+            Elemental_darkness :  { Description : `Resistance: Grants resistance against specific types of elemental damage, such as darkness by`},
         },
         "Inventory" : {
             //  ID number : {"Name" : Name of item ,"quantity" : 0,"quality" : "common"}
@@ -223,53 +246,120 @@ function newGame(saveFileNum){
     
 }
 class Player {
-    constructor({name, race, gender, age, profession, level, strength, intelligence, charisma, agility, luck, health, maxHealth}){
-        this.name = name
-        this.race = race
-        this.gender = gender
-        this.age = age
-        this.profession = profession
-        this.level = level
-        this.strength = strength
-        this.intelligence = intelligence
-        this.charisma = charisma
-        this.agility = agility
-        this.luck = luck
-        this.health = health
-        this.maxHealth = maxHealth
+    constructor({ Name, Race, Gender, Age, Profession, Level, Strength, Intelligence, Charisma, Agility, Luck, Health, MaxHealth }) {
+        this.Name = Name;
+        this.Race = Race;
+        this.Gender = Gender;
+        this.Age = Age;
+        this.Profession = Profession;
+        this.Level = Level;
+        this.Strength = Strength;
+        this.Intelligence = Intelligence;
+        this.Charisma = Charisma;
+        this.Agility = Agility;
+        this.Luck = Luck;
+        this.Health = Health;
+        this.MaxHealth = MaxHealth;
+        this.Debuff_Effects = {};
+        this.Buff_Effects = {};
     }
+
     attack(enemy) {
         // Perform attack logic here
-        console.log(`${this.name} attacks ${enemy}!`);
+        console.log(`${this.Name} attacks ${enemy}!`);
     }
 
     heal(amount) {
         // Perform healing logic here
-        this.health += amount;
-        if (this.health > this.maxHealth) {
-            this.health = this.maxHealth;
+        this.Health += amount;
+        if (this.Health > this.MaxHealth) {
+            this.Health = this.MaxHealth;
         }
-        console.log(`${this.name} heals for ${amount} health.`);
+        console.log(`${this.Name} heals for ${amount} health.`);
     }
 
     levelUp() {
         // Perform level up logic here
-        this.level++;
-        console.log(`${this.name} levels up to level ${this.level}!`);
+        this.Level++;
+        console.log(`${this.Name} levels up to level ${this.Level}!`);
+    }
+
+    applyDebuff(effect, amount, saveFile, elementId) {
+        // Apply debuff effect to the player
+        if (this.Debuff_Effects[effect]) {
+            // If the debuff effect already exists, update its amount
+            this.Debuff_Effects[effect].Amount = amount;
+        } else {
+            // If the debuff effect doesn't exist, create a new entry
+            this.Debuff_Effects[effect] = { Amount: amount };
+        }
+
+        // Update the amount in the saveFile object
+        if (saveFile.Debuff_Effects[effect]) {
+            saveFile.Debuff_Effects[effect].Amount = amount;
+        } else {
+            // If the debuff effect doesn't exist in saveFile, create a new entry
+            saveFile.Debuff_Effects[effect] = { Amount: amount };
+        }
+
+        console.log(`Applying ${amount} on debuff: ${effect}`);
+
+        // Update UI element if provided
+        if (elementId) {
+            const element = document.querySelector(elementId);
+            const Side_Menu3 = document.getElementById('Side-Menu3');
+            if (element) {
+                // Example: Update UI element opacity for 'Blinded' debuff
+                switch (effect) {
+                    case 'Blinded':
+                        element.style.opacity = amount / 100;
+                        break;
+                }
+                // Update UI text to reflect debuff description if available
+                if (saveFile.Debuff_Effects[effect]?.Description) {
+                    const newDescription = `${saveFile.Debuff_Effects[effect].Description}, ${amount}.`;
+                    if (Side_Menu3.innerHTML.trim() === '') {
+                        Side_Menu3.innerHTML = newDescription;
+                    } else {
+                        // Append a line break and the new description
+                        Side_Menu3.innerHTML += '<br>' + newDescription;
+                    }
+                }                
+            }
+        }
+    }// TODO refractor this (chatgpt already has answers)
+
+    rested(amount) {
+        // Decrease specific debuff effects when the player rests
+        const debuffsToDecrease = [2, 3, 9, 10, 20, 21];
+        debuffsToDecrease.forEach(debuffId => {
+            if (this.Debuff_Effects[debuffId]) {
+                // Decrease the debuff effect
+                this.Debuff_Effects[debuffId] -= amount;
+
+                // Check if the debuff effect is completely relieved
+                if (this.Debuff_Effects[debuffId] <= 0) {
+                    console.log(`${this.Name} has completely relieved the debuff with ID ${debuffId}`);
+                    delete this.Debuff_Effects[debuffId]; // Remove the debuff from the debuffEffects object
+                } else {
+                    console.log(`${this.Name} partially relieves the debuff with ID ${debuffId}`);
+                }
+            }
+        });
     }
 }
 
 let character = new Player({
-    name: 'unknown',
-    profession: 'none',
-    level: 0,
-    strength: 0,
-    intelligence: 0,
-    charisma: 0,
-    agility: 0,
-    luck: 0,
-    health: 80,
-    maxHealth: 100
+    Name: 'unknown',
+    Profession: 'none',
+    Level: 0,
+    Strength: 0,
+    Intelligence: 0,
+    Charisma: 0,
+    Agility: 0,
+    Luck: 0,
+    Health: 80,
+    MaxHealth: 100,
 });
 
 
@@ -279,6 +369,7 @@ let character = new Player({
     character.attack("monster");
     character.heal(20);
     character.levelUp();
+    character.rested(amount);
 */
 
 
@@ -292,6 +383,7 @@ function story(saveFile){
     //const options = document.querySelector('.options');
     //const app = document.querySelector('#app'); // all the app (right and center includin title)
     const choices_section_title = document.querySelector('.choices_section_title');
+    const choices_section = document.querySelectorAll('.choices_section');
     const Button_Choice1 = document.querySelector('.Sh_1');
     const Button_Choice2 = document.querySelector('.Sh_2');
     const Button_Choice3 = document.querySelector('.Sh_3');
@@ -479,16 +571,23 @@ function story(saveFile){
     }
     function nextScene(saveFile) {
         // Increment the current scene progress only if there are more scenes available
+        let lastChoiceIndex = saveFile.Choices_Made[saveFile.current_chapter_progress].length - 1;
+        let LastButtonPressed = saveFile.Choices_Made[saveFile.current_chapter_progress][lastChoiceIndex];
         if (saveFile.current_storyLine_progress < Object.keys(saveFile.storyLine_progress[saveFile.current_chapter_progress]).length - 1 && saveFile.current_chapter_progress == 0) {
             saveFile.current_storyLine_progress++;
             console.log('pressed NextScene id=5')
         }else if(saveFile.current_storyLine_progress < Object.keys(saveFile.storyLine_progress[saveFile.current_chapter_progress]).length - 1 && saveFile.current_chapter_progress == 1){
             switch(saveFile.current_storyLine_progress){
+                case 0:
+                    saveFile.current_storyLine_progress = LastButtonPressed - 1; //from 1 to 5 are scene other area
+                    break;
                 case 1:
                 case 2:
                 case 3:
                 case 4:
                 case 5:
+                    saveFile.current_storyLine_progress += 5;
+                    break;
                 case 6:
                 case 7:
                 case 8:
@@ -534,7 +633,7 @@ function story(saveFile){
                 case 8:
                 case 9:
                 case 10:
-                   saveFile.current_storyLine_progress -= 4;
+                   saveFile.current_storyLine_progress -= 5;
                    break;
             }
                 
@@ -558,9 +657,9 @@ function story(saveFile){
     function nextChapter(saveFile) {
         // Increment the current chapter progress only if there are more chapters available
         if (saveFile.current_chapter_progress < Object.keys(saveFile.storyLine_progress).length - 1) {
+            saveFile.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
             saveFile.current_chapter_progress++;
             saveFile.current_title_progress++;
-            saveFile.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
             console.log('Next Chapter');
         } else {
             // Handle the case when there are no more chapters
@@ -639,12 +738,21 @@ function story(saveFile){
                 break;
             case 1:
                 switch(current_storyLine_progress){
-                    case 0:
-                        saveFile.current_storyLine_progress = LastButtonPressed--; //from 1 to 5 are scene other area
-                        console.log('id=10-14');
-                        break;
                     case 6:
-
+                        switch(LastButtonPressed){
+                            case 2:
+                                break;
+                            case 3:
+                                break;
+                            case 4:
+                                character.applyDebuff('Blinded', 20, saveFile, ".choices_section")
+                                break;
+                            case 5:
+                                character.rested(20)
+                                break;
+                            case 6:
+                                break;
+                        }
                         break;
                     case 7:
                         
@@ -680,8 +788,6 @@ function story(saveFile){
         if (Button_Choice6)         Button_Choice6.innerHTML = " ";
         if (Button_Choice7)         Button_Choice7.innerHTML = " ";
     }
-    
-
 return saveFile
 }
 
