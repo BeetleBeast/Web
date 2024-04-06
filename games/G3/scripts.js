@@ -283,51 +283,56 @@ class Player {
         this.Level++;
         console.log(`${this.Name} levels up to level ${this.Level}!`);
     }
-
     applyDebuff(effect, amount, saveFile, elementId) {
         // Apply debuff effect to the player
-        if (this.Debuff_Effects[effect]) {
-            // If the debuff effect already exists, update its amount
-            this.Debuff_Effects[effect].Amount = amount;
-        } else {
-            // If the debuff effect doesn't exist, create a new entry
-            this.Debuff_Effects[effect] = { Amount: amount };
-        }
-
+        this.updateDebuff(effect, amount);
+    
         // Update the amount in the saveFile object
-        if (saveFile.Debuff_Effects[effect]) {
-            saveFile.Debuff_Effects[effect].Amount = amount;
-        } else {
-            // If the debuff effect doesn't exist in saveFile, create a new entry
+        if (!saveFile.Debuff_Effects[effect]) {
             saveFile.Debuff_Effects[effect] = { Amount: amount };
+        } else {
+            saveFile.Debuff_Effects[effect].Amount = amount;
         }
-
+    
         console.log(`Applying ${amount} on debuff: ${effect}`);
-
+    
         // Update UI element if provided
         if (elementId) {
             const element = document.querySelector(elementId);
-            const Side_Menu3 = document.getElementById('Side-Menu3');
             if (element) {
-                // Example: Update UI element opacity for 'Blinded' debuff
-                switch (effect) {
-                    case 'Blinded':
-                        element.style.opacity = amount / 100;
-                        break;
-                }
-                // Update UI text to reflect debuff description if available
-                if (saveFile.Debuff_Effects[effect]?.Description) {
-                    const newDescription = `${saveFile.Debuff_Effects[effect].Description}, ${amount}.`;
-                    if (Side_Menu3.innerHTML.trim() === '') {
-                        Side_Menu3.innerHTML = newDescription;
-                    } else {
-                        // Append a line break and the new description
-                        Side_Menu3.innerHTML += '<br>' + newDescription;
-                    }
-                }                
+                this.updateUI(effect, amount, saveFile, element);
             }
         }
-    }// TODO refractor this (chatgpt already has answers)
+    }
+    
+    updateDebuff(effect, amount) {
+        // If the debuff effect already exists, update its amount
+        if (!this.Debuff_Effects[effect]) {
+            this.Debuff_Effects[effect] = { Amount: amount };
+        } else {
+            this.Debuff_Effects[effect].Amount = amount;
+        }
+    }
+    
+    updateUI(effect, amount, saveFile, element) {
+        // Example: Update UI element opacity for 'Blinded' debuff
+        if (effect === 'Blinded') {
+            element.style.opacity = amount / 100;
+        }
+    
+        // Update UI text to reflect debuff description if available
+        if (saveFile.Debuff_Effects[effect]?.Description) {
+            const newDescription = `${saveFile.Debuff_Effects[effect].Description}, ${amount}.`;
+            const Side_Menu3 = document.getElementById('Side-Menu3');
+            if (Side_Menu3.innerHTML.trim() === '') {
+                Side_Menu3.innerHTML = newDescription;
+            } else {
+                // Append a line break and the new description
+                Side_Menu3.innerHTML += '<br>' + newDescription;
+            }
+        }
+    }
+    
 
     rested(amount) {
         // Decrease specific debuff effects when the player rests
@@ -375,6 +380,7 @@ let character = new Player({
 
 function story(saveFile){
     console.log("Begin of story");
+    let LatestsaveFile = saveFile;
     const Title = document.querySelector('.Quest_Title');
     //const main_section = document.querySelector('.main_section');
     const main_content = document.querySelector('.content-canvas');
@@ -405,7 +411,7 @@ function story(saveFile){
         savefileId.removeEventListener("click", saveFileClickHandler);
     }
     
-    function saveFileClickHandler() {
+    function saveFileClickHandler(LatestsaveFile) {
         console.log('Saving game');
         saveFileNum = prompt('Save file number');
     
@@ -414,6 +420,9 @@ function story(saveFile){
             savefileId.innerHTML = "Save Successful";
             let saveFileJSON = saveFile; // You may want to stringify the saveFile object if it's complex
             localStorage.setItem('saveFile' + saveFileNum, JSON.stringify(saveFileJSON));
+            if(!saveFileNum){// TODO do something here
+                localStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
+            }
             console.log('Save file ' + saveFileNum + ' saved');
             return saveFileNum;
         }
