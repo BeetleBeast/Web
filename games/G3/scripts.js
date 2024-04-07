@@ -20,7 +20,7 @@ const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  
 const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debuff)
 const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
 
-var saveFileNum = 0;
+var saveFileNum = 0;    //  TODO : make it usefull
 var last_loaded_game = '';
 var typeOfGame = 'New_Game';
 let valueSTRING = [];
@@ -94,8 +94,8 @@ function newGame(saveFileNum){
                 8 :  {"sceneName" : "Shadowed1", "playerText": "Within the shadowed corridor, you come across a series of ancient runes etched into the cavern walls, their meanings lost to time. As you study the intricate symbols, you sense a faint stirring in the darkness, as if the very shadows themselves are alive with unseen energy."},
                 9 :  {"sceneName" : "Subterranean1", "playerText": "Along the banks of the subterranean stream, you encounter a family of glowing fish, their scales shimmering with iridescent light as they dart through the crystal-clear waters. They seem to be communicating with one another through a series of intricate patterns and movements, creating a mesmerizing display of aquatic ballet."},
                 10 :  {"sceneName" : "Fungal1", "playerText": "Deep within the fungal grove, you stumble upon a cluster of luminous mushrooms, their caps pulsating with a soft, ethereal light. As you approach, you feel a sense of peace wash over you, as if the mushrooms are emitting a calming energy that soothes your weary soul."},
-                11 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
-                12 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
+                11 :  {"sceneName" : "Mossy2", "playerText": "placeholder"},
+                12 :  {"sceneName" : "Mossy1_hidden_enclove", "playerText": "placeholder"},
                 13 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
                 14 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
                 15 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
@@ -138,6 +138,11 @@ function newGame(saveFileNum){
                 //  : { 1 : "Previously", 7 : "Next"},
                 // Leave the area undisturbed
             }
+        },
+        "Choices_Possible_Confused" : {
+            //  index number : { button number : Text }
+            0 : {0 : "Placeholder"},
+            1 : {},
         },
         "Buttons_section_title" : {
             //  chapter num : {   Scene num : text }
@@ -182,6 +187,12 @@ function newGame(saveFileNum){
         },
         "Player_character" : Player,
         "Buttons" : [1,2,3,4,5,6,7],
+        "Buttons_Hidden" : {
+            //  chapter number : {  scene number  : [  button numbers wich chould be hidden ]  }
+            1 : {
+                6 : [2],
+            },
+        },
         "Debuff_Effects" : {
             Weakened :  {  Description : `Character's strength or attack power is reduced by`},
             Slowed :  {  Description : `Character's movement speed is decreased by`},
@@ -318,6 +329,7 @@ class Player {
         // Example: Update UI element opacity for 'Blinded' debuff
         if (effect === 'Blinded') {
             element.style.opacity = amount / 100;
+            //  TODO add Confusion and pacified effects
         }
     
         // Update UI text to reflect debuff description if available
@@ -379,8 +391,6 @@ let character = new Player({
 
 
 function story(saveFile){
-    console.log("Begin of story");
-    let LatestsaveFile = saveFile;
     const Title = document.querySelector('.Quest_Title');
     //const main_section = document.querySelector('.main_section');
     const main_content = document.querySelector('.content-canvas');
@@ -404,23 +414,27 @@ function story(saveFile){
     const Side_Menu4 = document.getElementById('Side-Menu4');
 
     // save loaded game (goes to SG file to load and save the game)
+    let LatestsaveFile = saveFile;
     if (savefileId && !savefileId.hasAttribute('data-listener-added')) {
-        savefileId.addEventListener("click", saveFileClickHandler);
+        savefileId.addEventListener("click", saveFileClickHandler(LatestsaveFile));
         savefileId.setAttribute('data-listener-added', 'true');
     } else {
         savefileId.removeEventListener("click", saveFileClickHandler);
     }
-    
+
+    console.log("Begin of story");
+
     function saveFileClickHandler(LatestsaveFile) {
         console.log('Saving game');
+        // TODO : try using LatestsaveFile instead of prompt i.e. every time action? save instence of saveFile as LatestsaveFile
         saveFileNum = prompt('Save file number');
     
         if (saveFileNum !== null) {
             console.log('saving game id=1', saveFile);
             savefileId.innerHTML = "Save Successful";
-            let saveFileJSON = saveFile; // You may want to stringify the saveFile object if it's complex
+            let saveFileJSON = saveFile;
             localStorage.setItem('saveFile' + saveFileNum, JSON.stringify(saveFileJSON));
-            if(!saveFileNum){// TODO do something here
+            if(!saveFileNum){
                 localStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
             }
             console.log('Save file ' + saveFileNum + ' saved');
@@ -447,7 +461,6 @@ function story(saveFile){
         
                 // Update saveFile with loaded data
                 if (loadedSaveFile) {
-                    // Assuming saveFile and loadedSaveFile have similar structure
                     Object.assign(saveFile, loadedSaveFile);
                     console.log('Save file updated:', saveFile);
                     choices_section_title.innerHTML = " ";
@@ -467,18 +480,17 @@ function story(saveFile){
         
         
 
-    //  Start of story by initialising progress
-    ButtonPressed(saveFile)
-
-    let current_title_progress = saveFile.current_title_progress        // make a var van dit 
-    let current_title = saveFile.title_progress[current_title_progress]
-    title_progress(current_title,current_title_progress)
-
-    let current_storyLine_progress = saveFile.current_storyLine_progress        // make a var van dit 
+    //  Start of story by initialising progress/
+    let current_storyLine_progress = saveFile.current_storyLine_progress
+    let current_title_progress = saveFile.current_title_progress
     let current_storyLine = saveFile.storyLine_progress[saveFile.current_chapter_progress][current_storyLine_progress]
-    scene_progress(current_storyLine,current_storyLine_progress)
+    let current_title = saveFile.title_progress[current_title_progress]
 
-    choices_section_title.innerHTML = saveFile.Buttons_section_title[saveFile.current_chapter_progress][saveFile.current_storyLine_progress];  // change if needed be
+    ButtonPressed(saveFile);    //  print current Buttons
+    manageHiddenInfo(saveFile, false);  //  hides info if need be
+    title_progress(current_title,current_title_progress)    //  print current title
+    scene_progress(current_storyLine,current_storyLine_progress)    //  print current scene text
+    choices_section_title.innerHTML = saveFile.Buttons_section_title[saveFile.current_chapter_progress][saveFile.current_storyLine_progress];// print current scection title
     
     function getButtonValues(saveFile) {
         const buttonValues = [];
@@ -517,7 +529,6 @@ function story(saveFile){
                         saveFile.Choices_Made[saveFile.current_chapter_progress].push(buttonValue);
                         Choices_calculator(saveFile);
                         console.log("Choices_Made after change id=262 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
-                        nextScene(saveFile);
                         break;
                     case 7:
                         console.log("Choices_Made before change id=255 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
@@ -560,6 +571,28 @@ function story(saveFile){
             }
         }
     }
+    function manageHiddenInfo(saveFile, revealInfo) {
+        const current_storyLine = saveFile.current_storyLine_progress;
+        const current_chapter = saveFile.current_chapter_progress;
+    
+        // Check if Buttons_Hidden data exists for the current chapter and story line
+        const Buttons_Hidden = saveFile.Buttons_Hidden[current_chapter]?.[current_storyLine];
+    
+        if (Buttons_Hidden) {
+            // Iterate over the hidden button values for the current scene
+            Buttons_Hidden.forEach(buttonValue => {
+                const button = document.querySelector('.Sh_' + buttonValue);
+                if (button) {
+                    // Set button display based on revealInfo condition
+                    button.style.display = revealInfo ? "block" : "none";
+                }
+            });
+        } else {
+            console.log(`No hidden buttons defined for chapter ${current_chapter} and scene ${current_storyLine}`);
+        }
+    }
+    
+    
 
     function title_progress(current_title,current_title_progress) {
         let title_story = current_title['title_story_'+current_title_progress]
@@ -580,6 +613,7 @@ function story(saveFile){
     }
     function nextScene(saveFile) {
         // Increment the current scene progress only if there are more scenes available
+        // current place > next place
         let lastChoiceIndex = saveFile.Choices_Made[saveFile.current_chapter_progress].length - 1;
         let LastButtonPressed = saveFile.Choices_Made[saveFile.current_chapter_progress][lastChoiceIndex];
         if (saveFile.current_storyLine_progress < Object.keys(saveFile.storyLine_progress[saveFile.current_chapter_progress]).length - 1 && saveFile.current_chapter_progress == 0) {
@@ -598,11 +632,17 @@ function story(saveFile){
                     saveFile.current_storyLine_progress += 5;
                     break;
                 case 6:
+                    if(buttonValue == 2){
+                        saveFile.current_storyLine_progress += 6;                    
+                    }else {
+                        saveFile.current_storyLine_progress += 5;
+                    }
+                    break;
                 case 7:
                 case 8:
                 case 9:
                 case 10:
-                   saveFile.current_storyLine_progress += 4;
+                   saveFile.current_storyLine_progress += 5;
                    break;
             }
         } else {
@@ -703,7 +743,6 @@ function story(saveFile){
     
 
     function Choices_calculator(saveFile){
-        // current place > next place
         let current_storyLine_progress = saveFile.current_storyLine_progress;
         let current_chapter = saveFile.current_chapter_progress;
         let lastChoiceIndex = saveFile.Choices_Made[saveFile.current_chapter_progress].length - 1;
@@ -744,22 +783,34 @@ function story(saveFile){
                         valueSTRING.push(value);
                         break;
                 }
+                nextScene(saveFile);
                 break;
             case 1:
                 switch(current_storyLine_progress){
                     case 6:
                         switch(LastButtonPressed){
                             case 2:
+                                //  Investigate the hidden alcove
+                                nextScene(saveFile);
                                 break;
                             case 3:
+                                character.rested(10);
+                                character.applyDebuff('Pacified', 20, saveFile, ".choices_section")
+                                character.applyDebuff('Confusion', 20, saveFile, ".choices_section")
+                                //  Listen to the soothing melody of the flower
                                 break;
                             case 4:
-                                character.applyDebuff('Blinded', 20, saveFile, ".choices_section")
+                                //  Continue exploring the passage
+                                nextScene(saveFile);
                                 break;
                             case 5:
                                 character.rested(20)
                                 break;
                             case 6:
+                                //  Feel the texture of the moss beneath your fingertips
+                                //  this here is option 6
+                                main_section.innerHTML += "You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.";
+                                manageHiddenInfo(saveFile, true)
                                 break;
                         }
                         break;
@@ -777,7 +828,7 @@ function story(saveFile){
                         break;
                 }
                 break;
-                //  TODO add special sircumstances for 6 to 10 (sometimes go to other scene or add to inventory )
+                //  TODO add special sircumstances for 7 to 10 (sometimes go to other scene or add to inventory )
                 /*
                     6 : { 1 : "Leave the area undisturbed", 2 : "Investigate the hidden alcove.", 3 : "Listen to the soothing melody of the flower.", 4 : "Continue exploring the passage", 5 : "Sit quietly and observe the surroundings", 6 : "Feel the texture of the moss beneath your fingertips."},
                     7 : { 1 : "Leave the area undisturbed", 2 : "Approach the figure cautiously.", 3 : "Sit quietly by the pool and observe.", 4 : "Cast a stone into the pool.", 5 : "Attempt to communicate with the figure.", 6 : "Feel the cool crystal walls with your hands."},
