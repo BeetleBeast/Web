@@ -1,10 +1,6 @@
 const Title = document.querySelector('.Quest_Title');
 const main_section = document.querySelector('.main_section');
 const main_content = document.querySelector('.content-canvas');
-const bar = document.querySelector('.bar');
-const extra = document.querySelector('.extras');
-const options = document.querySelector('.options');
-const app = document.querySelector('#app'); // all the app (right and center includin title)
 const choices_section_title = document.querySelector('.choices_section_title');
 const choices_section = document.querySelectorAll('.choices_section');
 const Button_Choice1 = document.querySelector('.Sh_1');
@@ -21,36 +17,52 @@ const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debu
 const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
 
 var saveFileNum = 0;    //  TODO : make it usefull
-var last_loaded_game = '';
-var typeOfGame = 'New_Game';
 let valueSTRING = [];
 let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
 let amount = 0;
+let saveFile = {}; // Initialize saveFile object
 
-// initial latest loaded game
-if (saveFileNum == 0){
-    saveFileNum = 1;
-}else if(saveFileNum){
-    console.log('Initial function executed.');
-    last_loaded_game = 'saveFile'+saveFileNum+'.json';
-    typeOfGame = 'Continue_Game';
+// Function to start up the game
+ window.onload = function() {
+    startup()
+};
+
+// Function to start up or load the game
+function startup() {
+    // Display a yes/no prompt
+    const userConfirmed = confirm("Do you want to play from the last save?");
+
+    if (userConfirmed) {
+        console.log("User confirmed to load last save.");
+        loadGame();
+    } else {
+        console.log("User declined to load last save. Starting a new game.");
+        newGame();
+    }
 }
- // if there is no saved files create a new save file
- onload = function() {startup(last_loaded_game)};
 
- function startup(last_loaded_game){
+// Function to load the game from localStorage
+function loadGame() {
+    let loadedSaveFile = JSON.parse(localStorage.getItem('LatestsaveFile'));
 
-     if (! last_loaded_game || last_loaded_game == '' || last_loaded_game == ' ') {
-         newGame();
-         console.log('new game!');
-     }
-     else{
-         LoadGame(last_loaded_game);
-         console.log('load game!')
-     }
- }
-
+    if (loadedSaveFile) {
+        console.log('Loaded save file:', loadedSaveFile);
+        saveFile = loadedSaveFile;
+        choices_section_title.innerHTML = " ";
+        Button_Choice1.innerHTML = " ";
+        Button_Choice2.innerHTML = " ";
+        Button_Choice3.innerHTML = " ";
+        Button_Choice4.innerHTML = " ";
+        Button_Choice5.innerHTML = " ";
+        Button_Choice6.innerHTML = " ";
+        Button_Choice7.innerHTML = " ";
+        story();
+    } else {
+        console.error('Error: Loaded save file is invalid.');
+        newGame(); // Fallback to starting a new game if loading fails
+    }
+}
 
 // newGame makes the prep for a new game
 function newGame(saveFileNum){
@@ -131,6 +143,8 @@ function newGame(saveFileNum){
                 8 : { 1 : "Leave the area undisturbed", 2 : "Reach out to touch the ancient runes.", 3 : "Atempt to read the chant or incantation.", 4 : "Continue down the corridor.", 5 : "Meditate in front of the runes.", 6 : "Feel the texture of the walls for any irregularities."},
                 9 : { 1 : "Leave the area undisturbed", 2 : "Follow the stream to its source.", 3 : "Offer a small offering of food to the fish.", 4 : "Take a moment to admire the surroundings.", 5 : "Feel the water with your hands.", 6 : "Listen to the soothing sound of the rushing stream."},
                 10 : { 1 : "Leave the area undisturbed", 2 : "Sit amongst the mushrooms and observe.", 3 : "Reach out to touch the mushrooms.", 4 : "Inhale deeply, breathing in the aroma.", 5 : "Feel the texture of the ground beneath your feet.", 6 : "Listen for any sounds emanating from the grove."},
+                11 : { 1 : "Previously", 7 : "Next"},
+                12 : { 1 : "Previously", 7 : "Next"},
                 //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : ""},
                 //  : { 1 : "Leave the area undisturbed", 2 : "", 3 : "", 4 : "", 5 : "", 6 : ""},
                 //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : ""},
@@ -392,12 +406,8 @@ let character = new Player({
 
 function story(saveFile){
     const Title = document.querySelector('.Quest_Title');
-    //const main_section = document.querySelector('.main_section');
+    const main_section = document.querySelector('.main_section');
     const main_content = document.querySelector('.content-canvas');
-    //const bar = document.querySelector('.bar');
-    //const extra = document.querySelector('.extras');
-    //const options = document.querySelector('.options');
-    //const app = document.querySelector('#app'); // all the app (right and center includin title)
     const choices_section_title = document.querySelector('.choices_section_title');
     const choices_section = document.querySelectorAll('.choices_section');
     const Button_Choice1 = document.querySelector('.Sh_1');
@@ -413,71 +423,89 @@ function story(saveFile){
     const Side_Menu3 = document.getElementById('Side-Menu3');
     const Side_Menu4 = document.getElementById('Side-Menu4');
 
-    // save loaded game (goes to SG file to load and save the game)
     let LatestsaveFile = saveFile;
+    
+    // Save file click handler function
+    function saveFileClickHandler() {
+        console.log('Saving game');
+        // TODO: Implement save logic based on your requirements
+        saveFileNum = 0;
+
+        if (saveFileNum !== null) {
+            console.log('Saving game id=1', saveFile);
+            savefileId.innerHTML = "Save Successful";
+            let saveFileJSON = saveFile;
+            localStorage.setItem('saveFile' + saveFileNum, JSON.stringify(saveFileJSON));
+            localStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
+            console.log('Save file ' + saveFileNum + ' saved');
+            saveFileNum++;
+            return saveFileNum;
+        }
+    }
+
+    // Load file click handler function
+    function loadFileClickHandler() {
+        console.log('Loading game');
+        let saveFileNum = prompt('Which Save file number (type "latest" if unsure)');
+
+        if (saveFileNum !== null && saveFileNum !== 'latest') {
+            console.log('Loading game id=0', saveFileNum);
+            loadfileId.innerHTML = "Load Successful";
+            let loadedSaveFile = JSON.parse(localStorage.getItem('saveFile' + saveFileNum));
+            console.log('Save file ' + saveFileNum + ' loaded');
+
+            // Update saveFile with loaded data
+            if (loadedSaveFile) {
+                Object.assign(saveFile, loadedSaveFile);
+                console.log('Save file updated:', saveFile);
+                clearButtonContent();
+                story(saveFile);
+            } else {
+                console.error('Error: Loaded save file is invalid');
+            }
+        } else if (saveFileNum === 'latest') {
+            console.log('Loading latest game id=1');
+            loadfileId.innerHTML = "Load Successful";
+            let loadedSaveFile = JSON.parse(localStorage.getItem('LatestsaveFile'));
+            console.log('Latest save file loaded');
+
+            // Update saveFile with loaded data
+            if (loadedSaveFile) {
+                Object.assign(saveFile, loadedSaveFile);
+                console.log('Save file updated:', saveFile);
+                clearButtonContent();
+                story(saveFile);
+            } else {
+                console.error('Error: Loaded save file is invalid');
+            }
+        }
+    }
+
+    // Add event listener for save file click
     if (savefileId && !savefileId.hasAttribute('data-listener-added')) {
-        savefileId.addEventListener("click", saveFileClickHandler(LatestsaveFile));
+        savefileId.addEventListener("click", saveFileClickHandler);
         savefileId.setAttribute('data-listener-added', 'true');
     } else {
         savefileId.removeEventListener("click", saveFileClickHandler);
     }
 
-    console.log("Begin of story");
-
-    function saveFileClickHandler(LatestsaveFile) {
-        console.log('Saving game');
-        // TODO : try using LatestsaveFile instead of prompt i.e. every time action? save instence of saveFile as LatestsaveFile
-        saveFileNum = prompt('Save file number');
-    
-        if (saveFileNum !== null) {
-            console.log('saving game id=1', saveFile);
-            savefileId.innerHTML = "Save Successful";
-            let saveFileJSON = saveFile;
-            localStorage.setItem('saveFile' + saveFileNum, JSON.stringify(saveFileJSON));
-            if(!saveFileNum){
-                localStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
-            }
-            console.log('Save file ' + saveFileNum + ' saved');
-            return saveFileNum;
-        }
+    // Add event listener for load file click
+    if (loadfileId && !loadfileId.hasAttribute('data-listener-added')) {
+        loadfileId.addEventListener("click", loadFileClickHandler);
+        loadfileId.setAttribute('data-listener-added', 'true');
+    } else if (loadfileId && loadfileId.hasAttribute('data-listener-added')) {
+        loadfileId.removeEventListener("click", loadFileClickHandler);
     }
-        // save loaded game (goes to SG file to load and save the game)
-        if (loadfileId && !loadfileId.hasAttribute('data-listener-added')) {
-            loadfileId.addEventListener("click", loadFileClickHandler);
-            loadfileId.setAttribute('data-listener-added', 'true');
-        } else if (loadfileId && loadfileId.hasAttribute('data-listener-added')) {
-            loadfileId.removeEventListener("click", loadFileClickHandler);
-        }
-        
-        function loadFileClickHandler() {
-            console.log('Loading game');
-            let saveFileNum = prompt('Which Save file number');
-        
-            if (saveFileNum !== null) {
-                console.log('Loading game id=0', saveFileNum);
-                loadfileId.innerHTML = "Load Successful";
-                let loadedSaveFile = JSON.parse(localStorage.getItem('saveFile' + saveFileNum));
-                console.log('Save file ' + saveFileNum + ' loaded');
-        
-                // Update saveFile with loaded data
-                if (loadedSaveFile) {
-                    Object.assign(saveFile, loadedSaveFile);
-                    console.log('Save file updated:', saveFile);
-                    choices_section_title.innerHTML = " ";
-                    Button_Choice1.innerHTML = " ";
-                    Button_Choice2.innerHTML = " ";
-                    Button_Choice3.innerHTML = " ";
-                    Button_Choice4.innerHTML = " ";
-                    Button_Choice5.innerHTML = " ";
-                    Button_Choice6.innerHTML = " ";
-                    Button_Choice7.innerHTML = " ";
-                    story(saveFile)
-                } else {
-                    console.error('Error: Loaded save file is invalid');
-                }
-            }
-        }
-        
+
+    // Function to clear button content
+    function clearButtonContent() {
+        choices_section_title.innerHTML = "";
+        [Button_Choice1, Button_Choice2, Button_Choice3, Button_Choice4, Button_Choice5, Button_Choice6, Button_Choice7].forEach(button => {
+            button.innerHTML = "";
+        });
+    }
+
+    console.log("Begin of story");
         
 
     //  Start of story by initialising progress/
@@ -485,6 +513,9 @@ function story(saveFile){
     let current_title_progress = saveFile.current_title_progress
     let current_storyLine = saveFile.storyLine_progress[saveFile.current_chapter_progress][current_storyLine_progress]
     let current_title = saveFile.title_progress[current_title_progress]
+
+    //  make a save of latest version of saveFile
+    localStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
 
     ButtonPressed(saveFile);    //  print current Buttons
     manageHiddenInfo(saveFile, false);  //  hides info if need be
@@ -632,7 +663,7 @@ function story(saveFile){
                     saveFile.current_storyLine_progress += 5;
                     break;
                 case 6:
-                    if(buttonValue == 2){
+                    if(LastButtonPressed == 2){
                         saveFile.current_storyLine_progress += 6;                    
                     }else {
                         saveFile.current_storyLine_progress += 5;
@@ -787,6 +818,14 @@ function story(saveFile){
                 break;
             case 1:
                 switch(current_storyLine_progress){
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        nextScene(saveFile)
+                        break;
                     case 6:
                         switch(LastButtonPressed){
                             case 2:
@@ -895,17 +934,3 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
 //  FIXME : chaper 1 is buggy in print character normal ( it prints everyletter twice only scene 0 )
 
 
-INIT()
-function INIT(){
-    
-    if (typeOfGame == 'New_Game'){
-        newGame();
-    }
-    else if(typeOfGame == 'Continue_Game'){
-        LoadGame(last_loaded_game);
-        console.log('load game!')
-    }else{
-        alert("Error: Invalid Game Type");
-    }
-    return saveFileNum
-}
