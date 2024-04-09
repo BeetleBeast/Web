@@ -1,0 +1,6 @@
+ 1 : {"Name" : "Soul Redeemer", "quantity" : 0, "quality" : "Legendary"},
+            2 : {"Name" : "rock", "quantity" : 0, "quality" : "common"},
+            3 : {"Name" : "stick", "quantity" : 0, "quality" : "common"},
+1: a stone which when activated rewinds time? can only be used once but can be found in the world
+2: a normal rock
+3: a ordinary stick

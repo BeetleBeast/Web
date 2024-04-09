@@ -242,15 +242,17 @@ function newGame(saveFileNum){
             Elemental_holy :  { Description : `Resistance: Grants resistance against specific types of elemental damage, such as holy by`},
             Elemental_darkness :  { Description : `Resistance: Grants resistance against specific types of elemental damage, such as darkness by`},
         },
-        "Inventory" : {
+        "Inventory" : [
             //  ID number : {"Name" : Name of item ,"quantity" : 0,"quality" : "common"}
-            0 : {"Name" : "Soul Redeemer", "quantity" : 1, "quality" : "Legendary"},
-        },
+            //   { id: 0 , Name : "PlaceHolder", quantity : 0, quality : "common"},
+            { id: 1 , Name : "Soul Redeemer", quantity : 1, quality : "Legendary"},
+
+        ],
         "ListOfAllItems" : {
             //  ID number : {"Name" : Name of item ,"quantity" : number of item inside iventory , "quality" : choose between common/uncomon/rare/unique/Legendary}
-            0 : {"Name" : "Soul Redeemer", "quantity" : 0, "quality" : "Legendary"},
-            1 : {"Name" : "rock", "quantity" : 0, "quality" : "common"},
-            2 : {"Name" : "stick", "quantity" : 0, "quality" : "common"},
+            1 : {"Name" : "Soul Redeemer", "quantity" : 0, "quality" : "Legendary"},
+            2 : {"Name" : "rock", "quantity" : 0, "quality" : "common"},
+            3 : {"Name" : "stick", "quantity" : 0, "quality" : "common"},
 
 
             //  : {"Name" : "PlaceHolder","quantity" : "PlaceHolder" , "quality" : "PlaceHolder"},
@@ -871,8 +873,57 @@ function story(saveFile){
         }
     }
 
+    
+    const inventoryItems = saveFile.Inventory;
+    const inventoryContainer = document.getElementById('inventory');
+    const toggleInventoryButton = document.getElementById('toggleInventoryButton');
+
+    // Function to populate inventory grid based on current page
+    function populateInventory(pageNumber) {
+        const pageSize = 16; // Number of items per page (adjust based on grid size)
+
+        const pageContainer = document.getElementById(`page${pageNumber}`);
+        pageContainer.innerHTML = ''; // Clear previous items
+
+        const startIndex = (pageNumber - 1) * pageSize;
+        const endIndex = Math.min(startIndex + pageSize, inventoryItems.length);
+        const itemsToShow = inventoryItems.slice(startIndex, endIndex);
+
+        itemsToShow.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.classList.add('inventoryItem');
+            itemElement.textContent = `${item.Name} x${item.quantity}`;
+            pageContainer.appendChild(itemElement);
+        });
+    }
+   
+    // Initialize the first page of the inventory
+    populateInventory(1);
+
+
 return saveFile
 }
+// Function to toggle visibility of the inventory
+function toggleInventory() {
+    const inventory = document.getElementById('inventory');
+    const toggleInventoryText = document.getElementById('toggleInventoryText');
+
+    if (inventory.style.display === 'none') {
+        inventory.style.display = 'block';
+        toggleInventoryText.style.display = 'none'; // Hide "Press I" text when inventory is visible
+    } else {
+        inventory.style.display = 'none';
+        toggleInventoryText.style.display = 'block'; // Show "Press I" text when inventory is hidden
+    }
+}
+
+// Event listener for key press (I key)
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'i' || event.key === 'I') {
+        toggleInventory();
+    }
+});
+
 function SetinnerHTMLToZero() {
     if (choices_section_title)  choices_section_title.innerHTML = " ";
     if (Button_Choice1)         Button_Choice1.innerHTML = " ";

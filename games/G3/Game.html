@@ -92,30 +92,40 @@
                 <div class="Choices Sh_6"></div>
                 <div class="Choices Sh_7"></div>
             </div>
-            <div class="Inventory" id="Inventory_parent">
-                
+            <!-- Inventory container with grid items -->
+            <div id="inventory" class="inventory" style="display: none;">
+                <div class="inventoryContainer">
+                    <div class="pages">
+                        <!-- This is where the grid items will be dynamically added -->
+                        <div class="page" id="page1">
+                            <!-- Grid items will be populated here -->
+                        </div>
+                        <!-- Add more pages as needed -->
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="Side-extra parent" data-visible="false">
-                <div class="Side-extra child1 Side-Saving">Saving
-                    <ul class="Side-extra Save-ul">
-                        <li class="Side-extra Save-li">
-                            <button type="button" role="button"  id="loadfileId" class="Side-extra load Button">load the latest Version</button>
-                        </li>
-                        <li class="Side-extra Save-li2">
-                            <button type="button" role="button" id="savefileId" class="Side-extra Save Button">Save the latest Version</button>
-                        </li>
-                    </ul>
-                </div>
-                <div class="Side-extra child1 Side-gameplay">gameplay</div>
-                <div class="Side-extra child1 Side-grafics">grafics</div>
-                <div class="Side-extra child1 Side-more">more
-                    <ul class="Side-extra Side-more-ul">
-                        <li class="Side-extra Side-more-li">Fist</li>
-                    </ul>
-                </div>
+    </div>
+    <div class="Side-extra parent" data-visible="false">
+        <div class="Side-extra child1 Side-Saving">Saving
+            <ul class="Side-extra Save-ul">
+                <li class="Side-extra Save-li">
+                    <button type="button" role="button"  id="loadfileId" class="Side-extra load Button">load the latest Version</button>
+                </li>
+                <li class="Side-extra Save-li2">
+                    <button type="button" role="button" id="savefileId" class="Side-extra Save Button">Save the latest Version</button>
+                </li>
+            </ul>
+        </div>
+        <div class="Side-extra child1 Side-gameplay">gameplay</div>
+        <div class="Side-extra child1 Side-grafics">grafics</div>
+        <div class="Side-extra child1 Side-more">more
+            <ul class="Side-extra Side-more-ul">
+                <li class="Side-extra Side-more-li">Fist</li>
+            </ul>
         </div>
     </div>
+
 
 </body>
 
