@@ -38,7 +38,7 @@ function startup() {
         loadGame();
     } else {
         console.log("User declined to load last save. Starting a new game.");
-        newGame();
+        newGame(saveFileNum);
     }
 }
 
@@ -49,18 +49,11 @@ function loadGame() {
     if (loadedSaveFile) {
         console.log('Loaded save file:', loadedSaveFile);
         saveFile = loadedSaveFile;
-        choices_section_title.innerHTML = " ";
-        Button_Choice1.innerHTML = " ";
-        Button_Choice2.innerHTML = " ";
-        Button_Choice3.innerHTML = " ";
-        Button_Choice4.innerHTML = " ";
-        Button_Choice5.innerHTML = " ";
-        Button_Choice6.innerHTML = " ";
-        Button_Choice7.innerHTML = " ";
-        story();
+        SetinnerHTMLToZero()
+        story(saveFile);
     } else {
         console.error('Error: Loaded save file is invalid.');
-        newGame(); // Fallback to starting a new game if loading fails
+        newGame(saveFileNum); // Fallback to starting a new game if loading fails
     }
 }
 
@@ -405,7 +398,7 @@ let character = new Player({
 
 
 function story(saveFile){
-    const Title = document.querySelector('.Quest_Title');
+    //const Title = document.querySelector('.Quest_Title');
     const main_section = document.querySelector('.main_section');
     const main_content = document.querySelector('.content-canvas');
     const choices_section_title = document.querySelector('.choices_section_title');
@@ -877,19 +870,19 @@ function story(saveFile){
                 */
         }
     }
-    function SetinnerHTMLToZero() {
-        if (choices_section_title)  choices_section_title.innerHTML = " ";
-        if (Button_Choice1)         Button_Choice1.innerHTML = " ";
-        if (Button_Choice2)         Button_Choice2.innerHTML = " ";
-        if (Button_Choice3)         Button_Choice3.innerHTML = " ";
-        if (Button_Choice4)         Button_Choice4.innerHTML = " ";
-        if (Button_Choice5)         Button_Choice5.innerHTML = " ";
-        if (Button_Choice6)         Button_Choice6.innerHTML = " ";
-        if (Button_Choice7)         Button_Choice7.innerHTML = " ";
-    }
+
 return saveFile
 }
-
+function SetinnerHTMLToZero() {
+    if (choices_section_title)  choices_section_title.innerHTML = " ";
+    if (Button_Choice1)         Button_Choice1.innerHTML = " ";
+    if (Button_Choice2)         Button_Choice2.innerHTML = " ";
+    if (Button_Choice3)         Button_Choice3.innerHTML = " ";
+    if (Button_Choice4)         Button_Choice4.innerHTML = " ";
+    if (Button_Choice5)         Button_Choice5.innerHTML = " ";
+    if (Button_Choice6)         Button_Choice6.innerHTML = " ";
+    if (Button_Choice7)         Button_Choice7.innerHTML = " ";
+}
 function slowTypingText(text, elementId, index = 0, speed = 200, printImmediately = false) {
     // Check if the text has already been printed
     if (document.querySelector(elementId).innerText == text) {
