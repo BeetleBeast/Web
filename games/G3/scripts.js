@@ -100,7 +100,7 @@ function newGame(saveFileNum){
                 9 :  {"sceneName" : "Subterranean1", "playerText": "Along the banks of the subterranean stream, you encounter a family of glowing fish, their scales shimmering with iridescent light as they dart through the crystal-clear waters. They seem to be communicating with one another through a series of intricate patterns and movements, creating a mesmerizing display of aquatic ballet."},
                 10 :  {"sceneName" : "Fungal1", "playerText": "Deep within the fungal grove, you stumble upon a cluster of luminous mushrooms, their caps pulsating with a soft, ethereal light. As you approach, you feel a sense of peace wash over you, as if the mushrooms are emitting a calming energy that soothes your weary soul."},
                 11 :  {"sceneName" : "Mossy2", "playerText": "placeholder"},
-                12 :  {"sceneName" : "Mossy1_hidden_enclove", "playerText": "placeholder"},
+                12 :  {"sceneName" : "Mossy1_hidden_enclove", "playerText": "You have found a hidden alcove tucked away within the mossy passage, concealed by lush greenery. Inside, the alcove opens into a small chamber adorned with shimmering crystals that reflect the dim light filtering through cracks in the ceiling. The air is cool and refreshing, carrying a faint hint of earthiness and mystery. Amidst the crystals, you spot a glimmering object half-buried in the moss—a small, intricately carved wooden box"},
                 13 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
                 14 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
                 15 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
@@ -137,7 +137,7 @@ function newGame(saveFileNum){
                 9 : { 1 : "Leave the area undisturbed", 2 : "Follow the stream to its source.", 3 : "Offer a small offering of food to the fish.", 4 : "Take a moment to admire the surroundings.", 5 : "Feel the water with your hands.", 6 : "Listen to the soothing sound of the rushing stream."},
                 10 : { 1 : "Leave the area undisturbed", 2 : "Sit amongst the mushrooms and observe.", 3 : "Reach out to touch the mushrooms.", 4 : "Inhale deeply, breathing in the aroma.", 5 : "Feel the texture of the ground beneath your feet.", 6 : "Listen for any sounds emanating from the grove."},
                 11 : { 1 : "Previously", 7 : "Next"},
-                12 : { 1 : "Previously", 7 : "Next"},
+                12 : { 1 : "Leave the box undisturbed and leave the alcove", 6 : "Pick up the box and examine its contents"},
                 //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : ""},
                 //  : { 1 : "Leave the area undisturbed", 2 : "", 3 : "", 4 : "", 5 : "", 6 : ""},
                 //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : ""},
@@ -177,6 +177,8 @@ function newGame(saveFileNum){
                 8 : "What shall you do",
                 9 : "What shall you do",
                 10 : "What shall you do",
+                11 : " ",
+                12 : "With careful hands, you consider the small, intricately carved wooden box half-buried in the moss. You have the option to:",
             }
         },
         "Choices_Made" : {
@@ -248,15 +250,21 @@ function newGame(saveFileNum){
             { id: 1 , Name : "Soul Redeemer", quantity : 1, quality : "Legendary"},
 
         ],
-        "ListOfAllItems" : {
-            //  ID number : {"Name" : Name of item ,"quantity" : number of item inside iventory , "quality" : choose between common/uncomon/rare/unique/Legendary}
-            1 : {"Name" : "Soul Redeemer", "quantity" : 0, "quality" : "Legendary"},
-            2 : {"Name" : "rock", "quantity" : 0, "quality" : "common"},
-            3 : {"Name" : "stick", "quantity" : 0, "quality" : "common"},
+        "ListOfAllItems" : [
+            //  { id: numberPlaceHolder , Name : "NamePlaceHolder", quantity : 0, quality : "common"}, choose between common/uncomon/rare/unique/Legendary}
+            { id: 1 , Name : "Soul Redeemer", quantity : 0, quality : "Legendary"},
+            { id: 2 , Name : "rock", quantity : 0, quality : "common"},
+            { id: 3 , Name : "stick", quantity : 0, quality : "common"},
+            { id: 4 , Name : "green_gemstone", quantity : 0, quality : "uncommon"},
+            { id: 5 , Name : "red_gemstone", quantity : 0, quality : "uncommon"},
+            { id: 6 , Name : "blue_gemstone", quantity : 0, quality : "uncommon"},
+            { id: 7 , Name : "brown_gemstone", quantity : 0, quality : "uncommon"},
+            { id: 8 , Name : "white_gemstone", quantity : 0, quality : "rare"},
+            { id: 9 , Name : "dark_gemstone", quantity : 0, quality : "rare"},
+            { id: 10 , Name : "purple_gemstone", quantity : 0, quality : "epic"},
 
-
-            //  : {"Name" : "PlaceHolder","quantity" : "PlaceHolder" , "quality" : "PlaceHolder"},
-        }
+           // : {"Nam" : "PlaceHolder","quantity" : "PlaceHolder" , "quality" : "PlaceHolder"},
+        ]
     }
 
 
@@ -675,6 +683,7 @@ function story(saveFile){
             // Handle the case when there are no more scenes in the current chapter
             console.log('No more scenes available in this chapter');
             nextChapter(saveFile)
+            return;
         }
         // Re-render the story with updated saveFile
         console.log('id=9')
@@ -831,6 +840,7 @@ function story(saveFile){
                                 character.rested(10);
                                 character.applyDebuff('Pacified', 20, saveFile, ".choices_section")
                                 character.applyDebuff('Confusion', 20, saveFile, ".choices_section")
+                                //  TODO : if pressed more then twice only the numbers should change
                                 //  Listen to the soothing melody of the flower
                                 break;
                             case 4:
@@ -842,7 +852,8 @@ function story(saveFile){
                                 break;
                             case 6:
                                 //  Feel the texture of the moss beneath your fingertips
-                                //  this here is option 6
+                                main_section.appendChild(document.createElement('br'));
+                                //addTextWithTempColor('.main_section',"You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.",'blue',false)
                                 main_section.innerHTML += "You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.";
                                 manageHiddenInfo(saveFile, true)
                                 break;
@@ -860,6 +871,13 @@ function story(saveFile){
                     case 10:
                         
                         break;
+                    case 11:
+                        break;
+                    case 12:
+                        addItemToInventory(4,1);
+                        main_section.innerHTML += 'You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.';
+
+                    break;
                 }
                 break;
                 //  TODO add special sircumstances for 7 to 10 (sometimes go to other scene or add to inventory )
@@ -923,7 +941,44 @@ document.addEventListener('keydown', function(event) {
         toggleInventory();
     }
 });
+function addTextWithTempColor(elementId, text, tempColor, Replace = true) {
+    const element = document.querySelector(elementId);
+    
+    // Change text content
+    if(Replace){
+        element.textContent = text;
+    }else{
+        element.textContent += text;
+    }
+  
+    // Temporarily change text color using the provided color
+    element.style.color = tempColor;
+  
+    // Reset color after a delay (simulating temporary color change)
+    setTimeout(() => {
+        element.style.color = 'azure'; // Reset to default color (azure)
+    }, 1000); // Adjust delay time (in milliseconds) as needed
+}
+// Function to add an item from ListOfAllItems to Inventory with a specified quantity
+function addItemToInventory(itemId, newQuantity) {
+    // Find the item in ListOfAllItems by itemId
+    const itemToAdd = saveFile.ListOfAllItems.find(item => item.id === itemId);
 
+    if (itemToAdd) {
+        // Clone the item from ListOfAllItems and set its quantity
+        const newItem = {
+            id: itemToAdd.id,
+            Name: itemToAdd.Name,
+            quantity: newQuantity,
+            quality: itemToAdd.quality
+        };
+
+        // Add the new item to the Inventory array
+        saveFile.Inventory.push(newItem);
+    } else {
+        console.error(`Item with id ${itemId} not found in ListOfAllItems.`);
+    }
+}
 function SetinnerHTMLToZero() {
     if (choices_section_title)  choices_section_title.innerHTML = " ";
     if (Button_Choice1)         Button_Choice1.innerHTML = " ";
