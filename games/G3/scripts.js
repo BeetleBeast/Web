@@ -834,7 +834,7 @@ function story(saveFile){
                         switch(LastButtonPressed){
                             case 2:
                                 //  Investigate the hidden alcove
-                                nextScene(saveFile);
+                                nextScene(saveFile);//  I.E. scene 12
                                 break;
                             case 3:
                                 character.rested(10);
@@ -860,16 +860,82 @@ function story(saveFile){
                         }
                         break;
                     case 7:
-                        
+                        switch(LastButtonPressed){
+                            case 2:
+                                //  you fall in the water and die if requirement is not activated if it is aquire mysterious figure
+                                break;
+                            case 3:
+                                //  nothing happens
+                                break;
+                            case 4:
+                                //  the stone disolves in the water
+                                break;
+                            case 5:
+                                //  get silence back
+                                break;
+                            case 6:
+                                //  get damage
+                                break;
+                        }
                         break;
                     case 8:
-                        
+                        switch(LastButtonPressed){
+                            case 2:
+                                //  feel drouwsy as not anouth mana ( player will not get info as comprehencion is to low )
+                                break;
+                            case 3:
+                                //  comprencion too low
+                                break;
+                            case 4:
+                                //  nextcene
+                                nextScene(saveFile);
+                                break;
+                            case 5:
+                                //  +? in theoretical int
+                                break;
+                            case 6:
+                                //  +? in practical int
+                                break;
+                        }
                         break;
                     case 9:
-                        
+                        switch(LastButtonPressed){
+                            case 2:
+                                //  Follow the stream to its source
+                                nextScene(saveFile);
+                                break;
+                            case 3:
+                                //  
+                                break;
+                            case 4:
+                                //  
+                                break;
+                            case 5:
+                                //  
+                                break;
+                            case 6:
+                                //  
+                                break;
+                        }
                         break;
                     case 10:
-                        
+                        switch(LastButtonPressed){
+                            case 2:
+                                //  
+                                break;
+                            case 3:
+                                //  
+                                break;
+                            case 4:
+                                //  
+                                break;
+                            case 5:
+                                //  
+                                break;
+                            case 6:
+                                //  
+                                break;
+                        }
                         break;
                     case 11:
                         break;
@@ -882,7 +948,6 @@ function story(saveFile){
                 break;
                 //  TODO add special sircumstances for 7 to 10 (sometimes go to other scene or add to inventory )
                 /*
-                    6 : { 1 : "Leave the area undisturbed", 2 : "Investigate the hidden alcove.", 3 : "Listen to the soothing melody of the flower.", 4 : "Continue exploring the passage", 5 : "Sit quietly and observe the surroundings", 6 : "Feel the texture of the moss beneath your fingertips."},
                     7 : { 1 : "Leave the area undisturbed", 2 : "Approach the figure cautiously.", 3 : "Sit quietly by the pool and observe.", 4 : "Cast a stone into the pool.", 5 : "Attempt to communicate with the figure.", 6 : "Feel the cool crystal walls with your hands."},
                     8 : { 1 : "Leave the area undisturbed", 2 : "Reach out to touch the ancient runes.", 3 : "Atempt to read the chant or incantation.", 4 : "Continue down the corridor.", 5 : "Meditate in front of the runes.", 6 : "Feel the texture of the walls for any irregularities."},
                     9 : { 1 : "Leave the area undisturbed", 2 : "Follow the stream to its source.", 3 : "Offer a small offering of food to the fish.", 4 : "Take a moment to admire the surroundings.", 5 : "Feel the water with your hands.", 6 : "Listen to the soothing sound of the rushing stream."},
@@ -893,9 +958,7 @@ function story(saveFile){
 
     
     const inventoryItems = saveFile.Inventory;
-    const inventoryContainer = document.getElementById('inventory');
-    const toggleInventoryButton = document.getElementById('toggleInventoryButton');
-
+    
     // Function to populate inventory grid based on current page
     function populateInventory(pageNumber) {
         const pageSize = 16; // Number of items per page (adjust based on grid size)
