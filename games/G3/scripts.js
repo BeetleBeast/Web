@@ -21,6 +21,7 @@ let valueSTRING = [];
 let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
 let amount = 0;
+let previousAmount = 0;
 let saveFile = {}; // Initialize saveFile object
 
 // Function to start up the game
@@ -355,10 +356,14 @@ class Player {
             const Side_Menu3 = document.getElementById('Side-Menu3');
             if (Side_Menu3.innerHTML.trim() === '') {
                 Side_Menu3.innerHTML = newDescription;
-            } else {
+            }else if (Side_Menu3.innerHTML.includes(saveFile.Debuff_Effects[effect].Description)) {
+                Side_Menu3.innerHTML = `${saveFile.Debuff_Effects[effect].Description}, ${previousAmount + amount}.`;
+            }
+             else {
                 // Append a line break and the new description
                 Side_Menu3.innerHTML += '<br>' + newDescription;
             }
+            previousAmount = amount;
         }
     }
     
@@ -840,7 +845,6 @@ function story(saveFile){
                                 character.rested(10);
                                 character.applyDebuff('Pacified', 20, saveFile, ".choices_section")
                                 character.applyDebuff('Confusion', 20, saveFile, ".choices_section")
-                                //  TODO : if pressed more then twice only the numbers should change
                                 //  Listen to the soothing melody of the flower
                                 break;
                             case 4:
