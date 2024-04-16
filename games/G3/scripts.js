@@ -285,7 +285,7 @@ function newGame(saveFileNum){
            // : {"Nam" : "PlaceHolder","quantity" : "PlaceHolder" , "quality" : "PlaceHolder"},
         ]
     }
-
+    
 
     // start story
     story(saveFile);
@@ -388,7 +388,7 @@ class Player {
             let Confused_Text = saveFile.storyLine_progress_Confused[saveFile.current_chapter_progress][saveFile.current_storyLine_progress]["sceneText"];
             let Confused_Buttons = saveFile.Choices_Possible_Confused[saveFile.current_chapter_progress][saveFile.current_storyLine_progress];
             slowTypingText(Confused_Text, '.main_section');
-            ButtonPressed(saveFile, saveFile.Choices_Possible_Confused);
+            ButtonPressedPAST(saveFile, saveFile.Choices_Possible_Confused);
         }
         if (effect == "pacified"){
             // not able to be agressief
