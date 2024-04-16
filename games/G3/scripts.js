@@ -147,10 +147,27 @@ function newGame(saveFileNum){
                 // Leave the area undisturbed
             }
         },
+        "storyLine_progress_Confused" : {
+            //  chapter number : { Special scene number : { Scene : Text }
+            1 : {
+                6 : {sceneText : "Placeholder", sceneTitle : "PlaceHolder"}
+            }
+        },
         "Choices_Possible_Confused" : {
-            //  index number : { button number : Text }
-            0 : {0 : "Placeholder"},
-            1 : {},
+            //  chapter number : { Special scene number : { button number : Text }
+            1 : {
+                6 : {
+                    1 : "PlaceHolder",
+                    2 : "PlaceHolder",
+                    3 : "PlaceHolder",
+                    4 : "PlaceHolder",
+                    5 : "PlaceHolder",
+                    6 : "PlaceHolder",
+                    7 : "PlaceHolder",
+                    
+                }
+            },
+            2 : {},
         },
         "Buttons_section_title" : {
             //  chapter num : {   Scene num : text }
@@ -355,16 +372,26 @@ class Player {
         if (!this.Debuff_Effects[effect]) {
             this.Debuff_Effects[effect] = { Amount: amount };
         } else {
-            saveFile.Debuff_Effects[effect].Amount = amount;
+            this.Debuff_Effects[effect].Amount = amount;
         }
     }
     
     updateUI(effect, amount, saveFile, element) {
         console.log('updateUI is activated id=156')
         // Example: Update UI element opacity for 'Blinded' debuff
-        if (effect === 'Blinded') {
+        if (effect == `Blinded`) {
             element.style.opacity = amount / 100;
-            //  TODO add Confusion and pacified effects
+            //  TODO add pacified effects
+        }if (effect == 'Confusion'){
+            // change text to confused text
+            console.log('activate confusion')            
+            let Confused_Text = saveFile.storyLine_progress_Confused[saveFile.current_chapter_progress][saveFile.current_storyLine_progress]["sceneText"];
+            let Confused_Buttons = saveFile.Choices_Possible_Confused[saveFile.current_chapter_progress][saveFile.current_storyLine_progress];
+            slowTypingText(Confused_Text, '.main_section');
+            ButtonPressed(saveFile, saveFile.Choices_Possible_Confused);
+        }
+        if (effect == "pacified"){
+            // not able to be agressief
         }
         // Update UI text to reflect debuff description if available
         if (previousAmounts[effect] >= 100) {
@@ -416,10 +443,7 @@ class Player {
                 }
             }
         }
-
     }
-    
-
     rested(amount) {
         // Decrease specific debuff effects when the player rests
         const debuffsToDecrease = [2, 3, 9, 10, 20, 21];
@@ -577,7 +601,7 @@ function story(saveFile){
     //  make a save of latest version of saveFile
     localStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
 
-    ButtonPressed(saveFile);    //  print current Buttons
+    ButtonPressed(saveFile, saveFile.Choices_Possible);    //  print current Buttons
     manageHiddenInfo(saveFile, false);  //  hides info if need be
     title_progress(current_title,current_title_progress)    //  print current title
     scene_progress(current_storyLine,current_storyLine_progress)    //  print current scene text
@@ -639,20 +663,17 @@ function story(saveFile){
             }
         }
     }
-
-    function ButtonPressed(saveFile) {
+    function ButtonPressed(saveFile, infogetter) {
         const buttonValues = getButtonValues(saveFile);
         for (const buttonValue of buttonValues) {
             const button = document.querySelector('.Sh_' + buttonValue);
             if (button) {
                 // Get the value of the button from the scene
-                const chapter = saveFile.Choices_Possible[saveFile.current_chapter_progress];
+                const chapter = infogetter[saveFile.current_chapter_progress];
                 const scene = chapter[saveFile.current_storyLine_progress];
                 const value = scene[buttonValue];
-    
                 // Set the inner HTML of the button
                 button.innerHTML = value;
-    
                 // Add event listener to the button
                 const handler = buttonClickHandler(buttonValue, saveFile);
                 button.removeEventListener("click", button.handlerReference); // Remove previous listener to avoid duplicates
@@ -665,10 +686,8 @@ function story(saveFile){
     function manageHiddenInfo(saveFile, revealInfo) {
         const current_storyLine = saveFile.current_storyLine_progress;
         const current_chapter = saveFile.current_chapter_progress;
-    
         // Check if Buttons_Hidden data exists for the current chapter and story line
         const Buttons_Hidden = saveFile.Buttons_Hidden[current_chapter]?.[current_storyLine];
-    
         if (Buttons_Hidden) {
             // Iterate over the hidden button values for the current scene
             Buttons_Hidden.forEach(buttonValue => {
@@ -682,9 +701,6 @@ function story(saveFile){
             console.log(`No hidden buttons defined for chapter ${current_chapter} and scene ${current_storyLine}`);
         }
     }
-    
-    
-
     function title_progress(current_title,current_title_progress) {
         let title_story = current_title['title_story_'+current_title_progress]
         slowTypingText(title_story,'.Quest_Title');         // Put the content on the left and the place where it needs to go on the right
@@ -700,7 +716,6 @@ function story(saveFile){
         //console.log('scene_text',scene_text)
         console.log('current_storyLine',current_storyLine);
         console.log('current_storyLine_progress', current_storyLine_progress);
-
     }
     function nextScene(saveFile) {
         // Increment the current scene progress only if there are more scenes available
@@ -733,8 +748,8 @@ function story(saveFile){
                 case 8:
                 case 9:
                 case 10:
-                   saveFile.current_storyLine_progress += 5;
-                   break;
+                    saveFile.current_storyLine_progress += 5;
+                    break;
             }
         } else {
             // Handle the case when there are no more scenes in the current chapter
@@ -767,15 +782,15 @@ function story(saveFile){
                 case 3:
                 case 4:
                 case 5:
-                   saveFile.current_storyLine_progress = 0;
-                   break;
+                    saveFile.current_storyLine_progress = 0;
+                    break;
                 case 6:
                 case 7:
                 case 8:
                 case 9:
                 case 10:
-                   saveFile.current_storyLine_progress -= 5;
-                   break;
+                    saveFile.current_storyLine_progress -= 5;
+                    break;
             }
                 
         }else {
@@ -998,7 +1013,6 @@ function story(saveFile){
                     case 12:
                         addItemToInventory(4,1);
                         main_section.innerHTML += 'You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.';
-
                     break;
                 }
                 break;
@@ -1011,6 +1025,8 @@ function story(saveFile){
                 */
         }
     }
+
+
 
     
     const inventoryItems = saveFile.Inventory;
@@ -1033,7 +1049,6 @@ function story(saveFile){
             pageContainer.appendChild(itemElement);
         });
     }
-   
     // Initialize the first page of the inventory
     populateInventory(1);
 
@@ -1044,7 +1059,6 @@ return saveFile
 function toggleInventory() {
     const inventory = document.getElementById('inventory');
     const toggleInventoryText = document.getElementById('toggleInventoryText');
-
     if (inventory.style.display === 'none') {
         inventory.style.display = 'block';
         toggleInventoryText.style.display = 'none'; // Hide "Press I" text when inventory is visible
@@ -1053,7 +1067,6 @@ function toggleInventory() {
         toggleInventoryText.style.display = 'block'; // Show "Press I" text when inventory is hidden
     }
 }
-
 // Event listener for key press (I key)
 document.addEventListener('keydown', function(event) {
     if (event.key === 'i' || event.key === 'I') {
@@ -1069,20 +1082,17 @@ function addTextWithTempColor(elementId, text, tempColor, Replace = true) {
     }else{
         element.textContent += text;
     }
-  
     // Temporarily change text color using the provided color
     element.style.color = tempColor;
-  
     // Reset color after a delay (simulating temporary color change)
     setTimeout(() => {
         element.style.color = 'azure'; // Reset to default color (azure)
     }, 1000); // Adjust delay time (in milliseconds) as needed
 }
-// Function to add an item from ListOfAllItems to Inventory with a specified quantity
 function addItemToInventory(itemId, newQuantity) {
+    // Function to add an item from ListOfAllItems to Inventory with a specified quantity
     // Find the item in ListOfAllItems by itemId
     const itemToAdd = saveFile.ListOfAllItems.find(item => item.id === itemId);
-
     if (itemToAdd) {
         // Clone the item from ListOfAllItems and set its quantity
         const newItem = {
@@ -1113,17 +1123,14 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
     if (document.querySelector(elementId).innerText == text) {
         return;
     }
-
     if (printImmediately) {
         // Clear the element before printing and print immediately
         document.querySelector(elementId).innerHTML = '';
         document.querySelector(elementId).innerHTML = text;
         return;
     }
-
     // Set printing flag before starting to print
     isCurrentlyPrinting = true;
-
     function printCharacter() {
         if (index < text.length && !stopTyping) {
             isCurrentlyPrinting = true;
@@ -1142,12 +1149,11 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
             isCurrentlyPrinting = false;
         }
     }
-
     // Clear the element before starting to print characters
     document.querySelector(elementId).innerHTML = '';
-
     // Start printing characters
     printCharacter();
+    
 }
 
 
