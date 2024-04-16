@@ -21,7 +21,7 @@ let valueSTRING = [];
 let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
 let amount = 0;
-let previousAmount = 0;
+let previousAmounts = {};
 let saveFile = {}; // Initialize saveFile object
 
 // Function to start up the game
@@ -226,6 +226,7 @@ function newGame(saveFileNum){
             Cursed :  {  Description : `Character is afflicted with a curse that causes various negative effects over time by`},
             Fatigue :  {  Description : `Reduces energy levels and slows down character movement or actions by`},
             Confusion :  {  Description : `Causes disorientation, making character actions unpredictable or uncontrollable by`},
+            MAXeffect : {  Description : `you have reacht the maximum amount of` },
         },
         "Buff_Effects" : {
             Strength :  { Description : `Increases physical power and damage output by`},
@@ -313,18 +314,32 @@ class Player {
         console.log(`${this.Name} levels up to level ${this.Level}!`);
     }
     applyDebuff(effect, amount, saveFile, elementId) {
+    if(previousAmounts[effect] >= 100){
+        console.log('applydebuff amount is over 100')
+        this.updateDebuff(effect, 100);
+        console.log(`Applying ${100} on debuff: ${effect}`);
+    
+        // Update UI element if provided
+        if (elementId) {
+            const element = document.querySelector(elementId);
+            if (element) {
+                this.updateUI(effect, 100, saveFile, element);
+            }
+        }
+
+    }else{
+        console.log('UNDER 100 id=155')
         // Apply debuff effect to the player
         this.updateDebuff(effect, amount);
     
-        // Update the amount in the saveFile object
+        // If the debuff effect already exists, update its amount
         if (!saveFile.Debuff_Effects[effect]) {
             saveFile.Debuff_Effects[effect] = { Amount: amount };
         } else {
             saveFile.Debuff_Effects[effect].Amount = amount;
         }
-    
         console.log(`Applying ${amount} on debuff: ${effect}`);
-    
+        
         // Update UI element if provided
         if (elementId) {
             const element = document.querySelector(elementId);
@@ -333,38 +348,75 @@ class Player {
             }
         }
     }
+    }
     
     updateDebuff(effect, amount) {
         // If the debuff effect already exists, update its amount
         if (!this.Debuff_Effects[effect]) {
             this.Debuff_Effects[effect] = { Amount: amount };
         } else {
-            this.Debuff_Effects[effect].Amount = amount;
+            saveFile.Debuff_Effects[effect].Amount = amount;
         }
     }
     
     updateUI(effect, amount, saveFile, element) {
+        console.log('updateUI is activated id=156')
         // Example: Update UI element opacity for 'Blinded' debuff
         if (effect === 'Blinded') {
             element.style.opacity = amount / 100;
             //  TODO add Confusion and pacified effects
         }
-    
         // Update UI text to reflect debuff description if available
-        if (saveFile.Debuff_Effects[effect]?.Description) {
-            const newDescription = `${saveFile.Debuff_Effects[effect].Description}, ${amount}.`;
-            const Side_Menu3 = document.getElementById('Side-Menu3');
-            if (Side_Menu3.innerHTML.trim() === '') {
-                Side_Menu3.innerHTML = newDescription;
-            }else if (Side_Menu3.innerHTML.includes(saveFile.Debuff_Effects[effect].Description)) {
-                Side_Menu3.innerHTML = `${saveFile.Debuff_Effects[effect].Description}, ${previousAmount + amount}.`;
+        if (previousAmounts[effect] >= 100) {
+            console.log('updateUI: amount is over 100');
+            const existingContent = Side_Menu3.innerHTML.trim();
+            const maxEffectDescription = saveFile.Debuff_Effects['MAXeffect'].Description;
+        
+            if (existingContent.includes(maxEffectDescription)) {
+                // Update existing description if it's already present
+                Side_Menu3.innerHTML = `${maxEffectDescription} ${effect}.`;
+            } else {
+                // Append a new description with a line break if needed
+                let newDescription = `${maxEffectDescription} ${effect}.`;
+                if (existingContent !== '') {
+                    Side_Menu3.innerHTML += '<br>';
+                }
+                Side_Menu3.innerHTML += newDescription;
             }
-             else {
-                // Append a line break and the new description
-                Side_Menu3.innerHTML += '<br>' + newDescription;
+        }else{
+            console.log('updateUI amount is under 100 id=157')
+            if (saveFile.Debuff_Effects[effect]?.Description) {
+                console.log('updateUI amount is under 100 id=158')
+                const effectDescription = saveFile.Debuff_Effects[effect].Description;
+                const newDescription = `${effectDescription}, ${amount}`;
+                
+                // Calculate the new amount based on the previous amount for this effect
+                const previousAmount = previousAmounts[effect] || 0;
+                const newAmount = previousAmount + amount;
+                previousAmounts[effect] = newAmount;
+                
+                const newDescriptionWithPreviousAmount = `${effectDescription}, ${newAmount}`;
+                
+                const Side_Menu3 = document.getElementById('Side-Menu3');
+                const existingContent = Side_Menu3.innerHTML.trim();
+
+                // Construct a regular expression to match the existing description pattern
+                const regex = new RegExp(`${effectDescription}, \\d+`);
+
+                if (existingContent.includes(effectDescription)) {
+                    // Replace the existing content with the updated description containing the new amount
+                    const updatedContent = existingContent.replace(regex, newDescriptionWithPreviousAmount);
+                    Side_Menu3.innerHTML = updatedContent;
+                } else {
+                    // Append a line break and the new description if it's not already present
+                    if (existingContent !== '') {
+                        Side_Menu3.innerHTML += '<br>';
+                    }
+                    Side_Menu3.innerHTML += newDescription;
+                }
             }
-            previousAmount = amount;
         }
+
     }
     
 
