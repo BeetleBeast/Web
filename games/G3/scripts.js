@@ -1093,6 +1093,6 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
     // Start printing characters
     printCharacter();
 }
-//  FIXME : chaper 1 is buggy in print character normal ( it prints everyletter twice only scene 0 )
+
 
 
