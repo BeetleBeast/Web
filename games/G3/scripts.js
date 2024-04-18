@@ -477,7 +477,6 @@ function story(saveFile){
     function saveFileClickHandler() {
         console.log('Saving game');
         // TODO: Implement save logic based on your requirements
-        saveFileNum = 0;
 
         if (saveFileNum !== null) {
             console.log('Saving game id=1', saveFile);
