@@ -66,23 +66,68 @@
 
 /*--Main-Canvas--*/
 body{
+	position: relative;
     display: flex;
 	text-align: center;
     overflow: hidden;
     background-color:#232530;
 	height: 100vh;
-	width: 100vw;
+}
+.container{
+	display: flex;
+    flex: 1; /* Container takes up all available space */
+	position: relative;
+}
+#Side-Menu {
+	position: relative;
+	width: 15em;
+	background-color: var(--side-Color);
+	border-right: 2px solid rgb(185, 0, 62);
+	text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* this will create space between the elements */
+	transition: width 0.3s ease;
+}
+.content-wrapper {
+    display: flex;
+    flex: 1; /* Flex container for app and side-extra */
+    position: relative; /* Relative positioning for absolute children */
 }
 #app{
+	flex: 1; /* Main content takes up remaining space */
 	display: flexbox;
 	float: right;
-	width: calc(100vw - 15em);
-	height: 100%;
-	min-height: 100%;
 	flex-direction: column;
 	z-index: 5;
 	margin: auto 10px;
+	margin-top: 5px;
+	margin-bottom: 20%;
 	
+}
+.startscreen{
+	text-align: center;
+	font-size: large;
+	padding: 5px;
+	padding-left: 1.5em;
+	padding-right: 1.5em;
+	background-color: #222;
+	color: gold;
+	border: 1px solid #666;
+	
+}
+.startscreen:hover{
+	border: 1px solid #999;
+	cursor: pointer;
+	transition-duration: 0.2s;
+}
+/*
+.startscreen:hover ~ .startscreen {
+    opacity: 0.5; // Reduce opacity for other buttons 
+}
+*/
+.startParent:hover .startscreen:not(:hover) {
+    opacity: 0.5;
 }
 .Quest_Title{
     color: white;
@@ -95,7 +140,7 @@ body{
 	box-sizing:content-box;
 	padding: .5em;
 	
-	margin-right: 15rem;
+	/*margin-right: 15rem;*/
 
 	font-family: "Fondamento", cursive;
 	font-weight: 400;
@@ -111,7 +156,7 @@ body{
 	top: 0;
 	height: 100%;
 
-	margin-right: 15em;
+	/*margin-right: 15em;*/
 }
 .main_section{
     color: white;
@@ -198,7 +243,7 @@ body{
 
 #inventory {
     position: relative;
-	margin-right: 15em;
+	/*margin-right: 15em;*/
 	margin-bottom: auto 12em;
     width: 100%; /* Full width */
 	height: 100%;
@@ -227,19 +272,45 @@ body{
 
 
 /*--Side-Menu--*/
-
-#Side-Menu {
-	background-color: var(--side-Color);
-	border-right: 2px solid rgb(185, 0, 62);
-	width: 15em;
-	height: 100%;
-	text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* this will create space between the elements */
-
-
+#Side-Menu_ColapseButton {
+	z-index: 500;
+	display: block;
+    position: absolute;
+	top: 0;
+	right: 0;
+	width: 35px;
+    color: white;
+    padding: 8px 12px; /* Adjust padding for button size */
+    margin: 5px;
+    border: 1px solid #999;
+	border-right: none;
+    background-color: transparent;
+    cursor: pointer;
 }
+
+#Side-Menu_ColapseButton:hover {
+    border-color: rgb(92, 92, 92);
+    background-color: rgb(92, 92, 92);
+}
+
+/* Styles for the thick arrows (left and right) */
+.thick-arrow-left, .thick-arrow-right {
+    width: 15px;
+    height: 15px;
+    border: 5px solid #cccccc;
+    border-left: 0;
+    border-top: 0;
+    
+    vertical-align: middle; /* Align arrows vertically within button */
+    transform: rotate(135deg); /* Adjust rotation angle for left arrow */
+    cursor: pointer;
+}
+
+.thick-arrow-right {
+    transform: rotate(315deg); /* Adjust rotation angle for right arrow */
+}
+
+
 .Side-Menu_Class{
 	font-family: "Protest Revolution", sans-serif;
 	font-weight: 400;
@@ -248,11 +319,12 @@ body{
 #Side-Menu1{
 	margin: auto 5px;
 	padding: auto 5px;
+	margin-top: 5px;
 }
 
 #Side-Menu2 {
 	background-color: var(--side-Color);
-	border-right: 2px solid rgb(185, 0, 62);
+	
 	width: 15em;
 	height: 100%;
 	text-align: center;
@@ -264,7 +336,7 @@ body{
 }
 #Side-Menu3 {
 	background-color: var(--side-Color);
-	border-right: 2px solid rgb(185, 0, 62);
+	
 	width: 15em;
 	height: 100%;
 	text-align: center;
@@ -275,7 +347,7 @@ body{
 }
 #Side-Menu4 {
 	background-color: var(--side-Color);
-	border-right: 2px solid rgb(185, 0, 62);
+	
 	width: 15em;
 	height: 100%;
 	text-align: center;
@@ -404,19 +476,23 @@ body{
 }
 	/* --Side Extra-- */
 .Side-extra{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	background-color: rgba(0, 0, 0, 0.575);
 	z-index: 9999999;
-	position: fixed;
+	
 	padding: auto 5px;
 	border-radius: 5px;
-	width: calc(100% - 16em);		/*calcl*/
-	height: 98dvh;
 	top: 4em;
 	transition: opacity 0.5s ease-in-out;
 	transition: opacity 0.5s ease-out;
+	visibility: hidden; /* Initially hide side-extra */
 }
 .Side-extra , .parent{
-	position: absolute;
+	/*position: absolute;*/
 	background-color: var(--thirdColor);
 	height: 99vh;
 	text-align: left;
@@ -439,7 +515,7 @@ body{
   .Save-ul[data-visible=true] > * {
 	visibility: visible;
 	opacity: 1;
-  }
+}
 [data-visible=true] {
 	opacity: 1;
 	visibility: visible; 

@@ -3,6 +3,7 @@ const main_section = document.querySelector('.main_section');
 const main_content = document.querySelector('.content-canvas');
 const choices_section_title = document.querySelector('.choices_section_title');
 const choices_section = document.querySelectorAll('.choices_section');
+const startScreen = document.querySelector('.startParent');
 const Button_Choice1 = document.querySelector('.Sh_1');
 const Button_Choice2 = document.querySelector('.Sh_2');
 const Button_Choice3 = document.querySelector('.Sh_3');
@@ -15,6 +16,7 @@ const loadfileId = document.getElementById('loadfileId');
 const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  (in words)
 const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debuff)
 const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
+const Side_MenuClass = document.querySelector('.InfluencesAll')
 
 var saveFileNum = 0;    //  TODO : make it usefull
 let valueSTRING = [];
@@ -31,15 +33,21 @@ window.onload = function() {
 };
 
 // Function to start up or load the game
-function startup() {
+function startup(userConfirmed) {
+    //  TODO: make a start screen
+    Title.innerHTML = 'Gatcha tower';
+    startScreen.dataset.visible = 'true';
+    Side_Menu4.dataset.visible = 'false';
     // Display a yes/no prompt
-    const userConfirmed = confirm("Do you want to play from the last save?");
+    //const userConfirmed = confirm("Do you want to play from the last save?");
 
-    if (userConfirmed) {
+    if (userConfirmed == 1) {
         console.log("User confirmed to load last save.");
+        startScreen.dataset.visible = 'false';
         loadGame();
-    } else {
+    }else if(userConfirmed == 2){
         console.log("User declined to load last save. Starting a new game.");
+        startScreen.dataset.visible = 'false';
         newGame(saveFileNum);
     }
 }

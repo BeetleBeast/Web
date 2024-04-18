@@ -16,113 +16,127 @@
 </head>
 
 <body>
-    <div id="Side-Menu" class="Side-Menu_Class">
-        <div id="Side-Menu1" class="Side-Menu_Class">
-            <div id="Side-image" class="Side-Menu_Class"></div>
-            <div id="Side-Title" class="Side-Menu_Class">Gatcha tower</div>
+    <div class="container">
+        <div id="Side-Menu" class="Side-Menu_Class">
+            <button id="Side-Menu_ColapseButton" title="Toggle the UI bar" aria-label="Toggle the UI bar" type="button" role="button">
+                <div  class="thick-arrow-left"></div>
+            </button>
             <br>
-            <button type="button" role="button" class="Open-more" onclick="openMoreSettings()" class="Side-Menu_Class">More</button>
-        </div>
-        <hr/>
-        <div id="Side-Menu2" class="Side-Menu_Class">
-            <!--    Character list  (in words)-->
-        </div>
-        <hr/>
-        <div id="Side-Menu3" class="Side-Menu_Class">
-            <!--    effects    (Debuff) -->
-        </div>
-        <hr/>
-        <div id="Side-Menu4" class="Side-Menu_Class">
-            <!--    influences  (Bar)-->
-            
-            <div class="Side-Influences_Title Side-Menu_Class">Pain</div>
-            <div class="Side-Influences Side-Menu_Class">
-                <div class="Side-Influences_Bar Pain Side-Menu_Class"></div>
-            </div>            
-            <div class="Side-Influences_Title Side-Menu_Class">Fatigue</div>
-            <div class="Side-Influences Side-Menu_Class">
-                <div class="Side-Influences_Bar Fatigue Side-Menu_Class"></div>
-            </div>            
-            <div class="Side-Influences_Title Side-Menu_Class">Fear</div>
-            <div class="Side-Influences Side-Menu_Class">
-                <div class="Side-Influences_Bar Fear Side-Menu_Class"></div>
-            </div>            
-            <div class="Side-Influences_Title Side-Menu_Class">Stress</div>
-            <div class="Side-Influences Side-Menu_Class">
-                <div class="Side-Influences_Bar Stress Side-Menu_Class"></div>
-            </div>            
-            <div class="Side-Influences_Title Side-Menu_Class">Trauma</div>
-            <div class="Side-Influences Side-Menu_Class">
-                <div class="Side-Influences_Bar Trauma Side-Menu_Class"></div>
-            </div>            
-            <div class="Side-Influences_Title Side-Menu_Class">Addiction</div>
-            <div class="Side-Influences Side-Menu_Class">
-                <div class="Side-Influences_Bar Addiction Side-Menu_Class"></div>
-            </div>            
-            <div class="Side-Influences_Title Side-Menu_Class">Sickness</div>
-            <div class="Side-Influences Side-Menu_Class">
-                <div class="Side-Influences_Bar Sickness Side-Menu_Class"></div>
-            </div>            
-            <div class="Side-Influences_Title Side-Menu_Class">Bleed</div>
-            <div class="Side-Influences Side-Menu_Class">
-                <div class="Side-Influences_Bar Bleed Side-Menu_Class"></div>
-            </div>            
-            <div class="Side-Influences_Title Side-Menu_Class">Control</div>
-            <div class="Side-Influences Side-Menu_Class">
-                <div class="Side-Influences_Bar Control Side-Menu_Class"></div>
-            </div>
-        </div>
-        <div class="bottom-links Side-Menu_Class">
-            <a href="/index.html" class="asettings Side-Menu_Class"><button type="button" role="button" class="settings">Exit</button></a>
-        </div>
-    </div>
-    <div id="app">
-        <h1 class="Quest_Title"></h1>
-        <div class="main">
-            <div class="main_section"></div>
-            <canvas class="content-canvas" ref="contentCanvas"></canvas>
-            <div class="choices_section">
-                <div class="choices_section_title"></div>
+            <div id="Side-Menu1" class="Side-Menu_Class">
+                <div id="Side-image" class="Side-Menu_Class"></div>
+                <div id="Side-Title" class="Side-Menu_Class">Gatcha tower</div>
                 <br>
-                <div class="Choices Sh_1"></div>
-                <div class="Choices Sh_2"></div>
-                <div class="Choices Sh_3"></div>
-                <div class="Choices Sh_4"></div>
-                <div class="Choices Sh_5"></div>
-                <div class="Choices Sh_6"></div>
-                <div class="Choices Sh_7"></div>
+                <button type="button" role="button" class="Open-more" onclick="openMoreSettings()" class="Side-Menu_Class">More</button>
             </div>
-            <!-- Inventory container with grid items -->
-            <div id="inventory" class="inventory">
-                <div class="inventoryContainer">
-                    <div class="pages">
-                        <!-- This is where the grid items will be dynamically added -->
-                        <div class="page" id="page1">
-                            <!-- Grid items will be populated here -->
+            <hr/>
+            <div id="Side-Menu2" class="Side-Menu_Class">
+                <!--    Character list  (in words)-->
+            </div>
+            <hr/>
+            <div id="Side-Menu3" class="Side-Menu_Class">
+                <!--    effects    (Debuff) -->
+            </div>
+            <hr/>
+            <div id="Side-Menu4" class="Side-Menu_Class">
+                <!--    influences  (Bar)-->
+                
+                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Pain</div>
+                <div class="Side-Influences Side-Menu_Class InfluencesAll">
+                    <div class="Side-Influences_Bar Pain Side-Menu_Class InfluencesAll"></div>
+                </div>            
+                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Fatigue</div>
+                <div class="Side-Influences Side-Menu_Class InfluencesAll">
+                    <div class="Side-Influences_Bar Fatigue Side-Menu_Class InfluencesAll"></div>
+                </div>            
+                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Fear</div>
+                <div class="Side-Influences Side-Menu_Class InfluencesAll">
+                    <div class="Side-Influences_Bar Fear Side-Menu_Class InfluencesAll"></div>
+                </div>            
+                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Stress</div>
+                <div class="Side-Influences Side-Menu_Class InfluencesAll">
+                    <div class="Side-Influences_Bar Stress Side-Menu_Class InfluencesAll"></div>
+                </div>            
+                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Trauma</div>
+                <div class="Side-Influences Side-Menu_Class InfluencesAll">
+                    <div class="Side-Influences_Bar Trauma Side-Menu_Class InfluencesAll"></div>
+                </div>            
+                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Addiction</div>
+                <div class="Side-Influences Side-Menu_Class InfluencesAll">
+                    <div class="Side-Influences_Bar Addiction Side-Menu_Class InfluencesAll"></div>
+                </div>            
+                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Sickness</div>
+                <div class="Side-Influences Side-Menu_Class InfluencesAll">
+                    <div class="Side-Influences_Bar Sickness Side-Menu_Class InfluencesAll"></div>
+                </div>            
+                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Bleed</div>
+                <div class="Side-Influences Side-Menu_Class InfluencesAll">
+                    <div class="Side-Influences_Bar Bleed Side-Menu_Class InfluencesAll"></div>
+                </div>            
+                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Control</div>
+                <div class="Side-Influences Side-Menu_Class InfluencesAll">
+                    <div class="Side-Influences_Bar Control Side-Menu_Class InfluencesAll"></div>
+                </div>
+            </div>
+            <div class="bottom-links Side-Menu_Class">
+                <a href="/index.html" class="asettings Side-Menu_Class"><button type="button" role="button" class="settings">Exit</button></a>
+            </div>
+        </div>
+        <div class="content-wrapper">
+            <div id="app">
+                <h1 class="Quest_Title"></h1>
+                <div class="main">
+                    <div class="main_section"></div>
+                    <canvas class="content-canvas" ref="contentCanvas"></canvas>
+                    <div class="startParent">
+                        <button onclick="startup(1)" id="Continue-Game" class="startscreen">continue</button>
+                        <button onclick="startup(2)" id="NewGame" class="startscreen">start</button>
+                        <button onclick="openMoreSettings()" id="LoadGame" class="startscreen">load</button>
+                        <button onclick="openMoreSettings()" id="Settings" class="startscreen">settings</button>
+                    </div>
+                    <div class="choices_section">
+                        <div class="choices_section_title"></div>
+                        <br>
+                        <div class="Choices Sh_1"></div>
+                        <div class="Choices Sh_2"></div>
+                        <div class="Choices Sh_3"></div>
+                        <div class="Choices Sh_4"></div>
+                        <div class="Choices Sh_5"></div>
+                        <div class="Choices Sh_6"></div>
+                        <div class="Choices Sh_7"></div>
+                    </div>
+                    <!-- Inventory container with grid items -->
+                    <div id="inventory" class="inventory">
+                        <div class="inventoryContainer">
+                            <div class="pages">
+                                <!-- This is where the grid items will be dynamically added -->
+                                <div class="page" id="page1">
+                                    <!-- Grid items will be populated here -->
+                                </div>
+                                <!-- Add more pages as needed -->
+                            </div>
                         </div>
-                        <!-- Add more pages as needed -->
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="Side-extra parent" data-visible="false">
-        <div class="Side-extra child1 Side-Saving">Saving
-            <ul class="Side-extra Save-ul">
-                <li class="Side-extra Save-li">
-                    <button type="button" role="button"  id="loadfileId" class="Side-extra load Button">load the latest Version</button>
-                </li>
-                <li class="Side-extra Save-li2">
-                    <button type="button" role="button" id="savefileId" class="Side-extra Save Button">Save the latest Version</button>
-                </li>
-            </ul>
-        </div>
-        <div class="Side-extra child1 Side-gameplay">gameplay</div>
-        <div class="Side-extra child1 Side-grafics">grafics</div>
-        <div class="Side-extra child1 Side-more">more
-            <ul class="Side-extra Side-more-ul">
-                <li class="Side-extra Side-more-li">Fist</li>
-            </ul>
+            <div class="Side-extra parent" data-visible="false">
+                <div class="Side-extra child1 Side-Saving">Saving
+                    <ul class="Side-extra Save-ul">
+                        <li class="Side-extra Save-li">
+                            <button type="button" role="button"  id="loadfileId" class="Side-extra load Button">load the latest Version</button>
+                        </li>
+                        <li class="Side-extra Save-li2">
+                            <button type="button" role="button" id="savefileId" class="Side-extra Save Button">Save the latest Version</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="Side-extra child1 Side-gameplay">gameplay</div>
+                <div class="Side-extra child1 Side-grafics">grafics</div>
+                <div class="Side-extra child1 Side-more">more
+                    <ul class="Side-extra Side-more-ul">
+                        <li class="Side-extra Side-more-li">Fist</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -132,10 +146,10 @@
 
 <script>
 function openMoreSettings() {
-  const parent = document.querySelector('.parent');
-  const isVisible = parent.dataset.visible === 'true';
-  parent.classList.toggle('visible');
-  parent.dataset.visible = !isVisible;
+    const parent = document.querySelector('.parent');
+    const isVisible = parent.dataset.visible === 'true';
+    parent.classList.toggle('visible');
+    parent.dataset.visible = !isVisible;
 }
 
 </script>
