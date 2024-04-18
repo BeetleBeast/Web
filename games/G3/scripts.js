@@ -22,10 +22,11 @@ let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
 let amount = 0;
 let previousAmounts = {};
+let IsPacified = false;
 let saveFile = {}; // Initialize saveFile object
 
 // Function to start up the game
- window.onload = function() {
+window.onload = function() {
     startup()
 };
 
@@ -150,24 +151,17 @@ function newGame(saveFileNum){
         "storyLine_progress_Confused" : {
             //  chapter number : { Special scene number : { Scene : Text }
             1 : {
-                6 : {sceneText : "Placeholder", sceneTitle : "PlaceHolder"}
+                6 : {sceneText : "As you traverse the mossy passage, you stumble upon a hidden alcove where a delicate flower blooms amidst the verdant foliage. Its petals shimmer with an otherworldly glow, emitting a faint, melodic hum. The flower seems to beckon to you, offering a sense of peace and serenity amidst the chaos of the cave.", sceneTitle : "Finding an exit?"}
             }
         },
         "Choices_Possible_Confused" : {
             //  chapter number : { Special scene number : { button number : Text }
             1 : {
-                6 : {
-                    1 : "PlaceHolder",
-                    2 : "PlaceHolder",
-                    3 : "PlaceHolder",
-                    4 : "PlaceHolder",
-                    5 : "PlaceHolder",
-                    6 : "PlaceHolder",
-                    7 : "PlaceHolder",
-                    
-                }
+                6 : { 1 : "Leave the area disturbed", 2 : "Investigate the hidden alcove.", 3 : "gain strenght by listening to the soothing melody of the flower.", 4 : "Continue exploring the passage", 5 : "Sit quietly and observe the surroundings", 6 : "gain extra lives by touching the mesmerising moss."},
             },
-            2 : {},
+            2 : {
+
+            },
         },
         "Buttons_section_title" : {
             //  chapter num : {   Scene num : text }
@@ -310,12 +304,10 @@ class Player {
         this.Debuff_Effects = {};
         this.Buff_Effects = {};
     }
-
     attack(enemy) {
         // Perform attack logic here
         console.log(`${this.Name} attacks ${enemy}!`);
     }
-
     heal(amount) {
         // Perform healing logic here
         this.Health += amount;
@@ -324,49 +316,44 @@ class Player {
         }
         console.log(`${this.Name} heals for ${amount} health.`);
     }
-
     levelUp() {
         // Perform level up logic here
         this.Level++;
         console.log(`${this.Name} levels up to level ${this.Level}!`);
     }
     applyDebuff(effect, amount, saveFile, elementId) {
-    if(previousAmounts[effect] >= 100){
-        console.log('applydebuff amount is over 100')
-        this.updateDebuff(effect, 100);
-        console.log(`Applying ${100} on debuff: ${effect}`);
-    
-        // Update UI element if provided
-        if (elementId) {
-            const element = document.querySelector(elementId);
-            if (element) {
-                this.updateUI(effect, 100, saveFile, element);
+        if(previousAmounts[effect] >= 100){
+            console.log('applydebuff amount is over 100')
+            this.updateDebuff(effect, 100);
+            console.log(`Applying ${100} on debuff: ${effect}`);
+            // Update UI element if provided
+            if (elementId) {
+                const element = document.querySelector(elementId);
+                if (element) {
+                    this.updateUI(effect, 100, saveFile, element);
+                }
             }
-        }
-
-    }else{
-        console.log('UNDER 100 id=155')
-        // Apply debuff effect to the player
-        this.updateDebuff(effect, amount);
-    
-        // If the debuff effect already exists, update its amount
-        if (!saveFile.Debuff_Effects[effect]) {
-            saveFile.Debuff_Effects[effect] = { Amount: amount };
-        } else {
-            saveFile.Debuff_Effects[effect].Amount = amount;
-        }
-        console.log(`Applying ${amount} on debuff: ${effect}`);
-        
-        // Update UI element if provided
-        if (elementId) {
-            const element = document.querySelector(elementId);
-            if (element) {
-                this.updateUI(effect, amount, saveFile, element);
+        }else{
+            console.log('UNDER 100 id=155')
+            // Apply debuff effect to the player
+            this.updateDebuff(effect, amount);
+            // If the debuff effect already exists, update its amount
+            if (!saveFile.Debuff_Effects[effect]) {
+                saveFile.Debuff_Effects[effect] = { Amount: amount };
+            } else {
+                saveFile.Debuff_Effects[effect].Amount = amount;
+            }
+            console.log(`Applying ${amount} on debuff: ${effect}`);
+            
+            // Update UI element if provided
+            if (elementId) {
+                const element = document.querySelector(elementId);
+                if (element) {
+                    this.updateUI(effect, amount, saveFile, element);
+                }
             }
         }
     }
-    }
-    
     updateDebuff(effect, amount) {
         // If the debuff effect already exists, update its amount
         if (!this.Debuff_Effects[effect]) {
@@ -375,30 +362,14 @@ class Player {
             this.Debuff_Effects[effect].Amount = amount;
         }
     }
-    
     updateUI(effect, amount, saveFile, element) {
         console.log('updateUI is activated id=156')
-        // Example: Update UI element opacity for 'Blinded' debuff
-        if (effect == `Blinded`) {
-            element.style.opacity = amount / 100;
-            //  TODO add pacified effects
-        }if (effect == 'Confusion'){
-            // change text to confused text
-            console.log('activate confusion')            
-            let Confused_Text = saveFile.storyLine_progress_Confused[saveFile.current_chapter_progress][saveFile.current_storyLine_progress]["sceneText"];
-            let Confused_Buttons = saveFile.Choices_Possible_Confused[saveFile.current_chapter_progress][saveFile.current_storyLine_progress];
-            slowTypingText(Confused_Text, '.main_section');
-            ButtonPressedPAST(saveFile, saveFile.Choices_Possible_Confused);
-        }
-        if (effect == "pacified"){
-            // not able to be agressief
-        }
         // Update UI text to reflect debuff description if available
         if (previousAmounts[effect] >= 100) {
             console.log('updateUI: amount is over 100');
             const existingContent = Side_Menu3.innerHTML.trim();
             const maxEffectDescription = saveFile.Debuff_Effects['MAXeffect'].Description;
-        
+            
             if (existingContent.includes(maxEffectDescription)) {
                 // Update existing description if it's already present
                 Side_Menu3.innerHTML = `${maxEffectDescription} ${effect}.`;
@@ -412,35 +383,30 @@ class Player {
             }
         }else{
             console.log('updateUI amount is under 100 id=157')
-            if (saveFile.Debuff_Effects[effect]?.Description) {
-                console.log('updateUI amount is under 100 id=158')
-                const effectDescription = saveFile.Debuff_Effects[effect].Description;
-                const newDescription = `${effectDescription}, ${amount}`;
-                
-                // Calculate the new amount based on the previous amount for this effect
-                const previousAmount = previousAmounts[effect] || 0;
-                const newAmount = previousAmount + amount;
-                previousAmounts[effect] = newAmount;
-                
-                const newDescriptionWithPreviousAmount = `${effectDescription}, ${newAmount}`;
-                
-                const Side_Menu3 = document.getElementById('Side-Menu3');
-                const existingContent = Side_Menu3.innerHTML.trim();
+            const effectDescription = saveFile.Debuff_Effects[effect].Description;
+            const newDescription = `${effectDescription}, ${amount}`;
+            
+            // Calculate the new amount based on the previous amount for this effect
+            const previousAmount = previousAmounts[effect] || 0;
+            const newAmount = previousAmount + amount;
+            previousAmounts[effect] = newAmount;
+            const newDescriptionWithPreviousAmount = `${effectDescription}, ${newAmount}`;
+            const Side_Menu3 = document.getElementById('Side-Menu3');
+            const existingContent = Side_Menu3.innerHTML.trim();
 
-                // Construct a regular expression to match the existing description pattern
-                const regex = new RegExp(`${effectDescription}, \\d+`);
-
-                if (existingContent.includes(effectDescription)) {
-                    // Replace the existing content with the updated description containing the new amount
-                    const updatedContent = existingContent.replace(regex, newDescriptionWithPreviousAmount);
-                    Side_Menu3.innerHTML = updatedContent;
-                } else {
-                    // Append a line break and the new description if it's not already present
-                    if (existingContent !== '') {
-                        Side_Menu3.innerHTML += '<br>';
-                    }
-                    Side_Menu3.innerHTML += newDescription;
+            // Construct a regular expression to match the existing description pattern
+            const regex = new RegExp(`${effectDescription}, \\d+`);
+            
+            if (existingContent.includes(effectDescription)) {
+                // Replace the existing content with the updated description containing the new amount
+                const updatedContent = existingContent.replace(regex, newDescriptionWithPreviousAmount);
+                Side_Menu3.innerHTML = updatedContent;
+            } else {
+                // Append a line break and the new description if it's not already present
+                if (existingContent !== '') {
+                    Side_Menu3.innerHTML += '<br>';
                 }
+                Side_Menu3.innerHTML += newDescription;
             }
         }
     }
@@ -465,8 +431,6 @@ class Player {
 }
 
 let character = new Player({
-    Name: 'unknown',
-    Profession: 'none',
     Level: 0,
     Strength: 0,
     Intelligence: 0,
@@ -701,9 +665,73 @@ function story(saveFile){
             console.log(`No hidden buttons defined for chapter ${current_chapter} and scene ${current_storyLine}`);
         }
     }
+    function DeBuffParentFunction(effect, amount, saveFile, elementId){
+        character.applyDebuff(effect, amount, saveFile, elementId)
+        deBuffEffectHandler(effect, amount, saveFile, elementId);
+    }
+    function deBuffEffectHandler(effect, amount, saveFile, element){
+        let Confused_Text = saveFile.storyLine_progress_Confused[saveFile.current_chapter_progress][saveFile.current_storyLine_progress]["sceneText"];
+        let Confused_Title = saveFile.storyLine_progress_Confused[saveFile.current_chapter_progress][saveFile.current_storyLine_progress]["sceneTitle"];
+        switch(effect){
+            case 'Weakened':
+                break;
+            case 'Slowed':
+                break;
+            case `Blinded`:
+                element.style.opacity = amount / 100;
+                break;
+            case 'Confused':
+                break;
+            case 'Silenced':
+                break;
+            case 'Crippled':
+                break;
+            case 'Vulnerable':
+                break;
+            case 'Disarmed':
+                break;
+            case 'Diseased':
+                break;
+            case 'Fear':
+                break;
+            case 'Stunned':
+                break;
+            case 'Hexed':
+                break;
+            case 'Drained':
+                break;
+            case 'Sapped':
+                break;
+            case 'Marked':
+                break;
+            case 'Burning':
+                break;
+            case 'Chilled':
+                break;
+            case 'Rooted':
+                break;
+            case "pacified":
+                // not able to be agressief
+                IsPacified = true;
+                break;
+            case 'Cursed':
+                break;
+            case 'Fatigue':
+                break;
+            case 'Confusion':
+                // change text to confused text
+                console.log('activate confusion')            
+                slowTypingText(Confused_Text, '.main_section', undefined, 35);
+                slowTypingText(Confused_Title, '.Quest_Title');
+                ButtonPressed(saveFile, saveFile.Choices_Possible_Confused);
+                break;
+            case 'MAXeffect':
+                break;
+        }
+    }
     function title_progress(current_title,current_title_progress) {
         let title_story = current_title['title_story_'+current_title_progress]
-        slowTypingText(title_story,'.Quest_Title');         // Put the content on the left and the place where it needs to go on the right
+        slowTypingText(title_story,'.Quest_Title');       // Put the content on the left and the place where it needs to go on the right
         console.log('title Chapter',title_story)
         console.log('current_title',current_title);
         console.log('current_title_progress', current_title_progress);
@@ -910,8 +938,8 @@ function story(saveFile){
                                 break;
                             case 3:
                                 character.rested(10);
-                                character.applyDebuff('Pacified', 20, saveFile, ".choices_section")
-                                character.applyDebuff('Confusion', 20, saveFile, ".choices_section")
+                                DeBuffParentFunction('Pacified', 20, saveFile, ".choices_section")
+                                DeBuffParentFunction('Confusion', 20, saveFile, ".choices_section")
                                 //  Listen to the soothing melody of the flower
                                 break;
                             case 4:
