@@ -121,11 +121,15 @@ body{
 	cursor: pointer;
 	transition-duration: 0.2s;
 }
-/*
-.startscreen:hover ~ .startscreen {
-    opacity: 0.5; // Reduce opacity for other buttons 
+.startParentParent{
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
-*/
+.startParent{
+	width: -moz-fit-content;
+	width: fit-content;
+}
 .startParent:hover .startscreen:not(:hover) {
     opacity: 0.5;
 }
@@ -173,6 +177,7 @@ body{
 	white-space: pre-wrap;
 }
 .choices_section{
+	position: relative;
     color: white;
 	z-index: auto;
 	text-align: center;
@@ -181,9 +186,9 @@ body{
 
 	height: 5em;
 	
+	bottom: 0;
 
-
-	background-color: rgb(34, 33, 33);
+	background-color: var(--mainColor)
 }
 .Choices{
 	float: left;

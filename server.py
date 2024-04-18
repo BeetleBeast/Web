@@ -102,7 +102,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             print("new_path via Main")
         return new_path
         
- 
+
 
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -120,9 +120,6 @@ if  __name__ == '__main__':
     print("Web_content::",web_content_dir,"\n"
     "main_content::",main_content_dir,"\n"
     "game_content::", Game_content_dir)
-    
-    print('New Ip =>',get_ip())
-
 
     # Specify the public IP address and ports
     public_ip = get_ip()  #  my public IP
@@ -136,8 +133,10 @@ if  __name__ == '__main__':
 
         # Start the server
         try:
+            # Start the HTTP server in a loop
+            print("Server is running. Press Ctrl+C to stop.")
             httpd.serve_forever()
-            print("press any key to stop")
         except KeyboardInterrupt:
             print("\nServer stopped.")
+            httpd.shutdown()  # Stop the server gracefully
 
