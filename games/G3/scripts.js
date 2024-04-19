@@ -17,6 +17,17 @@ const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  
 const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debuff)
 const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
 const Side_MenuClass = document.querySelector('.InfluencesAll')
+const PainBar = document.querySelector('.Pain');    //  width: 1%;
+const FatigueBar = document.querySelector('.Fatigue');  //  width: 1%;
+const FearBar = document.querySelector('.Fear');    //  width: 1%;
+const StressBar = document.querySelector('.Stress');    //  width: 1%;
+const TraumaBar = document.querySelector('.Trauma');    //  width: 1%;
+const AddictionBar = document.querySelector('.Addiction');  //  width: 1%;
+const SicknessBar = document.querySelector('.Sickness');    //  width: 1%;
+const BleedBar = document.querySelector('.Bleed');  //  width: 1%;
+const ControlBar = document.querySelector('.Control');  //  width: 100%;
+const ControlTitle = document.querySelector('.ControlTitle');
+const Side_Influences_Title = document.querySelector('.Side-Influences_Title');
 
 var saveFileNum = 0;    //  TODO : make it usefull
 let valueSTRING = [];
@@ -70,7 +81,6 @@ function loadGame() {
 // newGame makes the prep for a new game
 function newGame(saveFileNum){
     console.log('new game');
-    
     let saveFile = {
         "saveFileNumber" : saveFileNum,
         "current_storyLine_progress" : 0,
@@ -222,6 +232,45 @@ function newGame(saveFileNum){
                 6 : [2],
             },
         },
+        "Debuff_SpashText_Color" : {
+            0 : "#00FF00",  // Nothing (Green)
+            1 : "#33FF00",  // Barely noticeable
+            2 : "#66FF00",  // Mild
+            3 : "#99FF00",  // Slight
+            4 : "#CCFF00",  // Noticeable 
+            5 : "#FFFF00",  // Moderate (Yellow)
+            6 : "#FFCC00",  // Significant 
+            7 : "#FF9900",  // Intense 
+            8 : "#FF6600",  // Severe 
+            9 : "#FF3300",  // Excruciating 
+            10 : "#FF0000", // Agonizing (Red)
+            11 : "#FF0000"  // Ultimate  (Red)
+        },
+        "CurrentDebuffBar" : {
+            //  bar : { BarLength : "0"},
+            Pain : { BarLength : "0"},
+            Fatigue : { BarLength : "0"},
+            Fear : { BarLength : "0"},
+            Stress : { BarLength : "0"},
+            Trauma : { BarLength : "0"},
+            Addiction : { BarLength : "0"},
+            Sickness : { BarLength : "0"},
+            Bleed : { BarLength : "0"},
+            Control : { BarLength : "100"},
+        },
+        "Debuff_SpashText" : {
+            //  debuff(bar) effect : {  effect number ranging from 0- 100 with increment of 10 expect the last one. example;}
+            //  pain : {0 : "0", 1 : "1-10", 2 : "11-20", 3 : "21-30", 4 : "31-40", 5 : "41-50", 6 : "51-60", 7 : "61-70", 8 : "71-80", 9 : "81-90", 10 : "91-99", 11 : "100"}
+            Pain : { 0: "No pain", 1: "Barely noticeable discomfort", 2: "Mild twinge or ache", 3: "Slight discomfort with movement", 4: "Noticeable discomfort", 5: "Moderate pain", 6: "Significant pain", 7: "Intense pain", 8: "Severe pain", 9: "Excruciating pain", 10: "Agonizing pain", 11: "Ultimate agony"},
+            Fatigue : { 0: "No fatigue", 1: "Minimal tiredness", 2: "Slight weariness", 3: "Noticeable fatigue", 4: "Moderate tiredness", 5: "Mild exhaustion", 6: "Significant fatigue", 7: "Heavy weariness", 8: "Severe exhaustion", 9: "Nearing sleepiness", 10: "Struggling to stay awake", 11: "Can fall asleep anytime"},
+            Fear : { 0: "No fear", 1: "Slight unease", 2: "Mild apprehension", 3: "Noticeable concern", 4: "Moderate worry", 5: "Growing anxiety", 6: "Significant fear", 7: "Intense dread", 8: "Severe panic", 9: "Overwhelming terror", 10: "Paralyzing fear", 11: "Absolute terror"  },
+            Stress : { 0: "No stress", 1: "Minimal tension", 2: "Mild unease", 3: "Noticeable stress", 4: "Moderate pressure", 5: "Increasing strain", 6: "Significant stress", 7: "Intense pressure", 8: "Severe strain", 9: "Overwhelming stress", 10: "Near breaking point", 11: "Extreme distress"},
+            Trauma : { 0: "No trauma", 1: "Mild distress", 2: "Emotional discomfort", 3: "Noticeable unease", 4: "Moderate distress", 5: "Increasing anxiety", 6: "Significant trauma", 7: "Intense emotional pain", 8: "Severe distress", 9: "Overwhelming trauma", 10: "Near-breaking point", 11: "Extreme anguish"},
+            Addiction : { 0: "No addiction", 1: "Mild craving", 2: "Occasional urges", 3: "Noticeable dependency", 4: "Moderate addiction", 5: "Increasing compulsion", 6: "Significant dependency", 7: "Intense craving", 8: "Severe addiction", 9: "Overwhelming obsession", 10: "Near-irresistible urge", 11: "Extreme dependence"},
+            Sickness : { 0: "No sickness", 1: "Mild discomfort", 2: "Slight illness", 3: "Noticeable symptoms", 4: "Moderate sickness", 5: "Increasing discomfort", 6: "Significant illness", 7: "Intense symptoms", 8: "Severe sickness", 9: "Overwhelming ailment", 10: "Critical condition", 11: "Near death"},
+            Bleed : { 0: "No bleeding", 1: "Minor cut or scrape", 2: "Slow trickle of blood", 3: "Noticeable bleeding", 4: "Moderate hemorrhage", 5: "Increasing blood flow", 6: "Significant blood loss", 7: "Heavy bleeding", 8: "Severe hemorrhaging", 9: "Critical blood loss", 10: "Life-threatening bleed", 11: "Near exsanguination"},            
+            Control : { 0: "No control", 1: "Limited restraint", 2: "Basic discipline", 3: "Developing control", 4: "Moderate self-regulation", 5: "Steady discipline", 6: "Growing mastery", 7: "Strong self-control", 8: "Advanced discipline", 9: "Near mastery", 10: "Masterful control", 11: "Complete mastery"},            
+        },
         "Debuff_Effects" : {
             Weakened :  {  Description : `Character's strength or attack power is reduced by`},
             Slowed :  {  Description : `Character's movement speed is decreased by`},
@@ -290,6 +339,7 @@ function newGame(saveFileNum){
     
 
     // start story
+    ResetEffectBarToDefault(saveFile)
     story(saveFile);
     
     
@@ -462,10 +512,12 @@ let character = new Player({
 
 function story(saveFile){
     //const Title = document.querySelector('.Quest_Title');
+    const Title = document.querySelector('.Quest_Title');
     const main_section = document.querySelector('.main_section');
     const main_content = document.querySelector('.content-canvas');
     const choices_section_title = document.querySelector('.choices_section_title');
     const choices_section = document.querySelectorAll('.choices_section');
+    const startScreen = document.querySelector('.startParent');
     const Button_Choice1 = document.querySelector('.Sh_1');
     const Button_Choice2 = document.querySelector('.Sh_2');
     const Button_Choice3 = document.querySelector('.Sh_3');
@@ -475,12 +527,24 @@ function story(saveFile){
     const Button_Choice7 = document.querySelector('.Sh_7');
     const savefileId = document.getElementById('savefileId');
     const loadfileId = document.getElementById('loadfileId');
-    const Side_Menu2 = document.getElementById('Side-Menu2');
-    const Side_Menu3 = document.getElementById('Side-Menu3');
-    const Side_Menu4 = document.getElementById('Side-Menu4');
+    const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  (in words)
+    const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debuff)
+    const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
+    const Side_MenuClass = document.querySelector('.InfluencesAll');
+    const PainBar = document.querySelector('.Pain');    //  width: 1%;
+    const FatigueBar = document.querySelector('.Fatigue');  //  width: 1%;
+    const FearBar = document.querySelector('.Fear');    //  width: 1%;
+    const StressBar = document.querySelector('.Stress');    //  width: 1%;
+    const TraumaBar = document.querySelector('.Trauma');    //  width: 1%;
+    const AddictionBar = document.querySelector('.Addiction');  //  width: 1%;
+    const SicknessBar = document.querySelector('.Sickness');    //  width: 1%;
+    const BleedBar = document.querySelector('.Bleed');  //  width: 1%;
+    const ControlBar = document.querySelector('.Control');  //  width: 100%;
+    const ControlTitle = document.querySelector('.ControlTitle');
+    const Side_Influences_Title = document.querySelector('.Side-Influences_Title');
+
 
     let LatestsaveFile = saveFile;
-    
     // Save file click handler function
     function saveFileClickHandler() {
         console.log('Saving game');
@@ -577,6 +641,8 @@ function story(saveFile){
     title_progress(current_title,current_title_progress)    //  print current title
     scene_progress(current_storyLine,current_storyLine_progress)    //  print current scene text
     choices_section_title.innerHTML = saveFile.Buttons_section_title[saveFile.current_chapter_progress][saveFile.current_storyLine_progress];// print current scection title
+    Side_Menu4.dataset.visible = 'true';
+    //DisplayDebuffTextWithColors(saveFile,)
     
     function getButtonValues(saveFile) {
         const buttonValues = [];
@@ -1143,6 +1209,70 @@ function addItemToInventory(itemId, newQuantity) {
         console.error(`Item with id ${itemId} not found in ListOfAllItems.`);
     }
 }
+function ResetEffectBarToDefault(saveFile){
+    // Reset all bar widths to 0 except ControlBar
+    const barElement = [PainBar, FatigueBar, FearBar, StressBar, TraumaBar, AddictionBar, SicknessBar, BleedBar];
+    barElement.forEach(id => {
+        if (id) {
+            id.style.width = '0%';
+            console.log(`${id.id} bar set to 0%`);
+        }
+        
+    });
+    ControlBar.style.width = '70%';
+    const barIds = ['Pain', 'Fatigue', 'Fear', 'Stress', 'Trauma', 'Addiction', 'Sickness', 'Bleed', 'Control'];
+    barIds.forEach(Bar => {
+        if (saveFile.Debuff_SpashText){
+            const titleElement = document.querySelector(`.${Bar}Title`);
+            if (titleElement) {
+                if(Bar == 'Control'){
+                    const effectText = saveFile.Debuff_SpashText[Bar][7];
+                    document.querySelector(`.${Bar}Title`).innerHTML = `  ${effectText}.`;
+                }else{
+                    const effectText = saveFile.Debuff_SpashText[Bar][0];
+                    document.querySelector(`.${Bar}Title`).innerHTML = `  ${effectText}.`;
+                }
+                const effectColor = saveFile.Debuff_SpashText_Color[0];
+                
+                titleElement.style.color = effectColor;
+                
+            }
+            
+            
+        }
+    });
+    
+    
+    //ControlTitle.style.color = saveFile.Debuff_SpashText_Color[0];
+}
+function AddDebuffBar(saveFile, BarId, BarLength) {
+    saveFile.CurrentDebuffBar[BarId]['BarLength'] = BarLength;
+    const SBar = document.querySelector(BarId);
+    if (SBar) {
+        SBar.style.width = BarLength + '%';
+    }
+}
+function DisplayDebuffTextWithColors(saveFile, Bar, BarLength) {
+    const index = Math.floor(BarLength / 10) * 10;
+
+    if (Side_Influences_Title) {
+        Side_Influences_Title.innerHTML = ''; // Clear previous content
+        if (index >= 0 && index <= 100) {
+            Side_Influences_Title.innerHTML = Bar + ': ' + saveFile.Debuff_SpashText[Bar][index];
+            Side_Influences_Title.style.color = saveFile.Debuff_SpashText_Color[index];
+        } else if (index === 100) {
+            Side_Influences_Title.innerHTML = Bar + ': ' + saveFile.Debuff_SpashText[Bar][110];
+            Side_Influences_Title.style.color = saveFile.Debuff_SpashText_Color[110];
+        }
+    }
+    if(BarLength === 0){
+        Bar.dataset.visible = 'false';
+    }else{
+        Bar.dataset.visible = 'true';
+    }
+}
+
+
 function SetinnerHTMLToZero() {
     if (choices_section_title)  choices_section_title.innerHTML = " ";
     if (Button_Choice1)         Button_Choice1.innerHTML = " ";
