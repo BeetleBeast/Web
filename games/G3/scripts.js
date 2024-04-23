@@ -134,6 +134,9 @@ function newGame(saveFileNum){
         },
         "Choices_Possible" : {
             //  chapter number : { scene number : { Button number : Text }}
+            Death : {
+                4 : "Respawn at last checkpoint"
+            },
             0 : {
                 0 : { 7 : "Next"},
                 1 : { 1 : "Previously", 7 : "Next"},
@@ -235,18 +238,31 @@ function newGame(saveFileNum){
             },
         },
         "Debuff_SpashText_Color" : {
-            0 : "#00FF00",  // Nothing (Green)
-            1 : "#33FF00",  // Barely noticeable
-            2 : "#66FF00",  // Mild
-            3 : "#99FF00",  // Slight
-            4 : "#CCFF00",  // Noticeable 
-            5 : "#FFFF00",  // Moderate (Yellow)
-            6 : "#FFCC00",  // Significant 
-            7 : "#FF9900",  // Intense 
-            8 : "#FF6600",  // Severe 
-            9 : "#FF3300",  // Excruciating 
-            10 : "#FF0000", // Agonizing (Red)
-            11 : "#FF0000"  // Ultimate  (Red)
+            // has changed from nothing to type
+            0 : {
+                0 : "#00FF00",  // Nothing (Green)
+                1 : "#33FF00",  // Barely noticeable
+                2 : "#66FF00",  // Mild
+                3 : "#99FF00",  // Slight
+                4 : "#CCFF00",  // Noticeable
+                5 : "#FFFF00",  // Moderate (Yellow)
+                6 : "#FFCC00",  // Significant 
+                7 : "#FF9900",  // Intense 
+                8 : "#FF6600",  // Severe
+                9 : "#FF3300",  // Excruciating
+                10 : "#FF0000", // Agonizing (Red)
+                11 : "#FF0000"  // Ultimate  (Red)
+            },
+            1 : {
+                0 : "#FF0000",  // Ultimate  (Red)
+                1 : "#FF0000", // Agonizing (Red)
+                2 : "#FF3300",  // Excruciating
+                3 : "#FF6600",  // Severe
+                4 : "#FF9900",  // Intense
+                5 : "#FFCC00",  // Significant
+                6 : "#FFFF00",  // Moderate (Yellow)
+                7 : "#CCFF00",  // Noticeable
+            },
         },
         "CurrentDebuffBar" : {
             //  bar : { BarLength : "0"},
@@ -373,8 +389,10 @@ class Player {
         if (this.Health <= 0) {
             this.Health = 0;
             console.log(`${this.Name} is dead.`);
+            
+            // TODO herre fast ttravel
         }
-        console.log(`${this.Name} heals for ${amount} health.`);
+        console.log(`${this.Name} gets ${amount} damage.`);
     }
     heal(amount) {
         // Perform healing logic here
@@ -671,6 +689,14 @@ function story(saveFile){
         } else {
             console.log(`No hidden buttons defined for chapter ${current_chapter} and scene ${current_storyLine}`);
         }
+    }
+    function damageAndDeathParent(amount, atackMethod){
+        getDamage(amount);
+        if(character.Health <= 0 | character.Health - amount <= 0){
+            DiedScreen(atackMethod);
+        }
+        
+        //TODO: fast travel here
     }
     function DeBuffParentFunction(effect, amount, saveFile, elementId){
         character.applyDebuff(effect, amount, saveFile, elementId)
@@ -981,7 +1007,7 @@ function story(saveFile){
                                 break;
                             case 6:
                                 //  get damage
-                                character.getDamage(15)
+                                damageAndDeathParent(15,'an undefined pond of glazend color')
                                 break;
                         }
                         break;
@@ -1048,7 +1074,7 @@ function story(saveFile){
                         break;
                     case 12:
                         addItemToInventory(4,1);
-                        main_section.innerHTML += 'You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.';
+                        addTextWithTempColor('.main_section',"You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.",'green',false)
                     break;
                 }
                 break;
@@ -1223,6 +1249,13 @@ function loadFileClickHandler() {
             console.error('Error: Loaded save file is invalid');
         }
     }
+}
+function DiedScreen(atackMethod){
+    let defaultPhrase = "You died because of "
+    let FinalText = defaultPhrase + atackMethod;
+    addTextWithTempColor('.main_section', FinalText,'red',true)
+    // TODO fast travel 3 
+
 }
 function ResetFileClickHandler(){
     console.log('Resetting File?')
@@ -1408,6 +1441,3 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
     printCharacter();
     
 }
-
-
-

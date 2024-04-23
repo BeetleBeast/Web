@@ -111,6 +111,7 @@
                         <div class="Choices Sh_6"></div>
                         <div class="Choices Sh_7"></div>
                     </div>
+                    <!--    FIXME: make inventory only under it if there is room else it will also be on top    -->
                     <!-- Inventory container with grid items -->
                     <div id="inventory" class="inventory">
                         <div class="inventoryContainer">
@@ -173,7 +174,7 @@
                             <td class="Del_game"><button class="Section4_Del_G BtnTable DEl" onclick="deleteGame(5)">Delete Game</button></td>
                         </tr>
                         <tr class="section5">
-                            <td class="pagesLG"><button class="Btn-pages-back Btn-backforward thick-arrow-left-SG" title="back btn"></button></td>
+                            <td class="pagesLG"><button class="Btn-pages-back Btn-backforward thick-arrow-left-SG" title="back btn" type="button"></button></td>
                             <td class="pagesLG"><p class="Num1">page-<span class="pageNum Num1">1</span></p></td>
                             <td class="pagesLG"><button class="Btn-pages-forward Btn-backforward thick-arrow-right-SG" title="forward btn"></button></td>
                         </tr>
@@ -182,11 +183,11 @@
             </div>
             <div class="Side-extra parentGaPla parent" data-visible="false">
                 <div class="Side-extra  Side-gameplay">gameplay</div>
-                <button onclick="openSettings(2)" id="gameplay" class="Side-extra  Side-gameplay">gameplay</button>
+                <button onclick="openSettings(2)" id="gameplay" class="Side-extra  Side-gameplay" type="button">gameplay</button>
             </div>
             <div class="Side-extra parentGrafic parent" data-visible="false">
                 <div class="Side-extra  Side-grafics">grafics</div>
-                <button onclick="openSettings(3)" id="gameplay" class="Side-extra  Side-grafics">grafics</button>
+                <button onclick="openSettings(3)" id="grafics" class="Side-extra  Side-grafics" type="button">grafics</button>
             </div>
             <div class="Side-extra parentMore parent" data-visible="false">
                 <button type="button" role="button"  id="Reset" onclick="ResetFileClickHandler()" class="Side-extra Restart Button">Restart game</button>
