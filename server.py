@@ -4,7 +4,7 @@ import os
 import socket
 
 S_Web_dir = "S:\\Web"
-index_html = "GT.html"
+index_html = "index.html"
 if os.path.exists(S_Web_dir):
     web_content_dir = os.path.join(S_Web_dir)
     main_content_dir = os.path.join(S_Web_dir, "Main")
@@ -89,6 +89,13 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         
 
     def translate_path(self, path):
+        # Get the absolute path of the requested URL
+        path = http.server.SimpleHTTPRequestHandler.translate_path(self, path)
+
+        # Ensure the requested path is within the WEB_DIR
+        if not path.startswith(web_content_dir):
+            path = os.path.join(web_content_dir, os.path.relpath(path, self.server.base_path))
+
         new_path = os.path.normpath(path).lstrip("/")
         if new_path.startswith(index_html):
             new_path = new_path[len(index_html) + 1:]

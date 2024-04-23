@@ -556,102 +556,6 @@ function story(saveFile){
 
 
     let LatestsaveFile = saveFile;
-    // Save file click handler function
-    function saveFileClickHandler() {
-        console.log('Saving game');
-        // TODO: Implement better save logic urgent
-
-        if (saveFileNum !== null) {
-            console.log('Saving game id=1', saveFile);
-            savefileId.innerHTML = "Save Successful";
-            let saveFileJSON = saveFile;
-            localStorage.setItem('saveFile' + saveFileNum, JSON.stringify(saveFileJSON));
-            sessionStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
-            console.log('Save file ' + saveFileNum + ' saved');
-            saveFileNum++;
-            return saveFileNum;
-        }
-    }
-
-    // Load file click handler function
-    function loadFileClickHandler() {
-        console.log('Loading game');
-        let saveFileNum = prompt('Which Save file number (type "latest" if unsure)');
-
-        if (saveFileNum !== null && saveFileNum !== 'latest') {
-            console.log('Loading game id=0', saveFileNum);
-            loadfileId.innerHTML = "Load Successful";
-            let loadedSaveFile = JSON.parse(localStorage.getItem('saveFile' + saveFileNum));
-            console.log('Save file ' + saveFileNum + ' loaded');
-
-            // Update saveFile with loaded data
-            if (loadedSaveFile) {
-                Object.assign(saveFile, loadedSaveFile);
-                console.log('Save file updated:', saveFile);
-                clearButtonContent();
-                story(saveFile);
-            } else {
-                console.error('Error: Loaded save file is invalid');
-            }
-        } else if (saveFileNum === 'latest') {
-            console.log('Loading latest game id=1');
-            loadfileId.innerHTML = "Load Successful";
-            let loadedSaveFile = JSON.parse(sessionStorage.getItem('LatestsaveFile'));
-            console.log('Latest save file loaded');
-
-            // Update saveFile with loaded data
-            if (loadedSaveFile) {
-                Object.assign(saveFile, loadedSaveFile);
-                console.log('Save file updated:', saveFile);
-                clearButtonContent();
-                story(saveFile);
-            } else {
-                console.error('Error: Loaded save file is invalid');
-            }
-        }
-    }
-    function ResetFileClickHandler(){
-        console.log('Resetting File?')
-        let confirmed = confirm('Do you want to reset the game( all unsaved actions will be lost! ).');
-        if (confirmed){
-            sessionStorage.removeItem('LatestsaveFile');
-            console.log('Removed LatestsaveFile! id=809')
-            ResetFile = true;
-            window.location.reload();
-        }else{
-            return;
-        }
-    }
-    // Add event listener for save file click
-    if (savefileId && !savefileId.hasAttribute('data-listener-added')) {
-        savefileId.addEventListener("click", saveFileClickHandler);
-        savefileId.setAttribute('data-listener-added', 'true');
-    } else {
-        savefileId.removeEventListener("click", saveFileClickHandler);
-    }
-
-    // Add event listener for load file click
-    if (loadfileId && !loadfileId.hasAttribute('data-listener-added')) {
-        loadfileId.addEventListener("click", loadFileClickHandler);
-        loadfileId.setAttribute('data-listener-added', 'true');
-    } else if (loadfileId && loadfileId.hasAttribute('data-listener-added')) {
-        loadfileId.removeEventListener("click", loadFileClickHandler);
-    }
-    // Add event listener for RestartGame  click
-    if (RestartGame && !RestartGame.hasAttribute('data-listener-added')) {
-        RestartGame.addEventListener("click", ResetFileClickHandler);
-        RestartGame.setAttribute('data-listener-added', 'true');
-    } else if (RestartGame && RestartGame.hasAttribute('data-listener-added')) {
-        RestartGame.removeEventListener("click", ResetFileClickHandler);
-    }
-
-    // Function to clear button content
-    function clearButtonContent() {
-        choices_section_title.innerHTML = "";
-        [Button_Choice1, Button_Choice2, Button_Choice3, Button_Choice4, Button_Choice5, Button_Choice6, Button_Choice7].forEach(button => {
-            button.innerHTML = "";
-        });
-    }
 
     console.log("Begin of story");
         
@@ -1240,6 +1144,161 @@ function addItemToInventory(itemId, newQuantity) {
         console.error(`Item with id ${itemId} not found in ListOfAllItems.`);
     }
 }
+function openSettings(number) {
+    let parent; // Declare parent variable outside the switch statement
+    switch (number) {
+        case 1:
+            parent = document.querySelector('.parentLoad');
+            break;
+        case 2:
+            parent = document.querySelector('.parentGaPla');
+            break;
+        case 3:
+            parent = document.querySelector('.parentGrafic');
+            break;
+        case 4:
+            parent = document.querySelector('.parentMore');
+            break;
+        default:
+            return; // Handle default case or unexpected values
+    }
+    if (!parent) {
+        console.error('Parent element not found.');
+        return;
+    }
+    const isVisible = parent.dataset.visible === 'true';
+    parent.classList.toggle('visible');
+    parent.dataset.visible = !isVisible;
+}
+// Save file click handler function
+function saveFileClickHandler() {
+    console.log('Saving game');
+    // TODO: Implement better save logic urgent
+
+    if (saveFileNum !== null) {
+        console.log('Saving game id=1', saveFile);
+        savefileId.innerHTML = "Save Successful";
+        let saveFileJSON = saveFile;
+        localStorage.setItem('saveFile' + saveFileNum, JSON.stringify(saveFileJSON));
+        sessionStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
+        console.log('Save file ' + saveFileNum + ' saved');
+        saveFileNum++;
+        return saveFileNum;
+    }
+}
+
+// Load file click handler function
+function loadFileClickHandler() {
+    console.log('Loading game');
+    let saveFileNum = prompt('Which Save file number (type "latest" if unsure)');
+
+    if (saveFileNum !== null && saveFileNum !== 'latest') {
+        console.log('Loading game id=0', saveFileNum);
+        loadfileId.innerHTML = "Load Successful";
+        let loadedSaveFile = JSON.parse(localStorage.getItem('saveFile' + saveFileNum));
+        console.log('Save file ' + saveFileNum + ' loaded');
+
+        // Update saveFile with loaded data
+        if (loadedSaveFile) {
+            Object.assign(saveFile, loadedSaveFile);
+            console.log('Save file updated:', saveFile);
+            clearButtonContent();
+            story(saveFile);
+        } else {
+            console.error('Error: Loaded save file is invalid');
+        }
+    } else if (saveFileNum === 'latest') {
+        console.log('Loading latest game id=1');
+        loadfileId.innerHTML = "Load Successful";
+        let loadedSaveFile = JSON.parse(sessionStorage.getItem('LatestsaveFile'));
+        console.log('Latest save file loaded');
+
+        // Update saveFile with loaded data
+        if (loadedSaveFile) {
+            Object.assign(saveFile, loadedSaveFile);
+            console.log('Save file updated:', saveFile);
+            clearButtonContent();
+            story(saveFile);
+        } else {
+            console.error('Error: Loaded save file is invalid');
+        }
+    }
+}
+function ResetFileClickHandler(){
+    console.log('Resetting File?')
+    let confirmed = confirm('Do you want to reset the game( all unsaved actions will be lost! ).');
+    if (confirmed){
+        sessionStorage.removeItem('LatestsaveFile');
+        console.log('Removed LatestsaveFile! id=809')
+        ResetFile = true;
+        window.location.reload();
+    }else{
+        return;
+    }
+}
+//try {
+    // Add event listener for save file click
+    if (savefileId) {
+        if (!savefileId.hasAttribute('data-listener-added')) {
+            savefileId.addEventListener("click", saveFileClickHandler);
+            savefileId.setAttribute('data-listener-added', 'true');
+        }
+    }
+
+    // Remove event listener for save file click
+    if (savefileId) {
+        if (savefileId.hasAttribute('data-listener-added')) {
+            savefileId.removeEventListener("click", saveFileClickHandler);
+            savefileId.removeAttribute('data-listener-added');
+        }
+    }
+
+    // Add event listener for load file click
+    if (loadfileId) {
+        if (!loadfileId.hasAttribute('data-listener-added')) {
+            loadfileId.addEventListener("click", loadFileClickHandler);
+            loadfileId.setAttribute('data-listener-added', 'true');
+        }
+    }
+
+    // Remove event listener for load file click
+    if (loadfileId) {
+        if (loadfileId.hasAttribute('data-listener-added')) {
+            loadfileId.removeEventListener("click", loadFileClickHandler);
+            loadfileId.removeAttribute('data-listener-added');
+        }
+    }
+
+    // Add event listener for RestartGame click
+    if (RestartGame) {
+        if (!RestartGame.hasAttribute('data-listener-added')) {
+            RestartGame.addEventListener("click", ResetFileClickHandler);
+            RestartGame.setAttribute('data-listener-added', 'true');
+        }
+    }
+
+    // Remove event listener for RestartGame click
+    if (RestartGame) {
+        if (RestartGame.hasAttribute('data-listener-added')) {
+            RestartGame.removeEventListener("click", ResetFileClickHandler);
+            RestartGame.removeAttribute('data-listener-added');
+        }
+    }
+    console.log('heloo')
+/*
+} catch (error) {
+    console.log(error);
+    console.log('halooooo')
+}
+*/
+// Function to clear button content
+function clearButtonContent() {
+    choices_section_title.innerHTML = "";
+    [Button_Choice1, Button_Choice2, Button_Choice3, Button_Choice4, Button_Choice5, Button_Choice6, Button_Choice7].forEach(button => {
+        button.innerHTML = "";
+    });
+}
+
 function ResetEffectBarToDefault(saveFile){
     // Reset all bar widths to 0 except ControlBar
     const barElement = [PainBar, FatigueBar, FearBar, StressBar, TraumaBar, AddictionBar, SicknessBar, BleedBar];
