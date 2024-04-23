@@ -26,7 +26,7 @@
                 <div id="Side-image" class="Side-Menu_Class"></div>
                 <div id="Side-Title" class="Side-Menu_Class">Gatcha tower</div>
                 <br>
-                <button type="button" role="button" class="Open-more" onclick="openMoreSettings()" class="Side-Menu_Class">More</button>
+                <button type="button" role="button" class="Open-more" onclick="openSettings(4)" class="Side-Menu_Class">More</button>
             </div>
             <hr/>
             <div id="Side-Menu1-1">
@@ -95,8 +95,8 @@
                         <div class="startParent">
                             <button onclick="startup(1)" id="Continue-Game" class="startscreen">continue</button>
                             <button onclick="startup(2)" id="NewGame" class="startscreen">start</button>
-                            <button onclick="openMoreSettings()" id="LoadGame" class="startscreen">load</button>
-                            <button onclick="openMoreSettings()" id="Settings" class="startscreen">settings</button>
+                            <button onclick="openSettings(1)" id="LoadGame" class="startscreen">load</button>
+                            <button onclick="openSettings(3)" id="Settings" class="startscreen">settings</button>
                         </div>
                     </div>
                     <div class="choices_section">
@@ -124,7 +124,8 @@
                     </div>
                 </div>
             </div>
-            <div class="Side-extra parent" data-visible="false">
+            <!--    FIXME: Side extra css id broken fix it -->
+            <div class="Side-extra parentLoad parent" data-visible="false">
                 <div class="Side-extra child1 Side-Saving">Saving
                     <ul class="Side-extra Save-ul">
                         <li class="Side-extra Save-li">
@@ -134,13 +135,77 @@
                             <button type="button" role="button" id="savefileId" class="Side-extra Save Button">Save the latest Version</button>
                         </li>
                     </ul>
+                    <table class="tabletable">
+                        <caption></caption>
+                        <tbody class="Allsection">
+                            <tr class="sectionNULL">
+                                <th class="Num1"><h5>#</h5></th>
+                                <th class="SaveGameH">Save</th>
+                                <th class="load_gameSH">load</th>
+                                <th class="Th_NameH">ID / Name</th>
+                                <th class="Del_gameH">Delete</th>
+                            </tr>
+                            <tr class="section0">
+                                <th class="Num1"><h5>1</h5></th>
+                                <th class="SaveGame"><button class="Section0_Save_Game BtnTable" onclick="saveGame(1)">Save Game</button></th>
+                                <th class="load_gameS"><button class="Section0_load_game BtnTable" onclick="loadGame(1)">load Game</button></th>
+                                <th class="Th_Name"><span class="Section0_Name  SpanSName0" id="gameName1"></span></th>
+                                <th class="Del_game"><button class="Section0_Del_G BtnTable DEl" onclick="deleteGame(1)">Delete Game</button></th>
+                            </tr>
+                            <tr class="section1">
+                                <th class="Num1"><h5>2</h5></th>
+                                <th class="SaveGame"><button class="Section1_Save_Game BtnTable" onclick="saveGame(2)">Save Game</button></th>
+                                <th class="load_gameS"><button class="Section1_load_game BtnTable" onclick="loadGame(2)">load Game</button></th>
+                                <th class="Th_Name"><span class="Section1_Name SpanSName1" id="gameName2"></span></th>
+                                <th class="Del_game"><button class="Section1_Del_G BtnTable DEl" onclick="deleteGame(2)">Delete Game</button></th>
+                            </tr>
+                            <tr class="section2">
+                                <th class="Num1"><h5>3</h5></th>
+                                <th class="SaveGame"><button class="Section2_Save_Game BtnTable" onclick="saveGame(3)">Save Game</button></th>
+                                <th class="load_gameS"><button class="Section2_load_game BtnTable" onclick="loadGame(3)">load Game</button></th>
+                                <th class="Th_Name"><span class="Section2_Name SpanSName2" id="gameName3"></span></th>
+                                <th class="Del_game"><button class="Section2_Del_G BtnTable DEl" onclick="deleteGame(3)">Delete Game</button></th>
+                            </tr>
+                            <tr class="section3">
+                                <th class="Num1"><h5>4</h5></th>
+                                <th class="SaveGame"><button class="Section3_Save_Game BtnTable" onclick="saveGame(4)">Save Game</button></th>
+                                <th class="load_gameS"><button class="Section3_load_game BtnTable" onclick="loadGame(4)">load Game</button></th>
+                                <th class="Th_Name"><span class="Section3_Name SpanSName3" id="gameName4"></span></th>
+                                <th class="Del_game"><button class="Section0_Del_G BtnTable DEl" onclick="deleteGame(4)">Delete Game</button></th>
+                            </tr>
+                            <tr class="section4">
+                                <th class="Num1"><h5>5</h5></th>
+                                <th class="SaveGame"><button class="Section4_Save_Game BtnTable" onclick="saveGame(5)">Save Game</button></th>
+                                <th class="load_gameS"><button class="Section4_load_game BtnTable" onclick="Load_game(5)">load Game</button></th>
+                                <th class="Th_Name"><span class="Section4_Name  SpanSName4" id="gameName5"></span></th>
+                                <th class="Del_game"><button class="Section4_Del_G BtnTable DEl" onclick="deleteGame(5)">Delete Game</button></th>
+                            </tr>
+                            <tr class="section5">
+                                <th class="pagesLG BtnTable">
+                                    <button class="Btn-pages-back BtnTable" title="back btn"></button>
+                                    <p class="BtnTable">page</p><span class="BtnTable pageNum">1</span>
+                                    <button class="Btn-pages-forward BtnTable" title="forward btn"></button>
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="Side-extra child1 Side-gameplay">gameplay</div>
-                <div class="Side-extra child1 Side-grafics">grafics</div>
-                <div class="Side-extra child1 Side-more">more
-                    <ul class="Side-extra Side-more-ul">
-                        <li class="Side-extra Side-more-li">Fist</li>
-                    </ul>
+                <div class="Side-extra parentGaPla parent" data-visible="false"></div>
+                    <div class="Side-extra child1 Side-gameplay">gameplay</div>
+                    <button onclick="openSettings(2)" id="LoadGame" class="Side-extra child1 Side-gameplay">gameplay</button>
+                </div>
+                <div class="Side-extra parentGrafic parent" data-visible="false">
+                    <div class="Side-extra child1 Side-grafics">grafics</div>
+                    <button onclick="openSettings(3)" id="LoadGame" class="Side-extra child1 Side-grafics">grafics</button>
+                </div>
+                <div class="Side-extra parentMore parent" data-visible="false">
+                    <div class="Side-extra child1 Side-more">more
+                        <ul class="Side-extra Side-more-ul">
+                            <li class="Side-extra Side-more-li">
+                                <button type="button" role="button"  id="Reset" class="Side-extra Restart Button">Restart game</button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -151,12 +216,33 @@
 
 
 <script>
-function openMoreSettings() {
-    const parent = document.querySelector('.parent');
+function openSettings(number) {
+    let parent; // Declare parent variable outside the switch statement
+    switch (number) {
+        case 1:
+            parent = document.querySelector('.parentLoad');
+            break;
+        case 2:
+            parent = document.querySelector('.parentGaPla');
+            break;
+        case 3:
+            parent = document.querySelector('.parentGrafic');
+            break;
+        case 4:
+            parent = document.querySelector('.parentMore');
+            break;
+        default:
+            return; // Handle default case or unexpected values
+    }
+    if (!parent) {
+        console.error('Parent element not found.');
+        return;
+    }
     const isVisible = parent.dataset.visible === 'true';
     parent.classList.toggle('visible');
     parent.dataset.visible = !isVisible;
 }
+
 
 </script>
 <script src="/games/G3/scripts.js"></script>

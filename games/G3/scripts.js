@@ -13,6 +13,7 @@ const Button_Choice6 = document.querySelector('.Sh_6');
 const Button_Choice7 = document.querySelector('.Sh_7');
 const savefileId = document.getElementById('savefileId');
 const loadfileId = document.getElementById('loadfileId');
+const RestartGame = document.getElementById('Reset');
 const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  (in words)
 const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debuff)
 const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
@@ -36,6 +37,7 @@ let stopTyping = false;
 let amount = 0;
 let previousAmounts = {};
 let IsPacified = false;
+let ResetFile = false;
 let saveFile = {}; // Initialize saveFile object
 
 // Function to start up the game
@@ -366,6 +368,14 @@ class Player {
         // Perform attack logic here
         console.log(`${this.Name} attacks ${enemy}!`);
     }
+    getDamage(amount){
+        this.Health -= amount;
+        if (this.Health <= 0) {
+            this.Health = 0;
+            console.log(`${this.Name} is dead.`);
+        }
+        console.log(`${this.Name} heals for ${amount} health.`);
+    }
     heal(amount) {
         // Perform healing logic here
         this.Health += amount;
@@ -527,6 +537,7 @@ function story(saveFile){
     const Button_Choice7 = document.querySelector('.Sh_7');
     const savefileId = document.getElementById('savefileId');
     const loadfileId = document.getElementById('loadfileId');
+    const RestartGame = document.getElementById('Reset');
     const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  (in words)
     const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debuff)
     const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
@@ -548,7 +559,7 @@ function story(saveFile){
     // Save file click handler function
     function saveFileClickHandler() {
         console.log('Saving game');
-        // TODO: Implement better save logic 
+        // TODO: Implement better save logic urgent
 
         if (saveFileNum !== null) {
             console.log('Saving game id=1', saveFile);
@@ -599,7 +610,18 @@ function story(saveFile){
             }
         }
     }
-
+    function ResetFileClickHandler(){
+        console.log('Resetting File?')
+        let confirmed = confirm('Do you want to reset the game( all unsaved actions will be lost! ).');
+        if (confirmed){
+            sessionStorage.removeItem('LatestsaveFile');
+            console.log('Removed LatestsaveFile! id=809')
+            ResetFile = true;
+            window.location.reload();
+        }else{
+            return;
+        }
+    }
     // Add event listener for save file click
     if (savefileId && !savefileId.hasAttribute('data-listener-added')) {
         savefileId.addEventListener("click", saveFileClickHandler);
@@ -614,6 +636,13 @@ function story(saveFile){
         loadfileId.setAttribute('data-listener-added', 'true');
     } else if (loadfileId && loadfileId.hasAttribute('data-listener-added')) {
         loadfileId.removeEventListener("click", loadFileClickHandler);
+    }
+    // Add event listener for RestartGame  click
+    if (RestartGame && !RestartGame.hasAttribute('data-listener-added')) {
+        RestartGame.addEventListener("click", ResetFileClickHandler);
+        RestartGame.setAttribute('data-listener-added', 'true');
+    } else if (RestartGame && RestartGame.hasAttribute('data-listener-added')) {
+        RestartGame.removeEventListener("click", ResetFileClickHandler);
     }
 
     // Function to clear button content
@@ -634,8 +663,9 @@ function story(saveFile){
     let current_title = saveFile.title_progress[current_title_progress]
 
     //  make a save of latest version of saveFile
-    sessionStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
-
+    if(!ResetFile){
+        sessionStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
+    }
     ButtonPressed(saveFile, saveFile.Choices_Possible);    //  print current Buttons
     manageHiddenInfo(saveFile, false);  //  hides info if need be
     title_progress(current_title,current_title_progress)    //  print current title
@@ -1047,6 +1077,7 @@ function story(saveFile){
                                 break;
                             case 6:
                                 //  get damage
+                                character.getDamage(15)
                                 break;
                         }
                         break;
@@ -1271,8 +1302,6 @@ function DisplayDebuffTextWithColors(saveFile, Bar, BarLength) {
         Bar.dataset.visible = 'true';
     }
 }
-
-
 function SetinnerHTMLToZero() {
     if (choices_section_title)  choices_section_title.innerHTML = " ";
     if (Button_Choice1)         Button_Choice1.innerHTML = " ";

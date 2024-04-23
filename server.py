@@ -4,7 +4,7 @@ import os
 import socket
 
 S_Web_dir = "S:\\Web"
-index_html = "index.html"
+index_html = "GT.html"
 if os.path.exists(S_Web_dir):
     web_content_dir = os.path.join(S_Web_dir)
     main_content_dir = os.path.join(S_Web_dir, "Main")
