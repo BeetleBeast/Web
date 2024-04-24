@@ -43,10 +43,12 @@
     *{
       position:relative;
       cursor: default;
-      user-select: none;
       -webkit-user-select: none;
+      user-select: none;
       font-family: 'Orbitron', sans-serif;
       text-decoration: none;
+      --mainColor: linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
+      --secondColor:rgba(228, 5, 128, 0.445);
     }
     *:visited{
         color: inherit;
@@ -55,27 +57,20 @@
         color: inherit;
     }
     html{
-    text-align: center;
-    background-color:#232530;
-    }
-    #detach-button-host {
-    display: none !important;
-    }
-    *{
-      --mainColor: linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
-      --secondColor:rgba(228, 5, 128, 0.445);
-    }
-    html{
+      text-align: center;
+      background-color:#232530;
       --scrollbarBG: #232530;
       --thumbBG: var(--secondColor);
       overflow: hidden;
+  }
+    #detach-button-host {
+    display: none !important;
     }
     .st::-webkit-scrollbar {
       width: 11px;
     }
     .st {
-      scrollbar-width: thin;
-      scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+      overflow-y: scroll;
     }
     .st::-webkit-scrollbar-track {
       background: var(--scrollbarBG);
@@ -84,9 +79,6 @@
       background-color: var(--thumbBG) ;
       border-radius: 6px;
       border: 3px solid var(--scrollbarBG);
-    }
-    .st{
-      overflow-y: scroll;
     }
     .container{
       overflow-y: none;

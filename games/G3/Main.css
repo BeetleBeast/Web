@@ -143,9 +143,6 @@ body{
 	margin-bottom: 0;
 	box-sizing:content-box;
 	padding: .5em;
-	
-	/*margin-right: 15rem;*/
-
 	font-family: "Fondamento", cursive;
 	font-weight: 400;
 	font-style: normal;
@@ -155,12 +152,8 @@ body{
 	z-index: 5;
 	padding-top: 5px;
 	position: relative;
-
-	
 	top: 0;
 	height: 100%;
-
-	/*margin-right: 15em;*/
 }
 .main_section{
     color: white;
@@ -223,7 +216,6 @@ body{
 /*	Inventory	*/
 #inventory {
     position: relative;
-	/*margin-right: 15em;*/
 	margin-bottom: auto 12em;
     width: 100%; /* Full width */
 	height: 100%;
@@ -488,7 +480,6 @@ body{
 	/* --Side Extra-- */
 .Side-extra{
 	position: absolute;
-	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
@@ -504,7 +495,6 @@ body{
 	opacity: initial;
 }
 .Side-extra , .parent{
-	/*position: absolute;*/
 	background-color: var(--thirdColor);
 	height: 99vh;
 	text-align: left;
@@ -616,12 +606,6 @@ body{
 }
 .Button{
 	color: white;
-}
-button{
-    color: inherit;
-    height: inherit;
-    width: inherit;
-    box-shadow: 1px 1px 0px black;
 }
 .Button:hover{
 	cursor: pointer;
