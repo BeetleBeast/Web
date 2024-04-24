@@ -55,21 +55,26 @@ function startup(userConfirmed) {
         if (userConfirmed == 1) {
             console.log("User confirmed to load last save.");
             startScreen.dataset.visible = 'false';
-            loadGame();
+            loadGame(0);
         }else if(userConfirmed == 2){
             console.log("User declined to load last save. Starting a new game.");
             startScreen.dataset.visible = 'false';
             newGame(saveFileNum);
         }
     }else{
-        loadGame()
+        loadGame(0)
     }
 }
 
 // Function to load the game from localStorage
-function loadGame() {
-    let loadedSaveFile = JSON.parse(sessionStorage.getItem('LatestsaveFile'));
+function loadGame(LoadFile) {
+    let loadedSaveFile;
     startScreen.dataset.visible = 'false';
+    if(LoadFile == 0){
+        loadedSaveFile = JSON.parse(sessionStorage.getItem('LatestsaveFile'));
+    }else{
+        //
+    }
     if (loadedSaveFile) {
         console.log('Loaded save file:', loadedSaveFile);
         saveFile = loadedSaveFile;
@@ -707,11 +712,13 @@ function story(saveFile){
         }
     }
     function InventoryItemClickedHandler(item_id){
-        //TODO : FT: InventoryItemClicked
         switch(item_id){
             case 1:
                 console.log('you dired id=500')
                 damageAndDeathParent(undefined,'you used the soul redeemer',true)
+                break;
+            case 4:
+                //  a green gemstone something
                 break;
         }
     }
@@ -1192,7 +1199,7 @@ document.addEventListener('keydown', function(event) {
         toggleInventory();
     }
 });
-function addTextWithTempColor(elementId, text, tempColor, Replace = true) {
+function addTextWithTempColor(elementId, text, tempColor, Replace = true, temp = true) {
     const element = document.querySelector(elementId);
     
     // Change text content
@@ -1204,9 +1211,11 @@ function addTextWithTempColor(elementId, text, tempColor, Replace = true) {
     // Temporarily change text color using the provided color
     element.style.color = tempColor;
     // Reset color after a delay (simulating temporary color change)
-    setTimeout(() => {
-        element.style.color = 'azure'; // Reset to default color (azure)
-    }, 1000); // Adjust delay time (in milliseconds) as needed
+    if(temp){
+        setTimeout(() => {
+            element.style.color = 'azure'; // Reset to default color (azure)
+        }, 1000); // Adjust delay time (in milliseconds) as needed
+    }
 }
 
 function openSettings(number) {
@@ -1238,7 +1247,7 @@ function openSettings(number) {
 // Save file click handler function
 function saveFileClickHandler() {
     console.log('Saving game');
-    // TODO: Implement better save logic urgent
+    // TODO:  save logic urgent
 
     if (saveFileNum !== null) {
         console.log('Saving game id=1', saveFile);
@@ -1292,8 +1301,9 @@ function loadFileClickHandler() {
 function DiedScreen(atackMethod){
     let defaultPhrase = "You died because "
     let FinalText = defaultPhrase + atackMethod;
-    addTextWithTempColor('.main_section', FinalText,'red',true)
-    // TODO: add button for it
+    stopTyping = true;
+    addTextWithTempColor('.main_section', FinalText,'red',true,false)
+    // TODO: add button for DiedScreen !!!
     // TODO FT: died screen
 
 }
@@ -1420,6 +1430,7 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
             isCurrentlyPrinting = false;
         }
     }
+    //TODO: FT: printchar
     // Clear the element before starting to print characters
     document.querySelector(elementId).innerHTML = '';
     // Start printing characters
