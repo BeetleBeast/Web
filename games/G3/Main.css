@@ -221,31 +221,6 @@ body{
 	margin-left: 0;
 }
 /*	Inventory	*/
-/* Define hover styles for the inventory items */
-.inventoryItem {
-    width: 80px;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
-    border-radius: 8px;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
-
-    /* Additional styles for a cleaner appearance */
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-/* Hover styles for the inventory items */
-.inventoryItem:hover {
-    background-color: rgba(255, 255, 255, 0.3); /* Lighter semi-transparent white background */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add box shadow on hover for depth effect */
-}
-
 #inventory {
     position: relative;
 	/*margin-right: 15em;*/
@@ -262,18 +237,49 @@ body{
 
 .pages {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+	flex-direction: row;
+	flex-wrap: wrap;
+    row-gap: 30px;
 }
 
 .page {
     /*width: calc(25% - 10px); /* Adjust based on desired grid layout */
 	
-    padding: 10px;
-    border: 1px solid white;
-    color: white;
+    
+    
+    
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+    row-gap: 30px;
+}
+/* Define hover styles for the inventory items */
+.inventoryItem {
+	border: 1px solid white;
+	color: white;
+	padding: 10px;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    border-radius: 8px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+	margin: auto 15px;
+
+    /* Additional styles for a cleaner appearance */
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
+/* Hover styles for the inventory items */
+.inventoryItem:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* Lighter semi-transparent white background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add box shadow on hover for depth effect */
+}
 
 
 /*--Side-Menu--*/

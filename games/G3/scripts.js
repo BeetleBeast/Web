@@ -14,6 +14,7 @@ const Button_Choice7 = document.querySelector('.Sh_7');
 const savefileId = document.getElementById('savefileId');
 const loadfileId = document.getElementById('loadfileId');
 const RestartGame = document.getElementById('Reset');
+const inventoryItem = document.querySelector('.inventoryItem');
 const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  (in words)
 const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debuff)
 const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
@@ -262,6 +263,11 @@ function newGame(saveFileNum){
                 5 : "#FFCC00",  // Significant
                 6 : "#FFFF00",  // Moderate (Yellow)
                 7 : "#CCFF00",  // Noticeable
+                8 : "#99FF00",  // Slight
+                9 : "#66FF00",  // Mild
+                10 : "#33FF00",  // Barely noticeable
+                11 : "#00FF00",  // Nothing (Green)
+
             },
         },
         "CurrentDebuffBar" : {
@@ -343,13 +349,13 @@ function newGame(saveFileNum){
             { id: 1 , Name : "Soul Redeemer", quantity : 0, quality : "Legendary"},
             { id: 2 , Name : "rock", quantity : 0, quality : "common"},
             { id: 3 , Name : "stick", quantity : 0, quality : "common"},
-            { id: 4 , Name : "green_gemstone", quantity : 0, quality : "uncommon"},
-            { id: 5 , Name : "red_gemstone", quantity : 0, quality : "uncommon"},
-            { id: 6 , Name : "blue_gemstone", quantity : 0, quality : "uncommon"},
-            { id: 7 , Name : "brown_gemstone", quantity : 0, quality : "uncommon"},
-            { id: 8 , Name : "white_gemstone", quantity : 0, quality : "rare"},
-            { id: 9 , Name : "dark_gemstone", quantity : 0, quality : "rare"},
-            { id: 10 , Name : "purple_gemstone", quantity : 0, quality : "epic"},
+            { id: 4 , Name : "green gemstone", quantity : 0, quality : "uncommon"},
+            { id: 5 , Name : "red gemstone", quantity : 0, quality : "uncommon"},
+            { id: 6 , Name : "blue gemstone", quantity : 0, quality : "uncommon"},
+            { id: 7 , Name : "brown gemstone", quantity : 0, quality : "uncommon"},
+            { id: 8 , Name : "white gemstone", quantity : 0, quality : "rare"},
+            { id: 9 , Name : "dark gemstone", quantity : 0, quality : "rare"},
+            { id: 10 , Name : "purple gemstone", quantity : 0, quality : "epic"},
 
            // : {"Nam" : "PlaceHolder","quantity" : "PlaceHolder" , "quality" : "PlaceHolder"},
         ]
@@ -390,7 +396,6 @@ class Player {
             this.Health = 0;
             console.log(`${this.Name} is dead.`);
             
-            // TODO herre fast ttravel
         }
         console.log(`${this.Name} gets ${amount} damage.`);
     }
@@ -556,6 +561,7 @@ function story(saveFile){
     const savefileId = document.getElementById('savefileId');
     const loadfileId = document.getElementById('loadfileId');
     const RestartGame = document.getElementById('Reset');
+    const inventoryItem = document.querySelector('.inventoryItem');
     const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  (in words)
     const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debuff)
     const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
@@ -592,6 +598,8 @@ function story(saveFile){
     manageHiddenInfo(saveFile, false);  //  hides info if need be
     title_progress(current_title,current_title_progress)    //  print current title
     scene_progress(current_storyLine,current_storyLine_progress)    //  print current scene text
+    // Initialize the first page of the inventory
+    populateInventory(saveFile,1);
     choices_section_title.innerHTML = saveFile.Buttons_section_title[saveFile.current_chapter_progress][saveFile.current_storyLine_progress];// print current scection title
     Side_Menu4.dataset.visible = 'true';
     //DisplayDebuffTextWithColors(saveFile,)
@@ -690,13 +698,73 @@ function story(saveFile){
             console.log(`No hidden buttons defined for chapter ${current_chapter} and scene ${current_storyLine}`);
         }
     }
-    function damageAndDeathParent(amount, atackMethod){
+    function damageAndDeathParent(amount, atackMethod, instaKill = false){
+        if(!instaKill){
         getDamage(amount);
-        if(character.Health <= 0 | character.Health - amount <= 0){
+        }
+        if(character.Health <= 0 || character.Health - amount <= 0 || instaKill){
             DiedScreen(atackMethod);
         }
-        
-        //TODO: fast travel here
+    }
+    function InventoryItemClickedHandler(item_id){
+        //TODO : FT: InventoryItemClicked
+        switch(item_id){
+            case 1:
+                console.log('you dired id=500')
+                damageAndDeathParent(undefined,'you used the soul redeemer',true)
+                break;
+        }
+    }
+    // Function to populate inventory grid based on current page
+    function populateInventory(saveFile,pageNumber) {
+        let number = 1;
+        const inventoryItems = saveFile.Inventory;
+        const pageSize = 16; // Number of items per page (adjust based on grid size)
+
+        const pageContainer = document.getElementById(`page${pageNumber}`);
+        pageContainer.innerHTML = ''; // Clear previous items
+
+        const startIndex = (pageNumber - 1) * pageSize;
+        const endIndex = Math.min(startIndex + pageSize, inventoryItems.length);
+        const itemsToShow = inventoryItems.slice(startIndex, endIndex);
+
+        itemsToShow.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.classList.add('inventoryItem');
+            itemElement.textContent = `${item.Name} x${item.quantity}`;
+
+            itemElement.id = `item-${number} itemType-${item.id}`;
+
+            // Add click event listener to each item
+            itemElement.addEventListener('click', () => {
+                // Call the click handler function passing the item id or class
+                InventoryItemClickedHandler(item.id); // Example: Passing item id
+            });
+
+            pageContainer.appendChild(itemElement);
+            number++;
+        });
+    }
+
+    function addItemToInventory(saveFile, itemId, newQuantity) {
+        // Function to add an item from ListOfAllItems to Inventory with a specified quantity
+        // Find the item in ListOfAllItems by itemId
+        const itemToAdd = saveFile.ListOfAllItems.find(item => item.id === itemId);
+        if (itemToAdd) {
+            // Clone the item from ListOfAllItems and set its quantity
+            const newItem = {
+                id: itemToAdd.id,
+                Name: itemToAdd.Name,
+                quantity: newQuantity,
+                quality: itemToAdd.quality
+            };
+
+            // Add the new item to the Inventory array
+            saveFile.Inventory.push(newItem);
+            populateInventory(saveFile,1)
+        } else {
+            console.error(`Item with id ${itemId} not found in ListOfAllItems.`);
+        }
     }
     function DeBuffParentFunction(effect, amount, saveFile, elementId){
         character.applyDebuff(effect, amount, saveFile, elementId)
@@ -852,6 +920,8 @@ function story(saveFile){
                 case 10:
                     saveFile.current_storyLine_progress -= 5;
                     break;
+                case 12:
+                    saveFile.current_storyLine_progress -= 6;
             }
                 
         }else {
@@ -985,8 +1055,7 @@ function story(saveFile){
                             case 6:
                                 //  Feel the texture of the moss beneath your fingertips
                                 main_section.appendChild(document.createElement('br'));
-                                //addTextWithTempColor('.main_section',"You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.",'blue',false)
-                                main_section.innerHTML += "You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.";
+                                addTextWithTempColor('.main_section',"You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.",'blue',false)
                                 manageHiddenInfo(saveFile, true)
                                 break;
                         }
@@ -1007,7 +1076,7 @@ function story(saveFile){
                                 break;
                             case 6:
                                 //  get damage
-                                damageAndDeathParent(15,'an undefined pond of glazend color')
+                                damageAndDeathParent(15,'of an undefined pond of glazend color')
                                 break;
                         }
                         break;
@@ -1073,9 +1142,16 @@ function story(saveFile){
                     case 11:
                         break;
                     case 12:
-                        addItemToInventory(4,1);
-                        addTextWithTempColor('.main_section',"You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.",'green',false)
-                    break;
+                        switch(LastButtonPressed){
+                            case 2:
+                                //  
+                                break;
+                            case 6:
+                                addItemToInventory(saveFile,4,1);
+                                addTextWithTempColor('.main_section',"You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.",'green',false)
+                                break;
+                        }
+                        break;
                 }
                 break;
                 //  TODO add special sircumstances for 7 to 10 (sometimes go to other scene or add to inventory )
@@ -1091,28 +1167,9 @@ function story(saveFile){
 
 
     
-    const inventoryItems = saveFile.Inventory;
     
-    // Function to populate inventory grid based on current page
-    function populateInventory(pageNumber) {
-        const pageSize = 16; // Number of items per page (adjust based on grid size)
+    
 
-        const pageContainer = document.getElementById(`page${pageNumber}`);
-        pageContainer.innerHTML = ''; // Clear previous items
-
-        const startIndex = (pageNumber - 1) * pageSize;
-        const endIndex = Math.min(startIndex + pageSize, inventoryItems.length);
-        const itemsToShow = inventoryItems.slice(startIndex, endIndex);
-
-        itemsToShow.forEach(item => {
-            const itemElement = document.createElement('div');
-            itemElement.classList.add('inventoryItem');
-            itemElement.textContent = `${item.Name} x${item.quantity}`;
-            pageContainer.appendChild(itemElement);
-        });
-    }
-    // Initialize the first page of the inventory
-    populateInventory(1);
 
 
 return saveFile
@@ -1123,10 +1180,10 @@ function toggleInventory() {
     const toggleInventoryText = document.getElementById('toggleInventoryText');
     if (inventory.style.display === 'none') {
         inventory.style.display = 'block';
-        toggleInventoryText.style.display = 'none'; // Hide "Press I" text when inventory is visible
+        
     } else {
         inventory.style.display = 'none';
-        toggleInventoryText.style.display = 'block'; // Show "Press I" text when inventory is hidden
+        
     }
 }
 // Event listener for key press (I key)
@@ -1151,25 +1208,7 @@ function addTextWithTempColor(elementId, text, tempColor, Replace = true) {
         element.style.color = 'azure'; // Reset to default color (azure)
     }, 1000); // Adjust delay time (in milliseconds) as needed
 }
-function addItemToInventory(itemId, newQuantity) {
-    // Function to add an item from ListOfAllItems to Inventory with a specified quantity
-    // Find the item in ListOfAllItems by itemId
-    const itemToAdd = saveFile.ListOfAllItems.find(item => item.id === itemId);
-    if (itemToAdd) {
-        // Clone the item from ListOfAllItems and set its quantity
-        const newItem = {
-            id: itemToAdd.id,
-            Name: itemToAdd.Name,
-            quantity: newQuantity,
-            quality: itemToAdd.quality
-        };
 
-        // Add the new item to the Inventory array
-        saveFile.Inventory.push(newItem);
-    } else {
-        console.error(`Item with id ${itemId} not found in ListOfAllItems.`);
-    }
-}
 function openSettings(number) {
     let parent; // Declare parent variable outside the switch statement
     switch (number) {
@@ -1251,10 +1290,11 @@ function loadFileClickHandler() {
     }
 }
 function DiedScreen(atackMethod){
-    let defaultPhrase = "You died because of "
+    let defaultPhrase = "You died because "
     let FinalText = defaultPhrase + atackMethod;
     addTextWithTempColor('.main_section', FinalText,'red',true)
-    // TODO fast travel 3 
+    // TODO: add button for it
+    // TODO FT: died screen
 
 }
 function ResetFileClickHandler(){
@@ -1269,61 +1309,6 @@ function ResetFileClickHandler(){
         return;
     }
 }
-//try {
-    // Add event listener for save file click
-    if (savefileId) {
-        if (!savefileId.hasAttribute('data-listener-added')) {
-            savefileId.addEventListener("click", saveFileClickHandler);
-            savefileId.setAttribute('data-listener-added', 'true');
-        }
-    }
-
-    // Remove event listener for save file click
-    if (savefileId) {
-        if (savefileId.hasAttribute('data-listener-added')) {
-            savefileId.removeEventListener("click", saveFileClickHandler);
-            savefileId.removeAttribute('data-listener-added');
-        }
-    }
-
-    // Add event listener for load file click
-    if (loadfileId) {
-        if (!loadfileId.hasAttribute('data-listener-added')) {
-            loadfileId.addEventListener("click", loadFileClickHandler);
-            loadfileId.setAttribute('data-listener-added', 'true');
-        }
-    }
-
-    // Remove event listener for load file click
-    if (loadfileId) {
-        if (loadfileId.hasAttribute('data-listener-added')) {
-            loadfileId.removeEventListener("click", loadFileClickHandler);
-            loadfileId.removeAttribute('data-listener-added');
-        }
-    }
-
-    // Add event listener for RestartGame click
-    if (RestartGame) {
-        if (!RestartGame.hasAttribute('data-listener-added')) {
-            RestartGame.addEventListener("click", ResetFileClickHandler);
-            RestartGame.setAttribute('data-listener-added', 'true');
-        }
-    }
-
-    // Remove event listener for RestartGame click
-    if (RestartGame) {
-        if (RestartGame.hasAttribute('data-listener-added')) {
-            RestartGame.removeEventListener("click", ResetFileClickHandler);
-            RestartGame.removeAttribute('data-listener-added');
-        }
-    }
-    console.log('heloo')
-/*
-} catch (error) {
-    console.log(error);
-    console.log('halooooo')
-}
-*/
 // Function to clear button content
 function clearButtonContent() {
     choices_section_title.innerHTML = "";
@@ -1350,14 +1335,14 @@ function ResetEffectBarToDefault(saveFile){
             if (titleElement) {
                 if(Bar == 'Control'){
                     const effectText = saveFile.Debuff_SpashText[Bar][7];
+                    titleElement.style.color = saveFile.Debuff_SpashText_Color[1][7];
                     document.querySelector(`.${Bar}Title`).innerHTML = `  ${effectText}.`;
                 }else{
                     const effectText = saveFile.Debuff_SpashText[Bar][0];
                     document.querySelector(`.${Bar}Title`).innerHTML = `  ${effectText}.`;
+                    titleElement.style.color = saveFile.Debuff_SpashText_Color[0][0];
                 }
-                const effectColor = saveFile.Debuff_SpashText_Color[0];
                 
-                titleElement.style.color = effectColor;
                 
             }
             
@@ -1439,5 +1424,52 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
     document.querySelector(elementId).innerHTML = '';
     // Start printing characters
     printCharacter();
-    
 }
+// Add event listener for save file click
+if (savefileId) {
+    if (!savefileId.hasAttribute('data-listener-added')) {
+        savefileId.addEventListener("click", saveFileClickHandler);
+        savefileId.setAttribute('data-listener-added', 'true');
+    }
+}
+
+// Remove event listener for save file click
+if (savefileId) {
+    if (savefileId.hasAttribute('data-listener-added')) {
+        savefileId.removeEventListener("click", saveFileClickHandler);
+        savefileId.removeAttribute('data-listener-added');
+    }
+}
+
+// Add event listener for load file click
+if (loadfileId) {
+    if (!loadfileId.hasAttribute('data-listener-added')) {
+        loadfileId.addEventListener("click", loadFileClickHandler);
+        loadfileId.setAttribute('data-listener-added', 'true');
+    }
+}
+
+// Remove event listener for load file click
+if (loadfileId) {
+    if (loadfileId.hasAttribute('data-listener-added')) {
+        loadfileId.removeEventListener("click", loadFileClickHandler);
+        loadfileId.removeAttribute('data-listener-added');
+    }
+}
+
+// Add event listener for RestartGame click
+if (RestartGame) {
+    if (!RestartGame.hasAttribute('data-listener-added')) {
+        RestartGame.addEventListener("click", ResetFileClickHandler);
+        RestartGame.setAttribute('data-listener-added', 'true');
+    }
+}
+
+// Remove event listener for RestartGame click
+if (RestartGame) {
+    if (RestartGame.hasAttribute('data-listener-added')) {
+        RestartGame.removeEventListener("click", ResetFileClickHandler);
+        RestartGame.removeAttribute('data-listener-added');
+    }
+}
+console.log('heloo')
