@@ -45,12 +45,12 @@ let CurrentPageNumber = 1;
 let SaveForest = {
     'LatestNumData': NaN,
     'saveParent': {
-        section0: {},
-        section1: {},
-        section2: {},
-        section3: {},
-        section4: {},
-        section5: {},
+        'section0': {1:2},
+        'section1': {1:2},
+        'section2': {1:2},
+        'section3': {1:2},
+        'section4': {1:2},
+        'section5': {1:2},
     }
 }
 
@@ -72,16 +72,16 @@ function LoadedSaves() {
     //  TODO: display current name in span if available
     const savedForestString = localStorage.getItem('SaveForest');
     if (savedForestString) {
-        SaveForest = JSON.parse(savedForestString);
+        SaveForest = savedForestString;
         
         const lastUsedNumSaveFile = SaveForest['LatestNumData'];
         if (lastUsedNumSaveFile) {
             for (let i = 0; i <= lastUsedNumSaveFile; i++) {
                 const gameNameElement = document.getElementById(`gameName${i}`); // 0 - 5 
-                saveData = SaveForest['saveParent'][`section${i}`]
+                saveData = SaveForest['saveParent'][`section${i}`];
                 if (saveData) {
-                    gameNameElement.innerHTML = `Save ${saveData['saveFile'['saveFileNumber']]}`;
-                }else{
+                    gameNameElement.textContent = `Save ${saveData['saveFileNumber']}`;
+                } else {
                     document.querySelector('.load_gameS').disable;
                     gameNameElement.innerHTML = ''; // Clear empty slots
                 }
@@ -110,45 +110,48 @@ function startup(userConfirmed) {
         }else if(userConfirmed == 2){
             console.log("User declined to load last save. Starting a new game.");
             startScreen.dataset.visible = 'true';
-            newGame(saveFileNum);
+            newGame();
         }
     }else{
         console.log('Nothing in Session')
         loadLatestGame(0)
     }
 }
-// Function to save game
 function saveGame(NumSection){
+    saveData = LatestsaveFile;
     //TODO fix this
-    let savedSaveFile;
-    
-    savedSaveFile = localStorage.setItem(`saveData${saveFileNum}-${CurrentPageNumber}`, JSON.stringify(saveData));
     const gameIndex = NumSection - 1; // Adjust index for zero-based arrays
     const gameNameElement = document.getElementById(`gameName${NumSection}`);
+    SaveForest['saveParent'][`section${NumSection}`] = saveData;
 
     // Update game name display
     if (SaveForest['LatestNumData']) {
-        gameNameElement.textContent = `Save ${currentGameIndex}`;
+        gameNameElement.textContent = `Save ${saveData}`;
+    } else {
+        gameNameElement.textContent = `Save ${1}`;
+        currentGameIndex = 1;
     }
     SaveForest['LatestNumData'] = currentGameIndex;
+    
+    JSON.stringify(localStorage.setItem('SaveForest', SaveForest));
     // Increment game index for the next save
     currentGameIndex++;
+    saveData['saveFileNumber']++;
     
-
     console.log(`Saving game ${saveFileNum}`);
 }
-// Function to load game data from localStorage
-function loadGame(saveFilenNum) {
+
+function loadGame(saveFileNum) {
     //TODO: gameload fix this
     if (saveFileNum !== null && saveFileNum !== 0) {
         console.log('Loading game id=0', saveFileNum);
-        let FOO = document.getElementById(`gameName${saveFilenNum}-${CurrentPageNumber}`);
-        let loadedSaveFile = localStorage.getItem(`saveData${saveFilenNum}-${CurrentPageNumber}`);
+        //let FOO = document.getElementById(`gameName${saveFilenNum}-${CurrentPageNumber}`);
+        let loadedSaveFile = JSON.parse(localStorage.getItem('SaveForest'));
         console.log('Save file ' + saveFileNum + ' loaded');
 
         // Update saveData with loaded data
         if (loadedSaveFile) {
-            Object.assign(saveData, loadedSaveFile);
+            saveData = loadedSaveFile; // Parse the string into an object
             console.log('Save file updated:', saveData);
             clearButtonContent();
             story(saveData);
@@ -156,8 +159,8 @@ function loadGame(saveFilenNum) {
             console.error('Error: Loaded save file is invalid');
         }
     } else if (saveFileNum === 0) {
-        openSettings(1)
-        loadLatestGame(0)
+        openSettings(1);
+        loadLatestGame(0);
     }
 }
 // Function to delete game
@@ -179,28 +182,30 @@ function deleteGame(index) {
 }
 // Function to load the game from localStorage
 function loadLatestGame(LoadFile) {
-    let loadedSaveFile;
+    let loadedSaveData;
     startScreen.dataset.visible = 'false';
     if(LoadFile == 0){
-        loadedSaveFile = JSON.parse(sessionStorage.getItem('LatestsaveFile'));
+        loadedSaveData = JSON.parse(sessionStorage.getItem('LatestsaveFile'));
+        saveData = loadedSaveData;
     }else{
-        loadedSaveFile = JSON.parse(localStorage.getItem('saveData'+LoadFile));
+        loadedSaveData = JSON.parse(localStorage.getItem('SaveForest'));
+        saveData = loadedSaveData['saveParent']['section0'];
     }
-    if (loadedSaveFile) {
-        console.log('Loaded save file:', loadedSaveFile);
-        saveData = loadedSaveFile;
+    if (loadedSaveData) {
+        console.log('Loaded save file:', loadedSaveData);
+        
         SetinnerHTMLToZero()
         story(saveData);
     } else {
         console.error('Error: Loaded save file is invalid.');
-        newGame(saveFileNum); // Fallback to starting a new game if loading fails
+        newGame(); // Fallback to starting a new game if loading fails
     }
 }
 // newGame makes the prep for a new game
-function newGame(saveFileNum){
+function newGame(){
     console.log('new game');
     let saveData = {
-        "saveFileNumber" : saveFileNum,
+        "saveFileNumber" : 1,
         "current_storyLine_progress" : 0,
         "current_chapter_progress" : 0,
         "current_title_progress" : 0,
@@ -709,8 +714,8 @@ function story(saveData){
     //  make a save of latest version of saveData
     if(!ResetFile){
         sessionStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
-        SaveForest['saveParent']['section0'] = JSON.stringify(LatestsaveFile);
-        localStorage.setItem('SaveForest',SaveForest);
+        SaveForest['saveParent']['section0'] = LatestsaveFile;
+        localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
     }
     ButtonPressed(saveData, saveData.Choices_Possible);    //  print current Buttons
     manageHiddenInfo(saveData, false);  //  hides info if need be
