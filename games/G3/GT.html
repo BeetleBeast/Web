@@ -83,6 +83,7 @@
             </div>
             <div class="bottom-links Side-Menu_Class">
                 <a href="/index.html" class="asettings Side-Menu_Class"><button type="button" role="button" class="settings">Exit</button></a>
+                <a class="asettings Side-Menu_Class"><button type="button" role="button" class="settings_Load" onclick="openSettings(1)">Load</button></a>
             </div>
         </div>
         <div class="content-wrapper">
@@ -138,6 +139,14 @@
                             <th class="Th_NameH">ID / Name</th>
                             <th class="Del_gameH">Delete</th>
                         </tr>
+                        <tr class="section_Latest">
+                            <td class="Num1"><h5 class="Numberchanger">1</h5></td>
+                            <td class="SaveGame"></td>
+                            <td class="load_gameS"><button class="Section00_load_game BtnTable" onclick="loadGame(0)">load Game</button></td>
+                            <td class="Th_Name"><span class="Section00_Name  SpanSName00" id="gameName0">Latest-Game</span></td>
+                            <td class="Del_game"><button class="Section00_Del_G BtnTable DEl" onclick="deleteGame(0)">Delete Game</button></td>
+                        </tr>
+                        <hr/>
                         <tr class="section0">
                             <td class="Num1"><h5 class="Numberchanger">1</h5></td>
                             <td class="SaveGame"><button class="Section0_Save_Game BtnTable" onclick="saveGame(1)">Save Game</button></td>
@@ -175,7 +184,7 @@
                         </tr>
                         <tr class="section5">
                             <td class="pagesLG"><button class="Btn-pages-back Btn-backforward thick-arrow-left-SG" title="back btn" type="button"></button></td>
-                            <td class="pagesLG"><p class="Num1">page-<span class="pageNum Num1">1</span></p></td>
+                            <td class="pagesLG"><p class="Num1">page<span class="pageNum Num1">1</span></p></td>
                             <td class="pagesLG"><button class="Btn-pages-forward Btn-backforward thick-arrow-right-SG" title="forward btn"></button></td>
                         </tr>
                     </tbody>

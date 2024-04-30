@@ -29,6 +29,7 @@ const SicknessBar = document.querySelector('.Sickness');    //  width: 1%;
 const BleedBar = document.querySelector('.Bleed');  //  width: 1%;
 const ControlBar = document.querySelector('.Control');  //  width: 100%;
 const ControlTitle = document.querySelector('.ControlTitle');
+const load_S = document.querySelector('.settings_Load');
 const Side_Influences_Title = document.querySelector('.Side-Influences_Title');
 
 var saveFileNum = 0;    //  TODO : make it usefull
@@ -39,57 +40,166 @@ let amount = 0;
 let previousAmounts = {};
 let IsPacified = false;
 let ResetFile = false;
-let saveFile = {}; // Initialize saveFile object
+let saveData = {}; // Initialize saveData object
+let CurrentPageNumber = 1;
+let SaveForest = {
+    'LatestNumData': NaN,
+    'saveParent': {
+        section0: {},
+        section1: {},
+        section2: {},
+        section3: {},
+        section4: {},
+        section5: {},
+    }
+}
 
 // Function to start up the game
-window.onload = function() {
+window.onload = function () {
+    LoadedSaves()
     startup()
 };
+/* 
+TODO:   
+    add localstorage for number for span, latest span number and the saveData and latestsaveFile
+    load span on load (correct number for page)
 
+    savefile has already the correct number
+    number last
+}
+*/
+function LoadedSaves() {
+    //  TODO: display current name in span if available
+    const savedForestString = localStorage.getItem('SaveForest');
+    if (savedForestString) {
+        SaveForest = JSON.parse(savedForestString);
+        
+        const lastUsedNumSaveFile = SaveForest['LatestNumData'];
+        if (lastUsedNumSaveFile) {
+            for (let i = 0; i <= lastUsedNumSaveFile; i++) {
+                const gameNameElement = document.getElementById(`gameName${i}`); // 0 - 5 
+                saveData = SaveForest['saveParent'][`section${i}`]
+                if (saveData) {
+                    gameNameElement.innerHTML = `Save ${saveData['saveFile'['saveFileNumber']]}`;
+                }else{
+                    document.querySelector('.load_gameS').disable;
+                    gameNameElement.innerHTML = ''; // Clear empty slots
+                }
+                document.querySelector('.SaveGame').disable;
+            }
+            console.log('Game data loaded from localStorage');
+        } else {
+            console.log(`No saves available`);
+        }
+    } else {
+        console.log(`No save data found`);
+    }
+}
 // Function to start up or load the game
 function startup(userConfirmed) {
     Title.innerHTML = 'Gatcha tower';
     startScreen.dataset.visible = 'true';
     Side_Menu4.dataset.visible = 'false';
+    //load_S.dataset.visible = 'false';
     if(!sessionStorage.getItem('LatestsaveFile')){
         if (userConfirmed == 1) {
             console.log("User confirmed to load last save.");
             startScreen.dataset.visible = 'false';
-            loadGame(0);
+            load_S.dataset.visible = 'true';
+            loadLatestGame(0);
         }else if(userConfirmed == 2){
             console.log("User declined to load last save. Starting a new game.");
-            startScreen.dataset.visible = 'false';
+            startScreen.dataset.visible = 'true';
             newGame(saveFileNum);
         }
     }else{
-        loadGame(0)
+        console.log('Nothing in Session')
+        loadLatestGame(0)
     }
 }
+// Function to save game
+function saveGame(NumSection){
+    //TODO fix this
+    let savedSaveFile;
+    
+    savedSaveFile = localStorage.setItem(`saveData${saveFileNum}-${CurrentPageNumber}`, JSON.stringify(saveData));
+    const gameIndex = NumSection - 1; // Adjust index for zero-based arrays
+    const gameNameElement = document.getElementById(`gameName${NumSection}`);
 
+    // Update game name display
+    if (SaveForest['LatestNumData']) {
+        gameNameElement.textContent = `Save ${currentGameIndex}`;
+    }
+    SaveForest['LatestNumData'] = currentGameIndex;
+    // Increment game index for the next save
+    currentGameIndex++;
+    
+
+    console.log(`Saving game ${saveFileNum}`);
+}
+// Function to load game data from localStorage
+function loadGame(saveFilenNum) {
+    //TODO: gameload fix this
+    if (saveFileNum !== null && saveFileNum !== 0) {
+        console.log('Loading game id=0', saveFileNum);
+        let FOO = document.getElementById(`gameName${saveFilenNum}-${CurrentPageNumber}`);
+        let loadedSaveFile = localStorage.getItem(`saveData${saveFilenNum}-${CurrentPageNumber}`);
+        console.log('Save file ' + saveFileNum + ' loaded');
+
+        // Update saveData with loaded data
+        if (loadedSaveFile) {
+            Object.assign(saveData, loadedSaveFile);
+            console.log('Save file updated:', saveData);
+            clearButtonContent();
+            story(saveData);
+        } else {
+            console.error('Error: Loaded save file is invalid');
+        }
+    } else if (saveFileNum === 0) {
+        openSettings(1)
+        loadLatestGame(0)
+    }
+}
+// Function to delete game
+function deleteGame(index) {
+    const gameIndex = index - 1; // Adjust index for zero-based arrays
+
+    // Clear game name display
+    document.getElementById(`gameName${gameIndex + 1}`).textContent = '';
+
+    // Remove game data from localStorage
+    localStorage.removeItem(`SaveFile${gameIndex}`);
+
+    console.log(`Deleting game ${index}`);
+
+    // Check if there are no more saved games to remove stored index
+    if (localStorage.length <= 2) {
+        localStorage.removeItem('storedI');
+    }
+}
 // Function to load the game from localStorage
-function loadGame(LoadFile) {
+function loadLatestGame(LoadFile) {
     let loadedSaveFile;
     startScreen.dataset.visible = 'false';
     if(LoadFile == 0){
         loadedSaveFile = JSON.parse(sessionStorage.getItem('LatestsaveFile'));
     }else{
-        //
+        loadedSaveFile = JSON.parse(localStorage.getItem('saveData'+LoadFile));
     }
     if (loadedSaveFile) {
         console.log('Loaded save file:', loadedSaveFile);
-        saveFile = loadedSaveFile;
+        saveData = loadedSaveFile;
         SetinnerHTMLToZero()
-        story(saveFile);
+        story(saveData);
     } else {
         console.error('Error: Loaded save file is invalid.');
         newGame(saveFileNum); // Fallback to starting a new game if loading fails
     }
 }
-
 // newGame makes the prep for a new game
 function newGame(saveFileNum){
     console.log('new game');
-    let saveFile = {
+    let saveData = {
         "saveFileNumber" : saveFileNum,
         "current_storyLine_progress" : 0,
         "current_chapter_progress" : 0,
@@ -368,8 +478,8 @@ function newGame(saveFileNum){
     
 
     // start story
-    ResetEffectBarToDefault(saveFile)
-    story(saveFile);
+    ResetEffectBarToDefault(saveData)
+    story(saveData);
     
     
 }
@@ -417,7 +527,7 @@ class Player {
         this.Level++;
         console.log(`${this.Name} levels up to level ${this.Level}!`);
     }
-    applyDebuff(effect, amount, saveFile, elementId) {
+    applyDebuff(effect, amount, saveData, elementId) {
         if(previousAmounts[effect] >= 100){
             console.log('applydebuff amount is over 100')
             this.updateDebuff(effect, 100);
@@ -426,7 +536,7 @@ class Player {
             if (elementId) {
                 const element = document.querySelector(elementId);
                 if (element) {
-                    this.updateUI(effect, 100, saveFile, element);
+                    this.updateUI(effect, 100, saveData, element);
                 }
             }
         }else{
@@ -434,10 +544,10 @@ class Player {
             // Apply debuff effect to the player
             this.updateDebuff(effect, amount);
             // If the debuff effect already exists, update its amount
-            if (!saveFile.Debuff_Effects[effect]) {
-                saveFile.Debuff_Effects[effect] = { Amount: amount };
+            if (!saveData.Debuff_Effects[effect]) {
+                saveData.Debuff_Effects[effect] = { Amount: amount };
             } else {
-                saveFile.Debuff_Effects[effect].Amount = amount;
+                saveData.Debuff_Effects[effect].Amount = amount;
             }
             console.log(`Applying ${amount} on debuff: ${effect}`);
             
@@ -445,7 +555,7 @@ class Player {
             if (elementId) {
                 const element = document.querySelector(elementId);
                 if (element) {
-                    this.updateUI(effect, amount, saveFile, element);
+                    this.updateUI(effect, amount, saveData, element);
                 }
             }
         }
@@ -458,13 +568,13 @@ class Player {
             this.Debuff_Effects[effect].Amount = amount;
         }
     }
-    updateUI(effect, amount, saveFile, element) {
+    updateUI(effect, amount, saveData, element) {
         console.log('updateUI is activated id=156')
         // Update UI text to reflect debuff description if available
         if (previousAmounts[effect] >= 100) {
             console.log('updateUI: amount is over 100');
             const existingContent = Side_Menu3.innerHTML.trim();
-            const maxEffectDescription = saveFile.Debuff_Effects['MAXeffect'].Description;
+            const maxEffectDescription = saveData.Debuff_Effects['MAXeffect'].Description;
             
             if (existingContent.includes(maxEffectDescription)) {
                 // Update existing description if it's already present
@@ -479,7 +589,7 @@ class Player {
             }
         }else{
             console.log('updateUI amount is under 100 id=157')
-            const effectDescription = saveFile.Debuff_Effects[effect].Description;
+            const effectDescription = saveData.Debuff_Effects[effect].Description;
             const newDescription = `${effectDescription}, ${amount}`;
             
             // Calculate the new amount based on the previous amount for this effect
@@ -548,7 +658,7 @@ let character = new Player({
 */
 
 
-function story(saveFile){
+function story(saveData){
     //const Title = document.querySelector('.Quest_Title');
     const Title = document.querySelector('.Quest_Title');
     const main_section = document.querySelector('.main_section');
@@ -582,38 +692,41 @@ function story(saveFile){
     const ControlBar = document.querySelector('.Control');  //  width: 100%;
     const ControlTitle = document.querySelector('.ControlTitle');
     const Side_Influences_Title = document.querySelector('.Side-Influences_Title');
+    const load_games_save = document.querySelector('.load_gameS');
 
 
-    let LatestsaveFile = saveFile;
+    let LatestsaveFile = saveData;
 
     console.log("Begin of story");
         
 
     //  Start of story by initialising progress/
-    let current_storyLine_progress = saveFile.current_storyLine_progress
-    let current_title_progress = saveFile.current_title_progress
-    let current_storyLine = saveFile.storyLine_progress[saveFile.current_chapter_progress][current_storyLine_progress]
-    let current_title = saveFile.title_progress[current_title_progress]
+    let current_storyLine_progress = saveData.current_storyLine_progress
+    let current_title_progress = saveData.current_title_progress
+    let current_storyLine = saveData.storyLine_progress[saveData.current_chapter_progress][current_storyLine_progress]
+    let current_title = saveData.title_progress[current_title_progress]
 
-    //  make a save of latest version of saveFile
+    //  make a save of latest version of saveData
     if(!ResetFile){
         sessionStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
+        SaveForest['saveParent']['section0'] = JSON.stringify(LatestsaveFile);
+        localStorage.setItem('SaveForest',SaveForest);
     }
-    ButtonPressed(saveFile, saveFile.Choices_Possible);    //  print current Buttons
-    manageHiddenInfo(saveFile, false);  //  hides info if need be
+    ButtonPressed(saveData, saveData.Choices_Possible);    //  print current Buttons
+    manageHiddenInfo(saveData, false);  //  hides info if need be
     title_progress(current_title,current_title_progress)    //  print current title
     scene_progress(current_storyLine,current_storyLine_progress)    //  print current scene text
-    // Initialize the first page of the inventory
-    populateInventory(saveFile,1);
-    choices_section_title.innerHTML = saveFile.Buttons_section_title[saveFile.current_chapter_progress][saveFile.current_storyLine_progress];// print current scection title
+    // Initialize the first page of the inventoryload_games_save
+    populateInventory(saveData,1);
+    choices_section_title.innerHTML = saveData.Buttons_section_title[saveData.current_chapter_progress][saveData.current_storyLine_progress];// print current scection title
     Side_Menu4.dataset.visible = 'true';
-    //DisplayDebuffTextWithColors(saveFile,)
+    //DisplayDebuffTextWithColors(saveData,)
     
-    function getButtonValues(saveFile) {
+    function getButtonValues(saveData) {
         const buttonValues = [];
-        for (const buttonValue of saveFile.Buttons) {
-            const chapter = saveFile.Choices_Possible[saveFile.current_chapter_progress];
-            const scene = chapter[saveFile.current_storyLine_progress];
+        for (const buttonValue of saveData.Buttons) {
+            const chapter = saveData.Choices_Possible[saveData.current_chapter_progress];
+            const scene = chapter[saveData.current_storyLine_progress];
             const value = scene[buttonValue];
             if (value) {
                 console.log('value id=12',value)
@@ -623,7 +736,7 @@ function story(saveFile){
         return buttonValues;
     }
     
-    function buttonClickHandler(buttonValue, saveFile) {
+    function buttonClickHandler(buttonValue, saveData) {
         return () => {
             console.log('Button ' + buttonValue + ' pressed'); // Log button press
             if (!isCurrentlyPrinting) {
@@ -632,52 +745,52 @@ function story(saveFile){
                 stopTyping = false;
                 switch (buttonValue) {
                     case 1:
-                        console.log("Choices_Made before change id=253 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
-                        saveFile.Choices_Made[saveFile.current_chapter_progress].pop();
-                        console.log("Choices_Made after change id=254 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
-                        previousScene(saveFile);
+                        console.log("Choices_Made before change id=253 ", saveData.Choices_Made[saveData.current_chapter_progress]);
+                        saveData.Choices_Made[saveData.current_chapter_progress].pop();
+                        console.log("Choices_Made after change id=254 ", saveData.Choices_Made[saveData.current_chapter_progress]);
+                        previousScene(saveData);
                         break;
                     case 2:
                     case 3:
                     case 4:
                     case 5:
                     case 6:
-                        console.log("Choices_Made before change id=261 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
-                        saveFile.Choices_Made[saveFile.current_chapter_progress].push(buttonValue);
-                        Choices_calculator(saveFile);
-                        console.log("Choices_Made after change id=262 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
+                        console.log("Choices_Made before change id=261 ", saveData.Choices_Made[saveData.current_chapter_progress]);
+                        saveData.Choices_Made[saveData.current_chapter_progress].push(buttonValue);
+                        Choices_calculator(saveData);
+                        console.log("Choices_Made after change id=262 ", saveData.Choices_Made[saveData.current_chapter_progress]);
                         break;
                     case 7:
-                        console.log("Choices_Made before change id=255 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
-                        saveFile.Choices_Made[saveFile.current_chapter_progress].push(buttonValue);
-                        console.log("Choices_Made after change id=256 ", saveFile.Choices_Made[saveFile.current_chapter_progress]);
-                        nextScene(saveFile);
+                        console.log("Choices_Made before change id=255 ", saveData.Choices_Made[saveData.current_chapter_progress]);
+                        saveData.Choices_Made[saveData.current_chapter_progress].push(buttonValue);
+                        console.log("Choices_Made after change id=256 ", saveData.Choices_Made[saveData.current_chapter_progress]);
+                        nextScene(saveData);
                         break;
                 }
             } else {
                 stopTyping = true;
-                console.log('current_storyLine_progress id=8', saveFile.current_storyLine_progress);
-                slowTypingText(saveFile.storyLine_progress[saveFile.current_chapter_progress][saveFile.current_storyLine_progress]['playerText'], '.main_section', undefined, undefined, true);
-                slowTypingText(saveFile.title_progress[saveFile.current_title_progress]['title_story_' + saveFile.current_title_progress], '.Quest_Title', undefined, undefined, true);
+                console.log('current_storyLine_progress id=8', saveData.current_storyLine_progress);
+                slowTypingText(saveData.storyLine_progress[saveData.current_chapter_progress][saveData.current_storyLine_progress]['playerText'], '.main_section', undefined, undefined, true);
+                slowTypingText(saveData.title_progress[saveData.current_title_progress]['title_story_' + saveData.current_title_progress], '.Quest_Title', undefined, undefined, true);
                 isCurrentlyPrinting = false;
-                console.log('Print everything for scene number ', saveFile.current_storyLine_progress);
+                console.log('Print everything for scene number ', saveData.current_storyLine_progress);
                 
             }
         }
     }
-    function ButtonPressed(saveFile, infogetter) {
-        const buttonValues = getButtonValues(saveFile);
+    function ButtonPressed(saveData, infogetter) {
+        const buttonValues = getButtonValues(saveData);
         for (const buttonValue of buttonValues) {
             const button = document.querySelector('.Sh_' + buttonValue);
             if (button) {
                 // Get the value of the button from the scene
-                const chapter = infogetter[saveFile.current_chapter_progress];
-                const scene = chapter[saveFile.current_storyLine_progress];
+                const chapter = infogetter[saveData.current_chapter_progress];
+                const scene = chapter[saveData.current_storyLine_progress];
                 const value = scene[buttonValue];
                 // Set the inner HTML of the button
                 button.innerHTML = value;
                 // Add event listener to the button
-                const handler = buttonClickHandler(buttonValue, saveFile);
+                const handler = buttonClickHandler(buttonValue, saveData);
                 button.removeEventListener("click", button.handlerReference); // Remove previous listener to avoid duplicates
                 button.addEventListener("click", handler);
                 button.handlerReference = handler; // Store the reference to the handler function
@@ -685,11 +798,11 @@ function story(saveFile){
             }
         }
     }
-    function manageHiddenInfo(saveFile, revealInfo) {
-        const current_storyLine = saveFile.current_storyLine_progress;
-        const current_chapter = saveFile.current_chapter_progress;
+    function manageHiddenInfo(saveData, revealInfo) {
+        const current_storyLine = saveData.current_storyLine_progress;
+        const current_chapter = saveData.current_chapter_progress;
         // Check if Buttons_Hidden data exists for the current chapter and story line
-        const Buttons_Hidden = saveFile.Buttons_Hidden[current_chapter]?.[current_storyLine];
+        const Buttons_Hidden = saveData.Buttons_Hidden[current_chapter]?.[current_storyLine];
         if (Buttons_Hidden) {
             // Iterate over the hidden button values for the current scene
             Buttons_Hidden.forEach(buttonValue => {
@@ -723,9 +836,9 @@ function story(saveFile){
         }
     }
     // Function to populate inventory grid based on current page
-    function populateInventory(saveFile,pageNumber) {
+    function populateInventory(saveData,pageNumber) {
         let number = 1;
-        const inventoryItems = saveFile.Inventory;
+        const inventoryItems = saveData.Inventory;
         const pageSize = 16; // Number of items per page (adjust based on grid size)
 
         const pageContainer = document.getElementById(`page${pageNumber}`);
@@ -753,10 +866,10 @@ function story(saveFile){
         });
     }
 
-    function addItemToInventory(saveFile, itemId, newQuantity) {
+    function addItemToInventory(saveData, itemId, newQuantity) {
         // Function to add an item from ListOfAllItems to Inventory with a specified quantity
         // Find the item in ListOfAllItems by itemId
-        const itemToAdd = saveFile.ListOfAllItems.find(item => item.id === itemId);
+        const itemToAdd = saveData.ListOfAllItems.find(item => item.id === itemId);
         if (itemToAdd) {
             // Clone the item from ListOfAllItems and set its quantity
             const newItem = {
@@ -767,19 +880,19 @@ function story(saveFile){
             };
 
             // Add the new item to the Inventory array
-            saveFile.Inventory.push(newItem);
-            populateInventory(saveFile,1)
+            saveData.Inventory.push(newItem);
+            populateInventory(saveData,1)
         } else {
             console.error(`Item with id ${itemId} not found in ListOfAllItems.`);
         }
     }
-    function DeBuffParentFunction(effect, amount, saveFile, elementId){
-        character.applyDebuff(effect, amount, saveFile, elementId)
-        deBuffEffectHandler(effect, amount, saveFile, elementId);
+    function DeBuffParentFunction(effect, amount, saveData, elementId){
+        character.applyDebuff(effect, amount, saveData, elementId)
+        deBuffEffectHandler(effect, amount, saveData, elementId);
     }
-    function deBuffEffectHandler(effect, amount, saveFile, element){
-        let Confused_Text = saveFile.storyLine_progress_Confused[saveFile.current_chapter_progress][saveFile.current_storyLine_progress]["sceneText"];
-        let Confused_Title = saveFile.storyLine_progress_Confused[saveFile.current_chapter_progress][saveFile.current_storyLine_progress]["sceneTitle"];
+    function deBuffEffectHandler(effect, amount, saveData, element){
+        let Confused_Text = saveData.storyLine_progress_Confused[saveData.current_chapter_progress][saveData.current_storyLine_progress]["sceneText"];
+        let Confused_Title = saveData.storyLine_progress_Confused[saveData.current_chapter_progress][saveData.current_storyLine_progress]["sceneTitle"];
         switch(effect){
             case 'Weakened':
                 break;
@@ -831,7 +944,7 @@ function story(saveFile){
                 console.log('activate confusion')            
                 slowTypingText(Confused_Text, '.main_section', undefined, 35);
                 slowTypingText(Confused_Title, '.Quest_Title');
-                ButtonPressed(saveFile, saveFile.Choices_Possible_Confused);
+                ButtonPressed(saveData, saveData.Choices_Possible_Confused);
                 break;
             case 'MAXeffect':
                 break;
@@ -853,47 +966,47 @@ function story(saveFile){
         console.log('current_storyLine',current_storyLine);
         console.log('current_storyLine_progress', current_storyLine_progress);
     }
-    function nextScene(saveFile) {
+    function nextScene(saveData) {
         // Increment the current scene progress only if there are more scenes available
         // current place > next place
-        let lastChoiceIndex = saveFile.Choices_Made[saveFile.current_chapter_progress].length - 1;
-        let LastButtonPressed = saveFile.Choices_Made[saveFile.current_chapter_progress][lastChoiceIndex];
-        if (saveFile.current_storyLine_progress < Object.keys(saveFile.storyLine_progress[saveFile.current_chapter_progress]).length - 1 && saveFile.current_chapter_progress == 0) {
-            saveFile.current_storyLine_progress++;
+        let lastChoiceIndex = saveData.Choices_Made[saveData.current_chapter_progress].length - 1;
+        let LastButtonPressed = saveData.Choices_Made[saveData.current_chapter_progress][lastChoiceIndex];
+        if (saveData.current_storyLine_progress < Object.keys(saveData.storyLine_progress[saveData.current_chapter_progress]).length - 1 && saveData.current_chapter_progress == 0) {
+            saveData.current_storyLine_progress++;
             console.log('pressed NextScene id=5')
-        }else if(saveFile.current_storyLine_progress < Object.keys(saveFile.storyLine_progress[saveFile.current_chapter_progress]).length - 1 && saveFile.current_chapter_progress == 1){
-            switch(saveFile.current_storyLine_progress){
+        }else if(saveData.current_storyLine_progress < Object.keys(saveData.storyLine_progress[saveData.current_chapter_progress]).length - 1 && saveData.current_chapter_progress == 1){
+            switch(saveData.current_storyLine_progress){
                 case 0:
-                    saveFile.current_storyLine_progress = LastButtonPressed - 1; //from 1 to 5 are scene other area
+                    saveData.current_storyLine_progress = LastButtonPressed - 1; //from 1 to 5 are scene other area
                     break;
                 case 1:
                 case 2:
                 case 3:
                 case 4:
                 case 5:
-                    saveFile.current_storyLine_progress += 5;
+                    saveData.current_storyLine_progress += 5;
                     break;
                 case 6:
                     if(LastButtonPressed == 2){
-                        saveFile.current_storyLine_progress += 6;                    
+                        saveData.current_storyLine_progress += 6;                    
                     }else {
-                        saveFile.current_storyLine_progress += 5;
+                        saveData.current_storyLine_progress += 5;
                     }
                     break;
                 case 7:
                 case 8:
                 case 9:
                 case 10:
-                    saveFile.current_storyLine_progress += 5;
+                    saveData.current_storyLine_progress += 5;
                     break;
             }
         } else {
             // Handle the case when there are no more scenes in the current chapter
             console.log('No more scenes available in this chapter');
-            nextChapter(saveFile)
+            nextChapter(saveData)
             return;
         }
-        // Re-render the story with updated saveFile
+        // Re-render the story with updated saveData
         console.log('id=9')
         choices_section_title.innerHTML = " ";
         Button_Choice1.innerHTML = " ";
@@ -903,32 +1016,32 @@ function story(saveFile){
         Button_Choice5.innerHTML = " ";
         Button_Choice6.innerHTML = " ";
         Button_Choice7.innerHTML = " ";
-        story(saveFile);
+        story(saveData);
     }
     
-    function previousScene(saveFile) {
+    function previousScene(saveData) {
         // Decrement the current scene progress only if it's not the first scene
-        if (saveFile.current_storyLine_progress > 0 && saveFile.current_chapter_progress == 0) {
-            saveFile.current_storyLine_progress--;
+        if (saveData.current_storyLine_progress > 0 && saveData.current_chapter_progress == 0) {
+            saveData.current_storyLine_progress--;
             console.log('pressed previousScene')
-        }else if(saveFile.current_storyLine_progress > 0 && saveFile.current_chapter_progress == 1){
-            switch(saveFile.current_storyLine_progress){
+        }else if(saveData.current_storyLine_progress > 0 && saveData.current_chapter_progress == 1){
+            switch(saveData.current_storyLine_progress){
                 case 1:
                 case 2:
                 case 3:
                 case 4:
                 case 5:
-                    saveFile.current_storyLine_progress = 0;
+                    saveData.current_storyLine_progress = 0;
                     break;
                 case 6:
                 case 7:
                 case 8:
                 case 9:
                 case 10:
-                    saveFile.current_storyLine_progress -= 5;
+                    saveData.current_storyLine_progress -= 5;
                     break;
                 case 12:
-                    saveFile.current_storyLine_progress -= 6;
+                    saveData.current_storyLine_progress -= 6;
             }
                 
         }else {
@@ -936,7 +1049,7 @@ function story(saveFile){
             console.log('Already at the beginning of the chapter');
             previousChapter();
         }
-        // Re-render the story with updated saveFile
+        // Re-render the story with updated saveData
         choices_section_title.innerHTML = " ";
         Button_Choice1.innerHTML = " ";
         Button_Choice2.innerHTML = " ";
@@ -945,21 +1058,21 @@ function story(saveFile){
         Button_Choice5.innerHTML = " ";
         Button_Choice6.innerHTML = " ";
         Button_Choice7.innerHTML = " ";
-        story(saveFile);
+        story(saveData);
     }
     
-    function nextChapter(saveFile) {
+    function nextChapter(saveData) {
         // Increment the current chapter progress only if there are more chapters available
-        if (saveFile.current_chapter_progress < Object.keys(saveFile.storyLine_progress).length - 1) {
-            saveFile.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
-            saveFile.current_chapter_progress++;
-            saveFile.current_title_progress++;
+        if (saveData.current_chapter_progress < Object.keys(saveData.storyLine_progress).length - 1) {
+            saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
+            saveData.current_chapter_progress++;
+            saveData.current_title_progress++;
             console.log('Next Chapter');
         } else {
             // Handle the case when there are no more chapters
             console.log('No more chapters available');
         }
-        // Re-render the story with updated saveFile
+        // Re-render the story with updated saveData
         choices_section_title.innerHTML = " ";
         Button_Choice1.innerHTML = " ";
         Button_Choice2.innerHTML = " ";
@@ -968,32 +1081,32 @@ function story(saveFile){
         Button_Choice5.innerHTML = " ";
         Button_Choice6.innerHTML = " ";
         Button_Choice7.innerHTML = " ";
-        story(saveFile);
+        story(saveData);
     }
     
-    function previousChapter(saveFile) {
+    function previousChapter(saveData) {
         // Decrement the current chapter progress only if it's not the first chapter
-        if (saveFile.current_chapter_progress > 0) {
-            saveFile.current_chapter_progress--;
-            saveFile.current_title_progress--;
-            saveFile.current_storyLine_progress = 0; // Reset the scene progress to start of the previous chapter
+        if (saveData.current_chapter_progress > 0) {
+            saveData.current_chapter_progress--;
+            saveData.current_title_progress--;
+            saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the previous chapter
             console.log('Previous Chapter');
         } else {
             // Handle the case when it's already the first chapter
             console.log('Already at the beginning of the story');
         }
-        // Re-render the story with updated saveFile
-        story(saveFile);
+        // Re-render the story with updated saveData
+        story(saveData);
     }
     
 
-    function Choices_calculator(saveFile){
-        let current_storyLine_progress = saveFile.current_storyLine_progress;
-        let current_chapter = saveFile.current_chapter_progress;
-        let lastChoiceIndex = saveFile.Choices_Made[saveFile.current_chapter_progress].length - 1;
-        let LastButtonPressed = saveFile.Choices_Made[saveFile.current_chapter_progress][lastChoiceIndex];
-        let value = saveFile.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
-        let Choices_Possible = saveFile.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed]
+    function Choices_calculator(saveData){
+        let current_storyLine_progress = saveData.current_storyLine_progress;
+        let current_chapter = saveData.current_chapter_progress;
+        let lastChoiceIndex = saveData.Choices_Made[saveData.current_chapter_progress].length - 1;
+        let LastButtonPressed = saveData.Choices_Made[saveData.current_chapter_progress][lastChoiceIndex];
+        let value = saveData.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
+        let Choices_Possible = saveData.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed]
         switch (current_chapter){
             case 0:
                 switch (lastChoiceIndex) {
@@ -1028,7 +1141,7 @@ function story(saveFile){
                         valueSTRING.push(value);
                         break;
                 }
-                nextScene(saveFile);
+                nextScene(saveData);
                 break;
             case 1:
                 switch(current_storyLine_progress){
@@ -1038,23 +1151,23 @@ function story(saveFile){
                     case 3:
                     case 4:
                     case 5:
-                        nextScene(saveFile)
+                        nextScene(saveData)
                         break;
                     case 6:
                         switch(LastButtonPressed){
                             case 2:
                                 //  Investigate the hidden alcove
-                                nextScene(saveFile);//  I.E. scene 12
+                                nextScene(saveData);//  I.E. scene 12
                                 break;
                             case 3:
                                 character.rested(10);
-                                DeBuffParentFunction('Pacified', 20, saveFile, ".choices_section")
-                                DeBuffParentFunction('Confusion', 20, saveFile, ".choices_section")
+                                DeBuffParentFunction('Pacified', 20, saveData, ".choices_section")
+                                DeBuffParentFunction('Confusion', 20, saveData, ".choices_section")
                                 //  Listen to the soothing melody of the flower
                                 break;
                             case 4:
                                 //  Continue exploring the passage
-                                nextScene(saveFile);
+                                nextScene(saveData);
                                 break;
                             case 5:
                                 character.rested(20)
@@ -1063,7 +1176,7 @@ function story(saveFile){
                                 //  Feel the texture of the moss beneath your fingertips
                                 main_section.appendChild(document.createElement('br'));
                                 addTextWithTempColor('.main_section',"You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.",'blue',false)
-                                manageHiddenInfo(saveFile, true)
+                                manageHiddenInfo(saveData, true)
                                 break;
                         }
                         break;
@@ -1097,7 +1210,7 @@ function story(saveFile){
                                 break;
                             case 4:
                                 //  nextcene
-                                nextScene(saveFile);
+                                nextScene(saveData);
                                 break;
                             case 5:
                                 //  +? in theoretical int
@@ -1111,7 +1224,7 @@ function story(saveFile){
                         switch(LastButtonPressed){
                             case 2:
                                 //  Follow the stream to its source
-                                nextScene(saveFile);
+                                nextScene(saveData);
                                 break;
                             case 3:
                                 //  
@@ -1154,7 +1267,7 @@ function story(saveFile){
                                 //  
                                 break;
                             case 6:
-                                addItemToInventory(saveFile,4,1);
+                                addItemToInventory(saveData,4,1);
                                 addTextWithTempColor('.main_section',"You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.",'green',false)
                                 break;
                         }
@@ -1179,7 +1292,7 @@ function story(saveFile){
 
 
 
-return saveFile
+return saveData
 }
 // Function to toggle visibility of the inventory
 function toggleInventory() {
@@ -1250,10 +1363,10 @@ function saveFileClickHandler() {
     // TODO:  save logic urgent
 
     if (saveFileNum !== null) {
-        console.log('Saving game id=1', saveFile);
+        console.log('Saving game id=1', saveData);
         savefileId.innerHTML = "Save Successful";
-        let saveFileJSON = saveFile;
-        localStorage.setItem('saveFile' + saveFileNum, JSON.stringify(saveFileJSON));
+        let saveFileJSON = saveData;
+        localStorage.setItem('saveData' + saveFileNum, JSON.stringify(saveFileJSON));
         sessionStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
         console.log('Save file ' + saveFileNum + ' saved');
         saveFileNum++;
@@ -1269,15 +1382,15 @@ function loadFileClickHandler() {
     if (saveFileNum !== null && saveFileNum !== 'latest') {
         console.log('Loading game id=0', saveFileNum);
         loadfileId.innerHTML = "Load Successful";
-        let loadedSaveFile = JSON.parse(localStorage.getItem('saveFile' + saveFileNum));
+        let loadedSaveFile = JSON.parse(localStorage.getItem('saveData' + saveFileNum));
         console.log('Save file ' + saveFileNum + ' loaded');
 
-        // Update saveFile with loaded data
+        // Update saveData with loaded data
         if (loadedSaveFile) {
-            Object.assign(saveFile, loadedSaveFile);
-            console.log('Save file updated:', saveFile);
+            Object.assign(saveData, loadedSaveFile);
+            console.log('Save file updated:', saveData);
             clearButtonContent();
-            story(saveFile);
+            story(saveData);
         } else {
             console.error('Error: Loaded save file is invalid');
         }
@@ -1287,17 +1400,19 @@ function loadFileClickHandler() {
         let loadedSaveFile = JSON.parse(sessionStorage.getItem('LatestsaveFile'));
         console.log('Latest save file loaded');
 
-        // Update saveFile with loaded data
+        // Update saveData with loaded data
         if (loadedSaveFile) {
-            Object.assign(saveFile, loadedSaveFile);
-            console.log('Save file updated:', saveFile);
+            Object.assign(saveData, loadedSaveFile);
+            console.log('Save file updated:', saveData);
             clearButtonContent();
-            story(saveFile);
+            story(saveData);
         } else {
             console.error('Error: Loaded save file is invalid');
         }
     }
 }
+//TODO: load_games_save
+
 function DiedScreen(atackMethod){
     let defaultPhrase = "You died because "
     let FinalText = defaultPhrase + atackMethod;
@@ -1312,6 +1427,7 @@ function ResetFileClickHandler(){
     let confirmed = confirm('Do you want to reset the game( all unsaved actions will be lost! ).');
     if (confirmed){
         sessionStorage.removeItem('LatestsaveFile');
+        localStorage.removeItem(SaveForest['LatestNumData'])
         console.log('Removed LatestsaveFile! id=809')
         ResetFile = true;
         window.location.reload();
@@ -1327,7 +1443,7 @@ function clearButtonContent() {
     });
 }
 
-function ResetEffectBarToDefault(saveFile){
+function ResetEffectBarToDefault(saveData){
     // Reset all bar widths to 0 except ControlBar
     const barElement = [PainBar, FatigueBar, FearBar, StressBar, TraumaBar, AddictionBar, SicknessBar, BleedBar];
     barElement.forEach(id => {
@@ -1340,17 +1456,17 @@ function ResetEffectBarToDefault(saveFile){
     ControlBar.style.width = '70%';
     const barIds = ['Pain', 'Fatigue', 'Fear', 'Stress', 'Trauma', 'Addiction', 'Sickness', 'Bleed', 'Control'];
     barIds.forEach(Bar => {
-        if (saveFile.Debuff_SpashText){
+        if (saveData.Debuff_SpashText){
             const titleElement = document.querySelector(`.${Bar}Title`);
             if (titleElement) {
                 if(Bar == 'Control'){
-                    const effectText = saveFile.Debuff_SpashText[Bar][7];
-                    titleElement.style.color = saveFile.Debuff_SpashText_Color[1][7];
+                    const effectText = saveData.Debuff_SpashText[Bar][7];
+                    titleElement.style.color = saveData.Debuff_SpashText_Color[1][7];
                     document.querySelector(`.${Bar}Title`).innerHTML = `  ${effectText}.`;
                 }else{
-                    const effectText = saveFile.Debuff_SpashText[Bar][0];
+                    const effectText = saveData.Debuff_SpashText[Bar][0];
                     document.querySelector(`.${Bar}Title`).innerHTML = `  ${effectText}.`;
-                    titleElement.style.color = saveFile.Debuff_SpashText_Color[0][0];
+                    titleElement.style.color = saveData.Debuff_SpashText_Color[0][0];
                 }
                 
                 
@@ -1361,26 +1477,26 @@ function ResetEffectBarToDefault(saveFile){
     });
     
     
-    //ControlTitle.style.color = saveFile.Debuff_SpashText_Color[0];
+    //ControlTitle.style.color = saveData.Debuff_SpashText_Color[0];
 }
-function AddDebuffBar(saveFile, BarId, BarLength) {
-    saveFile.CurrentDebuffBar[BarId]['BarLength'] = BarLength;
+function AddDebuffBar(saveData, BarId, BarLength) {
+    saveData.CurrentDebuffBar[BarId]['BarLength'] = BarLength;
     const SBar = document.querySelector(BarId);
     if (SBar) {
         SBar.style.width = BarLength + '%';
     }
 }
-function DisplayDebuffTextWithColors(saveFile, Bar, BarLength) {
+function DisplayDebuffTextWithColors(saveData, Bar, BarLength) {
     const index = Math.floor(BarLength / 10) * 10;
 
     if (Side_Influences_Title) {
         Side_Influences_Title.innerHTML = ''; // Clear previous content
         if (index >= 0 && index <= 100) {
-            Side_Influences_Title.innerHTML = Bar + ': ' + saveFile.Debuff_SpashText[Bar][index];
-            Side_Influences_Title.style.color = saveFile.Debuff_SpashText_Color[index];
+            Side_Influences_Title.innerHTML = Bar + ': ' + saveData.Debuff_SpashText[Bar][index];
+            Side_Influences_Title.style.color = saveData.Debuff_SpashText_Color[index];
         } else if (index === 100) {
-            Side_Influences_Title.innerHTML = Bar + ': ' + saveFile.Debuff_SpashText[Bar][110];
-            Side_Influences_Title.style.color = saveFile.Debuff_SpashText_Color[110];
+            Side_Influences_Title.innerHTML = Bar + ': ' + saveData.Debuff_SpashText[Bar][110];
+            Side_Influences_Title.style.color = saveData.Debuff_SpashText_Color[110];
         }
     }
     if(BarLength === 0){
