@@ -548,7 +548,7 @@ body{
 .parent{
 	z-index: 9999999;
 	flex-direction: row;
-	border: 2px solid rgba(68, 68, 68, 0.418);
+	/*border: 2px solid rgba(68, 68, 68, 0.418);*/
 	padding: 0;
 	margin: 0;
 	transition: opacity 0.5s ease-in-out;
@@ -709,7 +709,7 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable){
     justify-content:flex-start;
     flex-direction: column;
     height: -moz-fit-content;
-    height: fit-content;
+    height: fit-content;/*TODO:	add correct width and height 	*/
     margin-bottom: 20px;
 }
 

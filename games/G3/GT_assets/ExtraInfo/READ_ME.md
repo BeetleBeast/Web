@@ -8,7 +8,8 @@ OR
 tower power up
 
 
-
+add phone too
+apk?
 
 
 make some place restore effects

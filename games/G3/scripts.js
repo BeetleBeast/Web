@@ -34,7 +34,6 @@ const Side_Influences_Title = document.querySelector('.Side-Influences_Title');
 
 var currentdate = new Date();
 var datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1) + "/" + currentdate.getFullYear() + "|" + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-var saveFileNum = 0;    //  TODO : make it usefull
 let valueSTRING = [];
 let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
@@ -1316,7 +1315,7 @@ function ResetFileClickHandler(){
         ResetFile = true;
         window.location.reload();
     }else{
-        return;//FIXME: section0 resetfile
+        return;
     }
 }
 // Function to clear button content
@@ -1443,7 +1442,7 @@ function saveGame(NumSection){
     SaveForest[`section${NumSection}`] = saveData;
     SaveForest['section0'] = saveData;
     localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
-    console.log(`Saving game ${saveFileNum}`);
+    console.log(`Saving game ${saveData['saveDataName']}`);
 }
 function loadGame(NumSection) {
     SaveForest = JSON.parse(localStorage.getItem('SaveForest'));
