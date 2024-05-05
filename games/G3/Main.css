@@ -166,6 +166,15 @@ body{
     word-wrap: break-word;
 	word-break: keep-all;
 }
+.disable{
+    cursor:not-allowed;
+    -webkit-user-select: none;
+    user-select: none;
+    font-family: 'Orbitron', sans-serif;
+    text-decoration: none;
+    animation: none;
+    transition: none;
+}
 #text{
 	white-space: pre-wrap;
 }
@@ -688,7 +697,7 @@ button{
     right: 40%;
     top: -50px;
 }
-button:active:not(.disable, .Btn-backforward){
+button:active:not(.Section0_load_game, .Btn-backforward,.disable){
     box-shadow: none;
     transform: translateY(5px);
 }

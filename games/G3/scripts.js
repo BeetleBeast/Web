@@ -32,6 +32,8 @@ const ControlTitle = document.querySelector('.ControlTitle');
 const load_S = document.querySelector('.settings_Load');
 const Side_Influences_Title = document.querySelector('.Side-Influences_Title');
 
+var currentdate = new Date();
+var datetime = currentdate.getDay() + "/" + currentdate.getMonth() + "/" + currentdate.getFullYear() + "|" + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
 var saveFileNum = 0;    //  TODO : make it usefull
 let valueSTRING = [];
 let isCurrentlyPrinting = false; // set true if is printing and false if not
@@ -43,161 +45,84 @@ let ResetFile = false;
 let saveData = {}; // Initialize saveData object
 let CurrentPageNumber = 1;
 let SaveForest = {
-    'LatestNumData': NaN,
-    'saveParent': {
-        'section0': {1:2},
-        'section1': {1:2},
-        'section2': {1:2},
-        'section3': {1:2},
-        'section4': {1:2},
-        'section5': {1:2},
-    }
-}
+    'section0' : {},
+};
 
 // Function to start up the game
 window.onload = function () {
-    LoadedSaves()
     startup()
+    LoadedSaves()
 };
 /* 
 TODO:   
-    add localstorage for number for span, latest span number and the saveData and latestsaveFile
-    load span on load (correct number for page)
+    1. get startmenu for new game
+    2. reload page gets to game
+    3. reload game gets startmenu
 
-    savefile has already the correct number
-    number last
+    instead of removing local remove session when restarting game
 }
 */
+
 function LoadedSaves() {
     //  TODO: display current name in span if available
-    const savedForestString = localStorage.getItem('SaveForest');
-    if (savedForestString) {
-        SaveForest = savedForestString;
-        
-        const lastUsedNumSaveFile = SaveForest['LatestNumData'];
-        if (lastUsedNumSaveFile) {
-            for (let i = 0; i <= lastUsedNumSaveFile; i++) {
-                const gameNameElement = document.getElementById(`gameName${i}`); // 0 - 5 
-                saveData = SaveForest['saveParent'][`section${i}`];
-                if (saveData) {
-                    gameNameElement.textContent = `Save ${saveData['saveFileNumber']}`;
-                } else {
-                    document.querySelector('.load_gameS').disable;
-                    gameNameElement.innerHTML = ''; // Clear empty slots
-                }
-                document.querySelector('.SaveGame').disable;
+    const saveForestString = localStorage.getItem('SaveForest');
+    if (saveForestString) {
+        SaveForest = JSON.parse(saveForestString);
+        for (let i = 0; i < 6; i++) {
+            const sectionSpanName = document.getElementById(`gameName${i}`); // 0 - 5 
+            saveData = SaveForest[`section${i}`];
+            if (saveData) {
+                document.querySelector(`.Section${i}_load_game`).disabled = false;
+                document.querySelector(`.Section${i}_load_game`).classList.remove('disable');
+                sectionSpanName.textContent = `${saveData['saveDataName']}\\|/${datetime}`;
+                console.log('Game data loaded from localStorage('+i+').');
+            } else {
+                sectionSpanName.innerHTML = ''; // Clear empty slots
+                document.querySelector(`.Section${i}_load_game`).disabled = true;
+                document.querySelector(`.Section${i}_load_game`).classList.add('disable');
+                console.log('No save for '+i+' available');
             }
-            console.log('Game data loaded from localStorage');
-        } else {
-            console.log(`No saves available`);
         }
     } else {
-        console.log(`No save data found`);
+        console.log('SaveForest does not exist');
     }
+    
 }
 // Function to start up or load the game
 function startup(userConfirmed) {
+    console.log(typeof(userConfirmed))
     Title.innerHTML = 'Gatcha tower';
     startScreen.dataset.visible = 'true';
     Side_Menu4.dataset.visible = 'false';
+    SaveForest = JSON.parse(localStorage.getItem('SaveForest')|| '{}');
     //load_S.dataset.visible = 'false';
-    if(!sessionStorage.getItem('LatestsaveFile')){
-        if (userConfirmed == 1) {
+    if ( SaveForest['section0'] == null) {
+        if (userConfirmed === 1) {
             console.log("User confirmed to load last save.");
             startScreen.dataset.visible = 'false';
             load_S.dataset.visible = 'true';
             loadLatestGame(0);
-        }else if(userConfirmed == 2){
+        }else if(userConfirmed === 2){
             console.log("User declined to load last save. Starting a new game.");
-            startScreen.dataset.visible = 'true';
+            startScreen.dataset.visible = 'false';
             newGame();
         }
     }else{
-        console.log('Nothing in Session')
+        console.log('checking last Session')
         loadLatestGame(0)
     }
 }
-function saveGame(NumSection){
-    saveData = LatestsaveFile;
-    //TODO fix this
-    const gameIndex = NumSection - 1; // Adjust index for zero-based arrays
-    const gameNameElement = document.getElementById(`gameName${NumSection}`);
-    SaveForest['saveParent'][`section${NumSection}`] = saveData;
-
-    // Update game name display
-    if (SaveForest['LatestNumData']) {
-        gameNameElement.textContent = `Save ${saveData}`;
-    } else {
-        gameNameElement.textContent = `Save ${1}`;
-        currentGameIndex = 1;
-    }
-    SaveForest['LatestNumData'] = currentGameIndex;
-    
-    JSON.stringify(localStorage.setItem('SaveForest', SaveForest));
-    // Increment game index for the next save
-    currentGameIndex++;
-    saveData['saveFileNumber']++;
-    
-    console.log(`Saving game ${saveFileNum}`);
-}
-
-function loadGame(saveFileNum) {
-    //TODO: gameload fix this
-    if (saveFileNum !== null && saveFileNum !== 0) {
-        console.log('Loading game id=0', saveFileNum);
-        //let FOO = document.getElementById(`gameName${saveFilenNum}-${CurrentPageNumber}`);
-        let loadedSaveFile = JSON.parse(localStorage.getItem('SaveForest'));
-        console.log('Save file ' + saveFileNum + ' loaded');
-
-        // Update saveData with loaded data
-        if (loadedSaveFile) {
-            saveData = loadedSaveFile; // Parse the string into an object
-            console.log('Save file updated:', saveData);
-            clearButtonContent();
-            story(saveData);
-        } else {
-            console.error('Error: Loaded save file is invalid');
-        }
-    } else if (saveFileNum === 0) {
-        openSettings(1);
-        loadLatestGame(0);
-    }
-}
-// Function to delete game
-function deleteGame(index) {
-    const gameIndex = index - 1; // Adjust index for zero-based arrays
-
-    // Clear game name display
-    document.getElementById(`gameName${gameIndex + 1}`).textContent = '';
-
-    // Remove game data from localStorage
-    localStorage.removeItem(`SaveFile${gameIndex}`);
-
-    console.log(`Deleting game ${index}`);
-
-    // Check if there are no more saved games to remove stored index
-    if (localStorage.length <= 2) {
-        localStorage.removeItem('storedI');
-    }
-}
 // Function to load the game from localStorage
-function loadLatestGame(LoadFile) {
-    let loadedSaveData;
+function loadLatestGame(userConfirmed) {
     startScreen.dataset.visible = 'false';
-    if(LoadFile == 0){
-        loadedSaveData = JSON.parse(sessionStorage.getItem('LatestsaveFile'));
-        saveData = loadedSaveData;
-    }else{
-        loadedSaveData = JSON.parse(localStorage.getItem('SaveForest'));
-        saveData = loadedSaveData['saveParent']['section0'];
-    }
-    if (loadedSaveData) {
-        console.log('Loaded save file:', loadedSaveData);
-        
-        SetinnerHTMLToZero()
+    try {
+        SaveForest = JSON.parse(localStorage.getItem('SaveForest'));
+        saveData = SaveForest['section0'];
+        console.log('Loaded save file:', saveData);
+        clearButtonContent();
         story(saveData);
-    } else {
-        console.error('Error: Loaded save file is invalid.');
+    } catch (error) {
+        console.error('Error parsing SaveForest:', error);
         newGame(); // Fallback to starting a new game if loading fails
     }
 }
@@ -205,7 +130,7 @@ function loadLatestGame(LoadFile) {
 function newGame(){
     console.log('new game');
     let saveData = {
-        "saveFileNumber" : 1,
+        "saveDataName" : "Main",
         "current_storyLine_progress" : 0,
         "current_chapter_progress" : 0,
         "current_title_progress" : 0,
@@ -703,7 +628,6 @@ function story(saveData){
     let LatestsaveFile = saveData;
 
     console.log("Begin of story");
-        
 
     //  Start of story by initialising progress/
     let current_storyLine_progress = saveData.current_storyLine_progress
@@ -713,9 +637,14 @@ function story(saveData){
 
     //  make a save of latest version of saveData
     if(!ResetFile){
-        sessionStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
-        SaveForest['saveParent']['section0'] = LatestsaveFile;
+        //let SaveForestSection0 = SaveForest['section0'];
+        SaveForest['section0'] = LatestsaveFile;
+        console.log('LatestsaveFile:',LatestsaveFile)
+        console.log('SaveForest["section0"]:',SaveForest['section0'])
+        console.log('SaveForest:',SaveForest)
+        //console.log('SaveForest:',JSON.parse(SaveForest))
         localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
+        console.log('SaveForest:',SaveForest)
     }
     ButtonPressed(saveData, saveData.Choices_Possible);    //  print current Buttons
     manageHiddenInfo(saveData, false);  //  hides info if need be
@@ -1362,62 +1291,6 @@ function openSettings(number) {
     parent.classList.toggle('visible');
     parent.dataset.visible = !isVisible;
 }
-// Save file click handler function
-function saveFileClickHandler() {
-    console.log('Saving game');
-    // TODO:  save logic urgent
-
-    if (saveFileNum !== null) {
-        console.log('Saving game id=1', saveData);
-        savefileId.innerHTML = "Save Successful";
-        let saveFileJSON = saveData;
-        localStorage.setItem('saveData' + saveFileNum, JSON.stringify(saveFileJSON));
-        sessionStorage.setItem('LatestsaveFile', JSON.stringify(LatestsaveFile));
-        console.log('Save file ' + saveFileNum + ' saved');
-        saveFileNum++;
-        return saveFileNum;
-    }
-}
-
-// Load file click handler function
-function loadFileClickHandler() {
-    console.log('Loading game');
-    let saveFileNum = prompt('Which Save file number (type "latest" if unsure)');
-
-    if (saveFileNum !== null && saveFileNum !== 'latest') {
-        console.log('Loading game id=0', saveFileNum);
-        loadfileId.innerHTML = "Load Successful";
-        let loadedSaveFile = JSON.parse(localStorage.getItem('saveData' + saveFileNum));
-        console.log('Save file ' + saveFileNum + ' loaded');
-
-        // Update saveData with loaded data
-        if (loadedSaveFile) {
-            Object.assign(saveData, loadedSaveFile);
-            console.log('Save file updated:', saveData);
-            clearButtonContent();
-            story(saveData);
-        } else {
-            console.error('Error: Loaded save file is invalid');
-        }
-    } else if (saveFileNum === 'latest') {
-        console.log('Loading latest game id=1');
-        loadfileId.innerHTML = "Load Successful";
-        let loadedSaveFile = JSON.parse(sessionStorage.getItem('LatestsaveFile'));
-        console.log('Latest save file loaded');
-
-        // Update saveData with loaded data
-        if (loadedSaveFile) {
-            Object.assign(saveData, loadedSaveFile);
-            console.log('Save file updated:', saveData);
-            clearButtonContent();
-            story(saveData);
-        } else {
-            console.error('Error: Loaded save file is invalid');
-        }
-    }
-}
-//TODO: load_games_save
-
 function DiedScreen(atackMethod){
     let defaultPhrase = "You died because "
     let FinalText = defaultPhrase + atackMethod;
@@ -1425,19 +1298,31 @@ function DiedScreen(atackMethod){
     addTextWithTempColor('.main_section', FinalText,'red',true,false)
     // TODO: add button for DiedScreen !!!
     // TODO FT: died screen
-
 }
 function ResetFileClickHandler(){
     console.log('Resetting File?')
     let confirmed = confirm('Do you want to reset the game( all unsaved actions will be lost! ).');
     if (confirmed){
-        sessionStorage.removeItem('LatestsaveFile');
-        localStorage.removeItem(SaveForest['LatestNumData'])
+        // Get the SaveForest object from localStorage
+        SaveForest = JSON.parse(localStorage.getItem('SaveForest') || '{}');
+
+        // Check if the section0 property exists
+        if (SaveForest && SaveForest.section0) {
+            // Remove the section0 property
+            SaveForest.section0 = null;
+
+            // Save the updated SaveForest object back to localStorage
+            localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
+        } else {
+            // Handle the case where section0 property does not exist
+            console.log('section0 does not exist in SaveForest');
+        }
+
         console.log('Removed LatestsaveFile! id=809')
         ResetFile = true;
         window.location.reload();
     }else{
-        return;
+        return;//FIXME: section0 resetfile
     }
 }
 // Function to clear button content
@@ -1447,7 +1332,6 @@ function clearButtonContent() {
         button.innerHTML = "";
     });
 }
-
 function ResetEffectBarToDefault(saveData){
     // Reset all bar widths to 0 except ControlBar
     const barElement = [PainBar, FatigueBar, FearBar, StressBar, TraumaBar, AddictionBar, SicknessBar, BleedBar];
@@ -1473,15 +1357,9 @@ function ResetEffectBarToDefault(saveData){
                     document.querySelector(`.${Bar}Title`).innerHTML = `  ${effectText}.`;
                     titleElement.style.color = saveData.Debuff_SpashText_Color[0][0];
                 }
-                
-                
             }
-            
-            
         }
     });
-    
-    
     //ControlTitle.style.color = saveData.Debuff_SpashText_Color[0];
 }
 function AddDebuffBar(saveData, BarId, BarLength) {
@@ -1509,16 +1387,6 @@ function DisplayDebuffTextWithColors(saveData, Bar, BarLength) {
     }else{
         Bar.dataset.visible = 'true';
     }
-}
-function SetinnerHTMLToZero() {
-    if (choices_section_title)  choices_section_title.innerHTML = " ";
-    if (Button_Choice1)         Button_Choice1.innerHTML = " ";
-    if (Button_Choice2)         Button_Choice2.innerHTML = " ";
-    if (Button_Choice3)         Button_Choice3.innerHTML = " ";
-    if (Button_Choice4)         Button_Choice4.innerHTML = " ";
-    if (Button_Choice5)         Button_Choice5.innerHTML = " ";
-    if (Button_Choice6)         Button_Choice6.innerHTML = " ";
-    if (Button_Choice7)         Button_Choice7.innerHTML = " ";
 }
 function slowTypingText(text, elementId, index = 0, speed = 200, printImmediately = false) {
     // Check if the text has already been printed
@@ -1556,6 +1424,84 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
     document.querySelector(elementId).innerHTML = '';
     // Start printing characters
     printCharacter();
+}
+function saveGame(NumSection){
+    try {
+        saveData = LatestsaveFile;
+    } catch (error) {
+        console.log(error,'No saveData to get to be able to save');
+    }
+    
+    //TODO fix this
+    const gameIndex = NumSection - 1; // Adjust index for zero-based arrays
+    const sectionSpanName = document.getElementById(`gameName${NumSection}`);
+    sectionSpanName.textContent = `${saveData['saveDataName']}\\|/${datetime}`;
+    //SaveForest['saveParent'][PlaceHolder] = saveData;// FIXME: PlaceHolder
+    let NewGame = saveData['saveDataName'] == 'Main';
+    let NewName = 'Main';//  input from user
+    let inputEvent = 'ccccc'//  temp
+    if(!inputEvent == NewName){
+        NewName = 'InputEvent';
+    }
+        // Update game name display
+    if(NewGame){
+        sectionSpanName.textContent = `${NewName}\\|/${datetime}`;
+        console.log('via newGame')
+    }else{
+        sectionSpanName.textContent = `${saveData['saveDataName']}\\|/${datetime}`;
+        console.log('via old game')
+    }
+    //  if latest save only save latest else save on both
+    if(NumSection == 0){
+        SaveForest['section0'] = saveData;
+    }else{
+        SaveForest[`section${NumSection}`] = saveData;
+        SaveForest['section0'] = saveData;
+    }
+    
+    localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
+
+    
+    console.log(`Saving game ${saveFileNum}`);
+}
+function loadGame(saveFileNum) {
+    //TODO: gameload fix this
+    if (saveFileNum !== null && saveFileNum !== 0) {
+        console.log('Loading game id=0', saveFileNum);
+        //let FOO = document.getElementById(`gameName${saveFilenNum}-${CurrentPageNumber}`);
+        let loadedSaveFile = JSON.parse(localStorage.getItem('SaveForest'));
+        console.log('Save file ' + saveFileNum + ' loaded');
+
+        // Update saveData with loaded data
+        if (loadedSaveFile) {
+            saveData = loadedSaveFile; // Parse the string into an object
+            console.log('Save file updated:', saveData);
+            clearButtonContent();
+            story(saveData);
+        } else {
+            console.error('Error: Loaded save file is invalid');
+        }
+    } else if (saveFileNum === 0) {
+        openSettings(1);
+        loadLatestGame(0);
+    }
+}
+// Function to delete game
+function deleteGame(index) {
+    const gameIndex = index - 1; // Adjust index for zero-based arrays
+
+    // Clear game name display
+    document.getElementById(`gameName${gameIndex + 1}`).textContent = '';
+
+    // Remove game data from localStorage
+    localStorage.removeItem(`SaveFile${gameIndex}`);
+
+    console.log(`Deleting game ${index}`);
+
+    // Check if there are no more saved games to remove stored index
+    if (localStorage.length <= 2) {
+        localStorage.removeItem('storedI');
+    }
 }
 // Add event listener for save file click
 if (savefileId) {
@@ -1604,4 +1550,3 @@ if (RestartGame) {
         RestartGame.removeAttribute('data-listener-added');
     }
 }
-console.log('heloo')
