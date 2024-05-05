@@ -53,7 +53,7 @@ window.onload = function () {
     startup()
     LoadedSaves()
 };
-function LoadedSaves() {//  make same name same collor and last save another collor and fix time
+function LoadedSaves() {
     const saveForestString = localStorage.getItem('SaveForest');
     let lastbigesttime=0;
     if (saveForestString) {
@@ -62,8 +62,7 @@ function LoadedSaves() {//  make same name same collor and last save another col
             const sectionSpanName = document.getElementById(`gameName${i}`); // 0 - 5 
             saveData = SaveForest[`section${i}`];
             if(i === 0){
-
-            }else if (i > 0) {
+            }else if (i > 0 && saveData) {
                 document.querySelector(`.Section${i}_load_game`).disabled = false;
                 document.querySelector(`.Section${i}_load_game`).classList.remove('disable');
                 sectionSpanName.textContent = `${saveData['saveDataName']} | ${saveData['saveDataTime']}`;
@@ -1446,44 +1445,28 @@ function saveGame(NumSection){
     localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
     console.log(`Saving game ${saveFileNum}`);
 }
-function loadGame(saveFileNum) {
-    //TODO: gameload fix this
-    if (saveFileNum !== null && saveFileNum !== 0) {
-        console.log('Loading game id=0', saveFileNum);
-        //let FOO = document.getElementById(`gameName${saveFilenNum}-${CurrentPageNumber}`);
-        let loadedSaveFile = JSON.parse(localStorage.getItem('SaveForest'));
-        console.log('Save file ' + saveFileNum + ' loaded');
-
-        // Update saveData with loaded data
-        if (loadedSaveFile) {
-            saveData = loadedSaveFile; // Parse the string into an object
-            console.log('Save file updated:', saveData);
-            clearButtonContent();
-            story(saveData);
-        } else {
-            console.error('Error: Loaded save file is invalid');
-        }
-    } else if (saveFileNum === 0) {
+function loadGame(NumSection) {
+    SaveForest = JSON.parse(localStorage.getItem('SaveForest'));
+    saveData = SaveForest[`section${NumSection}`]
+    if (CurrentPageNumber == 1) {
+        console.log('Loading game id=0', NumSection);
+        startScreen.dataset.visible = 'false';
         openSettings(1);
-        loadLatestGame(0);
+        clearButtonContent();
+        ResetEffectBarToDefault(saveData);
+        story(saveData);
     }
 }
 // Function to delete game
-function deleteGame(index) {
-    const gameIndex = index - 1; // Adjust index for zero-based arrays
-
+function deleteGame(NumSection) {
+    SaveForest = JSON.parse(localStorage.getItem('SaveForest'));
+    saveData = SaveForest[`section${NumSection}`]
     // Clear game name display
-    document.getElementById(`gameName${gameIndex + 1}`).textContent = '';
-
+    document.getElementById(`gameName${NumSection}`).textContent = '';
     // Remove game data from localStorage
-    localStorage.removeItem(`SaveFile${gameIndex}`);
-
-    console.log(`Deleting game ${index}`);
-
-    // Check if there are no more saved games to remove stored index
-    if (localStorage.length <= 2) {
-        localStorage.removeItem('storedI');
-    }
+    SaveForest[`section${NumSection}`] = undefined;
+    localStorage.setItem('SaveForest',JSON.stringify(SaveForest));
+    console.log(`Deleting game ${NumSection}`);
 }
 // Add event listener for save file click
 if (savefileId) {
@@ -1492,7 +1475,6 @@ if (savefileId) {
         savefileId.setAttribute('data-listener-added', 'true');
     }
 }
-
 // Remove event listener for save file click
 if (savefileId) {
     if (savefileId.hasAttribute('data-listener-added')) {
@@ -1500,7 +1482,6 @@ if (savefileId) {
         savefileId.removeAttribute('data-listener-added');
     }
 }
-
 // Add event listener for load file click
 if (loadfileId) {
     if (!loadfileId.hasAttribute('data-listener-added')) {
@@ -1508,7 +1489,6 @@ if (loadfileId) {
         loadfileId.setAttribute('data-listener-added', 'true');
     }
 }
-
 // Remove event listener for load file click
 if (loadfileId) {
     if (loadfileId.hasAttribute('data-listener-added')) {
@@ -1516,7 +1496,6 @@ if (loadfileId) {
         loadfileId.removeAttribute('data-listener-added');
     }
 }
-
 // Add event listener for RestartGame click
 if (RestartGame) {
     if (!RestartGame.hasAttribute('data-listener-added')) {
@@ -1524,7 +1503,6 @@ if (RestartGame) {
         RestartGame.setAttribute('data-listener-added', 'true');
     }
 }
-
 // Remove event listener for RestartGame click
 if (RestartGame) {
     if (RestartGame.hasAttribute('data-listener-added')) {
