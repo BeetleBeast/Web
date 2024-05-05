@@ -33,7 +33,7 @@ const load_S = document.querySelector('.settings_Load');
 const Side_Influences_Title = document.querySelector('.Side-Influences_Title');
 
 var currentdate = new Date();
-var datetime = currentdate.getDay() + "/" + currentdate.getMonth() + "/" + currentdate.getFullYear() + "|" + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+var datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1) + "/" + currentdate.getFullYear() + "|" + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
 var saveFileNum = 0;    //  TODO : make it usefull
 let valueSTRING = [];
 let isCurrentlyPrinting = false; // set true if is printing and false if not
@@ -53,29 +53,34 @@ window.onload = function () {
     startup()
     LoadedSaves()
 };
-/* 
-TODO:   
-    1. get startmenu for new game
-    2. reload page gets to game
-    3. reload game gets startmenu
-
-    instead of removing local remove session when restarting game
-}
-*/
-
-function LoadedSaves() {
-    //  TODO: display current name in span if available
+function LoadedSaves() {//  make same name same collor and last save another collor and fix time
     const saveForestString = localStorage.getItem('SaveForest');
+    let lastbigesttime=0;
     if (saveForestString) {
         SaveForest = JSON.parse(saveForestString);
         for (let i = 0; i < 6; i++) {
             const sectionSpanName = document.getElementById(`gameName${i}`); // 0 - 5 
             saveData = SaveForest[`section${i}`];
-            if (saveData) {
+            if(i === 0){
+
+            }else if (i > 0) {
                 document.querySelector(`.Section${i}_load_game`).disabled = false;
                 document.querySelector(`.Section${i}_load_game`).classList.remove('disable');
-                sectionSpanName.textContent = `${saveData['saveDataName']}\\|/${datetime}`;
+                sectionSpanName.textContent = `${saveData['saveDataName']} | ${saveData['saveDataTime']}`;
                 console.log('Game data loaded from localStorage('+i+').');
+                if (saveData['saveDataName'] === "Main") {
+                    sectionSpanName.style.color = 'yellow';
+                } else {
+                    let formattedTime = saveData['saveDataTime'].replace(/[/:| ]/g, '');
+                    let timeAsNumber = parseInt(formattedTime);
+                
+                    if (timeAsNumber >= lastbigesttime) {
+                        lastbigesttime = timeAsNumber;
+                        sectionSpanName.style.color = 'green';
+                    } else {
+                        sectionSpanName.style.color = 'purple';
+                    }
+                }                
             } else {
                 sectionSpanName.innerHTML = ''; // Clear empty slots
                 document.querySelector(`.Section${i}_load_game`).disabled = true;
@@ -86,7 +91,6 @@ function LoadedSaves() {
     } else {
         console.log('SaveForest does not exist');
     }
-    
 }
 // Function to start up or load the game
 function startup(userConfirmed) {
@@ -95,8 +99,9 @@ function startup(userConfirmed) {
     startScreen.dataset.visible = 'true';
     Side_Menu4.dataset.visible = 'false';
     SaveForest = JSON.parse(localStorage.getItem('SaveForest')|| '{}');
+    TempLatestSave = JSON.parse(sessionStorage.getItem('TempLatestSave'));
     //load_S.dataset.visible = 'false';
-    if ( SaveForest['section0'] == null) {
+    if ( TempLatestSave == null) {
         if (userConfirmed === 1) {
             console.log("User confirmed to load last save.");
             startScreen.dataset.visible = 'false';
@@ -109,17 +114,23 @@ function startup(userConfirmed) {
         }
     }else{
         console.log('checking last Session')
-        loadLatestGame(0)
+        loadLatestGame(1)
     }
 }
 // Function to load the game from localStorage
 function loadLatestGame(userConfirmed) {
-    startScreen.dataset.visible = 'false';
+    startScreen.dataset.visible = 'false';// 0 = continue == local  1 = load == session
     try {
         SaveForest = JSON.parse(localStorage.getItem('SaveForest'));
-        saveData = SaveForest['section0'];
+        TempLatestSave = JSON.parse(sessionStorage.getItem('TempLatestSave'));
+        if(userConfirmed == 0){
+            saveData = SaveForest['section0'];
+        }else if(userConfirmed == 1){
+            saveData = TempLatestSave;
+        }
         console.log('Loaded save file:', saveData);
         clearButtonContent();
+        ResetEffectBarToDefault(saveData);
         story(saveData);
     } catch (error) {
         console.error('Error parsing SaveForest:', error);
@@ -131,6 +142,7 @@ function newGame(){
     console.log('new game');
     let saveData = {
         "saveDataName" : "Main",
+        "saveDataTime" : "",
         "current_storyLine_progress" : 0,
         "current_chapter_progress" : 0,
         "current_title_progress" : 0,
@@ -639,12 +651,9 @@ function story(saveData){
     if(!ResetFile){
         //let SaveForestSection0 = SaveForest['section0'];
         SaveForest['section0'] = LatestsaveFile;
-        console.log('LatestsaveFile:',LatestsaveFile)
-        console.log('SaveForest["section0"]:',SaveForest['section0'])
-        console.log('SaveForest:',SaveForest)
+        sessionStorage.setItem('TempLatestSave',JSON.stringify(LatestsaveFile));
         //console.log('SaveForest:',JSON.parse(SaveForest))
         localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
-        console.log('SaveForest:',SaveForest)
     }
     ButtonPressed(saveData, saveData.Choices_Possible);    //  print current Buttons
     manageHiddenInfo(saveData, false);  //  hides info if need be
@@ -1303,21 +1312,7 @@ function ResetFileClickHandler(){
     console.log('Resetting File?')
     let confirmed = confirm('Do you want to reset the game( all unsaved actions will be lost! ).');
     if (confirmed){
-        // Get the SaveForest object from localStorage
-        SaveForest = JSON.parse(localStorage.getItem('SaveForest') || '{}');
-
-        // Check if the section0 property exists
-        if (SaveForest && SaveForest.section0) {
-            // Remove the section0 property
-            SaveForest.section0 = null;
-
-            // Save the updated SaveForest object back to localStorage
-            localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
-        } else {
-            // Handle the case where section0 property does not exist
-            console.log('section0 does not exist in SaveForest');
-        }
-
+        sessionStorage.removeItem('TempLatestSave');
         console.log('Removed LatestsaveFile! id=809')
         ResetFile = true;
         window.location.reload();
@@ -1426,42 +1421,29 @@ function slowTypingText(text, elementId, index = 0, speed = 200, printImmediatel
     printCharacter();
 }
 function saveGame(NumSection){
-    try {
-        saveData = LatestsaveFile;
-    } catch (error) {
-        console.log(error,'No saveData to get to be able to save');
-    }
-    
-    //TODO fix this
-    const gameIndex = NumSection - 1; // Adjust index for zero-based arrays
+    currentdate = new Date();
+    var datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1)+ "/" +
+    currentdate.getFullYear() + " | " + currentdate.getHours() + ":" + 
+    currentdate.getMinutes() +":" + currentdate.getSeconds();
+    saveData = JSON.parse(sessionStorage.getItem('TempLatestSave'));
     const sectionSpanName = document.getElementById(`gameName${NumSection}`);
-    sectionSpanName.textContent = `${saveData['saveDataName']}\\|/${datetime}`;
-    //SaveForest['saveParent'][PlaceHolder] = saveData;// FIXME: PlaceHolder
-    let NewGame = saveData['saveDataName'] == 'Main';
-    let NewName = 'Main';//  input from user
-    let inputEvent = 'ccccc'//  temp
-    if(!inputEvent == NewName){
-        NewName = 'InputEvent';
-    }
-        // Update game name display
-    if(NewGame){
-        sectionSpanName.textContent = `${NewName}\\|/${datetime}`;
-        console.log('via newGame')
+    const nameChange = document.getElementById('nameChangeIn');
+    let NewName = nameChange.value;
+    // Update game name display
+    if(NewName == 'Main' || NewName == ""){
+        sectionSpanName.textContent = `${saveData['saveDataName']} | ${datetime}`;
+        saveData['saveDataTime'] = datetime;
+        sectionSpanName.style.color = 'yellow';
+        console.log('still default name')
     }else{
-        sectionSpanName.textContent = `${saveData['saveDataName']}\\|/${datetime}`;
-        console.log('via old game')
+        sectionSpanName.textContent = `${NewName} | ${datetime}`;
+        saveData['saveDataTime'] = datetime;
+        saveData['saveDataName'] = NewName;
+        console.log('new name')
     }
-    //  if latest save only save latest else save on both
-    if(NumSection == 0){
-        SaveForest['section0'] = saveData;
-    }else{
-        SaveForest[`section${NumSection}`] = saveData;
-        SaveForest['section0'] = saveData;
-    }
-    
+    SaveForest[`section${NumSection}`] = saveData;
+    SaveForest['section0'] = saveData;
     localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
-
-    
     console.log(`Saving game ${saveFileNum}`);
 }
 function loadGame(saveFileNum) {
