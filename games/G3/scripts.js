@@ -719,15 +719,26 @@ function story(saveData){
             }
         }
     }
-    function ButtonPressed(saveData, infogetter) {
+    function ButtonPressed(saveData, infogetter, IsDeathScreen = false) {
         const buttonValues = getButtonValues(saveData);
         for (const buttonValue of buttonValues) {
             const button = document.querySelector('.Sh_' + buttonValue);
             if (button) {
                 // Get the value of the button from the scene
-                const chapter = infogetter[saveData.current_chapter_progress];
-                const scene = chapter[saveData.current_storyLine_progress];
-                const value = scene[buttonValue];
+                let chapter;
+                let scene;
+                let value;
+                if(IsDeathScreen){
+                    chapter = infogetter[Death];
+                    value = chapter[buttonValue];
+                    
+                }else{
+                    chapter = infogetter[saveData.current_chapter_progress];
+                    scene = chapter[saveData.current_storyLine_progress];
+                    value = scene[buttonValue];
+                }
+                
+                
                 // Set the inner HTML of the button
                 button.innerHTML = value;
                 // Add event listener to the button
@@ -758,12 +769,11 @@ function story(saveData){
         }
     }
     function damageAndDeathParent(amount, atackMethod, instaKill = false){
-        if(!instaKill){
-        getDamage(amount);
-        }
         if(character.Health <= 0 || character.Health - amount <= 0 || instaKill){
             DiedScreen(atackMethod);
-        }
+        }else if(!instaKill){
+            character.getDamage(amount);
+            }
     }
     function InventoryItemClickedHandler(item_id){
         switch(item_id){
@@ -808,21 +818,25 @@ function story(saveData){
     }
 
     function addItemToInventory(saveData, itemId, newQuantity) {
-        // Function to add an item from ListOfAllItems to Inventory with a specified quantity
         // Find the item in ListOfAllItems by itemId
         const itemToAdd = saveData.ListOfAllItems.find(item => item.id === itemId);
         if (itemToAdd) {
-            // Clone the item from ListOfAllItems and set its quantity
-            const newItem = {
-                id: itemToAdd.id,
-                Name: itemToAdd.Name,
-                quantity: newQuantity,
-                quality: itemToAdd.quality
-            };
-
-            // Add the new item to the Inventory array
-            saveData.Inventory.push(newItem);
-            populateInventory(saveData,1)
+            // Check if the item is already in the Inventory
+            const existingItemIndex = saveData.Inventory.findIndex(item => item.id === itemId);
+            if (existingItemIndex !== -1) {
+                // If the item already exists in the Inventory, update its quantity
+                saveData.Inventory[existingItemIndex].quantity += newQuantity;
+            } else {
+                // If the item is not in the Inventory, add it with the specified quantity
+                saveData.Inventory.push({
+                    id: itemToAdd.id,
+                    Name: itemToAdd.Name,
+                    quantity: newQuantity,
+                    quality: itemToAdd.quality
+                });
+            }
+            // Call function to update the inventory display
+            populateInventory(saveData, 1);
         } else {
             console.error(`Item with id ${itemId} not found in ListOfAllItems.`);
         }
@@ -1298,12 +1312,13 @@ function openSettings(number) {
     parent.classList.toggle('visible');
     parent.dataset.visible = !isVisible;
 }
-function DiedScreen(atackMethod){
+function DiedScreen(saveData,atackMethod,ButtonPressed){
     let defaultPhrase = "You died because "
     let FinalText = defaultPhrase + atackMethod;
     stopTyping = true;
     addTextWithTempColor('.main_section', FinalText,'red',true,false)
-    // TODO: add button for DiedScreen !!!
+    ButtonPressed(saveData,saveData.Choices_Possible,true)
+    //TODO: fix the problem where it doesn't recognise buttonpressed
     // TODO FT: died screen
 }
 function ResetFileClickHandler(){
