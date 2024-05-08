@@ -141,8 +141,12 @@ function newGame(){
     let saveData = {
         "saveDataName" : "Main",
         "saveDataTime" : "",
+        "IsDead" : false,
+        "DeathReason": undefined,
         "current_storyLine_progress" : 0,
+        "LastSafeScene" : 0,
         "current_chapter_progress" : 0,
+        "LastSafeChapter" : 0,
         "current_title_progress" : 0,
         "title_progress" : { 
             //  title / chapter num : { title_story_[current_title_progress] : title}
@@ -153,6 +157,9 @@ function newGame(){
         },
         "storyLine_progress" : {
             //  chapter num : { Scene num : {"sceneName" : "placeholder", "playerText": "placeholder"}, },
+            Death : {
+                0 : {"sceneName" : "DeathScreen0", "playerText": "You died because "},
+            },
             0 : {
                 0 :  {"sceneName" : "Start", "playerText": "You wake up in a dark cave, the damp air clinging to your skin as you grope for any semblance of direction. The sound of distant rumbling echoes through the cavern, urging you to explore. With each step, the path twists and turns, revealing ancient ruins and forgotten passages. As you navigate this mysterious labyrinth, the weight of uncertainty presses upon you, yet a flicker of curiosity ignites within."},
                 1 :  {"sceneName" : "charachterDefining0", "playerText" : "Gazing into the rippling surface of a subterranean pool, you catch a glimpse of your own reflection amidst the murky depths. The dim light barely illuminates your features, leaving much to the imagination. Who is this figure staring back at you? The lines of gender blur in the wavering distortion, leaving only a sense of mystery in its wake. Lost in contemplation, you linger in the tranquil embrace of the cave, pondering the journey that lies ahead. With each ripple that disturbs your reflection, a surge of determination propels you forward, ready to embrace the enigma of your own existence. Let us now delve deeper into the story of this mysterious soul, as we unveil the intricate details of Your identity amidst the shadows of the underworld."},
@@ -191,7 +198,8 @@ function newGame(){
         "Choices_Possible" : {
             //  chapter number : { scene number : { Button number : Text }}
             Death : {
-                4 : "Respawn at last checkpoint"
+                4 : "Respawn at last checkpoint",
+
             },
             0 : {
                 0 : { 7 : "Next"},
@@ -244,6 +252,9 @@ function newGame(){
         },
         "Buttons_section_title" : {
             //  chapter num : {   Scene num : text }
+            Death : {
+                0 : " ",
+            },
             0 : {
                 0 : " ",
                 1 : " ",
@@ -274,6 +285,7 @@ function newGame(){
         },
         "Choices_Made" : {
             //  chapter number : string of num defined by Buttons order
+            Death : [],
             0 : [], 
             1 : [],
             2 : [],
@@ -284,6 +296,7 @@ function newGame(){
             7 : [],
             8 : [],
             9 : [],
+
         },
         "Player_character" : Player,
         "Buttons" : [1,2,3,4,5,6,7],
@@ -656,7 +669,7 @@ function story(saveData){
     ButtonPressed(saveData, saveData.Choices_Possible);    //  print current Buttons
     manageHiddenInfo(saveData, false);  //  hides info if need be
     title_progress(current_title,current_title_progress)    //  print current title
-    scene_progress(current_storyLine,current_storyLine_progress)    //  print current scene text
+    scene_progress(current_storyLine,current_storyLine_progress, saveData.DeathReason)    //  print current scene text
     // Initialize the first page of the inventoryload_games_save
     populateInventory(saveData,1);
     choices_section_title.innerHTML = saveData.Buttons_section_title[saveData.current_chapter_progress][saveData.current_storyLine_progress];// print current scection title
@@ -666,9 +679,15 @@ function story(saveData){
     function getButtonValues(saveData) {
         const buttonValues = [];
         for (const buttonValue of saveData.Buttons) {
-            const chapter = saveData.Choices_Possible[saveData.current_chapter_progress];
-            const scene = chapter[saveData.current_storyLine_progress];
-            const value = scene[buttonValue];
+            let chapter = saveData.Choices_Possible[saveData.current_chapter_progress];
+            let scene = chapter[saveData.current_storyLine_progress];
+            let value;
+            if(saveData.IsDead){
+                value = chapter[buttonValue];
+                
+            }else{
+                value = scene[buttonValue];
+            }
             if (value) {
                 console.log('value id=12',value)
                 buttonValues.push(buttonValue);
@@ -711,34 +730,28 @@ function story(saveData){
             } else {
                 stopTyping = true;
                 console.log('current_storyLine_progress id=8', saveData.current_storyLine_progress);
-                slowTypingText(saveData.storyLine_progress[saveData.current_chapter_progress][saveData.current_storyLine_progress]['playerText'], '.main_section', undefined, undefined, true);
-                slowTypingText(saveData.title_progress[saveData.current_title_progress]['title_story_' + saveData.current_title_progress], '.Quest_Title', undefined, undefined, true);
+                slowTypingText(saveData,saveData.storyLine_progress[saveData.current_chapter_progress][saveData.current_storyLine_progress]['playerText'], '.main_section', undefined, undefined, true);
+                slowTypingText(saveData,saveData.title_progress[saveData.current_title_progress]['title_story_' + saveData.current_title_progress], '.Quest_Title', undefined, undefined, true);
                 isCurrentlyPrinting = false;
                 console.log('Print everything for scene number ', saveData.current_storyLine_progress);
                 
             }
         }
     }
-    function ButtonPressed(saveData, infogetter, IsDeathScreen = false) {
+    function ButtonPressed(saveData, infogetter) {
         const buttonValues = getButtonValues(saveData);
         for (const buttonValue of buttonValues) {
             const button = document.querySelector('.Sh_' + buttonValue);
             if (button) {
                 // Get the value of the button from the scene
-                let chapter;
-                let scene;
+                let chapter = infogetter[saveData.current_chapter_progress];
+                let scene = chapter[saveData.current_storyLine_progress];
                 let value;
-                if(IsDeathScreen){
-                    chapter = infogetter[Death];
+                if(saveData.IsDead){
                     value = chapter[buttonValue];
-                    
                 }else{
-                    chapter = infogetter[saveData.current_chapter_progress];
-                    scene = chapter[saveData.current_storyLine_progress];
                     value = scene[buttonValue];
                 }
-                
-                
                 // Set the inner HTML of the button
                 button.innerHTML = value;
                 // Add event listener to the button
@@ -770,7 +783,10 @@ function story(saveData){
     }
     function damageAndDeathParent(amount, atackMethod, instaKill = false){
         if(character.Health <= 0 || character.Health - amount <= 0 || instaKill){
-            DiedScreen(atackMethod);
+            //DiedScreen(saveData,atackMethod);
+            saveData.DeathReason = atackMethod;
+            saveData.IsDead = true;
+            nextScene(saveData, true);
         }else if(!instaKill){
             character.getDamage(amount);
             }
@@ -897,8 +913,8 @@ function story(saveData){
             case 'Confusion':
                 // change text to confused text
                 console.log('activate confusion')            
-                slowTypingText(Confused_Text, '.main_section', undefined, 35);
-                slowTypingText(Confused_Title, '.Quest_Title');
+                slowTypingText(saveData,Confused_Text, '.main_section', undefined, 35);
+                slowTypingText(saveData,Confused_Title, '.Quest_Title');
                 ButtonPressed(saveData, saveData.Choices_Possible_Confused);
                 break;
             case 'MAXeffect':
@@ -907,15 +923,21 @@ function story(saveData){
     }
     function title_progress(current_title,current_title_progress) {
         let title_story = current_title['title_story_'+current_title_progress]
-        slowTypingText(title_story,'.Quest_Title');       // Put the content on the left and the place where it needs to go on the right
+        slowTypingText(saveData,title_story,'.Quest_Title');       // Put the content on the left and the place where it needs to go on the right
         console.log('title Chapter',title_story)
         console.log('current_title',current_title);
         console.log('current_title_progress', current_title_progress);
     }
-    function scene_progress(current_storyLine,current_storyLine_progress) {
+    function scene_progress(current_storyLine,current_storyLine_progress, DeathReason) {
         let title_scene = current_storyLine['sceneName']
-        let scene_text = current_storyLine['playerText']
-        slowTypingText(scene_text,'.main_section',undefined, 35);     // Put the content on the left and the place where it needs to go on the right + index + speed
+        let scene_text;
+        if(DeathReason){
+            scene_text = current_storyLine['playerText'] + DeathReason;
+        }else{
+            scene_text = current_storyLine['playerText'];
+        }
+        slowTypingText(saveData,scene_text,'.main_section',undefined, 35);     // Put the content on the left and the place where it needs to go on the right + index + speed
+        saveData.DeathReason = undefined;
         console.log('title Scene',title_scene)                          
         //console.log('scene_text',scene_text)
         console.log('current_storyLine',current_storyLine);
@@ -926,6 +948,13 @@ function story(saveData){
         // current place > next place
         let lastChoiceIndex = saveData.Choices_Made[saveData.current_chapter_progress].length - 1;
         let LastButtonPressed = saveData.Choices_Made[saveData.current_chapter_progress][lastChoiceIndex];
+        if (saveData.IsDead){
+            nextChapter(saveData, true);
+            return;
+        }else if(saveData.current_chapter_progress == 'Death'){
+            saveData.current_chapter_progress = saveData.LastSafeChapter;
+            saveData.current_storyLine_progress = saveData.LastSafeScene;
+        }
         if (saveData.current_storyLine_progress < Object.keys(saveData.storyLine_progress[saveData.current_chapter_progress]).length - 1 && saveData.current_chapter_progress == 0) {
             saveData.current_storyLine_progress++;
             console.log('pressed NextScene id=5')
@@ -933,6 +962,7 @@ function story(saveData){
             switch(saveData.current_storyLine_progress){
                 case 0:
                     saveData.current_storyLine_progress = LastButtonPressed - 1; //from 1 to 5 are scene other area
+                    saveData.LastSafeScene = saveData.current_storyLine_progress;
                     break;
                 case 1:
                 case 2:
@@ -958,19 +988,12 @@ function story(saveData){
         } else {
             // Handle the case when there are no more scenes in the current chapter
             console.log('No more scenes available in this chapter');
-            nextChapter(saveData)
+            nextChapter(saveData);
             return;
         }
         // Re-render the story with updated saveData
-        console.log('id=9')
-        choices_section_title.innerHTML = " ";
-        Button_Choice1.innerHTML = " ";
-        Button_Choice2.innerHTML = " ";
-        Button_Choice3.innerHTML = " ";
-        Button_Choice4.innerHTML = " ";
-        Button_Choice5.innerHTML = " ";
-        Button_Choice6.innerHTML = " ";
-        Button_Choice7.innerHTML = " ";
+        console.log('id=9');
+        clearButtonContent();
         story(saveData);
     }
     
@@ -1005,37 +1028,34 @@ function story(saveData){
             previousChapter();
         }
         // Re-render the story with updated saveData
-        choices_section_title.innerHTML = " ";
-        Button_Choice1.innerHTML = " ";
-        Button_Choice2.innerHTML = " ";
-        Button_Choice3.innerHTML = " ";
-        Button_Choice4.innerHTML = " ";
-        Button_Choice5.innerHTML = " ";
-        Button_Choice6.innerHTML = " ";
-        Button_Choice7.innerHTML = " ";
+        clearButtonContent();
         story(saveData);
     }
     
-    function nextChapter(saveData) {
+    function nextChapter(saveData, IsDying = false) {
         // Increment the current chapter progress only if there are more chapters available
+        if(IsDying){
+            saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
+            saveData.current_chapter_progress = "Death";
+        }else if(saveData.current_chapter_progress == "Death"){
+            saveData.current_chapter_progress = saveData.LastSafeChapter;
+            saveData.current_storyLine_progress = saveData.LastSafeScene;
+            console.log('Reset to last safe place');
+        }
         if (saveData.current_chapter_progress < Object.keys(saveData.storyLine_progress).length - 1) {
             saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
             saveData.current_chapter_progress++;
+            if(saveData.current_chapter_progress != "Death"){
+                saveData.LastSafeChapter = saveData.current_chapter_progress;
+            }
             saveData.current_title_progress++;
             console.log('Next Chapter');
         } else {
             // Handle the case when there are no more chapters
-            console.log('No more chapters available');
+            console.log('No more chapters available or dying');
         }
         // Re-render the story with updated saveData
-        choices_section_title.innerHTML = " ";
-        Button_Choice1.innerHTML = " ";
-        Button_Choice2.innerHTML = " ";
-        Button_Choice3.innerHTML = " ";
-        Button_Choice4.innerHTML = " ";
-        Button_Choice5.innerHTML = " ";
-        Button_Choice6.innerHTML = " ";
-        Button_Choice7.innerHTML = " ";
+        clearButtonContent();
         story(saveData);
     }
     
@@ -1053,16 +1073,22 @@ function story(saveData){
         // Re-render the story with updated saveData
         story(saveData);
     }
-    
-
     function Choices_calculator(saveData){
         let current_storyLine_progress = saveData.current_storyLine_progress;
         let current_chapter = saveData.current_chapter_progress;
         let lastChoiceIndex = saveData.Choices_Made[saveData.current_chapter_progress].length - 1;
         let LastButtonPressed = saveData.Choices_Made[saveData.current_chapter_progress][lastChoiceIndex];
-        let value = saveData.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
-        let Choices_Possible = saveData.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed]
+        let value;
+        if(saveData.IsDead){
+            value = saveData.Choices_Possible[current_chapter][LastButtonPressed];
+        }else{
+            value = saveData.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
+        }
         switch (current_chapter){
+            case 'Death':
+                saveData.IsDead = false;
+                nextScene(saveData);
+                break;
             case 0:
                 switch (lastChoiceIndex) {
                     case 2:
@@ -1151,7 +1177,7 @@ function story(saveData){
                                 break;
                             case 6:
                                 //  get damage
-                                damageAndDeathParent(15,'of an undefined pond of glazend color')
+                                damageAndDeathParent(15,'of an ambiguous pond of glazend color')
                                 break;
                         }
                         break;
@@ -1312,15 +1338,6 @@ function openSettings(number) {
     parent.classList.toggle('visible');
     parent.dataset.visible = !isVisible;
 }
-function DiedScreen(saveData,atackMethod,ButtonPressed){
-    let defaultPhrase = "You died because "
-    let FinalText = defaultPhrase + atackMethod;
-    stopTyping = true;
-    addTextWithTempColor('.main_section', FinalText,'red',true,false)
-    ButtonPressed(saveData,saveData.Choices_Possible,true)
-    //TODO: fix the problem where it doesn't recognise buttonpressed
-    // TODO FT: died screen
-}
 function ResetFileClickHandler(){
     console.log('Resetting File?')
     let confirmed = confirm('Do you want to reset the game( all unsaved actions will be lost! ).');
@@ -1396,10 +1413,16 @@ function DisplayDebuffTextWithColors(saveData, Bar, BarLength) {
         Bar.dataset.visible = 'true';
     }
 }
-function slowTypingText(text, elementId, index = 0, speed = 200, printImmediately = false) {
+function slowTypingText(saveData,text, elementId, index = 0, speed = 200, printImmediately = false) {
     // Check if the text has already been printed
     if (document.querySelector(elementId).innerText == text) {
         return;
+    }
+    if(saveData.IsDead){
+        // Clear the element before printing and print immediately
+        document.querySelector(elementId).style.color = 'red';
+    }else{
+        document.querySelector(elementId).style.color = 'white';
     }
     if (printImmediately) {
         // Clear the element before printing and print immediately
