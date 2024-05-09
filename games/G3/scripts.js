@@ -569,6 +569,10 @@ class Player {
             }
         }
     }
+    Resurrect(){
+        this.Level = -2;
+        this.Health = this.MaxHealth;
+    }
     rested(amount) {
         // Decrease specific debuff effects when the player rests
         const debuffsToDecrease = [2, 3, 9, 10, 20, 21];
@@ -954,6 +958,10 @@ function story(saveData){
         }else if(saveData.current_chapter_progress == 'Death'){
             saveData.current_chapter_progress = saveData.LastSafeChapter;
             saveData.current_storyLine_progress = saveData.LastSafeScene;
+            //saveData.Choices_Made[saveData.LastSafeChapter] = [undefined];    //  unsure about this
+            ResetEffectBarToDefault(saveData);
+            character.Resurrect();
+            console.log('id=501 Reset to last safe place');
         }
         if (saveData.current_storyLine_progress < Object.keys(saveData.storyLine_progress[saveData.current_chapter_progress]).length - 1 && saveData.current_chapter_progress == 0) {
             saveData.current_storyLine_progress++;
@@ -1037,10 +1045,6 @@ function story(saveData){
         if(IsDying){
             saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
             saveData.current_chapter_progress = "Death";
-        }else if(saveData.current_chapter_progress == "Death"){
-            saveData.current_chapter_progress = saveData.LastSafeChapter;
-            saveData.current_storyLine_progress = saveData.LastSafeScene;
-            console.log('Reset to last safe place');
         }
         if (saveData.current_chapter_progress < Object.keys(saveData.storyLine_progress).length - 1) {
             saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
