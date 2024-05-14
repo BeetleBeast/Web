@@ -37,10 +37,10 @@ var datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1) + "/" + 
 let valueSTRING = [];
 let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
-let amount = 0;
+let amount = 0; //  unesseray
 let previousAmounts = {};
 let IsPacified = false;
-let ResetFile = false;
+let ResetFile = false;// if true can't save latest as session is reseting
 let saveData = {}; // Initialize saveData object
 let CurrentPageNumber = 1;
 let SaveForest = {
@@ -249,6 +249,17 @@ function newGame(){
             2 : {
 
             },
+        },
+        "RandomEvent" : {
+            //  0 must empty, 1 to last gets all R events
+            0 : {},
+            1 : {
+                sceneName : "", sceneText : "",IsActive : false,chanceOfAcurring : 0.01,
+                buttonValues : {0:'',1:'',2:'',3:'',4:'',5:'',6:''},
+            },
+            2 : {},
+            3 : {},
+            4 : {},
         },
         "Buttons_section_title" : {
             //  chapter num : {   Scene num : text }
@@ -651,16 +662,12 @@ function story(saveData){
     const Side_Influences_Title = document.querySelector('.Side-Influences_Title');
     const load_games_save = document.querySelector('.load_gameS');
 
-
-    let LatestsaveFile = saveData;
-
-    console.log("Begin of story");
-
     //  Start of story by initialising progress/
     let current_storyLine_progress = saveData.current_storyLine_progress
     let current_title_progress = saveData.current_title_progress
     let current_storyLine = saveData.storyLine_progress[saveData.current_chapter_progress][current_storyLine_progress]
     let current_title = saveData.title_progress[current_title_progress]
+    let LatestsaveFile = saveData;
 
     //  make a save of latest version of saveData
     if(!ResetFile){
@@ -1297,7 +1304,7 @@ document.addEventListener('keydown', function(event) {
         toggleInventory();
     }
 });
-function addTextWithTempColor(elementId, text, tempColor, Replace = true, temp = true) {
+function addTextWithTempColor(elementId, text, tempColor, Replace = true, temp = true, defaultColor = 'azure') {
     const element = document.querySelector(elementId);
     
     // Change text content
@@ -1311,7 +1318,7 @@ function addTextWithTempColor(elementId, text, tempColor, Replace = true, temp =
     // Reset color after a delay (simulating temporary color change)
     if(temp){
         setTimeout(() => {
-            element.style.color = 'azure'; // Reset to default color (azure)
+            element.style.color = defaultColor; // Reset to default color (azure)
         }, 1000); // Adjust delay time (in milliseconds) as needed
     }
 }
@@ -1422,7 +1429,7 @@ function slowTypingText(saveData,text, elementId, index = 0, speed = 200, printI
     if (document.querySelector(elementId).innerText == text) {
         return;
     }
-    if(saveData.IsDead){
+    if(saveData.IsDead && elementId !== '.Quest_Title'){
         // Clear the element before printing and print immediately
         document.querySelector(elementId).style.color = 'red';
     }else{

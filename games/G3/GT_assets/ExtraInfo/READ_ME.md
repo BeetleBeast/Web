@@ -15,12 +15,12 @@ apk?
 make some place restore effects
 every action wich makes movement use fatigue    5%
 
- inventory side menu when press item for more options
+inventory side menu when press item for more options
+
+make cave more simple first time ariund then can be revisited
 
 
-
-
- Compelling Storyline: Focus on developing a strong, immersive narrative for your game. Craft intriguing characters, interesting plot twists, and meaningful choices for the player to make. A captivating story will keep players invested and eager to see what happens next.
+Compelling Storyline: Focus on developing a strong, immersive narrative for your game. Craft intriguing characters, interesting plot twists, and meaningful choices for the player to make. A captivating story will keep players invested and eager to see what happens next.
 
 Interactive Choices: Offer meaningful choices that impact the outcome of the game. Players should feel that their decisions matter and shape the story. Branching storylines based on choices can add replay value and increase player engagement.
 
