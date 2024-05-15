@@ -292,7 +292,7 @@ body{
 	right: 0;
 	width: 35px;
     color: white;
-    padding: 8px 12px; /* Adjust padding for button size */
+    padding: 5px 10px; /* Adjust padding for button size */
     margin: 5px;
     border: 1px solid #999;
 	border-right: none;
@@ -321,7 +321,9 @@ body{
 .thick-arrow-right {
     transform: rotate(315deg); /* Adjust rotation angle for right arrow */
 }
-
+#Side-Menu_ColapseButton:enabled{
+	padding: 8px 5px; /* Adjust padding for button size */
+}
 
 .Side-Menu_Class{
 	font-family: "Protest Revolution", sans-serif;
@@ -335,7 +337,7 @@ body{
 }
 
 #Side-Menu2 {
-	background-color: var(--side-Color);
+	/*background-color: var(--side-Color);*/
 	
 	width: 15em;
 	height: 100%;
@@ -347,7 +349,7 @@ body{
 	margin-top: auto 15px;
 }
 #Side-Menu3 {
-	background-color: var(--side-Color);
+	/*background-color: var(--side-Color);*/
 	
 	width: 15em;
 	height: 100%;
@@ -358,7 +360,7 @@ body{
 	color: azure;
 }
 #Side-Menu4 {
-	background-color: var(--side-Color);
+	/*background-color: var(--side-Color);*/
 	
 	width: 15em;
 	height: 100%;
@@ -420,7 +422,10 @@ body{
 }
 .bottom-links {
     display: flex;
-    justify-content: flex-end; /* this will align the elements to the bottom */
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+    /*justify-content: flex-end; /* this will align the elements to the bottom */
 }
 #side-Title{
 	/* existing styles */
@@ -450,25 +455,41 @@ body{
     transform: translateY(5px);
 }
 .settings{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
     color: aqua;
 	background-color: black;
 	display: block;
 	width: 5em;
-	height: -moz-fit-content;
-	height: fit-content;
-	padding: 0.5em;
-	margin-left: auto;
-	margin-right: auto;
+	height: 2.5em;
+	padding: none;
 	bottom: 0px;
 	border: 1px solid rgba(0, 0, 0, 0);
 }
 .asettings{
-	justify-content: flex-end;
-	margin-left: auto;
-	margin-right: auto;
+	/*justify-content: flex-end;
+	/*margin-left: auto;
+	margin-right: auto;*/
 	margin-bottom: 10em;
 }
-.settings:hover{
+.SettingsLOW{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+	align-items: baseline;
+    /*justify-content: flex-end; /* this will align the elements to the bottom */
+}
+.settingsEmpty{
+	color: transparent;
+	background-color: transparent;
+	border: 0px solid transparent;
+	border-color: transparent;
+	box-shadow: none;
+	
+}
+.settings:hover:not(.settingsEmpty){
 	color: aqua;
     border: 1px solid lightgreen;
 	cursor: pointer;
@@ -513,16 +534,15 @@ body{
 	
 
 }
+
 .Side-extra[data-visible=true] * {
 	visibility: visible;
 	opacity: 1;
-  }
-  
+}
   .Side-more-ul[data-visible=true] > * {
 	visibility: visible;
 	opacity: 1;
-  }
-  
+}
   .Save-ul[data-visible=true] > * {
 	visibility: visible;
 	opacity: 1;
@@ -531,10 +551,25 @@ body{
 	opacity: 1;
 	visibility: visible; 
 }
-[data-visible=false] {
+[data-visible=false]{
 	opacity: 0;
-	visibility:hidden; 
+	visibility:hidden;
+	content: none;
+	
 }
+.Side_Menu_Colapse{
+	content: normal;
+}
+.Side_Menu_Colapse[data-visible=false]{
+	content: none;
+	opacity: 0;
+	visibility: hidden;
+	
+}
+hr[data-visible=false]  {
+    display: none;
+}
+
 .parent .child1 {
 	z-index: 9999999;
 	color: white;
@@ -552,6 +587,16 @@ body{
 	padding: 0;
 	margin: 0;
 	transition: opacity 0.5s ease-in-out;
+}
+#nameChangeIn{
+	background-color: transparent;
+	border: 2px solid var(--mainColor);
+	width: 3em;
+	height: -moz-fit-content;
+	height: fit-content;
+	padding-left: 15px;
+	padding-right: 15px;
+	color: white;
 }
 
 .child1{
@@ -616,7 +661,7 @@ body{
 .Button{
 	color: white;
 }
-.Button:hover{
+.Button:hover:not(.settingsEmpty){
 	cursor: pointer;
 	color: blueviolet;
 }
@@ -697,7 +742,7 @@ button{
     right: 40%;
     top: -50px;
 }
-button:active:not(.Section0_load_game, .Btn-backforward,.disable){
+button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty){
     box-shadow: none;
     transform: translateY(5px);
 }
@@ -708,8 +753,10 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable){
     align-items: center;
     justify-content:flex-start;
     flex-direction: column;
-    height: -moz-fit-content;
-    height: fit-content;/*TODO:	add correct width and height 	*/
+    /*height: -moz-fit-content;*/
+    /*height: fit-content;/*TODO:	add correct width and height 	*/
+	height: 75%;
+	width: 75%;
     margin-bottom: 20px;
 }
 
@@ -717,12 +764,7 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable){
     border: .1px solid;
     border-color: rgb(96, 27, 160);
     border-radius: 5px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-
-
+    padding: 20px;
 }
 .sectionNULL{
     border-bottom: 1px solid;
@@ -808,23 +850,33 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable){
     width: fit-content;
     height: -moz-fit-content;
     height: fit-content;
+	border: 1px solid white;
 }
 .section1{
     width: -moz-fit-content;
     width: fit-content;
     height: -moz-fit-content;
     height: fit-content;
+	border: 1px solid white;
 }
 .section2{
     width: -moz-fit-content;
     width: fit-content;
     height: -moz-fit-content;
     height: fit-content;
+	border: 1px solid white;
 }
 .section3{
     height: -moz-fit-content;
     height: fit-content;
+	border: 1px solid white;
 }
+.section4{
+	height: -moz-fit-content;
+    height: fit-content;
+	border: 1px solid white;
+}
+
 .section5{
     display: flex;
     flex-direction: row;

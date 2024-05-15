@@ -15,9 +15,11 @@ const savefileId = document.getElementById('savefileId');
 const loadfileId = document.getElementById('loadfileId');
 const RestartGame = document.getElementById('Reset');
 const inventoryItem = document.querySelector('.inventoryItem');
+const Side_Menu = document.querySelector('.Side-Menu_Class');   //  influences  (Bar)
 const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  (in words)
 const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debuff)
 const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
+const Side_Menu5 = document.getElementById('Side-Menu5');   //  Extra buttons
 const Side_MenuClass = document.querySelector('.InfluencesAll')
 const PainBar = document.querySelector('.Pain');    //  width: 1%;
 const FatigueBar = document.querySelector('.Fatigue');  //  width: 1%;
@@ -31,6 +33,7 @@ const ControlBar = document.querySelector('.Control');  //  width: 100%;
 const ControlTitle = document.querySelector('.ControlTitle');
 const load_S = document.querySelector('.settings_Load');
 const Side_Influences_Title = document.querySelector('.Side-Influences_Title');
+const Side_Menu_ColapseButton = document.getElementById('Side-Menu_ColapseButton');
 
 var currentdate = new Date();
 var datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1) + "/" + currentdate.getFullYear() + "|" + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
@@ -51,6 +54,7 @@ let SaveForest = {
 window.onload = function () {
     startup()
     LoadedSaves()
+    setEventListener()
 };
 function LoadedSaves() {
     const saveForestString = localStorage.getItem('SaveForest');
@@ -103,7 +107,7 @@ function startup(userConfirmed) {
         if (userConfirmed === 1) {
             console.log("User confirmed to load last save.");
             startScreen.dataset.visible = 'false';
-            load_S.dataset.visible = 'true';
+            //load_S.dataset.visible = 'true';
             loadLatestGame(0);
         }else if(userConfirmed === 2){
             console.log("User declined to load last save. Starting a new game.");
@@ -129,10 +133,19 @@ function loadLatestGame(userConfirmed) {
         console.log('Loaded save file:', saveData);
         clearButtonContent();
         ResetEffectBarToDefault(saveData);
+        // Call the mergeDefaultProperties function to ensure saveData has all expected properties
+        mergeDefaultProperties(saveData);
         story(saveData);
     } catch (error) {
-        console.error('Error parsing SaveForest:', error);
-        newGame(); // Fallback to starting a new game if loading fails
+        if(error == TypeError){
+            console.error('Error in SaveData:', error);
+            story(saveData);
+        }else{
+            console.error('Unkown Error by parsing SaveForest:', error);
+            newGame(); // Fallback to starting a new game if loading fails
+        }
+        
+        
     }
 }
 // newGame makes the prep for a new game
@@ -417,6 +430,9 @@ function newGame(){
             Elemental_holy :  { Description : `Resistance: Grants resistance against specific types of elemental damage, such as holy by`},
             Elemental_darkness :  { Description : `Resistance: Grants resistance against specific types of elemental damage, such as darkness by`},
         },
+        "Settings" : {
+            'SlowTyping' : true,
+        },
         "Inventory" : [
             //  ID number : {"Name" : Name of item ,"quantity" : 0,"quality" : "common"}
             //   { id: 0 , Name : "PlaceHolder", quantity : 0, quality : "common"},
@@ -439,13 +455,14 @@ function newGame(){
            // : {"Nam" : "PlaceHolder","quantity" : "PlaceHolder" , "quality" : "PlaceHolder"},
         ]
     }
-    
+    SaveForest.DefaultSaveData = saveData;
+    //console.log('SaveForest:',JSON.parse(SaveForest))
+    localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
 
     // start story
     ResetEffectBarToDefault(saveData)
     story(saveData);
-    
-    
+
 }
 class Player {
     constructor({ Name, Race, Gender, Age, Profession, Level, Strength, Intelligence, Charisma, Agility, Luck, Health, MaxHealth }) {
@@ -1040,7 +1057,7 @@ function story(saveData){
         }else {
             // Handle the case when it's already the first scene
             console.log('Already at the beginning of the chapter');
-            previousChapter();
+            previousChapter(saveData);
         }
         // Re-render the story with updated saveData
         clearButtonContent();
@@ -1435,7 +1452,7 @@ function slowTypingText(saveData,text, elementId, index = 0, speed = 200, printI
     }else{
         document.querySelector(elementId).style.color = 'white';
     }
-    if (printImmediately) {
+    if (printImmediately || saveData.Settings.SlowTyping == false) {
         // Clear the element before printing and print immediately
         document.querySelector(elementId).innerHTML = '';
         document.querySelector(elementId).innerHTML = text;
@@ -1502,6 +1519,8 @@ function loadGame(NumSection) {
         openSettings(1);
         clearButtonContent();
         ResetEffectBarToDefault(saveData);
+        // Call the mergeDefaultProperties function to ensure saveData has all expected properties
+        mergeDefaultProperties(saveData);
         story(saveData);
     }
 }
@@ -1516,45 +1535,99 @@ function deleteGame(NumSection) {
     localStorage.setItem('SaveForest',JSON.stringify(SaveForest));
     console.log(`Deleting game ${NumSection}`);
 }
-// Add event listener for save file click
-if (savefileId) {
+function mergeDefaultProperties(saveData) {
+    // Define default properties with all expected properties and their default values
+    // TODO: FT merge prop
+    let defaultPropertiesForest =  JSON.parse(localStorage.getItem('SaveForest'));
+    const defaultProperties = defaultPropertiesForest.DefaultSaveData
+    // If saveData does not exist, initialize it with defaultProperties
+    if (!saveData) {
+        saveData = { ...defaultProperties };
+    } else {
+        // Merge default properties with existing properties, but only add missing properties
+        for (const prop in defaultProperties) {
+            if (!(prop in saveData)) {
+                saveData[prop] = defaultProperties[prop];
+            } else if (typeof defaultProperties[prop] === 'object') {
+                // If the property is an object (e.g., Settings), merge its properties
+                for (const subProp in defaultProperties[prop]) {
+                    if (!(subProp in saveData[prop])) {
+                        saveData[prop][subProp] = defaultProperties[prop][subProp];
+                    }
+                }
+            }
+        }
+    }
+}
+function Side_Menu_ColapseButtonClickHandler(){
+    const Side_Menu_Colapse = document.querySelector('.Side_Menu_Colapse');
+    const arrowChanger = document.getElementById('arrowChanger');
+    const hr = document.querySelectorAll('hr');
+    const SideMenus = [Side_Menu_Colapse, Side_Menu2, Side_Menu3, Side_Menu4, Side_Menu5, ...hr]
+    if (Side_Menu.style.width == '15em' || Side_Menu.style.width == "") {
+        Side_Menu.style.width = '35px';
+        arrowChanger.classList.replace('thick-arrow-left', 'thick-arrow-right');
+        setTimeout(() => {
+            SideMenus.forEach(el => {
+                el.dataset.visible = 'false';
+            });            
+        }, 0);
+    } else {
+        Side_Menu.style.width = '15em';
+        arrowChanger.classList.replace('thick-arrow-right', 'thick-arrow-left');
+        setTimeout(() => {
+            SideMenus.forEach(el => {
+                el.dataset.visible = 'true';
+            });
+        }, 200);
+    }
+}
+function setEventListener(){
+    // Add event listener for Side Menu Colapse Button click
+    Side_Menu_ColapseButton.addEventListener("click", Side_Menu_ColapseButtonClickHandler);
+    Side_Menu_ColapseButton.setAttribute('data-listener-added', 'true');
+    
+
+    // Add event listener for save file click
+
     if (!savefileId.hasAttribute('data-listener-added')) {
         savefileId.addEventListener("click", saveFileClickHandler);
         savefileId.setAttribute('data-listener-added', 'true');
     }
-}
-// Remove event listener for save file click
-if (savefileId) {
+
+    // Remove event listener for save file click
+
     if (savefileId.hasAttribute('data-listener-added')) {
         savefileId.removeEventListener("click", saveFileClickHandler);
         savefileId.removeAttribute('data-listener-added');
     }
-}
-// Add event listener for load file click
-if (loadfileId) {
+
+    // Add event listener for load file click
+
     if (!loadfileId.hasAttribute('data-listener-added')) {
         loadfileId.addEventListener("click", loadFileClickHandler);
         loadfileId.setAttribute('data-listener-added', 'true');
     }
-}
-// Remove event listener for load file click
-if (loadfileId) {
+
+    // Remove event listener for load file click
+
     if (loadfileId.hasAttribute('data-listener-added')) {
         loadfileId.removeEventListener("click", loadFileClickHandler);
         loadfileId.removeAttribute('data-listener-added');
     }
-}
-// Add event listener for RestartGame click
-if (RestartGame) {
+
+    // Add event listener for RestartGame click
+
     if (!RestartGame.hasAttribute('data-listener-added')) {
         RestartGame.addEventListener("click", ResetFileClickHandler);
         RestartGame.setAttribute('data-listener-added', 'true');
     }
-}
-// Remove event listener for RestartGame click
-if (RestartGame) {
+
+    // Remove event listener for RestartGame click
+
     if (RestartGame.hasAttribute('data-listener-added')) {
         RestartGame.removeEventListener("click", ResetFileClickHandler);
         RestartGame.removeAttribute('data-listener-added');
     }
+    
 }

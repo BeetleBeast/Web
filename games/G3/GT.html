@@ -19,71 +19,78 @@
     <div class="container">
         <div id="Side-Menu" class="Side-Menu_Class">
             <button id="Side-Menu_ColapseButton" title="Toggle the UI bar" aria-label="Toggle the UI bar" type="button">
-                <div  class="thick-arrow-left"></div>
+                <div  class="thick-arrow-left" id="arrowChanger"></div>
             </button>
             <br>
-            <div id="Side-Menu1" class="Side-Menu_Class">
-                <div id="Side-image" class="Side-Menu_Class"></div>
-                <div id="Side-Title" class="Side-Menu_Class">Gatcha tower</div>
+            <div id="Side-Menu1" class="Side-Menu_Class Side_Menu_Colapse">
+                <div id="Side-image" class="Side-Menu_Class Side_Menu_Colapse"></div>
+                <div id="Side-Title" class="Side-Menu_Class Side_Menu_Colapse">Gatcha tower</div>
                 <br>
-                <button type="button" class="Open-more" onclick="openSettings(4)" class="Side-Menu_Class">More</button>
             </div>
             <hr/>
-            <div id="Side-Menu1-1">
+            <div id="Side-Menu1-1" class="Side-Menu_Class Side_Menu_Colapse">
                 <!--   day or night-->
                 <br>
             </div>
-            <div id="Side-Menu2" class="Side-Menu_Class">
+            <div id="Side-Menu2" class="Side-Menu_Class Side_Menu_Colapse">
                 <!--    Character list  (in words)-->
             </div>
             <hr/>
-            <div id="Side-Menu3" class="Side-Menu_Class">
+            <div id="Side-Menu3" class="Side-Menu_Class Side_Menu_Colapse">
                 <!--    effects    (Debuff) -->
             </div>
             <hr/>
-            <div id="Side-Menu4" class="Side-Menu_Class">
+            <div id="Side-Menu4" class="Side-Menu_Class Side_Menu_Colapse">
                 <!--    influences  (Bar)-->
                 
-                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Pain:<span class="PainTitle Side-Menu_Class"></span></div>
-                <div class="Side-Influences Side-Menu_Class InfluencesAll">
-                    <div class="Side-Influences_Bar Pain Side-Menu_Class InfluencesAll"></div>
+                <div class="Side-Influences_Title Side-Menu_Class Side_Menu_Colapse InfluencesAll">Pain:<span class="PainTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
+                <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
+                    <div class="Side-Influences_Bar Pain Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>            
-                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Fatigue:<span class="FatigueTitle Side-Menu_Class"></span></div>
-                <div class="Side-Influences Side-Menu_Class InfluencesAll">
-                    <div class="Side-Influences_Bar Fatigue Side-Menu_Class InfluencesAll"></div>
+                <div class="Side-Influences_Title Side-Menu_Class Side_Menu_Colapse InfluencesAll">Fatigue:<span class="FatigueTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
+                <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
+                    <div class="Side-Influences_Bar Fatigue Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>            
-                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Fear:<span class="FearTitle Side-Menu_Class"></span></div>
-                <div class="Side-Influences Side-Menu_Class InfluencesAll">
-                    <div class="Side-Influences_Bar Fear Side-Menu_Class InfluencesAll"></div>
+                <div class="Side-Influences_Title Side-Menu_Class Side_Menu_Colapse InfluencesAll">Fear:<span class="FearTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
+                <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
+                    <div class="Side-Influences_Bar Fear Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>            
-                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Stress:<span class="StressTitle Side-Menu_Class"></span></div>
-                <div class="Side-Influences Side-Menu_Class InfluencesAll">
-                    <div class="Side-Influences_Bar Stress Side-Menu_Class InfluencesAll"></div>
+                <div class="Side-Influences_Title Side-Menu_Class Side_Menu_Colapse InfluencesAll">Stress:<span class="StressTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
+                <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
+                    <div class="Side-Influences_Bar Stress Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>            
-                <div class="Side-Influences_Titl Side-Menu_Class InfluencesAll">Trauma:<span class="TraumaTitle Side-Menu_Class"></span></div>
-                <div class="Side-Influences Side-Menu_Class InfluencesAll">
-                    <div class="Side-Influences_Bar Trauma Side-Menu_Class InfluencesAll"></div>
+                <div class="Side-Influences_Titl Side-Menu_Class Side_Menu_Colapse InfluencesAll">Trauma:<span class="TraumaTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
+                <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
+                    <div class="Side-Influences_Bar Trauma Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>            
-                <div class="Side-Influences_Titl Side-Menu_Class InfluencesAll">Addiction:<span class="AddictionTitle Side-Menu_Class"></span></div>
-                <div class="Side-Influences Side-Menu_Class InfluencesAll">
-                    <div class="Side-Influences_Bar Addiction Side-Menu_Class InfluencesAll"></div>
+                <div class="Side-Influences_Titl Side-Menu_Class Side_Menu_Colapse InfluencesAll">Addiction:<span class="AddictionTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
+                <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
+                    <div class="Side-Influences_Bar Addiction Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>            
-                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Sickness:<span class="SicknessTitle Side-Menu_Class"></span></div>
-                <div class="Side-Influences Side-Menu_Class InfluencesAll">
-                    <div class="Side-Influences_Bar Sickness Side-Menu_Class InfluencesAll"></div>
+                <div class="Side-Influences_Title Side-Menu_Class Side_Menu_Colapse InfluencesAll">Sickness:<span class="SicknessTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
+                <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
+                    <div class="Side-Influences_Bar Sickness Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>            
-                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Bleed:<span class="BleedTitle Side-Menu_Class"></span></div>
-                <div class="Side-Influences Side-Menu_Class InfluencesAll">
-                    <div class="Side-Influences_Bar Bleed Side-Menu_Class InfluencesAll"></div>
+                <div class="Side-Influences_Title Side-Menu_Class Side_Menu_Colapse InfluencesAll">Bleed:<span class="BleedTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
+                <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
+                    <div class="Side-Influences_Bar Bleed Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>            
-                <div class="Side-Influences_Title Side-Menu_Class InfluencesAll">Control:<span class="ControlTitle Side-Menu_Class"></span></div>
-                <div class="Side-Influences Side-Menu_Class InfluencesAll">
-                    <div class="Side-Influences_Bar Control Side-Menu_Class InfluencesAll"></div>
+                <div class="Side-Influences_Title Side-Menu_Class Side_Menu_Colapse InfluencesAll">Control:<span class="ControlTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
+                <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
+                    <div class="Side-Influences_Bar Control Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>
             </div>
-            <div class="bottom-links Side-Menu_Class">
-                <a href="/index.html" class="asettings Side-Menu_Class"><button type="button" class="settings">Exit</button></a>
-                <a class="asettings Side-Menu_Class"><button type="button" class="settings_Load settings" onclick="openSettings(1)">Load</button></a>
+            <div id="Side-Menu5" class="Side-Menu_Class Side_Menu_Colapse">
+                <div class="bottom-links Side-Menu_Class Side_Menu_Colapse">
+                    <button href="/index.html" class="settings Side-Menu_Class Side_Menu_Colapse" role="link">Exit</button>
+                    <button type="button" class="settings Side-Menu_Class Side_Menu_Colapse" onclick="openSettings(1)">Load</button>
+                    <button type="button" class="settings Side-Menu_Class Side_Menu_Colapse" onclick="openSettings(4)">More</button>
+                </div>
+                <div class="SettingsLOW Side-Menu_Class Side_Menu_Colapse">
+                    <button type="button" class="settings Side-Menu_Class Side_Menu_Colapse" onclick="openSettings(3)">settings</button>
+                    <div type="" class="settings settingsEmpty Side-Menu_Class Side_Menu_Colapse"></div>
+                    <button type="button" class="asettings settings Side-Menu_Class Side_Menu_Colapse" onclick="openSettings(2)">Gameplay</button>
+                </div>
             </div>
         </div>
         <div class="content-wrapper">
@@ -190,7 +197,7 @@
                         <tr class="section5">
                             <td class="nameChangeTitle">
                                 <form class="nameChange" novalidate>
-                                    <label for="nameChangeIn">Change save name</label>
+                                    <label for="nameChangeIn">Change save name to:</label>
                                     <input type="text"  id="nameChangeIn"name='nameChangeIn' placeholder="Main" pattern="[A-Za-z0-9]">
                                 </form>
                             </td>
