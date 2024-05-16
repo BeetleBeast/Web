@@ -1229,7 +1229,7 @@ function story(saveData){
                                 main_section.appendChild(document.createElement('br'));
                                 manageHiddenInfo(saveData, true, 0)
                                 break;
-                                // TODO: TP savadata
+                                // TODO: FT savadata
                         }
                         break;
                     case 7:
