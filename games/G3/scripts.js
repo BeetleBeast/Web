@@ -164,48 +164,55 @@ function newGame(){
         "title_progress" : { 
             //  title / chapter num : { title_story_[current_title_progress] : title}
             0 : { "title_story_0" : 'Into the new world'},
-            1 : { "title_story_1" : 'Finding an exit'},
+            1 : { "title_story_1" : 'Cave Exploration'},
             2 : { "title_story_2" : 'Lost in the forest'}, 
             3 : { "title_story_3" : 'Old cabbin'},
         },
         "storyLine_progress" : {
-            //  chapter num : { Scene num : {"sceneName" : "placeholder", "playerText": "placeholder"}, },
+            //  chapter num : { Scene num : {"sceneName" : "placeholder", "sceneText": "placeholder"}, },
             Death : {
-                0 : {"sceneName" : "DeathScreen0", "playerText": "You died because "},
+                0 : {"sceneName" : "DeathScreen0", "sceneText": "You died because "},
             },
             0 : {
-                0 :  {"sceneName" : "Start", "playerText": "You wake up in a dark cave, the damp air clinging to your skin as you grope for any semblance of direction. The sound of distant rumbling echoes through the cavern, urging you to explore. With each step, the path twists and turns, revealing ancient ruins and forgotten passages. As you navigate this mysterious labyrinth, the weight of uncertainty presses upon you, yet a flicker of curiosity ignites within."},
-                1 :  {"sceneName" : "charachterDefining0", "playerText" : "Gazing into the rippling surface of a subterranean pool, you catch a glimpse of your own reflection amidst the murky depths. The dim light barely illuminates your features, leaving much to the imagination. Who is this figure staring back at you? The lines of gender blur in the wavering distortion, leaving only a sense of mystery in its wake. Lost in contemplation, you linger in the tranquil embrace of the cave, pondering the journey that lies ahead. With each ripple that disturbs your reflection, a surge of determination propels you forward, ready to embrace the enigma of your own existence. Let us now delve deeper into the story of this mysterious soul, as we unveil the intricate details of Your identity amidst the shadows of the underworld."},
-                2 :  {"sceneName" : "charachterDefining1", "playerText" : "In the dim cavern, Your eyes glimmer like precious gems, reflecting the faint light with an entrancing allure. With each glance, you discern a depth of color, ranging from the azure depths of a tranquil ocean to the earthy warmth of sunlit forests"},
-                3 :  {"sceneName" : "charachterDefining2", "playerText" : "Amidst the shadows, Your hair dances in the gentle breeze, its texture hinting at a story of its own. Whether cascading in ebony rivers, catching the light in shimmering silver strands, or ablaze with the fiery hues of a setting sun, each tress adds to Your mystique"},
-                4 :  {"sceneName" : "charachterDefining3", "playerText" : "Your skin, bathed in the flickering light, revealed a complexion that seemed to hold stories untold. As you observe closely, you notice nuances of color, from the palest porcelain to the richest ebony, each hue adding depth to Your enigmatic presence."},
-                5 :  {"sceneName" : "charachterDefining4", "playerText" : "Your stature, silhouetted against the cavern walls, commands attention with a presence that is both formidable and intriguing. As you study them further, you discern the subtle contours of Your frame, which may lean towards a delicate grace or exude a powerful strength, leaving an indelible impression in the depths of the cavern."},
-                6 :  {"sceneName" : "charachterDefining5", "playerText" : "Your attire, a reflection of your journey through the rugged terrain, appears weathered and worn, bearing the marks of your passage through the cave's unforgiving landscape. You notice that your clothing carries either the rugged authenticity of a seasoned traveler, marked by dirt and grime, or the pristine cleanliness that hints at your recent arrival, untouched by the trials of the cavern."},
-                7 :  {"sceneName" : "charachterDefining6", "playerText" : "Gazing into the rippling waters of the cave's puddle, the figure contemplates their gender, recognizing it as a deeply personal truth. Whether they perceive themselves as aligning with the feminine or masculine, their identity crystallizes as a reflection of their inner self, not merely a narrative waiting to be written."},
-                8 :  {"sceneName" : "charachterDefining7", "playerText" : "As the light begins to dim within the cavern, the figure gazes into the fading reflections of the puddle, contemplating their essence. In the obscurity, their species becomes shrouded in uncertainty, a mysterious aspect of their being that defies classification. Their identity transcends the confines of known races, leaving their true nature obscured in the fading light."},
-                9 :  {"sceneName" : "seekExit", "playerText" : "Navigating the damp walls of the cavern, you seek an exit, fingers tracing the rough texture in search of escape. With each step, your determination grows, fueled by the desire to break free from the confines of this underground labyrinth."},
+                0 :  {"sceneName" : "Start", "sceneText": "You wake up in a dark cave, the damp air clinging to your skin as you grope for any semblance of direction. The sound of distant rumbling echoes through the cavern, urging you to explore. With each step, the path twists and turns, revealing ancient ruins and forgotten passages. As you navigate this mysterious labyrinth, the weight of uncertainty presses upon you, yet a flicker of curiosity ignites within."},
+                1 :  {"sceneName" : "charachterDefining0", "sceneText" : "Gazing into the rippling surface of a subterranean pool, you catch a glimpse of your own reflection amidst the murky depths. The dim light barely illuminates your features, leaving much to the imagination. Who is this figure staring back at you? The lines of gender blur in the wavering distortion, leaving only a sense of mystery in its wake. Lost in contemplation, you linger in the tranquil embrace of the cave, pondering the journey that lies ahead. With each ripple that disturbs your reflection, a surge of determination propels you forward, ready to embrace the enigma of your own existence. Let us now delve deeper into the story of this mysterious soul, as we unveil the intricate details of Your identity amidst the shadows of the underworld."},
+                2 :  {"sceneName" : "charachterDefining1", "sceneText" : "In the dim cavern, Your eyes glimmer like precious gems, reflecting the faint light with an entrancing allure. With each glance, you discern a depth of color, ranging from the azure depths of a tranquil ocean to the earthy warmth of sunlit forests"},
+                3 :  {"sceneName" : "charachterDefining2", "sceneText" : "Amidst the shadows, Your hair dances in the gentle breeze, its texture hinting at a story of its own. Whether cascading in ebony rivers, catching the light in shimmering silver strands, or ablaze with the fiery hues of a setting sun, each tress adds to Your mystique"},
+                4 :  {"sceneName" : "charachterDefining3", "sceneText" : "Your skin, bathed in the flickering light, revealed a complexion that seemed to hold stories untold. As you observe closely, you notice nuances of color, from the palest porcelain to the richest ebony, each hue adding depth to Your enigmatic presence."},
+                5 :  {"sceneName" : "charachterDefining4", "sceneText" : "Your stature, silhouetted against the cavern walls, commands attention with a presence that is both formidable and intriguing. As you study them further, you discern the subtle contours of Your frame, which may lean towards a delicate grace or exude a powerful strength, leaving an indelible impression in the depths of the cavern."},
+                6 :  {"sceneName" : "charachterDefining5", "sceneText" : "Your attire, a reflection of your journey through the rugged terrain, appears weathered and worn, bearing the marks of your passage through the cave's unforgiving landscape. You notice that your clothing carries either the rugged authenticity of a seasoned traveler, marked by dirt and grime, or the pristine cleanliness that hints at your recent arrival, untouched by the trials of the cavern."},
+                7 :  {"sceneName" : "charachterDefining6", "sceneText" : "Gazing into the rippling waters of the cave's puddle, the figure contemplates their gender, recognizing it as a deeply personal truth. Whether they perceive themselves as aligning with the feminine or masculine, their identity crystallizes as a reflection of their inner self, not merely a narrative waiting to be written."},
+                8 :  {"sceneName" : "charachterDefining7", "sceneText" : "As the light begins to dim within the cavern, the figure gazes into the fading reflections of the puddle, contemplating their essence. In the obscurity, their species becomes shrouded in uncertainty, a mysterious aspect of their being that defies classification. Their identity transcends the confines of known races, leaving their true nature obscured in the fading light."},
+                9 :  {"sceneName" : "seekExit", "sceneText" : "Navigating the damp walls of the cavern, you seek an exit, fingers tracing the rough texture in search of escape. With each step, your determination grows, fueled by the desire to break free from the confines of this underground labyrinth."},
             },
             1 : {
-                0 :  {"sceneName" : "seekExit0", "playerText": "As you wander through the cave's labyrinthine passages, you encounter a variety of pathways, each offering its own unique allure. One path is adorned with vibrant green moss, another lined with glittering crystals, while another disappears into shadowed depths. Further along, you find yourself following the course of an underground stream, and eventually, you stumble upon a cavern illuminated by bioluminescent fungi. Each pathway beckons with its own mysteries, inviting you to explore deeper into the heart of the cave's secrets."},
-                1 :  {"sceneName" : "The Mossy Passage", "playerText": "The current area is enveloped in a verdant embrace, with lush green moss covering every surface. The air is cool and fresh, carrying the earthy scent of vegetation. Shafts of dim light filter through the canopy above, casting dappled patterns on the moss-covered ground."},
-                2 :  {"sceneName" : "The Crystal Tunnel", "playerText": "In this area, the walls sparkle with the mesmerizing glow of crystals, illuminating the surroundings with a soft, ethereal light. The air feels charged with energy, and the ground beneath your feet shimmers with crystalline formations. Every step echoes softly in the cavernous space, creating a sense of wonder and awe."},
-                3 :  {"sceneName" : "The Shadowed Corridor", "playerText": "As you navigate this area, darkness presses in from all sides, enveloping you in an oppressive gloom. The air feels heavy and stifling, and the sound of your own footsteps echoes eerily in the silence. Shapes shift and morph in the shadows, playing tricks on your senses and heightening your sense of unease."},
-                4 :  {"sceneName" : "The Subterranean Stream", "playerText": "Here, the area is defined by the presence of a crystal-clear stream that meanders through the cavern. The sound of rushing water fills the air, accompanied by the gentle drip of stalactites above. The walls are slick with moisture, and patches of bioluminescent fungi cast a soft, eerie glow on the surroundings."},
-                5 :  {"sceneName" : "he Fungal Grove", "playerText": "In this area, the cavern is alive with the soft glow of bioluminescent fungi, casting an otherworldly light on the surroundings. The air is thick with the earthy scent of mushrooms, and strange shapes loom in the shadows. The ground beneath your feet is spongy with fungal growth, adding to the surreal atmosphere of the grove."},
-                6 :  {"sceneName" : "Mossy1", "playerText": "As you traverse the mossy passage, you stumble upon a hidden alcove where a delicate flower blooms amidst the verdant foliage. Its petals shimmer with an otherworldly glow, emitting a faint, melodic hum. The flower seems to beckon to you, offering a sense of peace and serenity amidst the chaos of the cave."},
-                7 :  {"sceneName" : "Crystal1", "playerText": "In the heart of the crystal tunnel, you discover a shimmering pool of water, its surface reflecting the myriad hues of the surrounding crystals. As you approach, you notice a faint figure standing at the water's edge, its form obscured by the dancing light."},
-                8 :  {"sceneName" : "Shadowed1", "playerText": "Within the shadowed corridor, you come across a series of ancient runes etched into the cavern walls, their meanings lost to time. As you study the intricate symbols, you sense a faint stirring in the darkness, as if the very shadows themselves are alive with unseen energy."},
-                9 :  {"sceneName" : "Subterranean1", "playerText": "Along the banks of the subterranean stream, you encounter a family of glowing fish, their scales shimmering with iridescent light as they dart through the crystal-clear waters. They seem to be communicating with one another through a series of intricate patterns and movements, creating a mesmerizing display of aquatic ballet."},
-                10 :  {"sceneName" : "Fungal1", "playerText": "Deep within the fungal grove, you stumble upon a cluster of luminous mushrooms, their caps pulsating with a soft, ethereal light. As you approach, you feel a sense of peace wash over you, as if the mushrooms are emitting a calming energy that soothes your weary soul."},
-                11 :  {"sceneName" : "Mossy2", "playerText": "placeholder"},
-                12 :  {"sceneName" : "Mossy1_hidden_enclove", "playerText": "You have found a hidden alcove tucked away within the mossy passage, concealed by lush greenery. Inside, the alcove opens into a small chamber adorned with shimmering crystals that reflect the dim light filtering through cracks in the ceiling. The air is cool and refreshing, carrying a faint hint of earthiness and mystery. Amidst the crystals, you spot a glimmering object half-buried in the moss—a small, intricately carved wooden box"},
-                13 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
-                14 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
-                15 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
-                16 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
-                17 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
-                18 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
-                19 :  {"sceneName" : "placeholder", "playerText": "placeholder"},
+                0 :  {"sceneName" : "seekExit0", "sceneText": "As you wander through the cave's labyrinthine passages, you encounter a variety of pathways, each offering its own unique allure. One path is adorned with vibrant green moss, another lined with glittering crystals, while another disappears into shadowed depths. Further along, you find yourself following the course of an underground stream, and eventually, you stumble upon a cavern illuminated by bioluminescent fungi. Each pathway beckons with its own mysteries, inviting you to explore deeper into the heart of the cave's secrets."},
+                1 :  {"sceneName" : "The Mossy Passage", "sceneText": "The current area is enveloped in a verdant embrace, with lush green moss covering every surface. The air is cool and fresh, carrying the earthy scent of vegetation. Shafts of dim light filter through the canopy above, casting dappled patterns on the moss-covered ground."},
+                2 :  {"sceneName" : "The Crystal Tunnel", "sceneText": "In this area, the walls sparkle with the mesmerizing glow of crystals, illuminating the surroundings with a soft, ethereal light. The air feels charged with energy, and the ground beneath your feet shimmers with crystalline formations. Every step echoes softly in the cavernous space, creating a sense of wonder and awe."},
+                3 :  {"sceneName" : "The Shadowed Corridor", "sceneText": "As you navigate this area, darkness presses in from all sides, enveloping you in an oppressive gloom. The air feels heavy and stifling, and the sound of your own footsteps echoes eerily in the silence. Shapes shift and morph in the shadows, playing tricks on your senses and heightening your sense of unease."},
+                4 :  {"sceneName" : "The Subterranean Stream", "sceneText": "Here, the area is defined by the presence of a crystal-clear stream that meanders through the cavern. The sound of rushing water fills the air, accompanied by the gentle drip of stalactites above. The walls are slick with moisture, and patches of bioluminescent fungi cast a soft, eerie glow on the surroundings."},
+                5 :  {"sceneName" : "he Fungal Grove", "sceneText": "In this area, the cavern is alive with the soft glow of bioluminescent fungi, casting an otherworldly light on the surroundings. The air is thick with the earthy scent of mushrooms, and strange shapes loom in the shadows. The ground beneath your feet is spongy with fungal growth, adding to the surreal atmosphere of the grove."},
+                6 :  {"sceneName" : "Mossy1", "sceneText": "As you traverse the mossy passage, you stumble upon a hidden alcove where a delicate flower blooms amidst the verdant foliage. Its petals shimmer with an otherworldly glow, emitting a faint, melodic hum. The flower seems to beckon to you, offering a sense of peace and serenity amidst the chaos of the cave."},
+                7 :  {"sceneName" : "Crystal1", "sceneText": "In the heart of the crystal tunnel, you discover a shimmering pool of water, its surface reflecting the myriad hues of the surrounding crystals. As you approach, you notice a faint figure standing at the water's edge, its form obscured by the dancing light."},
+                8 :  {"sceneName" : "Shadowed1", "sceneText": "Within the shadowed corridor, you come across a series of ancient runes etched into the cavern walls, their meanings lost to time. As you study the intricate symbols, you sense a faint stirring in the darkness, as if the very shadows themselves are alive with unseen energy."},
+                9 :  {"sceneName" : "Subterranean1", "sceneText": "Along the banks of the subterranean stream, you encounter a family of glowing fish, their scales shimmering with iridescent light as they dart through the crystal-clear waters. They seem to be communicating with one another through a series of intricate patterns and movements, creating a mesmerizing display of aquatic ballet."},
+                10 :  {"sceneName" : "Fungal1", "sceneText": "Deep within the fungal grove, you stumble upon a cluster of luminous mushrooms, their caps pulsating with a soft, ethereal light. As you approach, you feel a sense of peace wash over you, as if the mushrooms are emitting a calming energy that soothes your weary soul."},
+                11 :  {"sceneName" : "Mossy2", "sceneText": "placeholder"},
+                12 :  {"sceneName" : "Mossy1_hidden_enclove", "sceneText": "You have found a hidden alcove tucked away within the mossy passage, concealed by lush greenery. Inside, the alcove opens into a small chamber adorned with shimmering crystals that reflect the dim light filtering through cracks in the ceiling. The air is cool and refreshing, carrying a faint hint of earthiness and mystery. Amidst the crystals, you spot a glimmering object half-buried in the moss—a small, intricately carved wooden box"},
+                13 :  {"sceneName" : "placeholder", "sceneText": "placeholder"},
+                14 :  {"sceneName" : "placeholder", "sceneText": "placeholder"},
+                15 :  {"sceneName" : "placeholder", "sceneText": "placeholder"},
+                16 :  {"sceneName" : "placeholder", "sceneText": "placeholder"},
+                17 :  {"sceneName" : "placeholder", "sceneText": "placeholder"},
+                18 :  {"sceneName" : "placeholder", "sceneText": "placeholder"},
+                19 :  {"sceneName" : "placeholder", "sceneText": "placeholder"},
+            },
+            2 : {
+                0 :  {"sceneName" : `"FreshAir", "sceneText":"As the protagonist emerged from the cave's mouth, shrouded in the embrace of night's thick veil, a sense of urgency seized their heart. With every step into the darkness, the chilling embrace of uncertainty tightened its grip. The moon, a mere sliver in the sky, cast feeble light upon the rugged terrain, barely illuminating the path ahead. Each shadow seemed to whisper secrets of hidden dangers, urging caution with every hesitant footfall.
+                The wilderness stretched out before them, an endless expanse of tangled undergrowth and looming silhouettes of trees. The rustle of leaves and the distant howl of unseen creatures served as eerie companions on their journey. With no destination in sight, the need for shelter gnawed at their very core, urging them onward in search of refuge from the unforgiving night.
+                Their senses heightened, attuned to every sound and movement in the darkness, they pressed forward, driven by the primal instinct for survival. The cool night air kissed their skin, carrying the scent of damp earth and ancient secrets. In the distance, a faint glow beckoned—a beacon of hope amidst the vast unknown.
+                With determination etched upon their features, they forged ahead, guided by the flickering light, their quest for shelter a silent prayer in the wilderness of the night.`
+                },
             },
         },
         "Choices_Possible" : {
@@ -246,7 +253,15 @@ function newGame(){
                 //  : { 1 : "Previously", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : "Next"},
                 //  : { 1 : "Previously", 7 : "Next"},
                 // Leave the area undisturbed
-            }
+            },
+            2 : {
+                0 : { 1 : "Previously", 7 : "Next"},
+            },
+        },
+        "ALT_Choices_Possible" : {
+            1 : {
+                0 : { 1 : "dd"},
+            },
         },
         "storyLine_progress_Confused" : {
             //  chapter number : { Special scene number : { Scene : Text }
@@ -324,6 +339,24 @@ function newGame(){
         },
         "Player_character" : Player,
         "Buttons" : [1,2,3,4,5,6,7],
+        "Uncoverded" : {
+            //  type of hidden piece : {    ID of said piece    }
+            "HiddenText" : {
+                0 : false,
+            },
+            "HiddenButton" : {
+                2 : false,
+            },
+            "Items" : {
+                0 : false,
+            },
+        },
+        "HiddenStoryLine" : {
+            //  chapter : {     scene : {   Id : `PlaceHolder`}}
+            1 : {
+                6 : {0 : `You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.`},
+            },
+        },
         "Buttons_Hidden" : {
             //  chapter number : {  scene number  : [  button numbers wich chould be hidden ]  }
             1 : {
@@ -758,7 +791,7 @@ function story(saveData){
             } else {
                 stopTyping = true;
                 console.log('current_storyLine_progress id=8', saveData.current_storyLine_progress);
-                slowTypingText(saveData,saveData.storyLine_progress[saveData.current_chapter_progress][saveData.current_storyLine_progress]['playerText'], '.main_section', undefined, undefined, true);
+                slowTypingText(saveData,saveData.storyLine_progress[saveData.current_chapter_progress][saveData.current_storyLine_progress]['sceneText'], '.main_section', undefined, undefined, true);
                 slowTypingText(saveData,saveData.title_progress[saveData.current_title_progress]['title_story_' + saveData.current_title_progress], '.Quest_Title', undefined, undefined, true);
                 isCurrentlyPrinting = false;
                 console.log('Print everything for scene number ', saveData.current_storyLine_progress);
@@ -791,7 +824,7 @@ function story(saveData){
             }
         }
     }
-    function manageHiddenInfo(saveData, revealInfo) {
+    function manageHiddenInfo(saveData, revealInfo,HiddenTextID) {
         const current_storyLine = saveData.current_storyLine_progress;
         const current_chapter = saveData.current_chapter_progress;
         // Check if Buttons_Hidden data exists for the current chapter and story line
@@ -800,11 +833,25 @@ function story(saveData){
             // Iterate over the hidden button values for the current scene
             Buttons_Hidden.forEach(buttonValue => {
                 const button = document.querySelector('.Sh_' + buttonValue);
+                if(saveData.Uncoverded.HiddenButton[buttonValue] == true){
+                    button.style.display = "block";
+                    return;
+                }
                 if (button) {
                     // Set button display based on revealInfo condition
                     button.style.display = revealInfo ? "block" : "none";
+                    if (revealInfo){saveData.Uncoverded.HiddenButton[buttonValue] = true};
                 }
             });
+            if(HiddenTextID >= 0){
+                const Text_Hidden = saveData.HiddenStoryLine[saveData.current_chapter_progress][saveData.current_storyLine_progress];
+                if(saveData.Uncoverded.HiddenText[HiddenTextID] == false) {
+                    addTextWithTempColor('.main_section',Text_Hidden[HiddenTextID],'blue',false)
+                    saveData.Uncoverded.HiddenText[HiddenTextID] = true;
+                }else{
+                    //main_section.textContent += Text_Hidden[HiddenTextID];
+                }
+            }
         } else {
             console.log(`No hidden buttons defined for chapter ${current_chapter} and scene ${current_storyLine}`);
         }
@@ -960,9 +1007,9 @@ function story(saveData){
         let title_scene = current_storyLine['sceneName']
         let scene_text;
         if(DeathReason){
-            scene_text = current_storyLine['playerText'] + DeathReason;
+            scene_text = current_storyLine['sceneText'] + DeathReason;
         }else{
-            scene_text = current_storyLine['playerText'];
+            scene_text = current_storyLine['sceneText'];
         }
         slowTypingText(saveData,scene_text,'.main_section',undefined, 35);     // Put the content on the left and the place where it needs to go on the right + index + speed
         saveData.DeathReason = undefined;
@@ -1184,9 +1231,9 @@ function story(saveData){
                             case 6:
                                 //  Feel the texture of the moss beneath your fingertips
                                 main_section.appendChild(document.createElement('br'));
-                                addTextWithTempColor('.main_section',"You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.",'blue',false)
-                                manageHiddenInfo(saveData, true)
+                                manageHiddenInfo(saveData, true, 0)
                                 break;
+                                // TODO: TP savadata
                         }
                         break;
                     case 7:
