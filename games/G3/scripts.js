@@ -11,8 +11,6 @@ const Button_Choice4 = document.querySelector('.Sh_4');
 const Button_Choice5 = document.querySelector('.Sh_5');
 const Button_Choice6 = document.querySelector('.Sh_6');
 const Button_Choice7 = document.querySelector('.Sh_7');
-const savefileId = document.getElementById('savefileId');
-const loadfileId = document.getElementById('loadfileId');
 const RestartGame = document.getElementById('Reset');
 const inventoryItem = document.querySelector('.inventoryItem');
 const Side_Menu = document.querySelector('.Side-Menu_Class');   //  influences  (Bar)
@@ -691,8 +689,6 @@ function story(saveData){
     const Button_Choice5 = document.querySelector('.Sh_5');
     const Button_Choice6 = document.querySelector('.Sh_6');
     const Button_Choice7 = document.querySelector('.Sh_7');
-    const savefileId = document.getElementById('savefileId');
-    const loadfileId = document.getElementById('loadfileId');
     const RestartGame = document.getElementById('Reset');
     const inventoryItem = document.querySelector('.inventoryItem');
     const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  (in words)
@@ -1633,48 +1629,14 @@ function setEventListener(){
     // Add event listener for Side Menu Colapse Button click
     Side_Menu_ColapseButton.addEventListener("click", Side_Menu_ColapseButtonClickHandler);
     Side_Menu_ColapseButton.setAttribute('data-listener-added', 'true');
-    
-
-    // Add event listener for save file click
-
-    if (!savefileId.hasAttribute('data-listener-added')) {
-        savefileId.addEventListener("click", saveFileClickHandler);
-        savefileId.setAttribute('data-listener-added', 'true');
-    }
-
-    // Remove event listener for save file click
-
-    if (savefileId.hasAttribute('data-listener-added')) {
-        savefileId.removeEventListener("click", saveFileClickHandler);
-        savefileId.removeAttribute('data-listener-added');
-    }
-
-    // Add event listener for load file click
-
-    if (!loadfileId.hasAttribute('data-listener-added')) {
-        loadfileId.addEventListener("click", loadFileClickHandler);
-        loadfileId.setAttribute('data-listener-added', 'true');
-    }
-
-    // Remove event listener for load file click
-
-    if (loadfileId.hasAttribute('data-listener-added')) {
-        loadfileId.removeEventListener("click", loadFileClickHandler);
-        loadfileId.removeAttribute('data-listener-added');
-    }
 
     // Add event listener for RestartGame click
-
-    if (!RestartGame.hasAttribute('data-listener-added')) {
-        RestartGame.addEventListener("click", ResetFileClickHandler);
-        RestartGame.setAttribute('data-listener-added', 'true');
-    }
+    RestartGame.addEventListener("click", ResetFileClickHandler);
+    RestartGame.setAttribute('data-listener-added', 'true');
 
     // Remove event listener for RestartGame click
-
-    if (RestartGame.hasAttribute('data-listener-added')) {
-        RestartGame.removeEventListener("click", ResetFileClickHandler);
-        RestartGame.removeAttribute('data-listener-added');
-    }
+    RestartGame.removeEventListener("click", ResetFileClickHandler);
+    RestartGame.removeAttribute('data-listener-added');
+    
     
 }
