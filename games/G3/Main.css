@@ -15,7 +15,11 @@
 	--side-Color: rgb(30, 30, 44);
     --secondColor:rgba(228, 5, 128, 0.445);
 	--thirdColor: rgba(35, 37, 48, 0.521);
-	
+
+	--DarkBlue: rgb(35, 37, 48);
+	--AlmostBlue: rgb(0, 255, 255);
+	--Green1: rgb(41, 143, 118);
+	--Green2: rgb(144, 238, 144);
 	--Black: rgb(0, 0, 0);
 	--Red: rgb(255, 0, 0);
 	--Brown: rgb(165, 42, 42);
@@ -24,10 +28,7 @@
 	--Gold: rgb(255, 215, 0);
 	--beige: rgb(255, 134, 134);
 	--AlmostRed2: rgb(238, 144, 144);
-	--DarkBlue: rgb(35, 37, 48);
-	--AlmostBlue: rgb(0, 255, 255);
-	--Green1: rgb(41, 143, 118);
-	--Green2: rgb(144, 238, 144);
+
 
 	--DefaultColor0: azure;
 	--DefaultColor2: rgb(34, 34, 34);
@@ -569,7 +570,7 @@ body{
 .Side-extra , .parent{
 	background-color: var(--thirdColor);
 	height: 99vh;
-	text-align: left;
+	/*text-align: left;*/
 	visibility: hidden;
 	display: flex;
 	flex-direction: column;
@@ -619,7 +620,7 @@ hr[data-visible=false]  {
 	margin: 0;
 	position: relative;
 	text-align: center;
-	background-color: var(--thirdColor);
+	background-color: var(--DefaultColor12);
 	
 }
 .parent{
@@ -790,15 +791,15 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
 }
 .tabletable {
     display: flex;
-    
-    
+    border: 2px solid var(--DefaultColor9);
+    background-color: var(--side-Color);
     align-items: center;
     justify-content:flex-start;
     flex-direction: column;
     /*height: -moz-fit-content;*/
     /*height: fit-content;/*TODO:	add correct width and height 	*/
 	height: 75%;
-	width: 75%;
+	width: 60%;
     margin-bottom: 20px;
 }
 
@@ -807,6 +808,8 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
     border-color: var(--AlmostPurple4);
     border-radius: 5px;
     padding: 20px;
+	width: 95%;
+	height: 95%;
 }
 .sectionNULL{
     border-bottom: 1px solid;
@@ -887,6 +890,13 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
     border-color: var(--Red);
     color: var(--Red);
 }
+.trSection{
+border: 1px solid var(--mainColor);
+width: 200%;
+}
+.trSection:hover:not(.disable){
+	background-color: var(--AlmostBlack2);
+}
 .section0{
     width: -moz-fit-content;
     width: fit-content;
@@ -918,7 +928,6 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
     height: fit-content;
 	border: 1px solid var(--DefaultColor0);
 }
-
 .section5{
     display: flex;
     flex-direction: row;
@@ -940,6 +949,9 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
 }
 .thick-arrow-right-SG {
     transform: rotate(315deg); /* Adjust rotation angle for right arrow */
+}
+.nameChangeLabel{
+	color: var(--mainColor);
 }
 .ApplyB{
     color: var(--Brown);

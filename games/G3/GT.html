@@ -139,14 +139,14 @@
                 <table class="tabletable">
                     <caption></caption>
                     <tbody class="Allsection">
-                        <tr class="sectionNULL">
+                        <tr class="sectionNULL trSectionHead">
                             <th class="Num1"><h5>#</h5></th>
                             <th class="SaveGameH">Save</th>
                             <th class="load_gameSH">load</th>
                             <th class="Th_NameH">ID / Name</th>
                             <th class="Del_gameH">Delete</th>
                         </tr>
-                        <tr class="section_Latest">
+                        <tr class="section_Latest trSection">
                             <td class="Num1"><h5 class="Numberchanger">A</h5></td>
                             <td class="SaveGame"></td>
                             <td class="load_gameS"><button type="button" class="Section0_load_game load_gameS BtnTable" onclick="loadGame(0)">load Game</button></td>
@@ -154,35 +154,35 @@
                             <td class="Del_game"><button type="button" class="Section00_Del_G BtnTable DEl" onclick="deleteGame(0)">Delete Game</button></td>
                         </tr>
                         
-                        <tr class="section0">
+                        <tr class="section0 trSection">
                             <td class="Num1"><h5 class="Numberchanger">1</h5></td>
                             <td class="SaveGame"><button type="button" class="Section0_Save_Game BtnTable" onclick="saveGame(1)">Save Game</button></td>
                             <td class="load_gameS"disabled><button type="button" class="Section1_load_game load_gameS BtnTable" onclick="loadGame(1)" disabled>load Game</button></td>
                             <td class="Th_Name"><span class="Section0_Name  SpanSName0" id="gameName1"></span></td>
                             <td class="Del_game"><button type="button" class="Section0_Del_G BtnTable DEl" onclick="deleteGame(1)">Delete Game</button></td>
                         </tr>
-                        <tr class="section1">
+                        <tr class="section1 trSection">
                             <td class="Num1"><h5 class="Numberchanger">2</h5></td>
                             <td class="SaveGame"><button type="button" class="Section1_Save_Game BtnTable" onclick="saveGame(2)">Save Game</button></td>
                             <td class="load_gameS"><button type="button" class="Section2_load_game load_gameS BtnTable" onclick="loadGame(2)">load Game</button></td>
                             <td class="Th_Name"><span class="Section1_Name SpanSName1" id="gameName2"></span></td>
                             <td class="Del_game"><button type="button" class="Section1_Del_G BtnTable DEl" onclick="deleteGame(2)">Delete Game</button></td>
                         </tr>
-                        <tr class="section2">
+                        <tr class="section2 trSection">
                             <td class="Num1"><h5 class="Numberchanger">3</h5></td>
                             <td class="SaveGame"><button type="button" class="Section2_Save_Game BtnTable" onclick="saveGame(3)">Save Game</button></td>
                             <td class="load_gameS"><button type="button" class="Section3_load_game load_gameS BtnTable" onclick="loadGame(3)">load Game</button></td>
                             <td class="Th_Name"><span class="Section2_Name SpanSName2" id="gameName3"></span></td>
                             <td class="Del_game"><button type="button" class="Section2_Del_G BtnTable DEl" onclick="deleteGame(3)">Delete Game</button></td>
                         </tr>
-                        <tr class="section3">
+                        <tr class="section3 trSection">
                             <td class="Num1"><h5 class="Numberchanger">4</h5></td>
                             <td class="SaveGame"><button type="button" class="Section3_Save_Game BtnTable" onclick="saveGame(4)">Save Game</button></td>
                             <td class="load_gameS"><button type="button" class="Section4_load_game load_gameS BtnTable" onclick="loadGame(4)">load Game</button></td>
                             <td class="Th_Name"><span type="button" class="Section3_Name SpanSName3" id="gameName4"></span></td>
                             <td class="Del_game"><button type="button" class="Section0_Del_G BtnTable DEl" onclick="deleteGame(4)">Delete Game</button></td>
                         </tr>
-                        <tr class="section4">
+                        <tr class="section4 trSection">
                             <td class="Num1"><h5 class="Numberchanger">5</h5></td>
                             <td class="SaveGame"><button type="button" class="Section4_Save_Game BtnTable" onclick="saveGame(5)">Save Game</button></td>
                             <td class="load_gameS"><button type="button" class="Section5_load_game load_gameS BtnTable" onclick="loadGame(5)">load Game</button></td>
@@ -197,7 +197,7 @@
                         <tr class="section5">
                             <td class="nameChangeTitle">
                                 <form class="nameChange" novalidate>
-                                    <label for="nameChangeIn">Change save name to:</label>
+                                    <label for="nameChangeIn"><p class="nameChangeLabel">Change save name to:</p></label>
                                     <input type="text"  id="nameChangeIn"name='nameChangeIn' placeholder="Main" pattern="[A-Za-z0-9]">
                                 </form>
                             </td>
