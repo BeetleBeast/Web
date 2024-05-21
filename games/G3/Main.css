@@ -11,10 +11,52 @@
 	padding: 0%;
 	margin: 0%;
 
-    --mainColor: linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
+    --mainColor: linear-gradient( to bottom right,rgba(145, 36, 155, 15),rgba(228, 5, 128, 0.445) );
 	--side-Color: rgb(30, 30, 44);
     --secondColor:rgba(228, 5, 128, 0.445);
 	--thirdColor: rgba(35, 37, 48, 0.521);
+	
+	--Black: rgb(0, 0, 0);
+	--Red: rgb(255, 0, 0);
+	--Brown: rgb(165, 42, 42);
+	--RedBorder: rgb(185, 0, 62);
+	--AlmostRed1: rgb(219, 4, 4);
+	--Gold: rgb(255, 215, 0);
+	--beige: rgb(255, 134, 134);
+	--AlmostRed2: rgb(238, 144, 144);
+	--DarkBlue: rgb(35, 37, 48);
+	--AlmostBlue: rgb(0, 255, 255);
+	--Green1: rgb(41, 143, 118);
+	--Green2: rgb(144, 238, 144);
+
+	--DefaultColor0: azure;
+	--DefaultColor2: rgb(34, 34, 34);
+	--DefaultColor6: rgb(102, 102, 102);
+	--DefaultColor9: rgb(153, 153, 153);
+	--DefaultColor10: rgb(92, 92, 92);
+	--DefaultColor11: rgb(204, 204, 204);
+	--DefaultColor12: rgb(61, 61, 61);
+	--AlmostBlack1: rgba(0, 0, 0, 0.048);
+	--AlmostBlack2: rgba(0, 0, 0, 0.2);
+	--AlmostBlack3: rgba(0, 0, 0, 0.575);
+	--AlmostWhite1: rgba(255,255,255,0.1);
+	--AlmostWhite2: rgba(255,255,255,0.3);
+
+	--AlmostPurple1: rgb(145, 36, 155);
+	--AlmostPurple2: rgb(138, 43, 226);
+	--AlmostPurple3: rgb(67, 0, 129);
+	--AlmostPurple4: rgb(96, 27, 160);
+
+	--Pain: rgb(128, 0, 0);
+	--Fatigue: rgb(0, 192, 166);
+	--Fear: rgb(128, 0, 0);
+	--Stress: rgb(0, 192, 166);
+	--Trauma: rgb(0, 192, 166);
+	--Addiction: rgb(255, 208, 0);
+	--Sickness: rgb(134, 172, 0);
+	--Bleed: rgb(54, 0, 0);
+	--Control: rgb(0, 128, 0);/*Green*/
+	
 }
 *:visited{
     color: inherit;
@@ -70,7 +112,7 @@ body{
     display: flex;
 	text-align: center;
     overflow: hidden;
-    background-color:#232530;
+    background-color:var(--DarkBlue);
 	height: 100vh;
 }
 .container{
@@ -82,7 +124,7 @@ body{
 	position: relative;
 	width: 15em;
 	background-color: var(--side-Color);
-	border-right: 2px solid rgb(185, 0, 62);
+	border-right: 2px solid var(--RedBorder);
 	text-align: center;
     display: flex;
     flex-direction: column;
@@ -111,13 +153,13 @@ body{
 	padding: 5px;
 	padding-left: 1.5em;
 	padding-right: 1.5em;
-	background-color: #222;
-	color: gold;
-	border: 1px solid #666;
+	background-color: var(--DefaultColor2);
+	color: var(--Gold);
+	border: 1px solid var(--DefaultColor6);
 	
 }
 .startscreen:hover{
-	border: 1px solid #999;
+	border: 1px solid var(--DefaultColor9);
 	cursor: pointer;
 	transition-duration: 0.2s;
 }
@@ -134,7 +176,7 @@ body{
     opacity: 0.5;
 }
 .Quest_Title{
-    color: white;
+    color: var(--DefaultColor0);
 	z-index: auto;
 	position: relative;
 	top: 0px;
@@ -156,7 +198,7 @@ body{
 	height: 100%;
 }
 .main_section{
-    color: white;
+    color: var(--DefaultColor0);
 	text-align: center;
 	font-size: large;
 	width: 80em;
@@ -180,7 +222,7 @@ body{
 }
 .choices_section{
 	position: relative;
-    color: white;
+    color: var(--DefaultColor0);
 	z-index: auto;
 	text-align: center;
 	padding: 20px;
@@ -205,13 +247,13 @@ body{
 .Choices:hover{
 	text-decoration: underline;
 	cursor: pointer;
-	color: #298f76;
+	color: var(--Green1);
 }
 .Sh_1{
-	color: #ff8686;
+	color: var(--beige);
 }
 .Sh_1:hover{
-	color: #ff0000;
+	color: var(--Red);
 }
 .Sh_2{
 	float: left;
@@ -228,7 +270,7 @@ body{
 	margin-bottom: auto 12em;
     width: 100%; /* Full width */
 	height: 100%;
-    background-color: rgba(0, 0, 0, 0.048); /* Semi-transparent black background */
+    background-color: var(--AlmostBlack); /* Semi-transparent black background */
     display: none; /* Initially hidden */
     padding: 10px;
     box-sizing: border-box;
@@ -256,15 +298,15 @@ body{
 }
 /* Define hover styles for the inventory items */
 .inventoryItem {
-	border: 1px solid white;
-	color: white;
+	border: 1px solid var(--DefaultColor0);
+	color: var(--DefaultColor0);
 	padding: 10px;
     width: 80px;
     height: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    background-color: var(--AlmostWhite1); /* Semi-transparent white background */
     border-radius: 8px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
 	margin: auto 15px;
@@ -278,8 +320,8 @@ body{
 
 /* Hover styles for the inventory items */
 .inventoryItem:hover {
-    background-color: rgba(255, 255, 255, 0.3); /* Lighter semi-transparent white background */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add box shadow on hover for depth effect */
+    background-color: var(--AlmostWhite2); /* Lighter semi-transparent white background */
+    box-shadow: 0 4px 8px var(--AlmostBlack2); /* Add box shadow on hover for depth effect */
 }
 
 
@@ -291,25 +333,25 @@ body{
 	top: 0;
 	right: 0;
 	width: 35px;
-    color: white;
+    color: var(--DefaultColor0);
     padding: 5px 10px; /* Adjust padding for button size */
     margin: 5px;
-    border: 1px solid #999;
+    border: 1px solid var(--DefaultColor9);
 	border-right: none;
     background-color: transparent;
     cursor: pointer;
 }
 
 #Side-Menu_ColapseButton:hover {
-    border-color: rgb(92, 92, 92);
-    background-color: rgb(92, 92, 92);
+    border-color: var(--DefaultColor10);
+    background-color: var(--DefaultColor10);
 }
 
 /* Styles for the thick arrows (left and right) */
 .thick-arrow-left, .thick-arrow-right {
     width: 15px;
     height: 15px;
-    border: 5px solid #cccccc;
+    border: 5px solid var(--DefaultColor11);
     border-left: 0;
     border-top: 0;
     
@@ -345,7 +387,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: center; /* this will create space between the elements */
-	color: azure;
+	color: var(--DefaultColor0);
 	margin-top: auto 15px;
 }
 #Side-Menu3 {
@@ -357,7 +399,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* this will create space between the elements */
-	color: azure;
+	color: var(--DefaultColor0);
 }
 #Side-Menu4 {
 	/*background-color: var(--side-Color);*/
@@ -368,57 +410,57 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* this will create space between the elements */
-	color: azure;
+	color: var(--DefaultColor0);
 	margin-bottom: 3em;
 	margin-top: 15px;
 }
 .Side-Influences{
 	width: 100%;
 	height: 5px;
-	background-color: rgb(61, 61, 61);
+	background-color: var(--DefaultColor12);
 }
 .Side-Influences_Bar{
 	width: 50%;
 	height: 5px;
-	background-color: green;
+	background-color: var(--Control);
 
 }
 .Pain{
 	width: 1%;
-	background-color: rgb(128, 0, 0);
+	background-color: var(--Pain);
 }
 .Fatigue{
 	width: 1%;
-	background-color: rgb(0, 192, 166);
+	background-color: var(--Fatigue);
 }
 .Fear{
 	width: 1%;
-	background-color: rgb(128, 0, 0);
+	background-color: var(--Fear);
 }
 .Stress{
 	width: 1%;
-	background-color: rgb(0, 192, 166);
+	background-color: var(--Stress);
 }
 
 .Trauma{
 	width: 1%;
-	background-color: rgb(0, 192, 166);
+	background-color: var(--Trauma);
 }
 .Addiction{
 	width: 1%;
-	background-color: rgb(255, 208, 0);
+	background-color: var(--Addiction);
 }
 .Sickness{
 	width: 1%;
-	background-color: rgb(134, 172, 0);
+	background-color: var(--Sickness);
 }
 .Bleed{
 	width: 1%;
-	background-color: rgb(54, 0, 0);
+	background-color: var(--Bleed);
 }
 .Control{
 	width: 100%;
-	background-color: green;
+	background-color: var(--Control);
 }
 .bottom-links {
     display: flex;
@@ -432,8 +474,8 @@ body{
 	margin-bottom: 50px;
 }
 .Open-more{
-    color: aqua;
-	background-color: black;
+    color: var(--AlmostBlue);
+	background-color: var(--Black);
 	width: 5em;
 	display: block;
 	height: -moz-fit-content;
@@ -444,10 +486,10 @@ body{
 	/* existing styles */
 	margin-top: -10px;
 	margin-bottom: 15px;
-	border: 1px solid rgba(0, 0, 0, 0);
+	border: 1px solid transparent;
 }
 .Open-more:hover{
-    border: 1px solid lightgreen;
+    border: 1px solid var(--Green2);
 	cursor: pointer;
     
 }.Open-more:active{
@@ -458,14 +500,14 @@ body{
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-    color: aqua;
-	background-color: black;
+    color: var(--AlmostBlue);
+	background-color: var(--Black);
 	display: block;
 	width: 5em;
 	height: 2.5em;
 	padding: none;
 	bottom: 0px;
-	border: 1px solid rgba(0, 0, 0, 0);
+	border: 1px solid transparent;
 }
 .asettings{
 	/*justify-content: flex-end;
@@ -490,8 +532,8 @@ body{
 	
 }
 .settings:hover:not(.settingsEmpty){
-	color: aqua;
-    border: 1px solid lightgreen;
+	color: var(--AlmostBlue);
+    border: 1px solid var(--Green2);
 	cursor: pointer;
 }
 #Side-image{
@@ -502,7 +544,7 @@ body{
 	text-align: center;
 	font-size: 25px;
 	padding-top: 6%;
-	color: gold;
+	color: var(--Gold);
 	display: block;
 
 
@@ -513,7 +555,7 @@ body{
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.575);
+	background-color: var(--AlmostBlack3);
 	z-index: 9999999;
 	
 	padding: auto 5px;
@@ -572,7 +614,7 @@ hr[data-visible=false]  {
 
 .parent .child1 {
 	z-index: 9999999;
-	color: white;
+	color: var(--DefaultColor0);
 	opacity: 1;
 	margin: 0;
 	position: relative;
@@ -596,7 +638,7 @@ hr[data-visible=false]  {
 	height: fit-content;
 	padding-left: 15px;
 	padding-right: 15px;
-	color: white;
+	color: var(--DefaultColor0);
 }
 
 .child1{
@@ -604,7 +646,7 @@ hr[data-visible=false]  {
 	height:inherit;
 	top: 15px;
 	z-index: 9999999;
-	color: white;
+	color: var(--DefaultColor0);
 	opacity: 1;
 	
 
@@ -614,7 +656,7 @@ hr[data-visible=false]  {
 	z-index: inherit;
 }
 .Save-ul{
-    color: rgb(238, 144, 144);
+    color: var(--AlmostRed2);
 
 	position: relative;
 	width: 90%;
@@ -624,7 +666,7 @@ hr[data-visible=false]  {
 	
 }
 .Save-li{
-	color: lightgreen;
+	color: var(--Green2);
 
 	position: relative;
 	width: 100%;
@@ -633,7 +675,7 @@ hr[data-visible=false]  {
 	margin: 0;
 	display:block;
 }.Save-li2{
-	color: lightgreen;
+	color: var(--Green2);
 
 	position: relative;
 	width: 100%;
@@ -659,11 +701,11 @@ hr[data-visible=false]  {
 	height: auto;
 }
 .Button{
-	color: white;
+	color: var(--DefaultColor0);
 }
 .Button:hover:not(.settingsEmpty){
 	cursor: pointer;
-	color: blueviolet;
+	color: var(--AlmostPurple2);
 }
 .Restart{
 	height: fit-content;
@@ -672,12 +714,12 @@ hr[data-visible=false]  {
 }
 .Side-gameplay{
 	opacity: 1;
-	border-left: 3px solid  --thirdColor;
-	border-right: 3px solid  --thirdColor;
+	border-left: 3px solid  var(--thirdColor);
+	border-right: 3px solid  var(--thirdColor);
 }
 .Side-grafics{
 	opacity: 1;
-	border-right: 3px solid  --thirdColor;
+	border-right: 3px solid  var(--thirdColor);
 }
 .Side-more{
 	opacity: 1;
@@ -700,7 +742,7 @@ button{
     color: inherit;
     height: inherit;
     width: inherit;
-    box-shadow: 1px 1px 0px black;
+    box-shadow: 1px 1px 0px var(--Black);
 }
 .prprp{
     margin-top: 15px;
@@ -715,9 +757,9 @@ button{
     height: -moz-fit-content;
     height: fit-content;
     top: -50px;
-    color: rgb(67, 0, 129);
-    box-shadow: 2px 2px 10px rgb(219, 4, 4), 5px 12px 20px rgb(145, 36, 155);
-    background:  linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
+    color: var(--AlmostPurple3);
+    box-shadow: 2px 2px 10px var(--AlmostRed1), 5px 12px 20px var(--AlmostPurple1);
+    background:  var(--mainColor);
     transition: background-color 0.2s;
 
 }
@@ -731,9 +773,9 @@ button{
     height: -moz-fit-content;
     height: fit-content;
     top: -50px;
-    color: rgb(67, 0, 129);
-    box-shadow: 2px 2px 10px rgb(219, 4, 4), 5px 12px 20px rgb(145, 36, 155);
-    background:  linear-gradient( to bottom right, rgba(145, 36, 155,15),rgba(228, 5, 128, 0.445));
+    color: var(--AlmostPurple3);
+    box-shadow: 2px 2px 10px var(--AlmostRed1), 5px 12px 20px var(--AlmostPurple1);
+    background:  var(--mainColor);
     transition: background-color 0.2s;
 }
 #nav_BAck{
@@ -762,18 +804,18 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
 
 .Allsection{
     border: .1px solid;
-    border-color: rgb(96, 27, 160);
+    border-color: var(--AlmostPurple4);
     border-radius: 5px;
     padding: 20px;
 }
 .sectionNULL{
     border-bottom: 1px solid;
-    border-color: rgb(255, 255, 255);
+    border-color: var(--DefaultColor0);
     
 }
 .Num1{
     background-color: transparent;
-    color: blueviolet;
+    color: var(--AlmostPurple2);
     
     border-radius: 5px;
     padding-top: 20px;
@@ -782,7 +824,7 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
 }
 .SaveGameH{
     background-color: transparent;
-    color: blueviolet;
+    color: var(--AlmostPurple2);
     
     border-radius: 5px;
     padding-top: 20px;
@@ -791,7 +833,7 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
 }
 .load_gameSH{
     background-color: transparent;
-    color: blueviolet;
+    color: var(--AlmostPurple2);
     
     border-radius: 5px;
     padding-top: 20px;
@@ -800,7 +842,7 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
 }
 .Th_NameH{
     background-color: transparent;
-    color: blueviolet;
+    color: var(--AlmostPurple2);
     
     border-radius: 5px;
     padding-top: 20px;
@@ -810,7 +852,7 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
 }
 .Del_gameH{
     background-color: transparent;
-    color: blueviolet;
+    color: var(--AlmostPurple2);
     
     border-radius: 5px;
     padding-top: 20px;
@@ -819,7 +861,7 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
 }
 .Th_Name{
     background-color: transparent;
-    color: blueviolet;
+    color: var(--AlmostPurple2);
     
     border-radius: 5px;
     padding-top: 20px;
@@ -829,7 +871,7 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
 }
 .BtnTable{
     background-color: transparent;
-    color: blueviolet;
+    color: var(--AlmostPurple2);
     border: 1px solid transparent;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -838,43 +880,43 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
     text-align: center;
 }
 .BtnTable:hover:not(.disable, .pagesLG){
-    border-color: blueviolet;
+    border-color: var(--AlmostPurple2);
     animation: biggier .5s linear forwards;
 }
 .DEl:hover{
-    border-color: red;
-    color: red;
+    border-color: var(--Red);
+    color: var(--Red);
 }
 .section0{
     width: -moz-fit-content;
     width: fit-content;
     height: -moz-fit-content;
     height: fit-content;
-	border: 1px solid white;
+	border: 1px solid var(--DefaultColor0);
 }
 .section1{
     width: -moz-fit-content;
     width: fit-content;
     height: -moz-fit-content;
     height: fit-content;
-	border: 1px solid white;
+	border: 1px solid var(--DefaultColor0);
 }
 .section2{
     width: -moz-fit-content;
     width: fit-content;
     height: -moz-fit-content;
     height: fit-content;
-	border: 1px solid white;
+	border: 1px solid var(--DefaultColor0);
 }
 .section3{
     height: -moz-fit-content;
     height: fit-content;
-	border: 1px solid white;
+	border: 1px solid var(--DefaultColor0);
 }
 .section4{
 	height: -moz-fit-content;
     height: fit-content;
-	border: 1px solid white;
+	border: 1px solid var(--DefaultColor0);
 }
 
 .section5{
@@ -886,7 +928,7 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
 .thick-arrow-left-SG, .thick-arrow-right-SG {
     width: 15px;
     height: 15px;
-    border: 2px solid #000000;
+    border: 2px solid var(--Black);
     border-left: 0;
     border-top: 0;
     color: transparent;
@@ -900,12 +942,12 @@ button:active:not(.Section0_load_game, .Btn-backforward,.disable,.settingsEmpty)
     transform: rotate(315deg); /* Adjust rotation angle for right arrow */
 }
 .ApplyB{
-    color: brown;
+    color: var(--Brown);
     padding-left: 50px;
 }
 .ApplyB:hover{
-    color: red;
+    color: var(--Red);
 }
 #TitleS{
-    color: white;
+    color: var(--DefaultColor0);
 }
