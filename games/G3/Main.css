@@ -951,7 +951,7 @@ width: 200%;
     transform: rotate(315deg); /* Adjust rotation angle for right arrow */
 }
 .nameChangeLabel{
-	color: var(--mainColor);
+	color: var(--mainColor);/*TODO: werk here fix it */
 }
 .ApplyB{
     color: var(--Brown);
