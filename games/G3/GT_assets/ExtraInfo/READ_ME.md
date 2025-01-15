@@ -11,6 +11,9 @@ tower power up
 add phone too
 apk?
 
+click anywhere to progress text
+
+make sound
 
 make some place restore effects
 every action wich makes movement use fatigue    5%

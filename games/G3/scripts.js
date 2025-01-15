@@ -865,7 +865,7 @@ function story(saveData){
     function InventoryItemClickedHandler(item_id){
         switch(item_id){
             case 1:
-                console.log('you dired id=500')
+                console.log('you died id=500')
                 damageAndDeathParent(undefined,'you used the soul redeemer',true)
                 break;
             case 4:
@@ -1107,9 +1107,9 @@ function story(saveData){
         story(saveData);
     }
     
-    function nextChapter(saveData, IsDying = false) {
+    function nextChapter(saveData, IsDead = false) {
         // Increment the current chapter progress only if there are more chapters available
-        if(IsDying){
+        if(IsDead){
             saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
             saveData.current_chapter_progress = "Death";
         }

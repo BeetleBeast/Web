@@ -137,7 +137,7 @@ body{
     flex: 1; /* Flex container for app and side-extra */
     position: relative; /* Relative positioning for absolute children */
 }
-#app{
+.app{
 	flex: 1; /* Main content takes up remaining space */
 	display: flexbox;
 	float: right;

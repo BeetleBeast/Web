@@ -11,12 +11,14 @@ if os.path.exists(S_Web_dir):
     Game_content_dir = os.path.join(S_Web_dir, "games")
     assets_content_dir = os.path.join(S_Web_dir, "Main", "assets")
     main_dir = "Main"
+    print(S_Web_dir)
 else:
     web_content_dir = os.path.join(os.getcwd())
     main_content_dir = os.path.join(os.getcwd(), "Main")
     Game_content_dir = os.path.join(os.getcwd(), "games")
     assets_content_dir = os.path.join(os.getcwd(), "Main", "assets")
     main_dir = "Main"
+    print(os.getcwd())
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -28,7 +30,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 print("Can't find index.html")
         elif self.path == "/index.html":
             # Handle the case when self.path is '/index.html'
-            self.path = "/"      
+            self.path = "/index.html"      
         elif self.path.endswith(".html"):
             # Handle html files
             self.send_response(200)
