@@ -443,10 +443,14 @@ function story(saveData){
         let lastChoiceIndex = saveData.Choices_Made[saveData.current_chapter_progress].length - 1;
         let LastButtonPressed = saveData.Choices_Made[saveData.current_chapter_progress][lastChoiceIndex];
         let value;
+        let valueS;
+        let charachterDefining;
         if(saveData.IsDead){
             value = saveData.Choices_Possible[current_chapter][LastButtonPressed];
+            valueS = saveData.ALT_Choices_Possible[current_chapter][LastButtonPressed];
         }else{
             value = saveData.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
+            valueS = saveData.ALT_Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
         }
         switch (current_chapter){
             case 'Death':
@@ -457,35 +461,48 @@ function story(saveData){
                 switch (lastChoiceIndex) {
                     case 2:
                         character.eye_Color = value;
-                        Side_Menu2.innerHTML = "Your "+value+" eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery."
+                        charachterDefining = "Your "+value+" eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery.";
+                        Side_Menu2.innerHTML = charachterDefining;
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
                         break;
                     case 3:
                         character.hair_style = value;
-                        Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes and your "+value+" stylish hair reveal a captivating essence, yet the remainder of you remains veiled in mystery."
+                        charachterDefining = "Your "+valueSTRING[0]+" eyes and your "+value+" stylish hair reveal a captivating essence, yet the remainder of you remains veiled in mystery."
+                        Side_Menu2.innerHTML = charachterDefining;
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
                         break;
                     case 4:
                         character.skin_complexion = value;
-                        Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, and your "+value+" complexion exude a captivating essence, leaving the rest of you shrouded in mystery."
+                        charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, and your "+value+" complexion exude a captivating essence, leaving the rest of you shrouded in mystery."
+                        Side_Menu2.innerHTML = charachterDefining;
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
                         break;
                     case 5:
                         character.stature = value;
-                        Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, and your "+value+" stature combine to present a captivating essence, yet the remainder of you remains shrouded in mystery."
+                        charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, and your "+value+" stature combine to present a captivating essence, yet the remainder of you remains shrouded in mystery."
+                        Side_Menu2.innerHTML = charachterDefining;
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
                         break;
                     case 6:
                         character.attire = value;
-                        Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+value+" attire collectively emanate a captivating essence, leaving the rest of you unexplored."
+                        charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+value+" attire collectively emanate a captivating essence, leaving the rest of you unexplored."
+                        Side_Menu2.innerHTML = charachterDefining;
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
                         break;
                     case 7:
                         character.gender = value;
-                        Side_Menu2.innerHTML = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+valueSTRING[4]+" attire collectively emanate a captivating essence. While your gender is "+value+", your race remains a mystery, awaiting discovery."
+                        charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+valueSTRING[4]+" attire collectively emanate a captivating essence. While your gender is "+value+", your race remains a mystery, awaiting discovery."
+                        Side_Menu2.innerHTML = charachterDefining;
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
                         break;
                 }
+                
                 nextScene(saveData);
                 break;
             case 1:

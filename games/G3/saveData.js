@@ -106,9 +106,20 @@ let saveData = {
         },
     },
     "ALT_Choices_Possible" : {
+        //  chapter number : { scene number : { Button number : Text }}
+        0 : {
+            0 : { 7 : "Next"},
+            1 : { 1 : "Previously", 7 : "Next"},
+            2 : { 1 : "Previously", 2 : "blue", 3 : "brown", 4 : "green", 5 : "hazel", 6 : "light grey"},
+            3 : { 1 : "Previously", 2 : "light blue", 3 : "dark blue", 4 : "light yellow", 5 : "orange", 6 : "firebrick"},
+            4 : { 1 : "Previously", 2 : "beige", 3 : "bronze", 4 : "Olive", 5 : "pink", 6 : "light brown"},
+            5 : { 1 : "Previously", 2 : "light pink", 3 : "dark blue", 4 : "green", 5 : "light blue", 6 : "brown"},
+            6 : { 1 : "Previously", 4 : "dark grey", 7 : "light grey"},
+            7 : { 1 : "Previously", 4 : "pink", 7 : "blue"},
+        },
         1 : {
             0 : { 1 : "dd"},
-        },
+        },  
     },
     "storyLine_progress_Confused" : {
         //  chapter number : { Special scene number : { Scene : Text }

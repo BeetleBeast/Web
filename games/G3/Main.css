@@ -373,13 +373,13 @@ body{
 	font-weight: 400;
 	font-style: normal;
 }
-#Side-Menu1{
+.Side-Menu1{
 	margin: auto 5px;
 	padding: auto 5px;
 	margin-top: 5px;
 }
 
-#Side-Menu2 {
+.Side-Menu2 {
 	/*background-color: var(--side-Color);*/
 	
 	width: 15em;
@@ -391,7 +391,7 @@ body{
 	color: var(--DefaultColor0);
 	margin-top: auto 15px;
 }
-#Side-Menu3 {
+.Side-Menu3 {
 	/*background-color: var(--side-Color);*/
 	
 	width: 15em;
@@ -402,7 +402,7 @@ body{
     justify-content: space-between; /* this will create space between the elements */
 	color: var(--DefaultColor0);
 }
-#Side-Menu4 {
+.Side-Menu4 {
 	/*background-color: var(--side-Color);*/
 	
 	width: 15em;

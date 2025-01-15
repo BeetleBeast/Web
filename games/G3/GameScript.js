@@ -15,10 +15,10 @@ const Button_Choice7 = document.querySelector('.Sh_7');
 const RestartGame = document.getElementById('Reset');
 const inventoryItem = document.querySelector('.inventoryItem');
 const Side_Menu = document.querySelector('.Side-Menu_Class');   //  influences  (Bar)
-const Side_Menu2 = document.getElementById('Side-Menu2');   //  Character list  (in words)
-const Side_Menu3 = document.getElementById('Side-Menu3');   //  effects    (Debuff)
-const Side_Menu4 = document.getElementById('Side-Menu4');   //  influences  (Bar)
-const Side_Menu5 = document.getElementById('Side-Menu5');   //  Extra buttons
+const Side_Menu2 = document.querySelector('.Side-Menu2');   //  Character list  (in words)
+const Side_Menu3 = document.querySelector('.Side-Menu3');   //  effects    (Debuff)
+const Side_Menu4 = document.querySelector('.Side-Menu4');   //  influences  (Bar)
+const Side_Menu5 = document.querySelector('.Side-Menu5');   //  Extra buttons
 const Side_MenuClass = document.querySelector('.InfluencesAll')
 const PainBar = document.querySelector('.Pain');    //  width: 1%;
 const FatigueBar = document.querySelector('.Fatigue');  //  width: 1%;
@@ -385,7 +385,7 @@ document.addEventListener('keydown', function(event) {
         toggleInventory();
     }
 });
-function addTextWithTempColor(elementId, text, tempColor, Replace = true, temp = true, defaultColor = 'azure') {
+function addTextWithTempColor(elementId, text, Color, Replace = true, temp = true, defaultColor = 'azure') {
     const element = document.querySelector(elementId);
     
     // Change text content
@@ -395,12 +395,35 @@ function addTextWithTempColor(elementId, text, tempColor, Replace = true, temp =
         element.textContent += text;
     }
     // Temporarily change text color using the provided color
-    element.style.color = tempColor;
+    element.style.color = Color;
     // Reset color after a delay (simulating temporary color change)
     if(temp){
         setTimeout(() => {
             element.style.color = defaultColor; // Reset to default color (azure)
         }, 1000); // Adjust delay time (in milliseconds) as needed
+    }
+}
+function addTextWithTempColorS(elementId,fullText, textThatNeedsColor, TextThatNeedsToRemainColor, color, replace  = true, temp = true, defaultColor = 'azure') {
+    const element = document.querySelector(elementId);
+    if (replace) {
+        element.innerHTML = ""; // Clear the content for replacement
+    }
+    const textParts = fullText.split(textThatNeedsColor); // Split around the target text
+    element.innerHTML = ""; // Clear before appending new content
+    //TODO: fix the colors
+    // Append text and color span
+    element.append(document.createTextNode(textParts[0])); // Add first part
+    const span = document.createElement("span");
+    span.textContent = textThatNeedsColor;
+    span.style.color = color;
+    element.append(span); // Add colored text
+    element.append(document.createTextNode(textParts[1])); // Add remaining text
+
+    // Reset color after a delay if temp is true
+    if (temp) {
+        setTimeout(() => {
+            span.style.color = defaultColor;
+        }, 1000); // 1-second delay
     }
 }
 
