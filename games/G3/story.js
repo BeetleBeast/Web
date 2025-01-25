@@ -104,6 +104,7 @@ function story(saveData){
                 }
                 // Set the inner HTML of the button
                 button.innerHTML = value;
+                button.style.display = 'inline-block'; // Make the button visible
                 // Add event listener to the button
                 const handler = buttonClickHandler(buttonValue, saveData);
                 button.removeEventListener("click", button.handlerReference); // Remove previous listener to avoid duplicates
@@ -322,6 +323,7 @@ function story(saveData){
             ResetEffectBarToDefault(saveData);
             character.Resurrect();
             console.log('id=501 Reset to last safe place');
+            story(saveData);
         }
         if (saveData.current_storyLine_progress < Object.keys(saveData.storyLine_progress[saveData.current_chapter_progress]).length - 1 && saveData.current_chapter_progress == 0) {
             saveData.current_storyLine_progress++;
@@ -409,9 +411,7 @@ function story(saveData){
         if (saveData.current_chapter_progress < Object.keys(saveData.storyLine_progress).length - 1) {
             saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
             saveData.current_chapter_progress++;
-            if(saveData.current_chapter_progress != "Death"){
-                saveData.LastSafeChapter = saveData.current_chapter_progress;
-            }
+            saveData.LastSafeChapter = saveData.current_chapter_progress;
             saveData.current_title_progress++;
             console.log('Next Chapter');
         } else {
@@ -463,43 +463,49 @@ function story(saveData){
                         character.eye_Color = value;
                         charachterDefining = "Your "+value+" eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery.";
                         Side_Menu2.innerHTML = charachterDefining;
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
+                        valueCOLOR.push(valueS);
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,0,valueS,true,false,undefined)
                         break;
                     case 3:
                         character.hair_style = value;
                         charachterDefining = "Your "+valueSTRING[0]+" eyes and your "+value+" stylish hair reveal a captivating essence, yet the remainder of you remains veiled in mystery."
                         Side_Menu2.innerHTML = charachterDefining;
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
+                        valueCOLOR.push(valueS);
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,1,valueS,true,false,undefined)
                         break;
                     case 4:
                         character.skin_complexion = value;
                         charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, and your "+value+" complexion exude a captivating essence, leaving the rest of you shrouded in mystery."
                         Side_Menu2.innerHTML = charachterDefining;
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
+                        valueCOLOR.push(valueS);
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,2,valueS,true,false,undefined)
                         break;
                     case 5:
                         character.stature = value;
                         charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, and your "+value+" stature combine to present a captivating essence, yet the remainder of you remains shrouded in mystery."
                         Side_Menu2.innerHTML = charachterDefining;
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
+                        valueCOLOR.push(valueS);
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,3,valueS,true,false,undefined)
                         break;
                     case 6:
                         character.attire = value;
                         charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+value+" attire collectively emanate a captivating essence, leaving the rest of you unexplored."
                         Side_Menu2.innerHTML = charachterDefining;
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
+                        valueCOLOR.push(valueS);
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,4,valueS,true,false,undefined)
                         break;
                     case 7:
                         character.gender = value;
                         charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+valueSTRING[4]+" attire collectively emanate a captivating essence. While your gender is "+value+", your race remains a mystery, awaiting discovery."
                         Side_Menu2.innerHTML = charachterDefining;
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueS,true,false,undefined)
                         valueSTRING.push(value);
+                        valueCOLOR.push(valueS);
+                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,5,valueS,true,false,undefined)
                         break;
                 }
                 

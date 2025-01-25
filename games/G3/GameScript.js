@@ -37,7 +37,8 @@ const Side_Menu_ColapseButton = document.getElementById('Side-Menu_ColapseButton
 
 var currentdate = new Date();
 var datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1) + "/" + currentdate.getFullYear() + "|" + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-let valueSTRING = [];
+let valueSTRING = [];   // Initialize the text of the player character set feature 
+let valueCOLOR = [];    // Initialize the color of the player character set feature 
 let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
 let amount = 0; //  unesseray
@@ -403,24 +404,39 @@ function addTextWithTempColor(elementId, text, Color, Replace = true, temp = tru
         }, 1000); // Adjust delay time (in milliseconds) as needed
     }
 }
-function addTextWithTempColorS(elementId,fullText, textThatNeedsColor, TextThatNeedsToRemainColor, color, replace  = true, temp = true, defaultColor = 'azure') {
+function addTextWithTempColorS(elementId,textBlock, textValue, textValuePast, textColorPast = [], amountOfPastTextValue, color, replace  = true, temporary = true, defaultColor = 'azure') {
+    // elementId, textBlock, textValue, textValuePast, color, replace = true, temporary = true, defaultColor = 'azure'
     const element = document.querySelector(elementId);
     if (replace) {
         element.innerHTML = ""; // Clear the content for replacement
     }
-    const textParts = fullText.split(textThatNeedsColor); // Split around the target text
-    element.innerHTML = ""; // Clear before appending new content
-    //TODO: fix the colors
-    // Append text and color span
+    //  color = saveData.ALT_Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
+    // Handle past text values
+    if (amountOfPastTextValue > 0 && textValuePast.length > 0) {
+        for (let i = 0; i < Math.min(amountOfPastTextValue, textValuePast.length); i++) {
+            const textPartsPast = textBlock.split(textValuePast[i]); // Split around textValuePast
+            element.append(document.createTextNode(textPartsPast[0])); // Add first part
+            const spanPast = document.createElement("span");
+            spanPast.textContent = textValuePast[i];
+            spanPast.style.color = textColorPast[i];
+            element.append(spanPast); // Add past text
+            textBlock = textPartsPast.slice(1).join(spanPast); // Update remaining textBlock
+        }
+    }
+
+    // Handle the main text value
+    const textParts = textBlock.split(textValue); // Split around textValue
     element.append(document.createTextNode(textParts[0])); // Add first part
     const span = document.createElement("span");
-    span.textContent = textThatNeedsColor;
+    span.textContent = textValue;
     span.style.color = color;
     element.append(span); // Add colored text
-    element.append(document.createTextNode(textParts[1])); // Add remaining text
+    if (textParts.length > 1) {
+        element.append(document.createTextNode(textParts.slice(1).join(span))); // Add remaining parts
+    }
 
-    // Reset color after a delay if temp is true
-    if (temp) {
+    // Reset color after a delay if temporary is true
+    if (temporary) {
         setTimeout(() => {
             span.style.color = defaultColor;
         }, 1000); // 1-second delay
@@ -470,6 +486,7 @@ function clearButtonContent() {
     choices_section_title.innerHTML = "";
     [Button_Choice1, Button_Choice2, Button_Choice3, Button_Choice4, Button_Choice5, Button_Choice6, Button_Choice7].forEach(button => {
         button.innerHTML = "";
+        button.style.display = 'none';
     });
 }
 function ResetEffectBarToDefault(saveData){

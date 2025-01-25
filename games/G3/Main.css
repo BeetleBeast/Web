@@ -29,6 +29,8 @@
 	--beige: rgb(255, 134, 134);
 	--AlmostRed2: rgb(238, 144, 144);
 
+	--LightGrey: rgb(123,123,123);
+	--DarkGrey: rgb(44,44,44);
 
 	--DefaultColor0: azure;
 	--DefaultColor2: rgb(34, 34, 34);
@@ -235,7 +237,18 @@ body{
 
 	background-color: var(--mainColor)
 }
+.choices_section_choices{
+	display: flex;
+	text-align: center;
+	justify-content: center; /* Center content horizontally */
+	align-items: center; /* Center content vertically */
+	flex-wrap: wrap; /* Allow wrapping of buttons if needed */
+	gap: 30px; /* Spacing between buttons */
+	color: var(--DefaultColor0);
+	background-color: var(--mainColor)
+}
 .Choices{
+	/*
 	float: left;
 	width: auto 2em;
 	height: auto;
@@ -243,7 +256,16 @@ body{
 	text-align: center;
 	margin-left: 5em;
 	margin-right: 5em;
-
+*/
+}
+.Choices{
+	display: none; /* Initially hidden, adjust visibility dynamically */
+	padding: auto 5px;
+	cursor: pointer;
+	font-size: 16px;
+}
+.Choices.visible {
+	display: inline-block; /* Only show visible buttons */
 }
 .Choices:hover{
 	text-decoration: underline;
@@ -252,18 +274,18 @@ body{
 }
 .Sh_1{
 	color: var(--beige);
+	
 }
 .Sh_1:hover{
 	color: var(--Red);
 }
 .Sh_2{
-	float: left;
-	margin-left: 10%;
+	/*float: left;*/
+	
 }
 .Sh_7{
-	float: right;
-	margin-right: 20%;
-	margin-left: 0;
+	/*float: right;*/
+	
 }
 /*	Inventory	*/
 #inventory {
