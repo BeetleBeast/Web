@@ -56,14 +56,14 @@ catch(error){
     };
     let saveData = saveData;
 }
-/*
+
 // Function to start up the game
 window.onload = function () {
     startup()
     LoadedSaves()
     setEventListener()
 };
-*/
+
 
 // Function to start up or load the game
 function startup(userConfirmed) {
@@ -97,7 +97,7 @@ function LoadedSaves() {
         SaveForest = JSON.parse(saveForestString);
         for (let i = 0; i < 6; i++) {
             const sectionSpanName = document.getElementById(`gameName${i}`); // 0 - 5 
-            saveData = SaveForest[`section${i}`];
+            //saveData = SaveForest[`section${i}`];
             if(i === 0){
             }else if (i > 0 && saveData) {
                 document.querySelector(`.Section${i}_load_game`).disabled = false;
@@ -550,12 +550,9 @@ function slowTypingText(saveData,text, elementId, index = 0, speed = 200, printI
     if (document.querySelector(elementId).innerText == text) {
         return;
     }
-    if(saveData.IsDead && elementId !== '.Quest_Title'){
-        // Clear the element before printing and print immediately
-        document.querySelector(elementId).style.color = 'red';
-    }else{
-        document.querySelector(elementId).style.color = 'white';
-    }
+    // Set text color based on `IsDead` status
+    document.querySelector(elementId).style.color = saveData.IsDead && elementId !== '.Quest_Title' ? 'red' : 'white';
+
     if (printImmediately || saveData.Settings.SlowTyping == false) {
         // Clear the element before printing and print immediately
         document.querySelector(elementId).innerHTML = '';
@@ -564,6 +561,32 @@ function slowTypingText(saveData,text, elementId, index = 0, speed = 200, printI
     }
     // Set printing flag before starting to print
     isCurrentlyPrinting = true;
+
+    function FakeCursor() {
+    // Create the fake insertion point
+    const cursor = document.createElement('span');
+    cursor.classList.add('fake-cursor');
+    cursor.innerHTML = '|';
+    document.querySelector(".main_section").appendChild(cursor);
+
+    // Add a blinking effect to the cursor using CSS
+    const cursorStyle = document.createElement('style');
+    cursorStyle.textContent = `
+        .fake-cursor {
+            display: inline-block;
+            animation: blink 1s step-start infinite;
+            color: inherit;
+        }
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(cursorStyle);
+
+    }
+
     function printCharacter() {
         if (index < text.length && !stopTyping) {
             isCurrentlyPrinting = true;
@@ -580,9 +603,15 @@ function slowTypingText(saveData,text, elementId, index = 0, speed = 200, printI
         } else {
             // If all characters have been printed, reset printing flag
             isCurrentlyPrinting = false;
+            //setTimeout(FakeCursor,5000);
         }
     }
-    //TODO: FT: printchar
+    /*
+    TODO
+    1. the print gets cut-off when an new aligna starts the new aligna should take the word with it
+    2. the FakeCursor doesn't work well enouth needs to be revized
+    3. add sound to it just start when isCurrentlyPrinting is true and it will work
+    */
     // Clear the element before starting to print characters
     document.querySelector(elementId).innerHTML = '';
     // Start printing characters
