@@ -237,7 +237,7 @@ function story(saveData){
         }
     }
     function DeBuffParentFunction(effect, amount, saveData, elementId){
-        character.applyDebuff(effect, amount, saveData, elementId)
+        //character.applyDebuff(effect, amount, saveData, elementId)
         deBuffEffectHandler(effect, amount, saveData, elementId);
     }
     function deBuffEffectHandler(effect, amount, saveData, element){
@@ -464,7 +464,12 @@ function story(saveData){
             valueS = saveData.ALT_Choices_Possible[current_chapter][LastButtonPressed];
         }else{
             value = saveData.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
-            valueS = saveData.ALT_Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
+            try{
+                valueS = saveData.ALT_Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
+            }catch(error){
+                console.log('fuck valueS', error);
+            }
+            
         }
         switch (current_chapter){
             case 'Death':

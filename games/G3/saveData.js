@@ -142,7 +142,8 @@ let saveData = {
     "storyLine_progress_Confused" : {
         //  chapter number : { Special scene number : { Scene : Text }
         1 : {
-            6 : {sceneText : "As you traverse the mossy passage, you stumble upon a hidden alcove where a delicate flower blooms amidst the verdant foliage. Its petals shimmer with an otherworldly glow, emitting a faint, melodic hum. The flower seems to beckon to you, offering a sense of peace and serenity amidst the chaos of the cave.", sceneTitle : "Finding an exit?"}
+            6 : {sceneText : "As you traverse the mossy passage, you stumble upon a hidden alcove where a delicate flower blooms amidst the verdant foliage. Its petals shimmer with an otherworldly glow, emitting a faint, melodic hum. The flower seems to beckon to you, offering a sense of peace and serenity amidst the chaos of the cave.",
+                sceneTitle : "Finding an exit?"}
         }
     },
     "Choices_Possible_Confused" : {

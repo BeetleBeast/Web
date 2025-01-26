@@ -41,19 +41,24 @@ let valueSTRING = [];   // Initialize the text of the player character set featu
 let valueCOLOR = [];    // Initialize the color of the player character set feature 
 let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
+let previousAmounts = [];
 let IsPacified = false;
 let ResetFile = false;// if true can't save latest as session is reseting
 let CurrentPageNumber = 1;
 
 
-
-try{localStorage.getItem('SaveForest');}
+/*
+try{
+    localStorage.getItem('SaveForest');
+}
 catch(error){
     let SaveForest = {
         'section0' : {},
     };
     let saveData = saveData;
+    console.log('Can this be removed? id=2525')
 }
+*/
 
 // Function to start up the game
 window.onload = function () {
@@ -97,7 +102,7 @@ function LoadedSaves() {
             const sectionSpanName = document.getElementById(`gameName${i}`); // 0 - 5 
             //saveData = SaveForest[`section${i}`];
             if(i === 0){
-            }else if (i > 0 && saveData) {
+            }else if (i > 0 && SaveForest[`section${i}`]) {
                 document.querySelector(`.Section${i}_load_game`).disabled = false;
                 document.querySelector(`.Section${i}_load_game`).classList.remove('disable');
                 sectionSpanName.textContent = `${saveData['saveDataName']} | ${saveData['saveDataTime']}`;
@@ -272,6 +277,7 @@ class Player {
             this.Debuff_Effects[effect].Amount = amount;
         }
     }
+    // TODO fix updateUI it breaks see     function DeBuffParentFunction(effect, amount, saveData, elementId){character.applyDebuff(effect, amount, saveData, elementId)} in story.js
     updateUI(effect, amount, saveData, element) {
         console.log('updateUI is activated id=156')
         // Update UI text to reflect debuff description if available
@@ -656,6 +662,7 @@ function loadGame(NumSection) {
         openSettings(1);
         clearButtonContent();
         ResetEffectBarToDefault(saveData);
+        Side_Menu2.innerHTML = "";
         // Call the mergeDefaultProperties function to ensure saveData has all expected properties
         mergeDefaultProperties(saveData);
         story(saveData);
