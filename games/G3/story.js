@@ -20,6 +20,8 @@ function story(saveData){
     manageHiddenInfo(saveData, false);  //  hides info if need be
     title_progress(current_title,current_title_progress)    //  print current title
     scene_progress(current_storyLine,current_storyLine_progress, saveData.DeathReason)    //  print current scene text
+    character_Descreption(saveData, saveData.Choices_Made);  //  print player character set feature if applicable
+    Effect_Bar_progress(saveData, saveData.CurrentDebuffBar);   //  print effect bar if applicable
     // Initialize the first page of the inventoryload_games_save
     populateInventory(saveData,1);
     choices_section_title.innerHTML = saveData.Buttons_section_title[saveData.current_chapter_progress][saveData.current_storyLine_progress];// print current scection title
@@ -39,7 +41,7 @@ function story(saveData){
                 value = scene[buttonValue];
             }
             if (value) {
-                console.log('value id=12',value)
+                console.log('value id=12 (buttonValue)',value)
                 buttonValues.push(buttonValue);
             }
         }
@@ -166,6 +168,18 @@ function story(saveData){
                 //  a green gemstone something
                 break;
         }
+    }
+    function character_Descreption(saveData, Choices_Made){
+        //  check wat in Side-Menu2 is, if not the same as Choices_Made replace it with It
+        if (Side_Menu2.innerHTML !== saveData.character_Descreption_Text_Final && saveData.current_storyLine_progress >= 3){
+            Side_Menu2.innerHTML = saveData.character_Descreption_Text_Final;
+            console.log('saveData.character_Descreption_Text_Final', saveData.character_Descreption_Text_Final);
+        }
+    }
+    function Effect_Bar_progress(saveData, CurrentDebuffBar){
+        //  check wat in Side-Menu4is, if not the same as CurrentDebuffBar replace it with It 
+        //  Side_Menu4
+        //TODO this needs to also be called like character_Descreption
     }
     // Function to populate inventory grid based on current page
     function populateInventory(saveData,pageNumber) {
@@ -458,54 +472,115 @@ function story(saveData){
                 nextScene(saveData);
                 break;
             case 0:
+                let descriptionTemplate = saveData.character_Descreption_Text[lastChoiceIndex].charachterDefining;
                 switch (lastChoiceIndex) {
                     case 2:
+                        //  Update class value
                         character.eye_Color = value;
-                        charachterDefining = "Your "+value+" eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery.";
+                        // Use `descriptionTemplate` with replacements
+                        charachterDefining = descriptionTemplate
+                        .replace(/{value}/g, value)
+                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
+                            return valueSTRING[parseInt(index, 10)];
+                        });
+                        //  Paste text to Side Menu
                         Side_Menu2.innerHTML = charachterDefining;
+                        // Update the value arrays
                         valueSTRING.push(value);
                         valueCOLOR.push(valueS);
+                        // Call the function to add text with temporary color
                         addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,0,valueS,true,false,undefined)
+                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
                         break;
                     case 3:
+                        //  Update class value
                         character.hair_style = value;
-                        charachterDefining = "Your "+valueSTRING[0]+" eyes and your "+value+" stylish hair reveal a captivating essence, yet the remainder of you remains veiled in mystery."
+                        // Use `descriptionTemplate` with replacements
+                        charachterDefining = descriptionTemplate
+                        .replace(/{value}/g, value)
+                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
+                            return valueSTRING[parseInt(index, 10)];
+                        });
+                        //  Paste text to Side Menu
                         Side_Menu2.innerHTML = charachterDefining;
+                        // Update the value arrays
                         valueSTRING.push(value);
                         valueCOLOR.push(valueS);
+                        // Call the function to add text with temporary color
                         addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,1,valueS,true,false,undefined)
+                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
                         break;
                     case 4:
+                        //  Update class value
                         character.skin_complexion = value;
-                        charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, and your "+value+" complexion exude a captivating essence, leaving the rest of you shrouded in mystery."
+                        // Use `descriptionTemplate` with replacements
+                        charachterDefining = descriptionTemplate
+                        .replace(/{value}/g, value)
+                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
+                            return valueSTRING[parseInt(index, 10)];
+                        });
+                        //  Paste text to Side Menu
                         Side_Menu2.innerHTML = charachterDefining;
+                        // Update the value arrays
                         valueSTRING.push(value);
                         valueCOLOR.push(valueS);
+                        // Call the function to add text with temporary color
                         addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,2,valueS,true,false,undefined)
+                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
                         break;
                     case 5:
+                        //  Update class value
                         character.stature = value;
-                        charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, and your "+value+" stature combine to present a captivating essence, yet the remainder of you remains shrouded in mystery."
+                        // Use `descriptionTemplate` with replacements
+                        charachterDefining = descriptionTemplate
+                        .replace(/{value}/g, value)
+                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
+                            return valueSTRING[parseInt(index, 10)];
+                        });
+                        //  Paste text to Side Menu
                         Side_Menu2.innerHTML = charachterDefining;
+                        // Update the value arrays
                         valueSTRING.push(value);
                         valueCOLOR.push(valueS);
+                        // Call the function to add text with temporary color
                         addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,3,valueS,true,false,undefined)
+                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
                         break;
                     case 6:
+                        //  Update class value
                         character.attire = value;
-                        charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+value+" attire collectively emanate a captivating essence, leaving the rest of you unexplored."
+                        // Use `descriptionTemplate` with replacements
+                        charachterDefining = descriptionTemplate
+                        .replace(/{value}/g, value)
+                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
+                            return valueSTRING[parseInt(index, 10)];
+                        });
+                        //  Paste text to Side Menu
                         Side_Menu2.innerHTML = charachterDefining;
+                        // Update the value arrays
                         valueSTRING.push(value);
                         valueCOLOR.push(valueS);
+                        // Call the function to add text with temporary color
                         addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,4,valueS,true,false,undefined)
+                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
                         break;
                     case 7:
+                        //  Update class value
                         character.gender = value;
-                        charachterDefining = "Your "+valueSTRING[0]+" eyes, your "+valueSTRING[1]+" stylish hair, your "+valueSTRING[2]+" complexion, your "+valueSTRING[3]+" stature, and your "+valueSTRING[4]+" attire collectively emanate a captivating essence. While your gender is "+value+", your race remains a mystery, awaiting discovery."
+                        // Use `descriptionTemplate` with replacements
+                        charachterDefining = descriptionTemplate
+                        .replace(/{value}/g, value)
+                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
+                            return valueSTRING[parseInt(index, 10)];
+                        });
+                        //  Paste text to Side Menu
                         Side_Menu2.innerHTML = charachterDefining;
+                        // Update the value arrays
                         valueSTRING.push(value);
                         valueCOLOR.push(valueS);
+                        // Call the function to add text with temporary color
                         addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,5,valueS,true,false,undefined)
+                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
                         break;
                 }
                 

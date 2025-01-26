@@ -239,6 +239,27 @@ let saveData = {
             6 : [2],
         },
     },
+    "character_Descreption_Text": {
+        2: {
+            charachterDefining: "Your {value} eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery.",
+        },
+        3: {
+            charachterDefining: "Your {valueSTRING[0]} eyes and your {value} stylish hair reveal a captivating essence, yet the remainder of you remains veiled in mystery.",
+        },
+        4: {
+            charachterDefining: "Your {valueSTRING[0]} eyes, your {valueSTRING[1]} stylish hair, and your {value} complexion exude a captivating essence, leaving the rest of you shrouded in mystery.",
+        },
+        5: {
+            charachterDefining: "Your {valueSTRING[0]} eyes, your {valueSTRING[1]} stylish hair, your {valueSTRING[2]} complexion, and your {value} stature combine to present a captivating essence, yet the remainder of you remains shrouded in mystery.",
+        },
+        6: {
+            charachterDefining: "Your {valueSTRING[0]} eyes, your {valueSTRING[1]} stylish hair, your {valueSTRING[2]} complexion, your {valueSTRING[3]} stature, and your {value} attire collectively emanate a captivating essence, leaving the rest of you unexplored.",
+        },
+        7: {
+            charachterDefining: "Your {valueSTRING[0]} eyes, your {valueSTRING[1]} stylish hair, your {valueSTRING[2]} complexion, your {valueSTRING[3]} stature, and your {valueSTRING[4]} attire collectively emanate a captivating essence. While your gender is {value}, your race remains a mystery, awaiting discovery.",
+        },
+    },
+    "character_Descreption_Text_Final": undefined,
     "Debuff_SpashText_Color" : {
         // has changed from nothing to type
         0 : {
@@ -364,4 +385,4 @@ let saveData = {
        // : {"Nam" : "PlaceHolder","quantity" : "PlaceHolder" , "quality" : "PlaceHolder"},
     ]
 }
-postMessage(saveData)
+//postMessage(saveData)

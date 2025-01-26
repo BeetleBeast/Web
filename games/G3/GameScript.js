@@ -41,8 +41,6 @@ let valueSTRING = [];   // Initialize the text of the player character set featu
 let valueCOLOR = [];    // Initialize the color of the player character set feature 
 let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
-let amount = 0; //  unesseray
-let previousAmounts = {};
 let IsPacified = false;
 let ResetFile = false;// if true can't save latest as session is reseting
 let CurrentPageNumber = 1;
@@ -509,10 +507,16 @@ function ResetEffectBarToDefault(saveData){
                     const effectText = saveData.Debuff_SpashText[Bar][7];
                     titleElement.style.color = saveData.Debuff_SpashText_Color[1][7];
                     document.querySelector(`.${Bar}Title`).innerHTML = `  ${effectText}.`;
+                    saveData.CurrentDebuffBar[Bar].BarLength = "70";
+                    saveData.CurrentDebuffBar[Bar].Text = effectText;
+                    saveData.CurrentDebuffBar[Bar].TextColor = saveData.Debuff_SpashText_Color[1][7];
                 }else{
                     const effectText = saveData.Debuff_SpashText[Bar][0];
                     document.querySelector(`.${Bar}Title`).innerHTML = `  ${effectText}.`;
                     titleElement.style.color = saveData.Debuff_SpashText_Color[0][0];
+                    saveData.CurrentDebuffBar[Bar].BarLength = "0";
+                    saveData.CurrentDebuffBar[Bar].Text = effectText;
+                    saveData.CurrentDebuffBar[Bar].TextColor = saveData.Debuff_SpashText_Color[0][0];
                 }
             }
         }
