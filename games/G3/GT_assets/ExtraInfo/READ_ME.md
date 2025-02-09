@@ -13,6 +13,10 @@ apk?
 
 click anywhere to progress text
 
+Make Dots progress -no click
+Screen shake event
+
+
 make sound
 
 make some place restore effects

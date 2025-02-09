@@ -171,7 +171,7 @@ function story(saveData){
     }
     function character_Descreption(saveData, Choices_Made){
         //  check wat in Side-Menu2 is, if not the same as Choices_Made replace it with It
-        if (Side_Menu2.innerHTML !== saveData.character_Descreption_Text_Final && saveData.current_storyLine_progress >= 3){
+        if (Side_Menu2.innerHTML !== saveData.character_Descreption_Text_Final && saveData.current_storyLine_progress >= 3 | saveData.current_chapter_progress >=1){
             Side_Menu2.innerHTML = saveData.character_Descreption_Text_Final;
             console.log('saveData.character_Descreption_Text_Final', saveData.character_Descreption_Text_Final);
         }

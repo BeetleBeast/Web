@@ -555,7 +555,58 @@ function DisplayDebuffTextWithColors(saveData, Bar, BarLength) {
         Bar.dataset.visible = 'true';
     }
 }
-function slowTypingText(saveData,text, elementId, index = 0, speed = 200, printImmediately = false) {
+function slowTypingText(saveData,text, elementId, index = 0, speed = 200, printImmediately = false, events = false) {
+    let spaceIndex = 0; // Reset space counter
+    function printCharacterImmediately(type) {
+        let output = ""; // Store the output in a temporary variable for better performance
+        
+        let element = document.querySelector(elementId);
+        if (type == 1) {
+            while (index < text.length) {
+                let char = text[index];
+
+                if (char === " ") {
+                    output += "&nbsp;";
+                    spaceIndex++;
+                } else if (spaceIndex >= 20 && char === "."| char === ",") {
+                    output += char + "<br>"; // Use <br> for new lines
+                    spaceIndex = 0;
+                } else {
+                    output += char;
+                }
+
+                index++;
+            }
+
+            element.innerHTML = output; // Set innerHTML once for efficiency
+            isCurrentlyPrinting = false; // Mark printing as complete
+            return;
+        }else if (type == 2){
+            isCurrentlyPrinting = true;
+            if (index < text.length && !stopTyping) {
+                let char = text[index];
+    
+                if (char === " ") {
+                    element.innerHTML += "&nbsp;";
+                    spaceIndex++;
+                } else if (spaceIndex >= 20 && char === "."| char === ",") {
+                    element.innerHTML += char + "<br>"; // Use <br> for new lines
+                    spaceIndex = 0;
+                } else {
+                    element.innerHTML += char;
+                }
+    
+                index++;
+                setTimeout(() => {
+                    printCharacterImmediately(2)
+                }, speed);// Schedule next character print
+            } else {
+                isCurrentlyPrinting = false; // Mark printing as complete
+                return;
+            }
+        }
+    }
+
     // Check if the text has already been printed
     if (document.querySelector(elementId).innerText == text) {
         return;
@@ -565,67 +616,49 @@ function slowTypingText(saveData,text, elementId, index = 0, speed = 200, printI
 
     if (printImmediately || saveData.Settings.SlowTyping == false) {
         // Clear the element before printing and print immediately
-        document.querySelector(elementId).innerHTML = '';
-        document.querySelector(elementId).innerHTML = text;
+        document.querySelector(elementId).innerHTML = '';  
+        // Start printing characters
+        printCharacterImmediately(1);
         return;
     }
     // Set printing flag before starting to print
     isCurrentlyPrinting = true;
 
     function FakeCursor() {
-    // Create the fake insertion point
-    const cursor = document.createElement('span');
-    cursor.classList.add('fake-cursor');
-    cursor.innerHTML = '|';
-    document.querySelector(".main_section").appendChild(cursor);
+        // Create the fake insertion point
+        const cursor = document.createElement('span');
+        cursor.classList.add('fake-cursor');
+        cursor.innerHTML = '|';
+        cursorT1 = ['\\', '|', '/', '-'];
+        cursorT2 = ['.'];
+        document.querySelector(".main_section").appendChild(cursor);
 
-    // Add a blinking effect to the cursor using CSS
-    const cursorStyle = document.createElement('style');
-    cursorStyle.textContent = `
-        .fake-cursor {
-            display: inline-block;
-            animation: blink 1s step-start infinite;
-            color: inherit;
-        }
-        @keyframes blink {
-            50% {
-                opacity: 0;
+        // Add a blinking effect to the cursor using CSS
+        const cursorStyle = document.createElement('style');
+        cursorStyle.textContent = `
+            .fake-cursor {
+                display: inline-block;
+                animation: blink 1s step-start infinite;
+                color: inherit;
             }
-        }
-    `;
-    document.head.appendChild(cursorStyle);
-
-    }
-
-    function printCharacter() {
-        if (index < text.length && !stopTyping) {
-            isCurrentlyPrinting = true;
-            // Print each character with a delay
-            let char = text[index];
-            if (char === " ") {
-                // For space character, include it in the output string with an extra space
-                document.querySelector(elementId).innerHTML += '&nbsp;';
-            } else {
-                document.querySelector(elementId).innerHTML += char;
+            @keyframes blink {
+                50% {
+                    opacity: 0;
+                }
             }
-            index++;
-            setTimeout(printCharacter, speed);
-        } else {
-            // If all characters have been printed, reset printing flag
-            isCurrentlyPrinting = false;
-            //setTimeout(FakeCursor,5000);
-        }
+        `;
+        document.head.appendChild(cursorStyle);
     }
     /*
     TODO
-    1. the print gets cut-off when an new aligna starts the new aligna should take the word with it
-    2. the FakeCursor doesn't work well enouth needs to be revized
-    3. add sound to it just start when isCurrentlyPrinting is true and it will work
+    
+    1. the FakeCursor doesn't work well enouth needs to be revized
+    2. add sound to it just start when isCurrentlyPrinting is true and it will work
     */
     // Clear the element before starting to print characters
     document.querySelector(elementId).innerHTML = '';
     // Start printing characters
-    printCharacter();
+    printCharacterImmediately(2);
 }
 function saveGame(NumSection){
     currentdate = new Date();

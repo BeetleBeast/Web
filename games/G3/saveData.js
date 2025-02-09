@@ -363,6 +363,8 @@ let saveData = {
     },
     "Settings" : {
         'SlowTyping' : true,
+        'DynamicTyping': false,
+        'IregularSpeed' : false,
     },
     "Inventory" : [
         //  ID number : {"Name" : Name of item ,"quantity" : 0,"quality" : "common"}
