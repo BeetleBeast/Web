@@ -327,8 +327,8 @@ function story(saveData){
     function scene_progress(current_storyLine,current_storyLine_progress, DeathReason) {
         let title_scene = current_storyLine['sceneName']
         let scene_text;
-        if(DeathReason){
-            scene_text = current_storyLine['sceneText'] + DeathReason;
+        if(saveData.DeathReason){
+            scene_text = current_storyLine['sceneText'] + saveData.DeathReason;
         }else{
             scene_text = current_storyLine['sceneText'];
         }
