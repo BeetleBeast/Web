@@ -42,7 +42,6 @@ let valueCOLOR = [];    // Initialize the color of the player character set feat
 let isCurrentlyPrinting = false; // set true if is printing and false if not
 let stopTyping = false;
 let previousAmounts = [];
-let IsPacified = false;
 let ResetFile = false;// if true can't save latest as session is reseting
 let CurrentPageNumber = 1;
 
@@ -74,8 +73,8 @@ function startup(userConfirmed) {
     Title.innerHTML = 'Gatcha tower';
     startScreen.dataset.visible = 'true';
     Side_Menu4.dataset.visible = 'false';
-    SaveForest = JSON.parse(localStorage.getItem('SaveForest')|| '{}');
-    TempLatestSave = JSON.parse(sessionStorage.getItem('TempLatestSave'));
+    let SaveForest = JSON.parse(localStorage.getItem('SaveForest')|| '{}');
+    let TempLatestSave = JSON.parse(sessionStorage.getItem('TempLatestSave'));
     //load_S.dataset.visible = 'false';
     if ( TempLatestSave == null) {
         if (userConfirmed === 1) {
@@ -101,8 +100,7 @@ function LoadedSaves() {
         for (let i = 0; i < 6; i++) {
             const sectionSpanName = document.getElementById(`gameName${i}`); // 0 - 5 
             //saveData = SaveForest[`section${i}`];
-            if(i === 0){
-            }else if (i > 0 && SaveForest[`section${i}`]) {
+            if (i > 0 && SaveForest[`section${i}`]) {
                 document.querySelector(`.Section${i}_load_game`).disabled = false;
                 document.querySelector(`.Section${i}_load_game`).classList.remove('disable');
                 sectionSpanName.textContent = `${saveData['saveDataName']} | ${saveData['saveDataTime']}`;
@@ -431,10 +429,12 @@ function addTextWithTempColorS(elementId,textBlock, textValue, textValuePast, te
     // Handle the main text value
     const textParts = textBlock.split(textValue); // Split around textValue
     element.append(document.createTextNode(textParts[0])); // Add first part
-    const span = document.createElement("span");
-    span.textContent = textValue;
-    span.style.color = color;
-    element.append(span); // Add colored text
+    if (textParts.length > 1) {
+        const span = document.createElement("span");
+        span.textContent = textValue;
+        span.style.color = color;
+        element.append(span); // Add colored text
+    }
     if (textParts.length > 1) {
         element.append(document.createTextNode(textParts.slice(1).join(span))); // Add remaining parts
     }
@@ -493,67 +493,41 @@ function clearButtonContent() {
         button.style.display = 'none';
     });
 }
-function ResetEffectBarToDefault(saveData){
-    // Reset all bar widths to 0 except ControlBar
-    const barElement = [PainBar, FatigueBar, FearBar, StressBar, TraumaBar, AddictionBar, SicknessBar, BleedBar];
-    barElement.forEach(id => {
-        if (id) {
-            id.style.width = '0%';
-            console.log(`${id.id} bar set to 0%`);
-        }
-        
-    });
-    ControlBar.style.width = '70%';
-    const barIds = ['Pain', 'Fatigue', 'Fear', 'Stress', 'Trauma', 'Addiction', 'Sickness', 'Bleed', 'Control'];
+function ResetEffectBarToDefault(saveData) {
+    const barIds = ['Pain', 'Fatigue', 'Fear', 'Stress', 'Trauma', 'Addiction', 'Sickness', 'Bleed'];
     barIds.forEach(Bar => {
-        if (saveData.Debuff_SpashText){
-            const titleElement = document.querySelector(`.${Bar}Title`);
-            if (titleElement) {
-                if(Bar == 'Control'){
-                    const effectText = saveData.Debuff_SpashText[Bar][7];
-                    titleElement.style.color = saveData.Debuff_SpashText_Color[1][7];
-                    document.querySelector(`.${Bar}Title`).innerHTML = `  ${effectText}.`;
-                    saveData.CurrentDebuffBar[Bar].BarLength = "70";
-                    saveData.CurrentDebuffBar[Bar].Text = effectText;
-                    saveData.CurrentDebuffBar[Bar].TextColor = saveData.Debuff_SpashText_Color[1][7];
-                }else{
-                    const effectText = saveData.Debuff_SpashText[Bar][0];
-                    document.querySelector(`.${Bar}Title`).innerHTML = `  ${effectText}.`;
-                    titleElement.style.color = saveData.Debuff_SpashText_Color[0][0];
-                    saveData.CurrentDebuffBar[Bar].BarLength = "0";
-                    saveData.CurrentDebuffBar[Bar].Text = effectText;
-                    saveData.CurrentDebuffBar[Bar].TextColor = saveData.Debuff_SpashText_Color[0][0];
-                }
-            }
-        }
+        DisplayDebuffTextWithColors(saveData, Bar, 0); // Display All bar text with color
     });
-    //ControlTitle.style.color = saveData.Debuff_SpashText_Color[0];
-}
-function AddDebuffBar(saveData, BarId, BarLength) {
-    saveData.CurrentDebuffBar[BarId]['BarLength'] = BarLength;
-    const SBar = document.querySelector(BarId);
-    if (SBar) {
-        SBar.style.width = BarLength + '%';
-    }
-}
-function DisplayDebuffTextWithColors(saveData, Bar, BarLength) {
-    const index = Math.floor(BarLength / 10) * 10;
+    DisplayDebuffTextWithColors(saveData, 'Control', 70); // Display Controlbar text with color
+    saveData.Debuff_SpashText_Final = Side_Menu4.innerHTML; // Save the final text of the debuff splash text
 
-    if (Side_Influences_Title) {
-        Side_Influences_Title.innerHTML = ''; // Clear previous content
-        if (index >= 0 && index <= 100) {
-            Side_Influences_Title.innerHTML = Bar + ': ' + saveData.Debuff_SpashText[Bar][index];
-            Side_Influences_Title.style.color = saveData.Debuff_SpashText_Color[index];
-        } else if (index === 100) {
-            Side_Influences_Title.innerHTML = Bar + ': ' + saveData.Debuff_SpashText[Bar][110];
-            Side_Influences_Title.style.color = saveData.Debuff_SpashText_Color[110];
+}
+function DisplayDebuffTextWithColors(saveData, EffectId, BarLength) {
+    const titleElement = document.querySelector(`.${EffectId}Title`);
+    const EffectBar = document.querySelector(`.${EffectId}`);
+    const index = Math.floor(BarLength / (8 + 1/3));
+    if (EffectBar && BarLength < 100) {
+        EffectBar.style.width = BarLength + '%';
+        // EffectBar.dataset.visible = 'true';
+    }
+    // if ( BarLength == 0) EffectBar.dataset.visible = 'false';
+    if (titleElement) {
+        titleElement.innerHTML = ''; // Clear previous content
+        if (index === 12) {
+            titleElement.innerHTML = EffectId + ': ' + saveData.Debuff_SpashText[EffectId].Text[11];
+            titleElement.style.color = saveData.Debuff_SpashText[EffectId].color[11];
+           // EffectId.dataset.visible = 'true';
+        }else if (index > 0 && index < 12) {
+            titleElement.innerHTML = EffectId + ': ' + saveData.Debuff_SpashText[EffectId].Text[index - 1];
+            titleElement.style.color = saveData.Debuff_SpashText[EffectId].color[index - 1];
+         //   EffectId.dataset.visible = 'true';
+        }else if (index === 0) {
+            titleElement.innerHTML = EffectId + ': ' + saveData.Debuff_SpashText[EffectId].Text[0];
+            titleElement.style.color = saveData.Debuff_SpashText[EffectId].color[0];
+            //EffectId.dataset.visible = 'false';
         }
     }
-    if(BarLength === 0){
-        Bar.dataset.visible = 'false';
-    }else{
-        Bar.dataset.visible = 'true';
-    }
+    saveData.Debuff_SpashText_Final = Side_Menu4.innerHTML; // Save the final text of the debuff splash text
 }
 function slowTypingText(saveData,text, elementId, index = 0, speed = 200, printImmediately = false, events = false) {
     let spaceIndex = 0; // Reset space counter

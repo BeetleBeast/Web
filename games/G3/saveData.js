@@ -3,16 +3,54 @@ let saveData = {
     "saveDataTime" : "",
     "IsDead" : false,
     "DeathReason": undefined,
+    "AtDeathScreen" : {
+        "AtDeath_storyLine_progress" : undefined,
+        "AtDeath_Chapter_progress" : undefined,
+        "AtDeath_Title_progress" : undefined,
+    },
     "current_storyLine_progress" : 0,
     "LastSafeScene" : 0,
     "current_chapter_progress" : 0,
     "LastSafeChapter" : 0,
     "current_title_progress" : 0,
     "AllSafePlaces": {
-        // Safe chapter num : { Safe Scene num : '1' if safe},
+        // Safe chapter num : { Safe Scene num : '1' if safe '0' if not safe},
+        Death : {
+            0 : '0',
+        },
         0 : {
             0 : '1',
+            1 : '0',
+            2 : '0',
+            3 : '0',
+            4 : '0',
+            5 : '0',
+            6 : '0',
+            7 : '0',
+            8 : '0',
             9 : '1',
+        },
+        1 : {
+            0 : '0',
+            1 : '0',
+            2 : '0',
+            3 : '0',
+            4 : '0',
+            5 : '0',
+            6 : '0',
+            7 : '0',
+            8 : '0',
+            9 : '0',
+            10 : '0',
+            11 : '0',
+            12 : '0',
+            13 : '0',
+            14 : '0',
+            15 : '0',
+            16 : '0',
+            17 : '0',
+            18 : '0',
+            19 : '0',
         },
         2 : {
             0 : '1',
@@ -43,7 +81,7 @@ let saveData = {
             9 :  {"sceneName" : "seekExit", "sceneText" : "Navigating the damp walls of the cavern, you seek an exit, fingers tracing the rough texture in search of escape. With each step, your determination grows, fueled by the desire to break free from the confines of this underground labyrinth."},
         },
         1 : {
-            0 :  {"sceneName" : "seekExit0", "sceneText": "As you wander through the cave's labyrinthine passages, you encounter a variety of pathways, each offering its own unique allure. One path is adorned with vibrant green moss, another lined with glittering crystals, while another disappears into shadowed depths. Further along, you find yourself following the course of an underground stream, and eventually, you stumble upon a cavern illuminated by bioluminescent fungi. Each pathway beckons with its own mysteries, inviting you to explore deeper into the heart of the cave's secrets."},
+            0 :  {"sceneName" : "seekExit0", "sceneText": "As you wander through the cave's labyrinth like passages, you encounter a variety of pathways, each offering its own unique allure. One path is adorned with vibrant green moss, another lined with glittering crystals, while another disappears into shadowed depths. Further along, you find yourself following the course of an underground stream, and eventually, you stumble upon a cavern illuminated by bioluminescent fungi. Each pathway beckons with its own mysteries, inviting you to explore deeper into the heart of the cave's secrets."},
             1 :  {"sceneName" : "The Mossy Passage", "sceneText": "The current area is enveloped in a verdant embrace, with lush green moss covering every surface. The air is cool and fresh, carrying the earthy scent of vegetation. Shafts of dim light filter through the canopy above, casting dappled patterns on the moss-covered ground."},
             2 :  {"sceneName" : "The Crystal Tunnel", "sceneText": "In this area, the walls sparkle with the mesmerizing glow of crystals, illuminating the surroundings with a soft, ethereal light. The air feels charged with energy, and the ground beneath your feet shimmers with crystalline formations. Every step echoes softly in the cavernous space, creating a sense of wonder and awe."},
             3 :  {"sceneName" : "The Shadowed Corridor", "sceneText": "As you navigate this area, darkness presses in from all sides, enveloping you in an oppressive gloom. The air feels heavy and stifling, and the sound of your own footsteps echoes eerily in the silence. Shapes shift and morph in the shadows, playing tricks on your senses and heightening your sense of unease."},
@@ -184,7 +222,7 @@ let saveData = {
             9 : " ",
         },
         1 : {
-            0 : "Which Dierction shall you chose",
+            0 : "Which direction shall you chose",
             1 : " ",
             2 : " ",
             3 : " ",
@@ -226,6 +264,7 @@ let saveData = {
         },
         "Items" : {
             0 : false,
+            4 : false,
         },
     },
     "HiddenStoryLine" : {
@@ -240,7 +279,7 @@ let saveData = {
             6 : [2],
         },
     },
-    "character_Descreption_Text": {
+    "character_Description_Text": {
         2: {
             charachterDefining: "Your {value} eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery.",
         },
@@ -260,63 +299,295 @@ let saveData = {
             charachterDefining: "Your {valueSTRING[0]} eyes, your {valueSTRING[1]} stylish hair, your {valueSTRING[2]} complexion, your {valueSTRING[3]} stature, and your {valueSTRING[4]} attire collectively emanate a captivating essence. While your gender is {value}, your race remains a mystery, awaiting discovery.",
         },
     },
-    "character_Descreption_Text_Final": undefined,
-    "Debuff_SpashText_Color" : {
-        // has changed from nothing to type
-        0 : {
-            0 : "#00FF00",  // Nothing (Green)
-            1 : "#33FF00",  // Barely noticeable
-            2 : "#66FF00",  // Mild
-            3 : "#99FF00",  // Slight
-            4 : "#CCFF00",  // Noticeable
-            5 : "#FFFF00",  // Moderate (Yellow)
-            6 : "#FFCC00",  // Significant 
-            7 : "#FF9900",  // Intense 
-            8 : "#FF6600",  // Severe
-            9 : "#FF3300",  // Excruciating
-            10 : "#FF0000", // Agonizing (Red)
-            11 : "#FF0000"  // Ultimate  (Red)
-        },
-        1 : {
-            0 : "#FF0000",  // Ultimate  (Red)
-            1 : "#FF0000", // Agonizing (Red)
-            2 : "#FF3300",  // Excruciating
-            3 : "#FF6600",  // Severe
-            4 : "#FF9900",  // Intense
-            5 : "#FFCC00",  // Significant
-            6 : "#FFFF00",  // Moderate (Yellow)
-            7 : "#CCFF00",  // Noticeable
-            8 : "#99FF00",  // Slight
-            9 : "#66FF00",  // Mild
-            10 : "#33FF00",  // Barely noticeable
-            11 : "#00FF00",  // Nothing (Green)
-
-        },
-    },
-    "CurrentDebuffBar" : {
-        //  bar : { BarLength : "0"},
-        Pain : { BarLength : "0"},
-        Fatigue : { BarLength : "0"},
-        Fear : { BarLength : "0"},
-        Stress : { BarLength : "0"},
-        Trauma : { BarLength : "0"},
-        Addiction : { BarLength : "0"},
-        Sickness : { BarLength : "0"},
-        Bleed : { BarLength : "0"},
-        Control : { BarLength : "100"},
-    },
-    "Debuff_SpashText" : {
+    "character_Description_Text_Final": undefined,
+    "Debuff_SpashText_Final": undefined,
+    "CurrentDebuff_Effects" : [
+        // "effect" example: "weakened"
+        "Weakened",
+    ],
+    "Debuff_SpashText": {
+        // CurrentDebuffBar : Debuff_SpashText_Color
         //  debuff(bar) effect : {  effect number ranging from 0- 100 with increment of 10 expect the last one. example;}
         //  pain : {0 : "0", 1 : "1-10", 2 : "11-20", 3 : "21-30", 4 : "31-40", 5 : "41-50", 6 : "51-60", 7 : "61-70", 8 : "71-80", 9 : "81-90", 10 : "91-99", 11 : "100"}
-        Pain : { 0: "No pain", 1: "Barely noticeable discomfort", 2: "Mild twinge or ache", 3: "Slight discomfort with movement", 4: "Noticeable discomfort", 5: "Moderate pain", 6: "Significant pain", 7: "Intense pain", 8: "Severe pain", 9: "Excruciating pain", 10: "Agonizing pain", 11: "Ultimate agony"},
-        Fatigue : { 0: "No fatigue", 1: "Minimal tiredness", 2: "Slight weariness", 3: "Noticeable fatigue", 4: "Moderate tiredness", 5: "Mild exhaustion", 6: "Significant fatigue", 7: "Heavy weariness", 8: "Severe exhaustion", 9: "Nearing sleepiness", 10: "Struggling to stay awake", 11: "Can fall asleep anytime"},
-        Fear : { 0: "No fear", 1: "Slight unease", 2: "Mild apprehension", 3: "Noticeable concern", 4: "Moderate worry", 5: "Growing anxiety", 6: "Significant fear", 7: "Intense dread", 8: "Severe panic", 9: "Overwhelming terror", 10: "Paralyzing fear", 11: "Absolute terror"  },
-        Stress : { 0: "No stress", 1: "Minimal tension", 2: "Mild unease", 3: "Noticeable stress", 4: "Moderate pressure", 5: "Increasing strain", 6: "Significant stress", 7: "Intense pressure", 8: "Severe strain", 9: "Overwhelming stress", 10: "Near breaking point", 11: "Extreme distress"},
-        Trauma : { 0: "No trauma", 1: "Mild distress", 2: "Emotional discomfort", 3: "Noticeable unease", 4: "Moderate distress", 5: "Increasing anxiety", 6: "Significant trauma", 7: "Intense emotional pain", 8: "Severe distress", 9: "Overwhelming trauma", 10: "Near-breaking point", 11: "Extreme anguish"},
-        Addiction : { 0: "No addiction", 1: "Mild craving", 2: "Occasional urges", 3: "Noticeable dependency", 4: "Moderate addiction", 5: "Increasing compulsion", 6: "Significant dependency", 7: "Intense craving", 8: "Severe addiction", 9: "Overwhelming obsession", 10: "Near-irresistible urge", 11: "Extreme dependence"},
-        Sickness : { 0: "No sickness", 1: "Mild discomfort", 2: "Slight illness", 3: "Noticeable symptoms", 4: "Moderate sickness", 5: "Increasing discomfort", 6: "Significant illness", 7: "Intense symptoms", 8: "Severe sickness", 9: "Overwhelming ailment", 10: "Critical condition", 11: "Near death"},
-        Bleed : { 0: "No bleeding", 1: "Minor cut or scrape", 2: "Slow trickle of blood", 3: "Noticeable bleeding", 4: "Moderate hemorrhage", 5: "Increasing blood flow", 6: "Significant blood loss", 7: "Heavy bleeding", 8: "Severe hemorrhaging", 9: "Critical blood loss", 10: "Life-threatening bleed", 11: "Near exsanguination"},            
-        Control : { 0: "No control", 1: "Limited restraint", 2: "Basic discipline", 3: "Developing control", 4: "Moderate self-regulation", 5: "Steady discipline", 6: "Growing mastery", 7: "Strong self-control", 8: "Advanced discipline", 9: "Near mastery", 10: "Masterful control", 11: "Complete mastery"},            
+        Pain: {
+            Text: {
+                0: "No pain",
+                1: "Barely noticeable discomfort",
+                2: "Mild twinge or ache",
+                3: "Slight discomfort with movement",
+                4: "Noticeable discomfort",
+                5: "Moderate pain",
+                6: "Significant pain",
+                7: "Intense pain",
+                8: "Severe pain",
+                9: "Excruciating pain",
+                10: "Agonizing pain",
+                11: "Ultimate agony",
+            },
+            BarLength: "0",
+            color: {
+              0: "#00FF00", // Nothing (Green)
+              1: "#33FF00", // Barely noticeable
+              2: "#66FF00", // Mild
+              3: "#99FF00", // Slight
+              4: "#CCFF00", // Noticeable
+              5: "#FFFF00", // Moderate (Yellow)
+              6: "#FFCC00", // Significant
+              7: "#FF9900", // Intense
+              8: "#FF6600", // Severe
+              9: "#FF3300", // Excruciating
+              10: "#FF0000", // Agonizing (Red)
+              11: "#FF0000", // Ultimate  (Red)}
+            },
+        },
+        Fatigue: {
+            Text: {
+                0: "No fatigue",
+                1: "Minimal tiredness",
+                2: "Slight weariness",
+                3: "Noticeable fatigue",
+                4: "Moderate tiredness",
+                5: "Mild exhaustion",
+                6: "Significant fatigue",
+                7: "Heavy weariness",
+                8: "Severe exhaustion",
+                9: "Nearing sleepiness",
+                10: "Struggling to stay awake",
+                11: "Can fall asleep anytime",
+            },
+            BarLength: "0",
+            color: {
+              0: "#00FF00", // Nothing (Green)
+              1: "#33FF00", // Barely noticeable
+              2: "#66FF00", // Mild
+              3: "#99FF00", // Slight
+              4: "#CCFF00", // Noticeable
+              5: "#FFFF00", // Moderate (Yellow)
+              6: "#FFCC00", // Significant
+              7: "#FF9900", // Intense
+              8: "#FF6600", // Severe
+              9: "#FF3300", // Excruciating
+              10: "#FF0000", // Agonizing (Red)
+              11: "#FF0000", // Ultimate  (Red)
+            },
+        },
+        Fear: {
+            Text: {
+                0: "No fear",
+                1: "Slight unease",
+                2: "Mild apprehension",
+                3: "Noticeable concern",
+                4: "Moderate worry",
+                5: "Growing anxiety",
+                6: "Significant fear",
+                7: "Intense dread",
+                8: "Severe panic",
+                9: "Overwhelming terror",
+                10: "Paralyzing fear",
+                11: "Absolute terror",
+            },
+            BarLength: "0",
+            color: {
+              0: "#00FF00", // Nothing (Green)
+              1: "#33FF00", // Barely noticeable
+              2: "#66FF00", // Mild
+              3: "#99FF00", // Slight
+              4: "#CCFF00", // Noticeable
+              5: "#FFFF00", // Moderate (Yellow)
+              6: "#FFCC00", // Significant
+              7: "#FF9900", // Intense
+              8: "#FF6600", // Severe
+              9: "#FF3300", // Excruciating
+              10: "#FF0000", // Agonizing (Red)
+              11: "#FF0000", // Ultimate  (Red)
+            },
+        },
+        Stress: {
+            Text: {
+                0: "No stress",
+                1: "Minimal tension",
+                2: "Mild unease",
+                3: "Noticeable stress",
+                4: "Moderate pressure",
+                5: "Increasing strain",
+                6: "Significant stress",
+                7: "Intense pressure",
+                8: "Severe strain",
+                9: "Overwhelming stress",
+                10: "Near breaking point",
+                11: "Extreme distress",
+            },
+            BarLength: "0",
+            color: {
+              0: "#00FF00", // Nothing (Green)
+              1: "#33FF00", // Barely noticeable
+              2: "#66FF00", // Mild
+              3: "#99FF00", // Slight
+              4: "#CCFF00", // Noticeable
+              5: "#FFFF00", // Moderate (Yellow)
+              6: "#FFCC00", // Significant
+              7: "#FF9900", // Intense
+              8: "#FF6600", // Severe
+              9: "#FF3300", // Excruciating
+              10: "#FF0000", // Agonizing (Red)
+              11: "#FF0000", // Ultimate  (Red)
+            },
+        },
+        Trauma: {
+            Text: {
+                0: "No trauma",
+                1: "Mild distress",
+                2: "Emotional discomfort",
+                3: "Noticeable unease",
+                4: "Moderate distress",
+                5: "Increasing anxiety",
+                6: "Significant trauma",
+                7: "Intense emotional pain",
+                8: "Severe distress",
+                9: "Overwhelming trauma",
+                10: "Near-breaking point",
+                11: "Extreme anguish",
+            },
+            BarLength: "0",
+            color: {
+              0: "#00FF00", // Nothing (Green)
+              1: "#33FF00", // Barely noticeable
+              2: "#66FF00", // Mild
+              3: "#99FF00", // Slight
+              4: "#CCFF00", // Noticeable
+              5: "#FFFF00", // Moderate (Yellow)
+              6: "#FFCC00", // Significant
+              7: "#FF9900", // Intense
+              8: "#FF6600", // Severe
+              9: "#FF3300", // Excruciating
+              10: "#FF0000", // Agonizing (Red)
+              11: "#FF0000", // Ultimate  (Red)
+            },
+        },
+        Addiction: {
+            Text: {
+                0: "No addiction",
+                1: "Mild craving",
+                2: "Occasional urges",
+                3: "Noticeable dependency",
+                4: "Moderate addiction",
+                5: "Increasing compulsion",
+                6: "Significant dependency",
+                7: "Intense craving",
+                8: "Severe addiction",
+                9: "Overwhelming obsession",
+                10: "Near-irresistible urge",
+                11: "Extreme dependence",
+            },
+            BarLength: "0",
+            color: {
+              0: "#00FF00", // Nothing (Green)
+              1: "#33FF00", // Barely noticeable
+              2: "#66FF00", // Mild
+              3: "#99FF00", // Slight
+              4: "#CCFF00", // Noticeable
+              5: "#FFFF00", // Moderate (Yellow)
+              6: "#FFCC00", // Significant
+              7: "#FF9900", // Intense
+              8: "#FF6600", // Severe
+              9: "#FF3300", // Excruciating
+              10: "#FF0000", // Agonizing (Red)
+              11: "#FF0000", // Ultimate  (Red)
+            },
+        },
+        Sickness: {
+            Text: {
+                0: "No sickness",
+                1: "Mild discomfort",
+                2: "Slight illness",
+                3: "Noticeable symptoms",
+                4: "Moderate sickness",
+                5: "Increasing discomfort",
+                6: "Significant illness",
+                7: "Intense symptoms",
+                8: "Severe sickness",
+                9: "Overwhelming ailment",
+                10: "Critical condition",
+                11: "Near death",
+            },
+            BarLength: "0",
+            color: {
+              0: "#00FF00", // Nothing (Green)
+              1: "#33FF00", // Barely noticeable
+              2: "#66FF00", // Mild
+              3: "#99FF00", // Slight
+              4: "#CCFF00", // Noticeable
+              5: "#FFFF00", // Moderate (Yellow)
+              6: "#FFCC00", // Significant
+              7: "#FF9900", // Intense
+              8: "#FF6600", // Severe
+              9: "#FF3300", // Excruciating
+              10: "#FF0000", // Agonizing (Red)
+              11: "#FF0000", // Ultimate  (Red)
+            },
+        },
+        Bleed: {
+            Text: {
+                0: "No bleeding",
+                1: "Minor cut or scrape",
+                2: "Slow trickle of blood",
+                3: "Noticeable bleeding",
+                4: "Moderate hemorrhage",
+                5: "Increasing blood flow",
+                6: "Significant blood loss",
+                7: "Heavy bleeding",
+                8: "Severe hemorrhaging",
+                9: "Critical blood loss",
+                10: "Life-threatening bleed",
+                11: "Near exsanguination",
+            },
+            BarLength: "0",
+            color: {
+              0: "#00FF00", // Nothing (Green)
+              1: "#33FF00", // Barely noticeable
+              2: "#66FF00", // Mild
+              3: "#99FF00", // Slight
+              4: "#CCFF00", // Noticeable
+              5: "#FFFF00", // Moderate (Yellow)
+              6: "#FFCC00", // Significant
+              7: "#FF9900", // Intense
+              8: "#FF6600", // Severe
+              9: "#FF3300", // Excruciating
+              10: "#FF0000", // Agonizing (Red)
+              11: "#FF0000", // Ultimate  (Red)
+            },
+        },
+        Control: {
+            Text: {
+                0: "No control",
+                1: "Limited restraint",
+                2: "Basic discipline",
+                3: "Developing control",
+                4: "Moderate self-regulation",
+                5: "Steady discipline",
+                6: "Growing mastery",
+                7: "Strong self-control",
+                8: "Advanced discipline",
+                9: "Near mastery",
+                10: "Masterful control",
+                11: "Complete mastery",
+            },
+            BarLength: "100",
+            color: {
+              0: "#FF0000", // Ultimate  (Red)
+              1: "#FF0000", // Agonizing (Red)
+              2: "#FF3300", // Excruciating
+              3: "#FF6600", // Severe
+              4: "#FF9900", // Intense
+              5: "#FFCC00", // Significant
+              6: "#FFFF00", // Moderate (Yellow)
+              7: "#CCFF00", // Noticeable
+              8: "#99FF00", // Slight
+              9: "#66FF00", // Mild
+              10: "#33FF00", // Barely noticeable
+              11: "#00FF00", // Nothing (Green)
+            },
+        },
     },
     "Debuff_Effects" : {
         Weakened :  {  Description : `Character's strength or attack power is reduced by`},
@@ -365,6 +636,25 @@ let saveData = {
         'SlowTyping' : true,
         'DynamicTyping': false,
         'IregularSpeed' : false,
+    },
+    "ItemDiscoveryText" : [
+        //  id : { text : "text", color : "color"}
+        { id: 1 , text : "You have discovered a Soul Redeemer, a legendary item that holds immense power."},
+        { id: 2 , text : "You have discovered a rock, a common item that can be used for various purposes."},
+        { id: 3 , text : "You have discovered a stick, a common item that can be used for various purposes."},
+        { id: 4 ,  
+            text : "You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.",
+            color : "green",
+        },
+        { id: 5 , text : "You have discovered a red gemstone, an uncommon item that can be used for various purposes."},
+        { id: 6 , text : "You have discovered a blue gemstone, an uncommon item that can be used for various purposes."},
+        { id: 7 , text : "You have discovered a brown gemstone, an uncommon item that can be used for various purposes."},
+        { id: 8 , text : "You have discovered a white gemstone, a rare item that can be used for various purposes."},
+        { id: 9 , text : "You have discovered a dark gemstone, a rare item that can be used for various purposes."},
+        { id: 10 , text : "You have discovered a purple gemstone, an epic item that can be used for various purposes."},
+    ],
+    "ItemDescriptionText" : {
+
     },
     "Inventory" : [
         //  ID number : {"Name" : Name of item ,"quantity" : 0,"quality" : "common"}

@@ -16,14 +16,13 @@ function story(saveData){
         //console.log('SaveForest:',JSON.parse(SaveForest))
         localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
     }
-    ButtonPressed(saveData, saveData.Choices_Possible);    //  print current Buttons
-    manageHiddenInfo(saveData, false);  //  hides info if need be
-    title_progress(current_title,current_title_progress)    //  print current title
+    ButtonPressed(saveData, saveData.Choices_Possible); //  print current Buttons
+    manageHiddenInfo(saveData, false); //  hides info if need be
+    title_progress(current_title,current_title_progress) //  print current title
     scene_progress(current_storyLine,current_storyLine_progress, saveData.DeathReason)    //  print current scene text
-    character_Descreption(saveData, saveData.Choices_Made);  //  print player character set feature if applicable
-    Effect_Bar_progress(saveData, saveData.CurrentDebuffBar);   //  print effect bar if applicable
-    // Initialize the first page of the inventoryload_games_save
-    populateInventory(saveData,1);
+    character_Description(saveData, saveData.Choices_Made); //  print player character set feature if applicable
+    Effect_Bar_progress(saveData, saveData.CurrentDebuffBar); //  print effect bar if applicable
+    populateInventory(saveData,1); // Initialize the first page of the inventoryload_games_save
     choices_section_title.innerHTML = saveData.Buttons_section_title[saveData.current_chapter_progress][saveData.current_storyLine_progress];// print current scection title
     Side_Menu4.dataset.visible = 'true';
     //DisplayDebuffTextWithColors(saveData,)
@@ -116,47 +115,63 @@ function story(saveData){
             }
         }
     }
-    function manageHiddenInfo(saveData, revealInfo,HiddenTextID) {
+    function manageHiddenInfo(saveData, revealInfo, HiddenTextID, ItemID) {
         const current_storyLine = saveData.current_storyLine_progress;
         const current_chapter = saveData.current_chapter_progress;
+        const itemDiscoveryText = getItemDiscoveryText(ItemID);
         // Check if Buttons_Hidden data exists for the current chapter and story line
         const Buttons_Hidden = saveData.Buttons_Hidden[current_chapter]?.[current_storyLine];
         if (Buttons_Hidden) {
             // Iterate over the hidden button values for the current scene
             Buttons_Hidden.forEach(buttonValue => {
                 const button = document.querySelector('.Sh_' + buttonValue);
-                if(saveData.Uncoverded.HiddenButton[buttonValue] == true){
+                if(saveData.Uncoverded.HiddenButton[buttonValue]){
                     button.style.display = "block";
                     return;
                 }
                 if (button) {
                     // Set button display based on revealInfo condition
                     button.style.display = revealInfo ? "block" : "none";
-                    if (revealInfo){saveData.Uncoverded.HiddenButton[buttonValue] = true};
+                    saveData.Uncoverded.HiddenButton[buttonValue] = !!revealInfo;
                 }
             });
-            if(HiddenTextID >= 0){
-                const Text_Hidden = saveData.HiddenStoryLine[saveData.current_chapter_progress][saveData.current_storyLine_progress];
-                if(saveData.Uncoverded.HiddenText[HiddenTextID] == false) {
-                    addTextWithTempColor('.main_section',Text_Hidden[HiddenTextID],'blue',false)
-                    saveData.Uncoverded.HiddenText[HiddenTextID] = true;
-                }else{
-                    //main_section.textContent += Text_Hidden[HiddenTextID];
-                }
-            }
         } else {
             console.log(`No hidden buttons defined for chapter ${current_chapter} and scene ${current_storyLine}`);
         }
+        if(HiddenTextID){
+            const Text_Hidden = saveData.HiddenStoryLine[saveData.current_chapter_progress][saveData.current_storyLine_progress];
+            if(!saveData.Uncoverded.HiddenText[HiddenTextID]) {
+                addTextWithTempColor('.main_section',Text_Hidden[HiddenTextID],'blue',false)
+                saveData.Uncoverded.HiddenText[HiddenTextID] = true;
+            }else{
+                //main_section.textContent += Text_Hidden[HiddenTextID];
+            }
+        }
+        if(ItemID){
+            //  add the item to the inventory and show the text if it is not already discovered
+            if (itemDiscoveryText && !saveData.Uncoverded.Items[ItemID]) {
+                addItemToInventory(saveData, ItemID, 1);
+                addTextWithTempColor('.main_section', itemDiscoveryText.text, itemDiscoveryText.color, false);
+                saveData.Uncoverded.ItemDiscovery[ItemID] = true;
+            }
+        }
     }
     function damageAndDeathParent(amount, atackMethod, instaKill = false){
-        if(character.Health <= 0 || character.Health - amount <= 0 || instaKill){
-            //DiedScreen(saveData,atackMethod);
+        function DeadCalculator() {
+            if (character.Health <= 0 || character.Health - amount <= 0 || instaKill) {
+                return true;
+            }
+        }
+        if (DeadCalculator()) {
             saveData.DeathReason = atackMethod;
             saveData.IsDead = true;
-            nextScene(saveData, true);
-        }else if(!instaKill){
+            saveData.AtDeathScreen.AtDeath_storyLine_progress = saveData.current_storyLine_progress;
+            saveData.AtDeathScreen.AtDeath_Chapter_progress = saveData.current_chapter_progress;
+            saveData.AtDeathScreen.AtDeath_Title_progress = saveData.current_title_progress;
+            nextScene(saveData);
+        } else if(!instaKill){
             character.getDamage(amount);
-            }
+        }
     }
     function InventoryItemClickedHandler(item_id){
         switch(item_id){
@@ -169,20 +184,22 @@ function story(saveData){
                 break;
         }
     }
-    function character_Descreption(saveData, Choices_Made){
-        //  check wat in Side-Menu2 is, if not the same as Choices_Made replace it with It
-        if (Side_Menu2.innerHTML !== saveData.character_Descreption_Text_Final && saveData.current_storyLine_progress >= 3 | saveData.current_chapter_progress >=1){
-            Side_Menu2.innerHTML = saveData.character_Descreption_Text_Final;
-            console.log('saveData.character_Descreption_Text_Final', saveData.character_Descreption_Text_Final);
+    function character_Description(saveData, Choices_Made){
+        //  check wat in Side-Menu2 is, if not the same as character_Description_Text_Final replace it with It
+        if (Side_Menu2.innerHTML !== saveData.character_Description_Text_Final && saveData.current_storyLine_progress >= 3 | saveData.current_chapter_progress >=1){
+            Side_Menu2.innerHTML = saveData.character_Description_Text_Final;
+            console.log('saveData.character_Description_Text_Final', saveData.character_Description_Text_Final);
         }
     }
     function Effect_Bar_progress(saveData, CurrentDebuffBar){
-        //  check wat in Side-Menu4is, if not the same as CurrentDebuffBar replace it with It 
-        //  Side_Menu4
-        //TODO this needs to also be called like character_Descreption
+        //  check wat in Side-Menu4 is, if not the same as Debuff_SpashText_Final replace it with It 
+        if (Side_Menu4.innerHTML !== saveData.Debuff_SpashText_Final) {
+            Side_Menu4.innerHTML = saveData.Debuff_SpashText_Final;
+            console.log('CurrentDebuffBar', saveData.Debuff_SpashText_Final);
+        }
     }
-    // Function to populate inventory grid based on current page
     function populateInventory(saveData,pageNumber) {
+        // Function to populate inventory grid based on current page
         let number = 1;
         const inventoryItems = saveData.Inventory;
         const pageSize = 16; // Number of items per page (adjust based on grid size)
@@ -283,7 +300,7 @@ function story(saveData){
                 break;
             case "pacified":
                 // not able to be agressief
-                IsPacified = true;
+                let IsPacified = true;
                 break;
             case 'Cursed':
                 break;
@@ -327,6 +344,9 @@ function story(saveData){
         // current place > next place
         let lastChoiceIndex = saveData.Choices_Made[saveData.current_chapter_progress].length - 1;
         let LastButtonPressed = saveData.Choices_Made[saveData.current_chapter_progress][lastChoiceIndex];
+        if (saveData.AllSafePlaces[saveData.current_chapter_progress][saveData.current_storyLine_progress] == 1){
+            saveData.LastSafeScene = saveData.current_storyLine_progress;
+        }
         if (saveData.IsDead){
             nextChapter(saveData, true);
             return;
@@ -334,11 +354,12 @@ function story(saveData){
             saveData.current_chapter_progress = saveData.LastSafeChapter;
             saveData.current_storyLine_progress = saveData.LastSafeScene;
             //saveData.Choices_Made[saveData.LastSafeChapter] = [undefined];    //  unsure about this
-            ResetEffectBarToDefault(saveData);
+            
             character.Resurrect();
             console.log('id=501 Reset to last safe place');
             story(saveData);
         }
+        // DisplayDebuffTextWithColors(saveData, 'Fatigue', -1); // Display Controlbar text with color
         if (saveData.current_storyLine_progress < Object.keys(saveData.storyLine_progress[saveData.current_chapter_progress]).length - 1 && saveData.current_chapter_progress == 0) {
             saveData.current_storyLine_progress++;
             console.log('pressed NextScene id=5')
@@ -346,7 +367,6 @@ function story(saveData){
             switch(saveData.current_storyLine_progress){
                 case 0:
                     saveData.current_storyLine_progress = LastButtonPressed - 1; //from 1 to 5 are scene other area
-                    saveData.LastSafeScene = saveData.current_storyLine_progress;
                     break;
                 case 1:
                 case 2:
@@ -425,8 +445,11 @@ function story(saveData){
         if (saveData.current_chapter_progress < Object.keys(saveData.storyLine_progress).length - 1) {
             saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
             saveData.current_chapter_progress++;
-            saveData.LastSafeChapter = saveData.current_chapter_progress;
             saveData.current_title_progress++;
+            console.log('AllSafePlaces',saveData.AllSafePlaces[saveData.current_chapter_progress][saveData.current_storyLine_progress]);
+            if (saveData.AllSafePlaces[saveData.current_chapter_progress][saveData.current_storyLine_progress] == 1){
+                saveData.LastSafeChapter = saveData.current_chapter_progress;
+            }
             console.log('Next Chapter');
         } else {
             // Handle the case when there are no more chapters
@@ -450,6 +473,41 @@ function story(saveData){
         }
         // Re-render the story with updated saveData
         story(saveData);
+    }
+    function getItemDiscoveryText(id){
+        return saveData.ItemDiscoveryText.find(entry => entry.id === id);
+    }
+    function characterMaker(saveData, lastChoiceIndex, value, valueS){
+        //  Update class value
+        const characterKeys = {
+            2: 'eye_Color',
+            3: 'hair_style',
+            4: 'skin_complexion',
+            5: 'stature',
+            6: 'attire',
+            7: 'gender'
+        };
+        
+        const keyToUpdate = characterKeys[lastChoiceIndex];
+        if (keyToUpdate) {
+            character[keyToUpdate] = value;
+        }
+        
+        // Use `descriptionTemplate` with replacements
+        let descriptionTemplate = saveData.character_Description_Text[lastChoiceIndex].charachterDefining;
+        let charachterDefining = descriptionTemplate
+        .replace(/{value}/g, value)
+        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
+            return valueSTRING[parseInt(index, 10)];
+        });
+        //  Paste text to Side Menu
+        Side_Menu2.innerHTML = charachterDefining;
+        // Update the value arrays
+        valueSTRING.push(value);
+        valueCOLOR.push(valueS);
+        // Call the function to add text with temporary color
+        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,lastChoiceIndex +2 ,valueS,true,false,undefined)
+        saveData.character_Description_Text_Final = Side_Menu2.innerHTML;
     }
     function Choices_calculator(saveData){
         let current_storyLine_progress = saveData.current_storyLine_progress;
@@ -477,115 +535,15 @@ function story(saveData){
                 nextScene(saveData);
                 break;
             case 0:
-                let descriptionTemplate = saveData.character_Descreption_Text[lastChoiceIndex].charachterDefining;
+                let descriptionTemplate = saveData.character_Description_Text[lastChoiceIndex].charachterDefining;
                 switch (lastChoiceIndex) {
                     case 2:
-                        //  Update class value
-                        character.eye_Color = value;
-                        // Use `descriptionTemplate` with replacements
-                        charachterDefining = descriptionTemplate
-                        .replace(/{value}/g, value)
-                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
-                            return valueSTRING[parseInt(index, 10)];
-                        });
-                        //  Paste text to Side Menu
-                        Side_Menu2.innerHTML = charachterDefining;
-                        // Update the value arrays
-                        valueSTRING.push(value);
-                        valueCOLOR.push(valueS);
-                        // Call the function to add text with temporary color
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,0,valueS,true,false,undefined)
-                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
-                        break;
                     case 3:
-                        //  Update class value
-                        character.hair_style = value;
-                        // Use `descriptionTemplate` with replacements
-                        charachterDefining = descriptionTemplate
-                        .replace(/{value}/g, value)
-                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
-                            return valueSTRING[parseInt(index, 10)];
-                        });
-                        //  Paste text to Side Menu
-                        Side_Menu2.innerHTML = charachterDefining;
-                        // Update the value arrays
-                        valueSTRING.push(value);
-                        valueCOLOR.push(valueS);
-                        // Call the function to add text with temporary color
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,1,valueS,true,false,undefined)
-                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
-                        break;
                     case 4:
-                        //  Update class value
-                        character.skin_complexion = value;
-                        // Use `descriptionTemplate` with replacements
-                        charachterDefining = descriptionTemplate
-                        .replace(/{value}/g, value)
-                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
-                            return valueSTRING[parseInt(index, 10)];
-                        });
-                        //  Paste text to Side Menu
-                        Side_Menu2.innerHTML = charachterDefining;
-                        // Update the value arrays
-                        valueSTRING.push(value);
-                        valueCOLOR.push(valueS);
-                        // Call the function to add text with temporary color
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,2,valueS,true,false,undefined)
-                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
-                        break;
                     case 5:
-                        //  Update class value
-                        character.stature = value;
-                        // Use `descriptionTemplate` with replacements
-                        charachterDefining = descriptionTemplate
-                        .replace(/{value}/g, value)
-                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
-                            return valueSTRING[parseInt(index, 10)];
-                        });
-                        //  Paste text to Side Menu
-                        Side_Menu2.innerHTML = charachterDefining;
-                        // Update the value arrays
-                        valueSTRING.push(value);
-                        valueCOLOR.push(valueS);
-                        // Call the function to add text with temporary color
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,3,valueS,true,false,undefined)
-                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
-                        break;
                     case 6:
-                        //  Update class value
-                        character.attire = value;
-                        // Use `descriptionTemplate` with replacements
-                        charachterDefining = descriptionTemplate
-                        .replace(/{value}/g, value)
-                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
-                            return valueSTRING[parseInt(index, 10)];
-                        });
-                        //  Paste text to Side Menu
-                        Side_Menu2.innerHTML = charachterDefining;
-                        // Update the value arrays
-                        valueSTRING.push(value);
-                        valueCOLOR.push(valueS);
-                        // Call the function to add text with temporary color
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,4,valueS,true,false,undefined)
-                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
-                        break;
                     case 7:
-                        //  Update class value
-                        character.gender = value;
-                        // Use `descriptionTemplate` with replacements
-                        charachterDefining = descriptionTemplate
-                        .replace(/{value}/g, value)
-                        .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
-                            return valueSTRING[parseInt(index, 10)];
-                        });
-                        //  Paste text to Side Menu
-                        Side_Menu2.innerHTML = charachterDefining;
-                        // Update the value arrays
-                        valueSTRING.push(value);
-                        valueCOLOR.push(valueS);
-                        // Call the function to add text with temporary color
-                        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,5,valueS,true,false,undefined)
-                        saveData.character_Descreption_Text_Final = Side_Menu2.innerHTML;
+                        characterMaker(saveData, lastChoiceIndex, value, valueS)
                         break;
                 }
                 
@@ -715,8 +673,7 @@ function story(saveData){
                                 //  
                                 break;
                             case 6:
-                                addItemToInventory(saveData,4,1);
-                                addTextWithTempColor('.main_section',"You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.",'green',false)
+                                manageHiddenInfo(saveData, undefined, undefined, 4)
                                 break;
                         }
                         break;
