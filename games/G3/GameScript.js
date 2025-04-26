@@ -495,8 +495,6 @@ function formatText(text) {
     }
     return formatted;
 }
-// --------------------------------------------------------------------------------
-
 // Utility: Create a fake blinking cursor
 function createFakeCursor() {
     const cursor = document.createElement('span');
@@ -533,7 +531,8 @@ async function addTextFullFeature({
     defaultColor = 'azure',
 }) {
     //TODO
-    //1. add sound to it just start when isCurrentlyPrinting is true and it will work
+    //1. add a pause off int seconds after a certain moment
+    //2. add sound to it just start when isCurrentlyPrinting is true and it will work
     const element = document.querySelector(elementId);
     if (replace) {
         element.innerHTML = ''; // Clear the content for replacement
@@ -562,6 +561,7 @@ async function addTextFullFeature({
     const cursor = createFakeCursor(); // Create a fake cursor
     if (textAndColorArray.color.length == 0) {
         element.appendChild(cursor)
+
         // sound setup
         // const typingSound = new Audio('path/to/typing-sound.mp3'); // Replace with actual sound file path when implemented
     }
@@ -636,10 +636,6 @@ async function addTextFullFeature({
         }, tempColorDuration);
     }
 }
-// ----------------------------------------------------------------------------------
-
-
-
 function saveGame(NumSection){
     currentdate = new Date();
     var datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1)+ "/" +
