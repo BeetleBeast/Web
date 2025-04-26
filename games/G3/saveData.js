@@ -56,12 +56,21 @@ let saveData = {
             0 : '1',
         },
     },
+    /* OLD WAY OF DOING IT
     "title_progress" : { 
         //  title / chapter num : { title_story_[current_title_progress] : title}
         0 : { "title_story_0" : 'Into the new world'},
         1 : { "title_story_1" : 'Cave Exploration'},
         2 : { "title_story_2" : 'Lost in the forest'}, 
         3 : { "title_story_3" : 'Old cabbin'},
+    },
+    */
+    "title_progress" : { 
+        //  chapter num : title
+        0 : "Into the new world",
+        1 : "Cave Exploration",
+        2 : "Lost in the forest",
+        3 : "Old cabbin",
     },
     "storyLine_progress" : {
         //  chapter num : { Scene num : {"sceneName" : "placeholder", "sceneText": "placeholder"}, },
@@ -280,6 +289,7 @@ let saveData = {
         },
     },
     "character_Description_Text": {
+        // scene number : { charachterDefining : "Text"}
         2: {
             charachterDefining: "Your {value} eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery.",
         },
@@ -636,6 +646,16 @@ let saveData = {
         'SlowTyping' : true,
         'DynamicTyping': false,
         'IregularSpeed' : false,
+        'Controls' : {
+            'Up' : 'ArrowUp',
+            'Down' : 'ArrowDown',
+            'Left' : 'ArrowLeft',
+            'Right' : 'ArrowRight',
+            'Enter' : 'Enter',
+            'Space' : 'Space',
+            'Escape' : 'Escape',
+            'Inventory' : 'I',
+        },
     },
     "ItemDiscoveryText" : [
         //  id : { text : "text", color : "color"}
@@ -643,7 +663,7 @@ let saveData = {
         { id: 2 , text : "You have discovered a rock, a common item that can be used for various purposes."},
         { id: 3 , text : "You have discovered a stick, a common item that can be used for various purposes."},
         { id: 4 ,  
-            text : "You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.",
+            text : "~You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.",
             color : "green",
         },
         { id: 5 , text : "You have discovered a red gemstone, an uncommon item that can be used for various purposes."},

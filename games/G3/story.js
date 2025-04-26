@@ -6,6 +6,7 @@ function story(saveData){
     let current_title_progress = saveData.current_title_progress
     let current_storyLine = saveData.storyLine_progress[saveData.current_chapter_progress][current_storyLine_progress]
     let current_title = saveData.title_progress[current_title_progress]
+    let current_section_title = saveData.Buttons_section_title[saveData.current_chapter_progress][current_storyLine_progress]
     let LatestsaveFile = saveData;
 
     //  make a save of latest version of saveData
@@ -19,14 +20,15 @@ function story(saveData){
     ButtonPressed(saveData, saveData.Choices_Possible); //  print current Buttons
     manageHiddenInfo(saveData, false); //  hides info if need be
     title_progress(current_title,current_title_progress) //  print current title
-    scene_progress(current_storyLine,current_storyLine_progress, saveData.DeathReason)    //  print current scene text
+    scene_progress(current_storyLine,current_storyLine_progress, saveData.DeathReason) //  print current scene text
+    section_title_progress(current_section_title); //  print current section title
     character_Description(saveData, saveData.Choices_Made); //  print player character set feature if applicable
     Effect_Bar_progress(saveData, saveData.CurrentDebuffBar); //  print effect bar if applicable
     populateInventory(saveData,1); // Initialize the first page of the inventoryload_games_save
-    choices_section_title.innerHTML = saveData.Buttons_section_title[saveData.current_chapter_progress][saveData.current_storyLine_progress];// print current scection title
-    Side_Menu4.dataset.visible = 'true';
-    //DisplayDebuffTextWithColors(saveData,)
     
+    Side_Menu3.dataset.visible = saveData.IsDead ? 'false' : 'true'; //  show or hide the effects (debuffs) bar
+    //DisplayDebuffTextWithColors(saveData,)
+
     function getButtonValues(saveData) {
         const buttonValues = [];
         for (const buttonValue of saveData.Buttons) {
@@ -81,8 +83,16 @@ function story(saveData){
             } else {
                 stopTyping = true;
                 console.log('current_storyLine_progress id=8', saveData.current_storyLine_progress);
-                slowTypingText(saveData,saveData.storyLine_progress[saveData.current_chapter_progress][saveData.current_storyLine_progress]['sceneText'], '.main_section', undefined, undefined, true);
-                slowTypingText(saveData,saveData.title_progress[saveData.current_title_progress]['title_story_' + saveData.current_title_progress], '.Quest_Title', undefined, undefined, true);
+                addTextFullFeature({
+                    textBlock : saveData.storyLine_progress[saveData.current_chapter_progress][saveData.current_storyLine_progress]['sceneText'],
+                    elementId : '.main_section',
+                    printImmediately : true,
+                })
+                addTextFullFeature({
+                    textBlock : saveData.title_progress[saveData.current_title_progress],
+                    elementId : '.Quest_Title',
+                    printImmediately : true,
+                })
                 isCurrentlyPrinting = false;
                 console.log('Print everything for scene number ', saveData.current_storyLine_progress);
                 
@@ -141,7 +151,12 @@ function story(saveData){
         if(HiddenTextID){
             const Text_Hidden = saveData.HiddenStoryLine[saveData.current_chapter_progress][saveData.current_storyLine_progress];
             if(!saveData.Uncoverded.HiddenText[HiddenTextID]) {
-                addTextWithTempColor('.main_section',Text_Hidden[HiddenTextID],'blue',false)
+                addTextFullFeature({
+                    elementId : '.main_section',
+                    textBlock : Text_Hidden[HiddenTextID],
+                    replace : false,
+                    textAndColorArray : { word : 'ALL', color : 'blue'},
+                })
                 saveData.Uncoverded.HiddenText[HiddenTextID] = true;
             }else{
                 //main_section.textContent += Text_Hidden[HiddenTextID];
@@ -151,7 +166,12 @@ function story(saveData){
             //  add the item to the inventory and show the text if it is not already discovered
             if (itemDiscoveryText && !saveData.Uncoverded.Items[ItemID]) {
                 addItemToInventory(saveData, ItemID, 1);
-                addTextWithTempColor('.main_section', itemDiscoveryText.text, itemDiscoveryText.color, false);
+                addTextFullFeature({
+                    elementId : '.main_section',
+                    textBlock : itemDiscoveryText.text,
+                    replace : false,
+                    textAndColorArray : { word : 'ALL', color : itemDiscoveryText.color},
+                })
                 saveData.Uncoverded.ItemDiscovery[ItemID] = true;
             }
         }
@@ -168,6 +188,7 @@ function story(saveData){
             saveData.AtDeathScreen.AtDeath_storyLine_progress = saveData.current_storyLine_progress;
             saveData.AtDeathScreen.AtDeath_Chapter_progress = saveData.current_chapter_progress;
             saveData.AtDeathScreen.AtDeath_Title_progress = saveData.current_title_progress;
+            stopTyping = true;
             nextScene(saveData);
         } else if(!instaKill){
             character.getDamage(amount);
@@ -186,6 +207,7 @@ function story(saveData){
     }
     function character_Description(saveData, Choices_Made){
         //  check wat in Side-Menu2 is, if not the same as character_Description_Text_Final replace it with It
+        Side_Menu2.dataset.visible = saveData.IsDead ? 'false' : 'true'; //  show or hide the character description
         if (Side_Menu2.innerHTML !== saveData.character_Description_Text_Final && saveData.current_storyLine_progress >= 3 | saveData.current_chapter_progress >=1){
             Side_Menu2.innerHTML = saveData.character_Description_Text_Final;
             console.log('saveData.character_Description_Text_Final', saveData.character_Description_Text_Final);
@@ -193,6 +215,7 @@ function story(saveData){
     }
     function Effect_Bar_progress(saveData, CurrentDebuffBar){
         //  check wat in Side-Menu4 is, if not the same as Debuff_SpashText_Final replace it with It 
+        Side_Menu4.dataset.visible = saveData.IsDead ? 'false' : 'true'; //  show or hide the debuff bar
         if (Side_Menu4.innerHTML !== saveData.Debuff_SpashText_Final) {
             Side_Menu4.innerHTML = saveData.Debuff_SpashText_Final;
             console.log('CurrentDebuffBar', saveData.Debuff_SpashText_Final);
@@ -227,6 +250,7 @@ function story(saveData){
             pageContainer.appendChild(itemElement);
             number++;
         });
+        if (saveData.IsDead) document.getElementById('inventory').style.display = 'none'; // Hide inventory if player is dead
     }
 
     function addItemToInventory(saveData, itemId, newQuantity) {
@@ -308,34 +332,47 @@ function story(saveData){
                 break;
             case 'Confusion':
                 // change text to confused text
-                console.log('activate confusion')            
-                slowTypingText(saveData,Confused_Text, '.main_section', undefined, 35);
-                slowTypingText(saveData,Confused_Title, '.Quest_Title');
+                console.log('activate confusion')
+                addTextFullFeature({
+                    textBlock : Confused_Text,
+                    elementId : '.main_section',
+                    speed : 35,
+                })
+                addTextFullFeature({
+                    textBlock : Confused_Title,
+                    elementId : '.Quest_Title',
+                })
+
                 ButtonPressed(saveData, saveData.Choices_Possible_Confused);
                 break;
             case 'MAXeffect':
                 break;
         }
     }
+    function section_title_progress(current_section_title) {
+        choices_section_title.innerHTML = current_section_title;// print current scection title
+        console.log('current_section_title', current_section_title);
+    }
     function title_progress(current_title,current_title_progress) {
-        let title_story = current_title['title_story_'+current_title_progress]
-        slowTypingText(saveData,title_story,'.Quest_Title');       // Put the content on the left and the place where it needs to go on the right
-        console.log('title Chapter',title_story)
+        addTextFullFeature({
+            textBlock : current_title,
+            elementId : '.Quest_Title',
+        })
         console.log('current_title',current_title);
         console.log('current_title_progress', current_title_progress);
     }
     function scene_progress(current_storyLine,current_storyLine_progress, DeathReason) {
         let title_scene = current_storyLine['sceneName']
         let scene_text;
-        if(saveData.DeathReason){
-            scene_text = current_storyLine['sceneText'] + saveData.DeathReason;
-        }else{
-            scene_text = current_storyLine['sceneText'];
-        }
-        slowTypingText(saveData,scene_text,'.main_section',undefined, 35);     // Put the content on the left and the place where it needs to go on the right + index + speed
+        scene_text = saveData.DeathReason ? current_storyLine['sceneText'] + saveData.DeathReason : current_storyLine['sceneText'];
+        addTextFullFeature({
+            textBlock : scene_text,
+            elementId : '.main_section',
+            speed : 35,
+        })
         saveData.DeathReason = undefined;
-        console.log('title Scene',title_scene)                          
-        //console.log('scene_text',scene_text)
+        console.log('Title scene:',title_scene)                          
+        console.log('Text scene:',scene_text)
         console.log('current_storyLine',current_storyLine);
         console.log('current_storyLine_progress', current_storyLine_progress);
     }
@@ -505,8 +542,12 @@ function story(saveData){
         // Update the value arrays
         valueSTRING.push(value);
         valueCOLOR.push(valueS);
-        // Call the function to add text with temporary color
-        addTextWithTempColorS('.Side-Menu2',charachterDefining,value,valueSTRING,valueCOLOR,lastChoiceIndex +2 ,valueS,true,false,undefined)
+        addTextFullFeature({
+            elementId: '.Side-Menu2', 
+            textBlock: charachterDefining, 
+            textAndColorArray: { word : valueSTRING, color : valueCOLOR},
+            replace : true,
+        })
         saveData.character_Description_Text_Final = Side_Menu2.innerHTML;
     }
     function Choices_calculator(saveData){

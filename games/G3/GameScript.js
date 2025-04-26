@@ -374,79 +374,22 @@ let character = new Player({
 function toggleInventory() {
     const inventory = document.getElementById('inventory');
     const toggleInventoryText = document.getElementById('toggleInventoryText');
-    if (inventory.style.display === 'none') {
-        inventory.style.display = 'block';
-        
+    if (!saveData.IsDead) {
+        inventory.style.display = (inventory.style.display === 'none') ? 'block' : 'none';
     } else {
-        inventory.style.display = 'none';
-        
+        console.log('Player is dead, inventory cannot be opened.');
     }
 }
+
 // Event listener for key press (I key)
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'i' || event.key === 'I') {
-        toggleInventory();
-    }
-});
-function addTextWithTempColor(elementId, text, Color, Replace = true, temp = true, defaultColor = 'azure') {
-    const element = document.querySelector(elementId);
-    
-    // Change text content
-    if(Replace){
-        element.textContent = text;
-    }else{
-        element.textContent += text;
-    }
-    // Temporarily change text color using the provided color
-    element.style.color = Color;
-    // Reset color after a delay (simulating temporary color change)
-    if(temp){
-        setTimeout(() => {
-            element.style.color = defaultColor; // Reset to default color (azure)
-        }, 1000); // Adjust delay time (in milliseconds) as needed
-    }
-}
-function addTextWithTempColorS(elementId,textBlock, textValue, textValuePast, textColorPast = [], amountOfPastTextValue, color, replace  = true, temporary = true, defaultColor = 'azure') {
-    // elementId, textBlock, textValue, textValuePast, color, replace = true, temporary = true, defaultColor = 'azure'
-    const element = document.querySelector(elementId);
-    if (replace) {
-        element.innerHTML = ""; // Clear the content for replacement
-    }
-    //  color = saveData.ALT_Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
-    // Handle past text values
-    if (amountOfPastTextValue > 0 && textValuePast.length > 0) {
-        for (let i = 0; i < Math.min(amountOfPastTextValue, textValuePast.length); i++) {
-            const textPartsPast = textBlock.split(textValuePast[i]); // Split around textValuePast
-            element.append(document.createTextNode(textPartsPast[0])); // Add first part
-            const spanPast = document.createElement("span");
-            spanPast.textContent = textValuePast[i];
-            spanPast.style.color = textColorPast[i];
-            element.append(spanPast); // Add past text
-            textBlock = textPartsPast.slice(1).join(spanPast); // Update remaining textBlock
+handleKeyPress();
+function handleKeyPress(Key = saveData.Settings.Controls.Inventory) {
+    document.addEventListener('keydown', function(event) {
+        if (event.key === Key.toLowerCase() || event.key === Key.toUpperCase()) {
+            toggleInventory();
         }
-    }
-
-    // Handle the main text value
-    const textParts = textBlock.split(textValue); // Split around textValue
-    element.append(document.createTextNode(textParts[0])); // Add first part
-    if (textParts.length > 1) {
-        const span = document.createElement("span");
-        span.textContent = textValue;
-        span.style.color = color;
-        element.append(span); // Add colored text
-    }
-    if (textParts.length > 1) {
-        element.append(document.createTextNode(textParts.slice(1).join(span))); // Add remaining parts
-    }
-
-    // Reset color after a delay if temporary is true
-    if (temporary) {
-        setTimeout(() => {
-            span.style.color = defaultColor;
-        }, 1000); // 1-second delay
-    }
+    });
 }
-
 function openSettings(number) {
     let parent; // Declare parent variable outside the switch statement
     switch (number) {
@@ -529,111 +472,174 @@ function DisplayDebuffTextWithColors(saveData, EffectId, BarLength) {
     }
     saveData.Debuff_SpashText_Final = Side_Menu4.innerHTML; // Save the final text of the debuff splash text
 }
-function slowTypingText(saveData,text, elementId, index = 0, speed = 200, printImmediately = false, events = false) {
-    let spaceIndex = 0; // Reset space counter
-    function printCharacterImmediately(type) {
-        let output = ""; // Store the output in a temporary variable for better performance
-        
-        let element = document.querySelector(elementId);
-        if (type == 1) {
-            while (index < text.length) {
-                let char = text[index];
+// Utility: Formats the text for spaces and breaks (~ = double break)
+function formatText(text) {
+    let formatted = '';
+    let spaceIndex = 0;
 
-                if (char === " ") {
-                    output += "&nbsp;";
-                    spaceIndex++;
-                } else if (spaceIndex >= 20 && char === "."| char === ",") {
-                    output += char + "<br>"; // Use <br> for new lines
-                    spaceIndex = 0;
-                } else {
-                    output += char;
-                }
+    for (let i = 0; i < text.length; i++) {
+        let char = text[i];
 
-                index++;
-            }
-
-            element.innerHTML = output; // Set innerHTML once for efficiency
-            isCurrentlyPrinting = false; // Mark printing as complete
-            return;
-        }else if (type == 2){
-            isCurrentlyPrinting = true;
-            if (index < text.length && !stopTyping) {
-                let char = text[index];
-    
-                if (char === " ") {
-                    element.innerHTML += "&nbsp;";
-                    spaceIndex++;
-                } else if (spaceIndex >= 20 && char === "."| char === ",") {
-                    element.innerHTML += char + "<br>"; // Use <br> for new lines
-                    spaceIndex = 0;
-                } else {
-                    element.innerHTML += char;
-                }
-    
-                index++;
-                setTimeout(() => {
-                    printCharacterImmediately(2)
-                }, speed);// Schedule next character print
-            } else {
-                isCurrentlyPrinting = false; // Mark printing as complete
-                return;
-            }
+        if (char === ' ') {
+            formatted += ' ';
+            spaceIndex++;
+        } else if (spaceIndex >= 20 && (char === '.' || char === ',')) {
+            formatted += char + '<br>';
+            spaceIndex = 0;
+        } else if (char === '~') {
+            formatted += '<br><br>';
+            spaceIndex = 0;
+        } else {
+            formatted += char;
         }
     }
+    return formatted;
+}
+// --------------------------------------------------------------------------------
 
-    // Check if the text has already been printed
-    if (document.querySelector(elementId).innerText == text) {
-        return;
-    }
-    // Set text color based on `IsDead` status
-    document.querySelector(elementId).style.color = saveData.IsDead && elementId !== '.Quest_Title' ? 'red' : 'white';
-
-    if (printImmediately || saveData.Settings.SlowTyping == false) {
-        // Clear the element before printing and print immediately
-        document.querySelector(elementId).innerHTML = '';  
-        // Start printing characters
-        printCharacterImmediately(1);
-        return;
-    }
-    // Set printing flag before starting to print
-    isCurrentlyPrinting = true;
-
-    function FakeCursor() {
-        // Create the fake insertion point
-        const cursor = document.createElement('span');
-        cursor.classList.add('fake-cursor');
-        cursor.innerHTML = '|';
-        cursorT1 = ['\\', '|', '/', '-'];
-        cursorT2 = ['.'];
-        document.querySelector(".main_section").appendChild(cursor);
-
-        // Add a blinking effect to the cursor using CSS
-        const cursorStyle = document.createElement('style');
-        cursorStyle.textContent = `
+// Utility: Create a fake blinking cursor
+function createFakeCursor() {
+    const cursor = document.createElement('span');
+    cursor.classList.add('fake-cursor');
+    cursor.innerHTML = '|';
+    /*
+    if (!document.getElementById('fake-cursor-style')) {
+        const style = document.createElement('style');
+        style.id = 'fake-cursor-style';
+        style.textContent = `
             .fake-cursor {
                 display: inline-block;
                 animation: blink 1s step-start infinite;
                 color: inherit;
             }
             @keyframes blink {
-                50% {
-                    opacity: 0;
-                }
+                50% { opacity: 0; }
             }
         `;
-        document.head.appendChild(cursorStyle);
+        document.head.appendChild(style);
     }
-    /*
-    TODO
-    
-    1. the FakeCursor doesn't work well enouth needs to be revized
-    2. add sound to it just start when isCurrentlyPrinting is true and it will work
     */
-    // Clear the element before starting to print characters
-    document.querySelector(elementId).innerHTML = '';
-    // Start printing characters
-    printCharacterImmediately(2);
+    return cursor;
 }
+// Core Function to simulate slow typing effect for text | New version
+async function addTextFullFeature({
+    elementId,
+    textBlock,
+    textAndColorArray = {word : [], color : []}, // array of { word: string, color: string }
+    speed = 200, 
+    printImmediately = false, 
+    replace = false,
+    tempColorDuration = 0,
+    defaultColor = 'azure',
+}) {
+    //TODO
+    //1. add sound to it just start when isCurrentlyPrinting is true and it will work
+    const element = document.querySelector(elementId);
+    if (replace) {
+        element.innerHTML = ''; // Clear the content for replacement
+    }
+
+    // Clear old cursors
+    document.querySelectorAll('.fake-cursor').forEach(c => c.remove());
+
+    // Set text color based on death
+    element.style.color = saveData.IsDead && elementId !== '.Quest_Title' ? 'red' : defaultColor;
+
+
+    // If printing immediately or slow typing disabled
+    if (printImmediately || saveData.Settings.SlowTyping === false) {
+        element.innerHTML = formatText(textBlock);
+        isCurrentlyPrinting = false;
+        return;
+    }
+
+    // Prepare for typing
+    element.innerHTML = '';
+    isCurrentlyPrinting = true;
+    stopTyping = false;
+    let typingPauseDuration = 2000; // Pause duration in milliseconds 
+
+    const cursor = createFakeCursor(); // Create a fake cursor
+    if (textAndColorArray.color.length == 0) {
+        element.appendChild(cursor)
+        // sound setup
+        // const typingSound = new Audio('path/to/typing-sound.mp3'); // Replace with actual sound file path when implemented
+    }
+
+    // If the word "ALL" is found in the textAndColorArray, set the color to textBlock instead of the word
+    const allColorEntry = textAndColorArray.word == 'ALL';
+    if (allColorEntry) {
+        element.style.color = allColorEntry.color;
+    }
+
+
+    // handle text and color array when it is not empty or "ALL" is not found
+    if (textAndColorArray.word.length > 0 && textAndColorArray.word[0] !== 'ALL') {
+        // Handle text and color array
+        let remainingText = textBlock;
+        for (let i = 0; i < textAndColorArray.word.length; i++) {
+            const word = textAndColorArray.word[i];
+            const color = textAndColorArray.color[i];
+
+            const index = remainingText.indexOf(word);
+            if (index !== -1) {
+                // Text before the word
+                const before = remainingText.substring(0, index);
+                element.append(document.createTextNode(before));
+    
+                // The colored word
+                const span = document.createElement("span");
+                span.textContent = word;
+                span.style.color = color;
+                element.append(span);
+    
+                // Update remaining text after the word
+                remainingText = remainingText.substring(index + word.length);
+            }
+        }
+    
+        // Append any leftover text
+        if (remainingText.length > 0) {
+            element.append(document.createTextNode(remainingText));
+        }
+        return;
+    }
+    let output = '';
+    for (let i = 0; i < textBlock.length; i++) {
+        if (stopTyping) {
+            // If player clicked while printing
+            element.innerHTML = formatText(textBlock);
+            isCurrentlyPrinting = false;
+            return;
+        }
+
+        let char = formatText(textBlock)[i];
+        
+        output += char;
+        element.innerHTML = output;
+        element.appendChild(cursor); // Append cursor after each character
+
+        // typingSound.currentTime = 0; // Reset sound to start
+        // typingSound.play().catch(() => {}); // Play typing sound
+        await new Promise(resolve => setTimeout(resolve, speed)); // Delay next letter
+    }
+
+
+    isCurrentlyPrinting = false;
+    element.removeChild(cursor); // Remove cursor after typing
+
+
+    // Reset color after a delay if tempColorDuration is greater than 0
+    if(tempColorDuration > 0){
+        setTimeout(() => {
+            element.style.color = defaultColor;
+        }, tempColorDuration);
+    }
+}
+// ----------------------------------------------------------------------------------
+
+
+
 function saveGame(NumSection){
     currentdate = new Date();
     var datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1)+ "/" +
