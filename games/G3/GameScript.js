@@ -46,18 +46,7 @@ let ResetFile = false;// if true can't save latest as session is reseting
 let CurrentPageNumber = 1;
 
 
-/*
-try{
-    localStorage.getItem('SaveForest');
-}
-catch(error){
-    let SaveForest = {
-        'section0' : {},
-    };
-    let saveData = saveData;
-    console.log('Can this be removed? id=2525')
-}
-*/
+
 
 // Function to start up the game
 window.onload = function () {
@@ -160,14 +149,14 @@ function loadLatestGame(userConfirmed) {
         ResetEffectBarToDefault(saveData);
         // Call the mergeDefaultProperties function to ensure saveData has all expected properties
         mergeDefaultProperties(saveData);
-        story(saveData);
+        Render_Scene(saveData, true);
     } catch (error) {
         if(error == TypeError){
             console.error('Error in SaveData:', error);
-            story(saveData);
+            Render_Scene(saveData, true);
         }else{
             console.error('Unkown Error by parsing SaveForest:', error);
-            newGame(saveData); // Fallback to starting a new game if loading fails
+            newGame(); // Fallback to starting a new game if loading fails
         }
         
         
@@ -179,13 +168,23 @@ function newGame(){
     console.log('new game');
     try{saveData.Player_character = Player;}
     catch(error){console.log('Can\'t set player because ',error);}
-    SaveForest.DefaultSaveData = saveData;
+    SaveForest = JSON.parse(localStorage.getItem('SaveForest')|| '{}');
+    if (!SaveForest) {
+        let SaveForest = {
+            'section0' : {},
+        };
+        SaveForest.DefaultSaveData = saveData;
+    }
+    else {
+        SaveForest.DefaultSaveData = saveData;
+    }
+    
     //console.log('SaveForest:',JSON.parse(SaveForest))
     localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
 
     // start story
     ResetEffectBarToDefault(saveData)
-    story(saveData);
+    Render_Scene(saveData, true);
 
 }
 
@@ -674,7 +673,7 @@ function loadGame(NumSection) {
         Side_Menu2.innerHTML = "";
         // Call the mergeDefaultProperties function to ensure saveData has all expected properties
         mergeDefaultProperties(saveData);
-        story(saveData);
+        Render_Scene(saveData, true);
     }
 }
 // Function to delete game
@@ -690,23 +689,21 @@ function deleteGame(NumSection) {
 }
 function mergeDefaultProperties(saveData) {
     // Define default properties with all expected properties and their default values
-    // TODO: FT merge prop
     let defaultPropertiesForest =  JSON.parse(localStorage.getItem('SaveForest'));
     const defaultProperties = defaultPropertiesForest.DefaultSaveData
     // If saveData does not exist, initialize it with defaultProperties
     if (!saveData) {
         saveData = { ...defaultProperties };
-    } else {
-        // Merge default properties with existing properties, but only add missing properties
-        for (const prop in defaultProperties) {
-            if (!(prop in saveData)) {
-                saveData[prop] = defaultProperties[prop];
-            } else if (typeof defaultProperties[prop] === 'object') {
-                // If the property is an object (e.g., Settings), merge its properties
-                for (const subProp in defaultProperties[prop]) {
-                    if (!(subProp in saveData[prop])) {
-                        saveData[prop][subProp] = defaultProperties[prop][subProp];
-                    }
+    }
+    // Merge default properties with existing properties, but only add missing properties
+    for (const prop in defaultProperties) {
+        if (!(prop in saveData)) {
+            saveData[prop] = defaultProperties[prop];
+        } else if (typeof defaultProperties[prop] === 'object') {
+            // If the property is an object (e.g., Settings), merge its properties
+            for (const subProp in defaultProperties[prop]) {
+                if (!(subProp in saveData[prop])) {
+                    saveData[prop][subProp] = defaultProperties[prop][subProp];
                 }
             }
         }
