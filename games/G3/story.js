@@ -8,28 +8,46 @@ function Render_Scene(saveData, isNew = false) {
     } else {
         saveData = JSON.parse(sessionStorage.getItem('TempLatestSave'));
     }
-    const {
-        current_storyLine_progress,
-        current_chapter_progress,
-        current_title_progress,
-        DeathReason,
-        Choices_Possible,
-        Buttons_section_title,
-        Choices_Made,
-        CurrentDebuffBar,
-        IsDead
-    } = saveData?? 0;
+    /*
+    if (!saveData.ItemID) {
+        const {
+            current_storyLine_progress,
+            current_chapter_progress,
+            current_title_progress,
+            DeathReason,
+            Choices_Possible,
+            Buttons_section_title,
+            Choices_Made,
+            CurrentDebuffBar,
+            IsDead
+        } = saveData?? 0;
 
-    const currentScene = saveData.storyLine_progress[current_chapter_progress][current_storyLine_progress];
-    const currentTitle = saveData.title_progress[current_title_progress];
-    const currentSectionTitle = Buttons_section_title[current_chapter_progress][current_storyLine_progress];
+        const currentScene = saveData.storyLine_progress[current_chapter_progress][current_storyLine_progress];
+        const currentTitle = saveData.title_progress[current_title_progress];
+        const currentSectionTitle = Buttons_section_title[current_chapter_progress][current_storyLine_progress];
+    }
+    */
+    const current_storyLine_progress = saveData.currrentScene.split('_')[1] || 0;
+    const current_chapter_progress = saveData.currrentScene.split('_')[0] || 0;
+    const current_title_progress = current_chapter_progress;
+    const DeathReason = saveData.DeathReason;
+    const Choices_Possible = saveData.scenes[saveData.currrentScene].options; // its different
+    //const Buttons_section_title = saveData.scenes[i].ButtonTitle;
+    const Choices_Made = saveData.Choices_Made[current_chapter_progress];
+    const CurrentDebuffBar = saveData.Debuff_SpashText_Final;
+    const IsDead = saveData.IsDead;
 
+    const currentSceneText = saveData.scenes[saveData.currrentScene].sceneText;
+    const currentSceneName = saveData.scenes[saveData.currrentScene].sceneName;
+    const currentTitle = saveData.scenes[saveData.currrentScene].chapterTitle;
+    const currentSectionTitle = saveData.scenes[saveData.currrentScene].ButtonTitle;
+    
     // --- UI Rendering ---
     // Render content in order
     ButtonPressed(saveData, Choices_Possible); // 1. Button's text , actions and visibility
     manageHiddenInfo(saveData, false); // 2. Hide or show buttons
     title_progress(currentTitle, current_title_progress); // 3. Title
-    scene_progress(currentScene, current_storyLine_progress, DeathReason); // 4. Text content
+    scene_progress(currentSceneText, currentSceneName); // 4. Text content
     section_title_progress(currentSectionTitle); // 5. button's title
     character_Description(saveData, Choices_Made); // 6. Character description if applicable
     Effect_Bar_progress(saveData, CurrentDebuffBar); // 7. Effect bar if applicable
@@ -49,14 +67,16 @@ function impromptuSave(saveData) {
 function getButtonValues(saveData) {
     const buttonValues = [];
     for (const buttonValue of saveData.Buttons) {
-        let chapter = saveData.Choices_Possible[saveData.current_chapter_progress];
-        let scene = chapter[saveData.current_storyLine_progress];
+        let currentScene = saveData.currrentScene.split('_')[1];
+        let currentChapter = saveData.currrentScene.split('_')[0];
+        let chapter = saveData.scenes[saveData.currrentScene];
+        let scene = chapter.options[buttonValue]?.ButtonText;
         let value;
-        if(saveData.IsDead){
+        if(saveData.isDead){
             value = chapter[buttonValue];
             
         }else{
-            value = scene[buttonValue];
+            value = scene;
         }
         if (value) {
             console.log('value id=12 (buttonValue)',value)
@@ -75,9 +95,9 @@ function buttonClickHandler(buttonValue, saveData) {
             stopTyping = false;
             switch (buttonValue) {
                 case 1:
-                    console.log("Choices_Made before change id=253 ", saveData.Choices_Made[saveData.current_chapter_progress]);
-                    saveData.Choices_Made[saveData.current_chapter_progress].pop();
-                    console.log("Choices_Made after change id=254 ", saveData.Choices_Made[saveData.current_chapter_progress]);
+                    console.log("Choices_Made before change id=253 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
+                    saveData.Choices_Made[saveData.currrentScene.split('_')[0]].pop();
+                    console.log("Choices_Made after change id=254 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
                     previousScene(saveData);
                     break;
                 case 2:
@@ -85,33 +105,33 @@ function buttonClickHandler(buttonValue, saveData) {
                 case 4:
                 case 5:
                 case 6:
-                    console.log("Choices_Made before change id=261 ", saveData.Choices_Made[saveData.current_chapter_progress]);
-                    saveData.Choices_Made[saveData.current_chapter_progress].push(buttonValue);
+                    console.log("Choices_Made before change id=261 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
+                    saveData.Choices_Made[saveData.currrentScene.split('_')[0]].push(buttonValue);
                     Choices_calculator(saveData);
-                    console.log("Choices_Made after change id=262 ", saveData.Choices_Made[saveData.current_chapter_progress]);
+                    console.log("Choices_Made after change id=262 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
                     break;
                 case 7:
-                    console.log("Choices_Made before change id=255 ", saveData.Choices_Made[saveData.current_chapter_progress]);
-                    saveData.Choices_Made[saveData.current_chapter_progress].push(buttonValue);
-                    console.log("Choices_Made after change id=256 ", saveData.Choices_Made[saveData.current_chapter_progress]);
+                    console.log("Choices_Made before change id=255 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
+                    saveData.Choices_Made[saveData.currrentScene.split('_')[0]].push(buttonValue);
+                    console.log("Choices_Made after change id=256 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
                     nextScene(saveData);
                     break;
             }
         } else {
             stopTyping = true;
-            console.log('current_storyLine_progress id=8', saveData.current_storyLine_progress);
+            console.log('current_storyLine_progress id=8', saveData.currrentScene.split('_')[1]);
             addTextFullFeature({
-                textBlock : saveData.storyLine_progress[saveData.current_chapter_progress][saveData.current_storyLine_progress]['sceneText'],
+                textBlock : saveData.scenes[saveData.currrentScene].sceneText,
                 elementId : '.main_section',
                 printImmediately : true,
             })
             addTextFullFeature({
-                textBlock : saveData.title_progress[saveData.current_title_progress],
+                textBlock : saveData.scenes[saveData.currrentScene].chapterTitle,
                 elementId : '.Quest_Title',
                 printImmediately : true,
             })
             isCurrentlyPrinting = false;
-            console.log('Print everything for scene number ', saveData.current_storyLine_progress);
+            console.log('Print everything for scene number ', saveData.currrentScene.split('_')[1]);
             
         }
     }
@@ -122,23 +142,24 @@ function ButtonPressed(saveData, infogetter) {
         const button = document.querySelector('.Sh_' + buttonValue);
         if (button) {
             // Get the value of the button from the scene
-            let chapter = infogetter[saveData.current_chapter_progress];
-            let scene = chapter[saveData.current_storyLine_progress];
+            // let chapter = infogetter[saveData.current_chapter_progress];
+            // let scene = chapter[saveData.current_storyLine_progress];
+            let chapter = saveData.scenes[saveData.currrentScene];
+            let scene = chapter.options[buttonValue]?.ButtonText;
             let value;
-            if(saveData.IsDead){
-                value = chapter[buttonValue];
-            }else{
-                value = scene[buttonValue];
-            }
+            
+            let Textvalue = scene;
+            let Namevalue = chapter.options[buttonValue]?.ButtonNumber;
+            
             // Set the inner HTML of the button
-            button.innerHTML = value;
+            button.innerHTML = Textvalue;
             button.style.display = 'inline-block'; // Make the button visible
             // Add event listener to the button
-            const handler = buttonClickHandler(buttonValue, saveData);
+            const handler = buttonClickHandler(Namevalue, saveData);
             button.removeEventListener("click", button.handlerReference); // Remove previous listener to avoid duplicates
             button.addEventListener("click", handler);
             button.handlerReference = handler; // Store the reference to the handler function
-            console.log('Event listener added for button ' + buttonValue); // Logging the addition of event listener
+            console.log('Event listener added for button ' + Namevalue); // Logging the addition of event listener
         }
     }
 }
@@ -378,35 +399,131 @@ function title_progress(current_title,current_title_progress) {
     console.log('current_title',current_title);
     console.log('current_title_progress', current_title_progress);
 }
-function scene_progress(current_storyLine,current_storyLine_progress, DeathReason) {
-    let title_scene = current_storyLine['sceneName']
-    let scene_text;
-    scene_text = saveData.DeathReason ? current_storyLine['sceneText'] + saveData.DeathReason : current_storyLine['sceneText'];
+function scene_progress(currentSceneText,currentSceneName) {
+    let title_scene = currentSceneName;
+    let scene_text = currentSceneText;
     addTextFullFeature({
         textBlock : scene_text,
         elementId : '.main_section',
         speed : 35,
     })
     saveData.DeathReason = undefined;
-    console.log('Title scene:',title_scene)                          
-    console.log('Text scene:',scene_text)
-    console.log('current_storyLine',current_storyLine);
-    console.log('current_storyLine_progress', current_storyLine_progress);
+    console.log('currentSceneName', title_scene);
+    console.log('currentSceneText', scene_text);
 }
+function navigateStory(saveData, { direction = 'next', level = 'scene', isDead = false }) {
+    let [chapter, scene] = saveData.currrentScene.split('_').map(Number);
+    if (chapter !== 'Death') {
+        chapter = parseInt(chapter);
+        scene = parseInt(scene);
+    }
+    // death handling
+    if (isDead) {
+        saveData.currrentScene = saveData.LastSafeScene || "0_0";
+        clearButtonContent();
+        Render_Scene(saveData, true);
+        return;
+    }
+    // SaveScene handling
+    if (saveData.currrentScene == saveData.safeScenes?.[saveData.currrentScene]) saveData.LastSafeScene = `${chapter}_${scene}`;
+
+    let lastChoiceIndex = saveData.Choices_Made[chapter].length - 1;
+    let LastButtonPressed = saveData.Choices_Made[chapter][lastChoiceIndex];
+    
+
+    const sceneKeys = Object.keys(saveData.scenes)
+        .filter(key => key.startsWith(`${chapter}_`))
+        .map(key => parseInt(key.split('_')[1]))
+        .sort((a, b) => a - b);
+
+    if (level === 'scene') {
+        const sceneData = saveData.scenes[saveData.currrentScene];
+        if (!Object.values(sceneData?.options)?.find(b => b.ButtonNumber === LastButtonPressed)) {
+            console.warn("No valid options available.");
+            return;
+        }
+        let currentIndex = sceneKeys.indexOf(scene);
+        const options = Object.values(saveData.scenes[saveData.currrentScene].options)?.find(b => b.ButtonNumber === LastButtonPressed);
+        if (direction === 'next') {
+            if (currentIndex < sceneKeys.length - 1) {
+                
+                // Move to the next scene
+                scene = options.next_scene? options.next_scene.split('_')[1] : sceneKeys[currentIndex + 1];
+                // Perform custom action if specified
+                // if (options.action) performSceneAction(options.action, saveData);
+                // FIXME: need to fic probelm here with going back or wteverver
+            } else {
+                return navigateStory(saveData, { direction: 'next', level: 'chapter' });
+            }
+        } else if (direction === 'previous') {
+            if (currentIndex > 0) {
+                scene = options.next_scene? options.next_scene.split('_')[1] : sceneKeys[currentIndex + 1];
+            } else {
+                return navigateStory(saveData, { direction: 'previous', level: 'chapter' });
+            }
+        }
+
+        saveData.currrentScene = `${chapter}_${scene}`;
+        saveData.current_storyLine_progress = scene;
+    }
+
+    if (level === 'chapter') {
+        if (direction === 'next' && chapter < Object.keys(saveData.scenes).length - 1) {
+            chapter += 1;
+            scene = 0;
+        } else if (direction === 'previous' && chapter > 0) {
+            chapter -= 1;
+            scene = 0;
+        } else {
+            console.log('No more chapters in this direction.');
+            return;
+        }
+
+        saveData.current_chapter_progress = chapter;
+        saveData.current_storyLine_progress = scene;
+        saveData.currrentScene = `${chapter}_${scene}`;
+    }
+
+    clearButtonContent();
+    Render_Scene(saveData, true);
+}
+function nextScene(saveData) {
+    navigateStory(saveData, { direction: 'next', level: 'scene' });
+}
+
+function previousScene(saveData) {
+    navigateStory(saveData, { direction: 'previous', level: 'scene' });
+}
+
+function nextChapter(saveData, isDead = false) {
+    navigateStory(saveData, { direction: 'next', level: 'chapter', isDead });
+}
+
+function previousChapter(saveData) {
+    navigateStory(saveData, { direction: 'previous', level: 'chapter' });
+}
+
+/*
 function nextScene(saveData) {
     // Increment the current scene progress only if there are more scenes available
     // current place > next place
-    let lastChoiceIndex = saveData.Choices_Made[saveData.current_chapter_progress].length - 1;
-    let LastButtonPressed = saveData.Choices_Made[saveData.current_chapter_progress][lastChoiceIndex];
-    if (saveData.AllSafePlaces[saveData.current_chapter_progress][saveData.current_storyLine_progress] == 1){
-        saveData.LastSafeScene = saveData.current_storyLine_progress;
+    let [ChapterStr, SceneStr] =  saveData.currrentScene.split('_');
+    let Chapter = parseInt(ChapterStr);
+    let Scene = parseInt(SceneStr);
+    let current_storyLine_progress = Scene;
+    let current_chapter_progress = Chapter;
+    let lastChoiceIndex = saveData.Choices_Made[current_chapter_progress].length - 1;
+    let LastButtonPressed = saveData.Choices_Made[current_chapter_progress][lastChoiceIndex];
+    if (saveData.safeScenes[saveData.currrentScene]){
+        saveData.LastSafeScene = saveData.currrentScene;
     }
-    if (saveData.IsDead){
+    if (saveData.isDead){
         nextChapter(saveData, true);
         return;
-    }else if(saveData.current_chapter_progress == 'Death'){
-        saveData.current_chapter_progress = saveData.LastSafeChapter;
-        saveData.current_storyLine_progress = saveData.LastSafeScene;
+    }else if(current_chapter_progress == 'Death'){
+        current_chapter_progress = saveData.LastSafeScene.split('_')[0];
+        current_storyLine_progress = saveData.LastSafeScene.split('_')[1];
+        saveData.currrentScene = saveData.LastSafeScene;
         //saveData.Choices_Made[saveData.LastSafeChapter] = [undefined];    //  unsure about this
         
         character.Resurrect();
@@ -414,33 +531,38 @@ function nextScene(saveData) {
         Render_Scene(saveData, true);
     }
     // DisplayDebuffTextWithColors(saveData, 'Fatigue', -1); // Display Controlbar text with color
-    if (saveData.current_storyLine_progress < Object.keys(saveData.storyLine_progress[saveData.current_chapter_progress]).length - 1 && saveData.current_chapter_progress == 0) {
+    // do check if scene is inside the chapter
+    if (saveData.scenes[saveData.currrentScene].sceneID < Object.keys(saveData.scenes).filter(sceneKey => sceneKey.startsWith(`0_`)).length -1 && current_chapter_progress == 0) {
+        // FIXME ^ here
         saveData.current_storyLine_progress++;
+        saveData.currrentScene = `${current_chapter_progress}_${current_storyLine_progress+1}`;
         console.log('pressed NextScene id=5')
-    }else if(saveData.current_storyLine_progress < Object.keys(saveData.storyLine_progress[saveData.current_chapter_progress]).length - 1 && saveData.current_chapter_progress == 1){
-        switch(saveData.current_storyLine_progress){
+    }else if(saveData.scenes[saveData.currrentScene].sceneID < Object.keys(saveData.scenes).filter(sceneKey => sceneKey.startsWith(`1_`)).length && current_chapter_progress == 1){
+        switch(current_storyLine_progress){
             case 0:
                 saveData.current_storyLine_progress = LastButtonPressed - 1; //from 1 to 5 are scene other area
+                saveData.currrentScene = `${current_chapter_progress}_${LastButtonPressed - 1}`;
                 break;
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
-                saveData.current_storyLine_progress += 5;
-                break;
-            case 6:
-                if(LastButtonPressed == 2){
-                    saveData.current_storyLine_progress += 6;                    
-                }else {
-                    saveData.current_storyLine_progress += 5;
-                }
-                break;
             case 7:
             case 8:
             case 9:
             case 10:
                 saveData.current_storyLine_progress += 5;
+                saveData.currrentScene = `${current_chapter_progress}_${current_storyLine_progress+5}`;
+                break;
+            case 6:
+                if(LastButtonPressed == 2){
+                    saveData.current_storyLine_progress += 6;
+                    saveData.currrentScene = `${current_chapter_progress}_${current_storyLine_progress+6}`;
+                }else {
+                    saveData.current_storyLine_progress += 5;
+                    saveData.currrentScene = `${current_chapter_progress}_${current_storyLine_progress+5}`;
+                }
                 break;
         }
     } else {
@@ -457,27 +579,33 @@ function nextScene(saveData) {
 
 function previousScene(saveData) {
     // Decrement the current scene progress only if it's not the first scene
-    if (saveData.current_storyLine_progress > 0 && saveData.current_chapter_progress == 0) {
-        saveData.current_storyLine_progress--;
+    let [ChapterStr, SceneStr] =  saveData.currrentScene.split('_');
+    let Chapter = parseInt(ChapterStr);
+    let Scene = parseInt(SceneStr);
+    if (Scene > 0 && Chapter == 0) {
+        saveData.currrentScene = Chapter + '_' + ( Scene -1 );
         console.log('pressed previousScene')
-    }else if(saveData.current_storyLine_progress > 0 && saveData.current_chapter_progress == 1){
-        switch(saveData.current_storyLine_progress){
+    }else if(Scene > 0 && Chapter == 1){
+        switch(Scene){
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
-                saveData.current_storyLine_progress = 0;
+                Scene = 0;
+                saveData.currrentScene = `${Chapter}_0`;
                 break;
             case 6:
             case 7:
             case 8:
             case 9:
             case 10:
-                saveData.current_storyLine_progress -= 5;
+                Scene -= 5;
+                saveData.currrentScene = `${Chapter}_${ Scene -5 }`;
                 break;
             case 12:
-                saveData.current_storyLine_progress -= 6;
+                Scene -= 6;
+                saveData.currrentScene = `${Chapter}_${ Scene -6 }`;
         }
             
     }else {
@@ -492,17 +620,21 @@ function previousScene(saveData) {
 
 function nextChapter(saveData, IsDead = false) {
     // Increment the current chapter progress only if there are more chapters available
+    let [ChapterStr, SceneStr] =  saveData.currrentScene.split('_');
+    let Chapter = parseInt(ChapterStr);
+    let Scene = parseInt(SceneStr);
     if(IsDead){
         saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
         saveData.current_chapter_progress = "Death";
     }
-    if (saveData.current_chapter_progress < Object.keys(saveData.storyLine_progress).length - 1) {
+    if (Chapter < Object.keys(saveData.scenes).length - 1) {
         saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
         saveData.current_chapter_progress++;
         saveData.current_title_progress++;
-        console.log('AllSafePlaces',saveData.AllSafePlaces[saveData.current_chapter_progress][saveData.current_storyLine_progress]);
-        if (saveData.AllSafePlaces[saveData.current_chapter_progress][saveData.current_storyLine_progress] == 1){
-            saveData.LastSafeChapter = saveData.current_chapter_progress;
+        saveData.currrentScene = ( Chapter + 1 ) + '_0';
+        //console.log('AllSafePlaces',saveData.AllSafePlaces[saveData.current_chapter_progress][saveData.current_storyLine_progress]);
+        if (saveData.safeScenes[saveData.currrentScene] == 1){
+            saveData.LastSafeChapter = saveData.currrentScene;
         }
         console.log('Next Chapter');
     } else {
@@ -528,6 +660,7 @@ function previousChapter(saveData) {
     // Re-render the story with updated saveData
     Render_Scene(saveData, true);
 }
+*/
 function getItemDiscoveryText(id){
     return saveData.ItemDiscoveryText.find(entry => entry.id === id);
 }
@@ -546,19 +679,30 @@ function characterMaker(saveData, lastChoiceIndex, value, valueS){
     if (keyToUpdate) {
         character[keyToUpdate] = value;
     }
+
+    // Update the value arrays
+    valueSTRING.push(value);
+    valueCOLOR.push(valueS);
+
+    // Get template string
+    const templateString = saveData.character_Description_Text[lastChoiceIndex].charachterDefining;
+
+    // Evaluate it as a template literal
+    const charachterDefining = new Function('value', 'valueSTRING', `return \`${templateString}\`;`)(value, valueSTRING);
+
     
     // Use `descriptionTemplate` with replacements
+    /*
     let descriptionTemplate = saveData.character_Description_Text[lastChoiceIndex].charachterDefining;
     let charachterDefining = descriptionTemplate
     .replace(/{value}/g, value)
     .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
         return valueSTRING[parseInt(index, 10)];
     });
-    //  Paste text to Side Menu
+    */
+    //  Display text to Side Menu
     Side_Menu2.innerHTML = charachterDefining;
-    // Update the value arrays
-    valueSTRING.push(value);
-    valueCOLOR.push(valueS);
+
     addTextFullFeature({
         elementId: '.Side-Menu2', 
         textBlock: charachterDefining, 
@@ -568,20 +712,33 @@ function characterMaker(saveData, lastChoiceIndex, value, valueS){
     saveData.character_Description_Text_Final = Side_Menu2.innerHTML;
 }
 function Choices_calculator(saveData){
-    let current_storyLine_progress = saveData.current_storyLine_progress;
-    let current_chapter = saveData.current_chapter_progress;
-    let lastChoiceIndex = saveData.Choices_Made[saveData.current_chapter_progress].length - 1;
-    let LastButtonPressed = saveData.Choices_Made[saveData.current_chapter_progress][lastChoiceIndex];
+    let [ChapterStr, SceneStr] =  saveData.currrentScene.split('_');
+    let Chapter = parseInt(ChapterStr);
+    let Scene = parseInt(SceneStr);
+
+    let current_storyLine_progress = Scene
+    let current_chapter = Chapter
+    let lastChoiceIndex = saveData.Choices_Made[Chapter].length - 1;
+    let LastButtonPressed = saveData.Choices_Made[Chapter][lastChoiceIndex];
     let value;
     let valueS;
     let charachterDefining;
-    if(saveData.IsDead){
-        value = saveData.Choices_Possible[current_chapter][LastButtonPressed];
-        valueS = saveData.ALT_Choices_Possible[current_chapter][LastButtonPressed];
+    if(saveData.isDead){
+        value = Object.values(saveData.scenes[saveData.currrentScene].options)
+            .find(opt => opt.ButtonNumber === LastButtonPressed)?.ButtonText || '';
+        // value = saveData.Choices_Possible[current_chapter][LastButtonPressed];
+        // valueS = saveData.ALT_Choices_Possible[current_chapter][LastButtonPressed];
+        valueS = Object.values(saveData.scenes[saveData.currrentScene].ALT_options)
+            .find(opt => opt.ButtonNumber === LastButtonPressed)?.ButtonText || '';
     }else{
-        value = saveData.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
+        // value = saveData.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
+        value = Object.values(saveData.scenes[saveData.currrentScene].options)
+            .find(opt => opt.ButtonNumber === LastButtonPressed)?.ButtonText || '';
         try{
-            valueS = saveData.ALT_Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
+            // valueS = saveData.ALT_Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
+            valueS = Object.values(saveData.scenes[saveData.currrentScene].ALT_options)
+                .find(opt => opt.ButtonNumber === LastButtonPressed)?.ButtonText || '';
+
         }catch(error){
             console.log('fuck valueS', error);
         }

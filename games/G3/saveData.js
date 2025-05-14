@@ -1,4 +1,4 @@
-let saveData = {
+let saveDataOG = {
     "saveDataName" : "Main",
     "saveDataTime" : "",
     "IsDead" : false,

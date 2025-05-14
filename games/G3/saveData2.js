@@ -1,9 +1,11 @@
 // Will be renamed to saveData.js when its ready
+//temp
 let saveData = {
     name: "Main",
     LastSaved: "",
     isDead: false,
     deathReason: null,
+    LastSafeScene: "0_0", // 0_1 for chapter 0, scene 1
     Player_character : undefined, // Was Player
     Buttons : [1,2,3,4,5,6,7],
     currrentScene: "0_0", // 0_1 for chapter 0, scene 1
@@ -26,11 +28,12 @@ let saveData = {
             sceneText: "You died because " + this.deathReason,
             ALT_Text: null,
             sceneID: -1,
+            ButtonTitle: "",
             options: {
                 0 : {
                     ButtonNumber: 4,
-                    ButtonTitle: "",
                     ButtonText: "Respawn at last checkpoint",
+                    next_scene: this.LastSafeScene,
                 },
             },
             ALT_options: {},
@@ -41,8 +44,9 @@ let saveData = {
             sceneText: "You wake up in a dark cave, the damp air clinging to your skin as you grope for any semblance of direction. The sound of distant rumbling echoes through the cavern, urging you to explore. With each step, the path twists and turns, revealing ancient ruins and forgotten passages. As you navigate this mysterious labyrinth, the weight of uncertainty presses upon you, yet a flicker of curiosity ignites within.",
             ALT_Text: null,
             sceneID: 0,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Next"},
+                1: {ButtonNumber: 7, ButtonText: "Next"},
             },
             ALT_options: {},
         },
@@ -52,9 +56,10 @@ let saveData = {
             sceneText: "Gazing into the rippling surface of a subterranean pool, you catch a glimpse of your own reflection amidst the murky depths. The dim light barely illuminates your features, leaving much to the imagination. Who is this figure staring back at you? The lines of gender blur in the wavering distortion, leaving only a sense of mystery in its wake...",
             ALT_Text: null,
             sceneID: 1,
+            ButtonTitle: "", 
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Next"},
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 7, ButtonText: "Next"},
             },
             ALT_options: {},
         },
@@ -64,20 +69,21 @@ let saveData = {
             sceneText: "In the dim cavern, Your eyes glimmer like precious gems, reflecting the faint light with an entrancing allure. With each glance, you discern a depth of color, ranging from the azure depths of a tranquil ocean to the earthy warmth of sunlit forests.",
             ALT_Text: null,
             sceneID: 2,
+            ButtonTitle: "", 
             options: {
-                1: { ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously" },
-                2: { ButtonNumber: 2, ButtonTitle: "", ButtonText: "piercing blue" },
-                3: { ButtonNumber: 3, ButtonTitle: "", ButtonText: "deep brown" },
-                4: { ButtonNumber: 4, ButtonTitle: "", ButtonText: "striking green" },
-                5: { ButtonNumber: 5, ButtonTitle: "", ButtonText: "captivating hazel" },
-                6: { ButtonNumber: 6, ButtonTitle: "", ButtonText: "intense grey" },
+                1: { ButtonNumber: 1, ButtonText: "Previously" },
+                2: { ButtonNumber: 2, ButtonText: "piercing blue" },
+                3: { ButtonNumber: 3, ButtonText: "deep brown" },
+                4: { ButtonNumber: 4, ButtonText: "striking green" },
+                5: { ButtonNumber: 5, ButtonText: "captivating hazel" },
+                6: { ButtonNumber: 6, ButtonText: "intense grey" },
             },
             ALT_options: {
-                1: { ButtonNumber: 2, ButtonTitle: "", ButtonText: "blue" },
-                2: { ButtonNumber: 3, ButtonTitle: "", ButtonText: "brown" },
-                3: { ButtonNumber: 4, ButtonTitle: "", ButtonText: "green" },
-                4: { ButtonNumber: 5, ButtonTitle: "", ButtonText: "hazel" },
-                5: { ButtonNumber: 6, ButtonTitle: "", ButtonText: "lightgrey" },
+                1: { ButtonNumber: 2, ButtonText: "blue" },
+                2: { ButtonNumber: 3, ButtonText: "brown" },
+                3: { ButtonNumber: 4, ButtonText: "green" },
+                4: { ButtonNumber: 5, ButtonText: "hazel" },
+                5: { ButtonNumber: 6, ButtonText: "lightgrey" },
             },
         },
         "0_3": {
@@ -86,20 +92,21 @@ let saveData = {
             sceneText: "Amidst the shadows, Your hair dances in the gentle breeze, its texture hinting at a story of its own. Whether cascading in ebony rivers, catching the light in shimmering silver strands, or ablaze with the fiery hues of a setting sun, each tress adds to Your mystique",
             ALT_Text: null,
             sceneID: 3,
+            ButtonTitle: "", 
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 2, ButtonTitle: "", ButtonText: "cascading waves"},
-                3: {ButtonNumber: 3, ButtonTitle: "", ButtonText: "cropped short"},
-                4: {ButtonNumber: 4, ButtonTitle: "", ButtonText: "braided intricately"},
-                5: {ButtonNumber: 5, ButtonTitle: "", ButtonText: "sophisticated bun"},
-                6: {ButtonNumber: 6, ButtonTitle: "", ButtonText: "wild and free"}
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 2, ButtonText: "cascading waves"},
+                3: {ButtonNumber: 3, ButtonText: "cropped short"},
+                4: {ButtonNumber: 4, ButtonText: "braided intricately"},
+                5: {ButtonNumber: 5, ButtonText: "sophisticated bun"},
+                6: {ButtonNumber: 6, ButtonText: "wild and free"}
             },
             ALT_options: {
-                1: {ButtonNumber: 2, ButtonTitle: "", ButtonText: "lightblue"},
-                2: {ButtonNumber: 3, ButtonTitle: "", ButtonText: "darkblue"},
-                3: {ButtonNumber: 4, ButtonTitle: "", ButtonText: "lightyellow"},
-                4: {ButtonNumber: 5, ButtonTitle: "", ButtonText: "orange"},
-                5: {ButtonNumber: 6, ButtonTitle: "", ButtonText: "firebrick"}
+                1: {ButtonNumber: 2, ButtonText: "lightblue"},
+                2: {ButtonNumber: 3, ButtonText: "darkblue"},
+                3: {ButtonNumber: 4, ButtonText: "lightyellow"},
+                4: {ButtonNumber: 5, ButtonText: "orange"},
+                5: {ButtonNumber: 6, ButtonText: "firebrick"}
             }
         },
         "0_4": {
@@ -108,20 +115,21 @@ let saveData = {
             sceneText: "Your skin, bathed in the flickering light, revealed a complexion that seemed to hold stories untold. As you observe closely, you notice nuances of color, from the palest porcelain to the richest ebony, each hue adding depth to Your enigmatic presence.",
             ALT_Text: null,
             sceneID: 4,
+            ButtonTitle: "", 
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 2, ButtonTitle: "", ButtonText: "porcelain fair"},
-                3: {ButtonNumber: 3, ButtonTitle: "", ButtonText: "sun-kissed bronze"},
-                4: {ButtonNumber: 4, ButtonTitle: "", ButtonText: "Olive-toned"},
-                5: {ButtonNumber: 5, ButtonTitle: "", ButtonText: "Rosy-pink"},
-                6: {ButtonNumber: 6, ButtonTitle: "", ButtonText: "Deep ebony"}
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 2, ButtonText: "porcelain fair"},
+                3: {ButtonNumber: 3, ButtonText: "sun-kissed bronze"},
+                4: {ButtonNumber: 4, ButtonText: "Olive-toned"},
+                5: {ButtonNumber: 5, ButtonText: "Rosy-pink"},
+                6: {ButtonNumber: 6, ButtonText: "Deep ebony"}
             },
             ALT_options: {
-                1:  {ButtonNumber: 2, ButtonTitle: "", ButtonText: "beige"},
-                2:  {ButtonNumber: 3, ButtonTitle: "", ButtonText: "bronze"},
-                3:  {ButtonNumber: 4, ButtonTitle: "", ButtonText: "Olive"},
-                4:  {ButtonNumber: 5, ButtonTitle: "", ButtonText: "pink"},
-                5:  {ButtonNumber: 6, ButtonTitle: "", ButtonText: "lightbrown"}
+                1:  {ButtonNumber: 2, ButtonText: "beige"},
+                2:  {ButtonNumber: 3, ButtonText: "bronze"},
+                3:  {ButtonNumber: 4, ButtonText: "Olive"},
+                4:  {ButtonNumber: 5, ButtonText: "pink"},
+                5:  {ButtonNumber: 6, ButtonText: "lightbrown"}
             }
         },
         "0_5": {
@@ -130,20 +138,21 @@ let saveData = {
             sceneText: "Your stature, silhouetted against the cavern walls, commands attention with a presence that is both formidable and intriguing. As you study them further, you discern the subtle contours of Your frame, which may lean towards a delicate grace or exude a powerful strength, leaving an indelible impression in the depths of the cavern.",
             ALT_Text: null,
             sceneID: 5,
+            ButtonTitle: "",
             options : {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 2, ButtonTitle: "", ButtonText: "Petite and delicate"},
-                3: {ButtonNumber: 3, ButtonTitle: "", ButtonText: "Tall and statuesque"},
-                4: {ButtonNumber: 4, ButtonTitle: "", ButtonText: "Somewhere in between"},
-                5: {ButtonNumber: 5, ButtonTitle: "", ButtonText: "Lean and athletic"},
-                6: {ButtonNumber: 6, ButtonTitle: "", ButtonText: "Muscular and imposing"}
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 2, ButtonText: "Petite and delicate"},
+                3: {ButtonNumber: 3, ButtonText: "Tall and statuesque"},
+                4: {ButtonNumber: 4, ButtonText: "Somewhere in between"},
+                5: {ButtonNumber: 5, ButtonText: "Lean and athletic"},
+                6: {ButtonNumber: 6, ButtonText: "Muscular and imposing"}
             },
             ALT_options: {
-                1: {ButtonNumber: 2, ButtonTitle: "", ButtonText: "lightpink"},
-                2: {ButtonNumber: 3, ButtonTitle: "", ButtonText: "darkblue"},
-                3: {ButtonNumber: 4, ButtonTitle: "", ButtonText: "green"},
-                4: {ButtonNumber: 5, ButtonTitle: "", ButtonText: "lightblue"},
-                5: {ButtonNumber: 6, ButtonTitle: "", ButtonText: "brown"}
+                1: {ButtonNumber: 2, ButtonText: "lightpink"},
+                2: {ButtonNumber: 3, ButtonText: "darkblue"},
+                3: {ButtonNumber: 4, ButtonText: "green"},
+                4: {ButtonNumber: 5, ButtonText: "lightblue"},
+                5: {ButtonNumber: 6, ButtonText: "brown"}
             }
         },
         "0_6": {
@@ -151,15 +160,16 @@ let saveData = {
             sceneName: "charachterDefining5",
             sceneText: "Your attire, a reflection of your journey through the rugged terrain, appears weathered and worn, bearing the marks of your passage through the cave's unforgiving landscape. You notice that your clothing carries either the rugged authenticity of a seasoned traveler, marked by dirt and grime, or the pristine cleanliness that hints at your recent arrival, untouched by the trials of the cavern.",
             ALT_Text: null,
+            ButtonTitle: "",
             sceneID: 6,
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 4, ButtonTitle: "", ButtonText: "Weathered and worn, marked by dirt and grime, reflecting a seasoned traveler"},
-                3: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Pristine and clean, untouched by the trials of the cavern, hinting at a recent arrival"}
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 4, ButtonText: "Weathered and worn, marked by dirt and grime, reflecting a seasoned traveler"},
+                3: {ButtonNumber: 7, ButtonText: "Pristine and clean, untouched by the trials of the cavern, hinting at a recent arrival"}
             },
             ALT_options: {
-                1: {ButtonNumber: 4, ButtonTitle: "", ButtonText: "darkgrey"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "lightgrey"}
+                1: {ButtonNumber: 4, ButtonText: "darkgrey"},
+                2: {ButtonNumber: 7, ButtonText: "lightgrey"}
             }
         },
         "0_7": {
@@ -168,14 +178,15 @@ let saveData = {
             sceneText: "Gazing into the rippling waters of the cave's puddle, the figure contemplates their gender, recognizing it as a deeply personal truth. Whether they perceive themselves as aligning with the feminine or masculine, their identity crystallizes as a reflection of their inner self, not merely a narrative waiting to be written.",
             ALT_Text: null,
             sceneID: 7,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 4, ButtonTitle: "", ButtonText: "Feminine"},
-                3: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Masculine"}
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 4, ButtonText: "Feminine"},
+                3: {ButtonNumber: 7, ButtonText: "Masculine"}
             },
             ALT_options: {
-                1: {ButtonNumber: 4, ButtonTitle: "", ButtonText: "pink"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "blue"}
+                1: {ButtonNumber: 4,  ButtonText: "pink"},
+                2: {ButtonNumber: 7,  ButtonText: "blue"}
             }
         },
         "0_8": {
@@ -184,9 +195,10 @@ let saveData = {
             sceneText: "As the light begins to dim within the cavern, the figure gazes into the fading reflections of the puddle, contemplating their essence. In the obscurity, their species becomes shrouded in uncertainty, a mysterious aspect of their being that defies classification. Their identity transcends the confines of known races, leaving their true nature obscured in the fading light.",
             ALT_Text: null,
             sceneID: 8,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Next"}
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 7, ButtonText: "Next"}
             },
             ALT_options: {}
         },
@@ -196,9 +208,10 @@ let saveData = {
             sceneText: "Navigating the damp walls of the cavern, you seek an exit, fingers tracing the rough texture in search of escape. With each step, your determination grows, fueled by the desire to break free from the confines of this underground labyrinth.",
             ALT_Text: null,
             sceneID: 9,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Next"}
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 7, ButtonText: "Next"}
             },
             ALT_options: {}
         },
@@ -208,13 +221,14 @@ let saveData = {
             sceneText: "As you wander through the cave's labyrinth like passages, you encounter a variety of pathways, each offering its own unique allure. One path is adorned with vibrant green moss, another lined with glittering crystals, while another disappears into shadowed depths. Further along, you find yourself following the course of an underground stream, and eventually, you stumble upon a cavern illuminated by bioluminescent fungi. Each pathway beckons with its own mysteries, inviting you to explore deeper into the heart of the cave's secrets.",
             ALT_Text: null,
             sceneID: 10,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 2, ButtonTitle: "", ButtonText: "The Mossy Passage"},
-                3: {ButtonNumber: 3, ButtonTitle: "", ButtonText: "The Crystal Tunnel"},
-                4: {ButtonNumber: 4, ButtonTitle: "", ButtonText: "The Shadowed Corridor"},
-                5: {ButtonNumber: 5, ButtonTitle: "", ButtonText: "The Subterranean Stream"},
-                6: {ButtonNumber: 6, ButtonTitle: "", ButtonText: "The Fungal Grove"}
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 2, ButtonText: "The Mossy Passage", next_scene: "1_1"},
+                3: {ButtonNumber: 3, ButtonText: "The Crystal Tunnel", next_scene: "1_2"},
+                4: {ButtonNumber: 4, ButtonText: "The Shadowed Corridor", next_scene: "1_3"},
+                5: {ButtonNumber: 5, ButtonText: "The Subterranean Stream", next_scene: "1_4"},
+                6: {ButtonNumber: 6, ButtonText: "The Fungal Grove", next_scene: "1_5"},
             },
             ALT_options: {}
         },
@@ -224,9 +238,10 @@ let saveData = {
             sceneText: "The current area is enveloped in a verdant embrace, with lush green moss covering every surface. The air is cool and fresh, carrying the earthy scent of vegetation. Shafts of dim light filter through the canopy above, casting dappled patterns on the moss-covered ground.",
             ALT_Text: null,
             sceneID: 11,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Next"},
+                1: {ButtonNumber: 1, ButtonText: "Previously", next_scene: "1_0"},
+                2: {ButtonNumber: 7, ButtonText: "Next", next_scene: "1_6"},
             },
             ALT_options: {}
         },
@@ -236,9 +251,10 @@ let saveData = {
             sceneText: "In this area, the walls sparkle with the mesmerizing glow of crystals, illuminating the surroundings with a soft, ethereal light. The air feels charged with energy, and the ground beneath your feet shimmers with crystalline formations. Every step echoes softly in the cavernous space, creating a sense of wonder and awe.",
             ALT_Text: null,
             sceneID: 12,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Next"},
+                1: {ButtonNumber: 1, ButtonText: "Previously", next_scene: "1_0"},
+                2: {ButtonNumber: 7, ButtonText: "Next", next_scene: "1_7"},
             },
             ALT_options: {}
         },
@@ -248,9 +264,10 @@ let saveData = {
             sceneText: "As you navigate this area, darkness presses in from all sides, enveloping you in an oppressive gloom. The air feels heavy and stifling, and the sound of your own footsteps echoes eerily in the silence. Shapes shift and morph in the shadows, playing tricks on your senses and heightening your sense of unease.",
             ALT_Text: null,
             sceneID: 13,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Next"},
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 7, ButtonText: "Next"},
             },
             ALT_options: {}
         },
@@ -260,9 +277,10 @@ let saveData = {
             sceneText: "Here, the area is defined by the presence of a crystal-clear stream that meanders through the cavern. The sound of rushing water fills the air, accompanied by the gentle drip of stalactites above. The walls are slick with moisture, and patches of bioluminescent fungi cast a soft, eerie glow on the surroundings.",
             ALT_Text: null,
             sceneID: 14,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Next"},
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 7, ButtonText: "Next"},
             },
             ALT_options: {}
         },
@@ -272,9 +290,10 @@ let saveData = {
             sceneText: "In this area, the cavern is alive with the soft glow of bioluminescent fungi, casting an otherworldly light on the surroundings. The air is thick with the earthy scent of mushrooms, and strange shapes loom in the shadows. The ground beneath your feet is spongy with fungal growth, adding to the surreal atmosphere of the grove.",
             ALT_Text: null,
             sceneID: 15,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Next"},
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 7, ButtonText: "Next"},
             },
             ALT_options: {}
         },
@@ -285,13 +304,14 @@ let saveData = {
             ALT_Name: "Finding an exit?",
             ALT_Text: "As you traverse the mossy passage, you stumble upon a hidden alcove where a delicate flower blooms amidst the verdant foliage. Its petals shimmer with an otherworldly glow, emitting a faint, melodic hum. The flower seems to beckon to you, offering a sense of peace and serenity amidst the chaos of the cave.",
             sceneID: 16,
+            ButtonTitle: "What shall you do",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "What shall you do", ButtonText: "Leave the area undisturbed"},
-                2: {ButtonNumber: 2, ButtonTitle: "What shall you do", ButtonText: "Investigate the hidden alcove."},
-                3: {ButtonNumber: 3, ButtonTitle: "What shall you do", ButtonText: "Listen to the soothing melody of the flower."},
-                4: {ButtonNumber: 4, ButtonTitle: "What shall you do", ButtonText: "Continue exploring the passage"},
-                5: {ButtonNumber: 5, ButtonTitle: "What shall you do", ButtonText: "Sit quietly and observe the surroundings"},
-                6: {ButtonNumber: 6, ButtonTitle: "What shall you do", ButtonText: "Feel the texture of the moss beneath your fingertips."},
+                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed"},
+                2: {ButtonNumber: 2, ButtonText: "Investigate the hidden alcove."},
+                3: {ButtonNumber: 3, ButtonText: "Listen to the soothing melody of the flower."},
+                4: {ButtonNumber: 4, ButtonText: "Continue exploring the passage"},
+                5: {ButtonNumber: 5, ButtonText: "Sit quietly and observe the surroundings"},
+                6: {ButtonNumber: 6, ButtonText: "Feel the texture of the moss beneath your fingertips."},
             },
             ALT_options: {
                 1 : "Leave the area disturbed", 2 : "Investigate the hidden alcove.", 3 : "gain strenght by listening to the soothing melody of the flower.", 4 : "Continue exploring the passage", 5 : "Sit quietly and observe the surroundings", 6 : "gain extra lives by touching the mesmerising moss."
@@ -304,13 +324,14 @@ let saveData = {
             ALT_Name: null,
             ALT_Text: null,
             sceneID: 17,
+            ButtonTitle: "What shall you do",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "What shall you do", ButtonText: "Leave the area undisturbed"},
-                2: {ButtonNumber: 2, ButtonTitle: "What shall you do", ButtonText: "Approach the figure cautiously."},
-                3: {ButtonNumber: 3, ButtonTitle: "What shall you do", ButtonText: "Sit quietly by the pool and observe."},
-                4: {ButtonNumber: 4, ButtonTitle: "What shall you do", ButtonText: "Cast a stone into the pool."},
-                5: {ButtonNumber: 5, ButtonTitle: "What shall you do", ButtonText: "Attempt to communicate with the figure."},
-                6: {ButtonNumber: 6, ButtonTitle: "What shall you do", ButtonText: "Feel the cool crystal walls with your hands."},
+                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed"},
+                2: {ButtonNumber: 2, ButtonText: "Approach the figure cautiously."},
+                3: {ButtonNumber: 3, ButtonText: "Sit quietly by the pool and observe."},
+                4: {ButtonNumber: 4, ButtonText: "Cast a stone into the pool."},
+                5: {ButtonNumber: 5, ButtonText: "Attempt to communicate with the figure."},
+                6: {ButtonNumber: 6, ButtonText: "Feel the cool crystal walls with your hands."},
             },
             ALT_options: {},
         },
@@ -321,13 +342,14 @@ let saveData = {
             ALT_Name: null,
             ALT_Text: null,
             sceneID: 18,
+            ButtonTitle: "What shall you do",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "What shall you do", ButtonText: "Leave the area undisturbed"},
-                2: {ButtonNumber: 2, ButtonTitle: "What shall you do", ButtonText: "Reach out to touch the ancient runes."},
-                3: {ButtonNumber: 3, ButtonTitle: "What shall you do", ButtonText: "Atempt to read the chant or incantation."},
-                4: {ButtonNumber: 4, ButtonTitle: "What shall you do", ButtonText: "Continue down the corridor."},
-                5: {ButtonNumber: 5, ButtonTitle: "What shall you do", ButtonText: "Meditate in front of the runes."},
-                6: {ButtonNumber: 6, ButtonTitle: "What shall you do", ButtonText: "Feel the texture of the walls for any irregularities."},
+                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed"},
+                2: {ButtonNumber: 2, ButtonText: "Reach out to touch the ancient runes."},
+                3: {ButtonNumber: 3, ButtonText: "Atempt to read the chant or incantation."},
+                4: {ButtonNumber: 4, ButtonText: "Continue down the corridor."},
+                5: {ButtonNumber: 5, ButtonText: "Meditate in front of the runes."},
+                6: {ButtonNumber: 6, ButtonText: "Feel the texture of the walls for any irregularities."},
             },
             ALT_options: {},
         },
@@ -338,13 +360,14 @@ let saveData = {
             ALT_Name: null,
             ALT_Text: null,
             sceneID: 19,
+            ButtonTitle: "What shall you do",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "What shall you do", ButtonText: "Leave the area undisturbed"},
-                2: {ButtonNumber: 2, ButtonTitle: "What shall you do", ButtonText: "Follow the stream to its source."},
-                3: {ButtonNumber: 3, ButtonTitle: "What shall you do", ButtonText: "Offer a small offering of food to the fish."},
-                4: {ButtonNumber: 4, ButtonTitle: "What shall you do", ButtonText: "Take a moment to admire the surroundings."},
-                5: {ButtonNumber: 5, ButtonTitle: "What shall you do", ButtonText: "Feel the water with your hands."},
-                6: {ButtonNumber: 6, ButtonTitle: "What shall you do", ButtonText: "Listen to the soothing sound of the rushing stream."},
+                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed"},
+                2: {ButtonNumber: 2, ButtonText: "Follow the stream to its source."},
+                3: {ButtonNumber: 3, ButtonText: "Offer a small offering of food to the fish."},
+                4: {ButtonNumber: 4, ButtonText: "Take a moment to admire the surroundings."},
+                5: {ButtonNumber: 5, ButtonText: "Feel the water with your hands."},
+                6: {ButtonNumber: 6, ButtonText: "Listen to the soothing sound of the rushing stream."},
             },
             ALT_options: {},
         },
@@ -355,13 +378,14 @@ let saveData = {
             ALT_Name: null,
             ALT_Text: null,
             sceneID: 20,
+            ButtonTitle: "What shall you do",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "What shall you do", ButtonText: "Leave the area undisturbed"},
-                2: {ButtonNumber: 2, ButtonTitle: "What shall you do", ButtonText: "Sit amongst the mushrooms and observe."},
-                3: {ButtonNumber: 3, ButtonTitle: "What shall you do", ButtonText: "Reach out to touch the mushrooms."},
-                4: {ButtonNumber: 4, ButtonTitle: "What shall you do", ButtonText: "Inhale deeply, breathing in the aroma."},
-                5: {ButtonNumber: 5, ButtonTitle: "What shall you do", ButtonText: "Feel the texture of the ground beneath your feet."},
-                6: {ButtonNumber: 6, ButtonTitle: "What shall you do", ButtonText: "Listen for any sounds emanating from the grove."},
+                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed"},
+                2: {ButtonNumber: 2, ButtonText: "Sit amongst the mushrooms and observe."},
+                3: {ButtonNumber: 3, ButtonText: "Reach out to touch the mushrooms."},
+                4: {ButtonNumber: 4, ButtonText: "Inhale deeply, breathing in the aroma."},
+                5: {ButtonNumber: 5, ButtonText: "Feel the texture of the ground beneath your feet."},
+                6: {ButtonNumber: 6, ButtonText: "Listen for any sounds emanating from the grove."},
             },
             ALT_options: {},
         },
@@ -372,9 +396,10 @@ let saveData = {
             ALT_Name: null,
             ALT_Text: null,
             sceneID: 21,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Next"},
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 7, ButtonText: "Next"},
             },
             ALT_options: {},
         },
@@ -385,9 +410,10 @@ let saveData = {
             ALT_Name: null,
             ALT_Text: null,
             sceneID: 22,
+            ButtonTitle: "With careful hands, you consider the small, intricately carved wooden box half-buried in the moss. You have the option to:",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "With careful hands, you consider the small, intricately carved wooden box half-buried in the moss. You have the option to:", ButtonText: "Leave the box undisturbed and leave the alcove"},
-                2: {ButtonNumber: 6, ButtonTitle: "With careful hands, you consider the small, intricately carved wooden box half-buried in the moss. You have the option to:", ButtonText: "Pick up the box and examine its contents"},
+                1: {ButtonNumber: 1, ButtonText: "Leave the box undisturbed and leave the alcove"},
+                2: {ButtonNumber: 6, ButtonText: "Pick up the box and examine its contents"},
             },
             ALT_options: {},
         },
@@ -401,9 +427,10 @@ let saveData = {
             ALT_Name: null,
             ALT_Text: null,
             sceneID: 23,
+            ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonTitle: "", ButtonText: "Previously"},
-                2: {ButtonNumber: 7, ButtonTitle: "", ButtonText: "Next"},
+                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                2: {ButtonNumber: 7, ButtonText: "Next"},
             },
             ALT_options: {},
         },
@@ -460,22 +487,22 @@ let saveData = {
     character_Description_Text: {
         // scene number : { charachterDefining : "Text"}
         2: {
-            charachterDefining: `Your ${value} eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery.`,
+            charachterDefining: "Your ${value} eyes reveal a captivating depth, while the rest of your features remain undisclosed, shrouded in mystery.",
         },
         3: {
-            charachterDefining: `Your ${valueSTRING[0]} eyes and your ${value} stylish hair reveal a captivating essence, yet the remainder of you remains veiled in mystery.`,
+            charachterDefining: "Your ${valueSTRING[0]} eyes and your ${value} stylish hair reveal a captivating essence, yet the remainder of you remains veiled in mystery.",
         },
         4: {
-            charachterDefining: `Your ${valueSTRING[0]} eyes, your ${valueSTRING[1]} stylish hair, and your ${value} complexion exude a captivating essence, leaving the rest of you shrouded in mystery.`,
+            charachterDefining: "Your ${valueSTRING[0]} eyes, your ${valueSTRING[1]} stylish hair, and your ${value} complexion exude a captivating essence, leaving the rest of you shrouded in mystery.",
         },
         5: {
-            charachterDefining: `Your ${valueSTRING[0]} eyes, your ${valueSTRING[1]} stylish hair, your ${valueSTRING[2]} complexion, and your ${value} stature combine to present a captivating essence, yet the remainder of you remains shrouded in mystery.`,
+            charachterDefining: "Your ${valueSTRING[0]} eyes, your ${valueSTRING[1]} stylish hair, your ${valueSTRING[2]} complexion, and your ${value} stature combine to present a captivating essence, yet the remainder of you remains shrouded in mystery.",
         },
         6: {
-            charachterDefining: `Your ${valueSTRING[0]} eyes, your ${valueSTRING[1]} stylish hair, your ${valueSTRING[2]} complexion, your ${valueSTRING[3]} stature, and your ${value} attire collectively emanate a captivating essence, leaving the rest of you unexplored.`,
+            charachterDefining: "Your ${valueSTRING[0]} eyes, your ${valueSTRING[1]} stylish hair, your ${valueSTRING[2]} complexion, your ${valueSTRING[3]} stature, and your ${value} attire collectively emanate a captivating essence, leaving the rest of you unexplored.",
         },
         7: {
-            charachterDefining: `Your ${valueSTRING[0]} eyes, your ${valueSTRING[1]} stylish hair, your ${valueSTRING[2]} complexion, your ${valueSTRING[3]} stature, and your ${valueSTRING[4]} attire collectively emanate a captivating essence. While your gender is ${value} your race remains a mystery, awaiting discovery.`,
+            charachterDefining: "Your ${valueSTRING[0]} eyes, your ${valueSTRING[1]} stylish hair, your ${valueSTRING[2]} complexion, your ${valueSTRING[3]} stature, and your ${valueSTRING[4]} attire collectively emanate a captivating essence. While your gender is ${value} your race remains a mystery, awaiting discovery.",
         },
     },
     character_Description_Text_Final: undefined,
