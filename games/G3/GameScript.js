@@ -39,14 +39,12 @@ var currentdate = new Date();
 var datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1) + "/" + currentdate.getFullYear() + "|" + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
 let valueSTRING = [];   // Initialize the text of the player character set feature 
 let valueCOLOR = [];    // Initialize the color of the player character set feature 
-let isCurrentlyPrinting = false; // set true if is printing and false if not
+let isCurrentlyPrinting = {}; // set true if is printing and false if not
 let stopTyping = false;
 let previousAmounts = [];
 let ResetFile = false;// if true can't save latest as session is reseting
 let CurrentPageNumber = 1;
-
-
-
+let currentTypingToken = {};
 
 // Function to start up the game
 window.onload = function () {
@@ -58,7 +56,7 @@ window.onload = function () {
 
 // Function to start up or load the game
 function startup(userConfirmed) {
-    (typeof(userConfirmed)) == 1 ? console.log('Continue story') : console.log('start new story');
+    userConfirmed === 1 ? console.log('Continue story') : console.log('start new story');
     Title.innerHTML = 'Gatcha tower';
     startScreen.dataset.visible = 'true';
     Side_Menu4.dataset.visible = 'false';
@@ -83,41 +81,41 @@ function startup(userConfirmed) {
 }
 function LoadedSaves() {
     const saveForestString = localStorage.getItem('SaveForest');
-    let lastbigesttime=0;
-    if (saveForestString) {
-        SaveForest = JSON.parse(saveForestString);
-        for (let i = 0; i < 6; i++) {
-            const sectionSpanName = document.getElementById(`gameName${i}`); // 0 - 5 
-            //saveData = SaveForest[`section${i}`];
-            if (i > 0 && SaveForest[`section${i}`]) {
-                document.querySelector(`.Section${i}_load_game`).disabled = false;
-                document.querySelector(`.Section${i}_load_game`).classList.remove('disable');
-                sectionSpanName.textContent = `${saveData['saveDataName']} | ${saveData['saveDataTime']}`;
-                console.log('Game data loaded from localStorage('+i+').');
-                if (saveData['saveDataName'] === "Main") {
-                    sectionSpanName.style.color = 'yellow';
-                } else {
-                    let formattedTime = saveData['saveDataTime'].replace(/[/:| ]/g, '');
-                    let timeAsNumber = parseInt(formattedTime);
-                
-                    if (timeAsNumber >= lastbigesttime) {
-                        lastbigesttime = timeAsNumber;
-                        sectionSpanName.style.color = 'green';
-                    } else {
-                        sectionSpanName.style.color = 'purple';
-                    }
-                }                
-            } else {
-                sectionSpanName.innerHTML = ''; // Clear empty slots
-                document.querySelector(`.Section${i}_load_game`).disabled = true;
-                document.querySelector(`.Section${i}_load_game`).classList.add('disable');
-                console.log('No save for '+i+' available');
+    let lastbigesttime = 0;
+    let LatestSpan = null;
+    if (!saveForestString) console.log('SaveForest does not exist');
+    //let saveData = {}; // Initialize saveData object
+    let SaveForest = JSON.parse(saveForestString);
+    for (let i = 0; i < 6; i++) {
+        const sectionSpanName = document.getElementById(`gameName${i}`); // 0 - 5 
+        let saveData = SaveForest[`section${i}`];
+        if (i > 0 && SaveForest[`section${i}`]) {
+            document.querySelector(`.Section${i}_load_game`).disabled = false;
+            document.querySelector(`.Section${i}_load_game`).classList.remove('disable');
+            sectionSpanName.textContent = `${saveData['name']} | ${saveData['LastSaved']}`;
+            console.log('Game data loaded from localStorage('+i+').');
+            
+            let formattedTime = saveData['LastSaved'].replace(/[/:| ]/g, '');
+            let timeAsNumber = parseInt(formattedTime);
+
+            sectionSpanName.style.color = saveData['name'] === "Main" ? 'yellow' : 'purple';
+            
+            if (timeAsNumber >= lastbigesttime) {
+                lastbigesttime = timeAsNumber;
+                LatestSpan = sectionSpanName;
             }
+            
+            
+
+        } else {
+            sectionSpanName.innerHTML = ''; // Clear empty slots
+            document.querySelector(`.Section${i}_load_game`).disabled = true;
+            document.querySelector(`.Section${i}_load_game`).classList.add('disable');
+            console.log('No save for '+i+' available');
         }
-    } else {
-        console.log('SaveForest does not exist');
-        //let saveData = {}; // Initialize saveData object
     }
+    if ( LatestSpan) LatestSpan.style.color = 'green';
+    
 }
 function setEventListener(){
     // Add event listener for Side Menu Colapse Button click
@@ -137,8 +135,9 @@ function setEventListener(){
 function loadLatestGame(userConfirmed) {
     startScreen.dataset.visible = 'false';// 0 = continue == local  1 = load == session
     try {
-        SaveForest = JSON.parse(localStorage.getItem('SaveForest'));
-        TempLatestSave = JSON.parse(sessionStorage.getItem('TempLatestSave'));
+        let SaveForest = JSON.parse(localStorage.getItem('SaveForest') || '{}');
+        let TempLatestSave = JSON.parse(sessionStorage.getItem('TempLatestSave') || '{}');
+        let saveData;
         if(userConfirmed == 0){
             saveData = SaveForest['section0'];
         }else if(userConfirmed == 1){
@@ -168,12 +167,12 @@ function newGame(){
     console.log('new game');
     try{saveData.Player_character = Player;}
     catch(error){console.log('Can\'t set player because ',error);}
-    SaveForest = JSON.parse(localStorage.getItem('SaveForest')|| '{}');
-    if (!SaveForest) {
-        let SaveForest = {
+    let SaveForest = JSON.parse(localStorage.getItem('SaveForest')|| '{}');
+    if (!SaveForest || Object.keys(SaveForest).length === 0) {
+        SaveForest = {
             'section0' : {},
+            DefaultSaveData : saveData
         };
-        SaveForest.DefaultSaveData = saveData;
     }
     else {
         SaveForest.DefaultSaveData = saveData;
@@ -181,6 +180,7 @@ function newGame(){
     
     //console.log('SaveForest:',JSON.parse(SaveForest))
     localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
+    sessionStorage.setItem('TempLatestSave', JSON.stringify(saveData));
 
     // start story
     ResetEffectBarToDefault(saveData)
@@ -382,7 +382,8 @@ function toggleInventory() {
 
 // Event listener for key press (I key)
 handleKeyPress();
-function handleKeyPress(Key = saveData.Settings.Controls.Inventory) {
+function handleKeyPress() {
+    const Key = saveData.Settings.Controls.Inventory
     document.addEventListener('keydown', function(event) {
         if (event.key === Key.toLowerCase() || event.key === Key.toUpperCase()) {
             toggleInventory();
@@ -482,7 +483,7 @@ function formatText(text) {
         if (char === ' ') {
             formatted += ' ';
             spaceIndex++;
-        } else if (spaceIndex >= 20 && (char === '.' || char === ',')) {
+        } else if (spaceIndex >= 20 && (char === '.' || char === ',') && text[i + 1]) {
             formatted += char + '<br>';
             spaceIndex = 0;
         } else if (char === '~') {
@@ -493,6 +494,63 @@ function formatText(text) {
         }
     }
     return formatted;
+}
+// utility:Set element Color
+function setElementColor(element, elementId, defaultColor) {
+    element.style.color = saveData.IsDead && elementId !== '.Quest_Title' ? 'red' : defaultColor;
+}
+// utility: print immediately
+async function handlePrintImmediately(element, textBlock, elementId) {
+    element.innerHTML = formatText(textBlock);
+    isCurrentlyPrinting[elementId] = false;
+}
+// utility: Print Charackters Slowly
+async function PrintCharSlow({ textBlock, elementId, element, speed, cursor, currentTypingToken, token, output = ''}) {
+    const formattedText = formatText(textBlock);
+    for (let i = 0; i < formattedText.length; i++) {
+        if (currentTypingToken[elementId] !== token || stopTyping) {
+            // If player clicked while printing
+            handlePrintImmediately( element, textBlock );
+            return;
+        }
+        let char = formattedText[i];
+        output += char;
+        element.innerHTML = output;
+        element.appendChild(cursor); // Append cursor after each character
+        // add a longer pause after dot or comma
+        const delayDuration = (char === '.' || char === ',') ? 400 : speed;
+        // typingSound.currentTime = 0; // Reset sound to start
+        // typingSound.play().catch(() => {}); // Play typing sound
+        await new Promise(resolve => setTimeout(resolve, delayDuration)); // Delay next letter
+    }
+}
+// utility: word coloring
+function applyWordColoring(element, textBlock, textAndColorArray) {
+    let remainingText = textBlock;
+    for (let i = 0; i < textAndColorArray.word.length; i++) {
+        const word = textAndColorArray.word[i];
+        const color = textAndColorArray.color[i];
+        const index = remainingText.indexOf(word);
+        if (index !== -1) {
+            element.append(document.createTextNode(remainingText.substring(0, index)));
+            const span = document.createElement("span");
+            span.textContent = word;
+            span.style.color = color;
+            element.append(span);
+            remainingText = remainingText.substring(index + word.length);
+        }
+    }
+    if (remainingText.length > 0) {
+        element.append(document.createTextNode(remainingText));
+    }
+}
+// utility: delay
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+// utility: clear Cursor
+function clearCursor() {
+    document.querySelectorAll('.fake-cursor').forEach(c => c.remove());
 }
 // Utility: Create a fake blinking cursor
 function createFakeCursor() {
@@ -518,7 +576,7 @@ function createFakeCursor() {
     */
     return cursor;
 }
-// Core Function to simulate slow typing effect for text | New version
+// Core Function to simulate slow typing effect for text
 async function addTextFullFeature({
     elementId,
     textBlock,
@@ -529,104 +587,60 @@ async function addTextFullFeature({
     tempColorDuration = 0,
     defaultColor = 'azure',
 }) {
-    //TODO
-    //1. add a pause off int seconds after a certain moment
-    //2. add sound to it just start when isCurrentlyPrinting is true and it will work
+    /* TODO
+    ** 1. add sound to it just start when isCurrentlyPrinting is true and it will work
+    */
+    const token = {};
+    currentTypingToken[elementId] = token;
     const element = document.querySelector(elementId);
-    if (replace) {
-        element.innerHTML = ''; // Clear the content for replacement
-    }
+    if (replace) element.innerHTML = ''; // Clear the content for replacement
 
     // Clear old cursors
-    document.querySelectorAll('.fake-cursor').forEach(c => c.remove());
-
+    clearCursor();
     // Set text color based on death
-    element.style.color = saveData.IsDead && elementId !== '.Quest_Title' ? 'red' : defaultColor;
+    setElementColor( element, elementId, defaultColor );
 
 
     // If printing immediately or slow typing disabled
     if (printImmediately || saveData.Settings.SlowTyping === false) {
-        element.innerHTML = formatText(textBlock);
-        isCurrentlyPrinting = false;
+        handlePrintImmediately( element, textBlock, elementId );
         return;
     }
 
     // Prepare for typing
     element.innerHTML = '';
-    isCurrentlyPrinting = true;
+    isCurrentlyPrinting[elementId] = true;
     stopTyping = false;
-    let typingPauseDuration = 2000; // Pause duration in milliseconds 
 
     const cursor = createFakeCursor(); // Create a fake cursor
     if (textAndColorArray.color.length == 0) {
         element.appendChild(cursor)
-
-        // sound setup
         // const typingSound = new Audio('path/to/typing-sound.mp3'); // Replace with actual sound file path when implemented
     }
 
     // If the word "ALL" is found in the textAndColorArray, set the color to textBlock instead of the word
     const allColorEntry = textAndColorArray.word == 'ALL';
-    if (allColorEntry) {
-        element.style.color = allColorEntry.color;
-    }
+    if (allColorEntry) element.style.color = allColorEntry.color;
 
 
     // handle text and color array when it is not empty or "ALL" is not found
     if (textAndColorArray.word.length > 0 && textAndColorArray.word[0] !== 'ALL') {
         // Handle text and color array
-        let remainingText = textBlock;
-        for (let i = 0; i < textAndColorArray.word.length; i++) {
-            const word = textAndColorArray.word[i];
-            const color = textAndColorArray.color[i];
-
-            const index = remainingText.indexOf(word);
-            if (index !== -1) {
-                // Text before the word
-                const before = remainingText.substring(0, index);
-                element.append(document.createTextNode(before));
-    
-                // The colored word
-                const span = document.createElement("span");
-                span.textContent = word;
-                span.style.color = color;
-                element.append(span);
-    
-                // Update remaining text after the word
-                remainingText = remainingText.substring(index + word.length);
-            }
-        }
-    
-        // Append any leftover text
-        if (remainingText.length > 0) {
-            element.append(document.createTextNode(remainingText));
-        }
+        applyWordColoring( element, textBlock, textAndColorArray );
         return;
     }
-    let output = '';
-    for (let i = 0; i < textBlock.length; i++) {
-        if (stopTyping) {
-            // If player clicked while printing
-            element.innerHTML = formatText(textBlock);
-            isCurrentlyPrinting = false;
-            return;
-        }
+    // Slow typing character by character
+    await PrintCharSlow({ textBlock, elementId, element, speed, cursor, currentTypingToken, token })
+    
 
-        let char = formatText(textBlock)[i];
-        
-        output += char;
-        element.innerHTML = output;
-        element.appendChild(cursor); // Append cursor after each character
 
-        // typingSound.currentTime = 0; // Reset sound to start
-        // typingSound.play().catch(() => {}); // Play typing sound
-        await new Promise(resolve => setTimeout(resolve, speed)); // Delay next letter
+    if ( cursor) element.removeChild(cursor); // Remove cursor after typing
+    
+    // Typing finished, clear token
+    if (currentTypingToken[elementId] === token) {
+        delete currentTypingToken[elementId];
+        isCurrentlyPrinting[elementId] = false;
     }
-
-
-    isCurrentlyPrinting = false;
-    element.removeChild(cursor); // Remove cursor after typing
-
 
     // Reset color after a delay if tempColorDuration is greater than 0
     if(tempColorDuration > 0){
@@ -637,33 +651,40 @@ async function addTextFullFeature({
 }
 function saveGame(NumSection){
     currentdate = new Date();
-    var datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1)+ "/" +
-    currentdate.getFullYear() + " | " + currentdate.getHours() + ":" + 
-    currentdate.getMinutes() +":" + currentdate.getSeconds();
-    saveData = JSON.parse(sessionStorage.getItem('TempLatestSave'));
+    const datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1)+ "/" +
+        currentdate.getFullYear() + " | " + currentdate.getHours() + ":" + 
+        currentdate.getMinutes() +":" + currentdate.getSeconds();
+    let SaveForest = JSON.parse(localStorage.getItem('SaveForest') || '{}');
+    let saveData = JSON.parse(sessionStorage.getItem('TempLatestSave'));
     const sectionSpanName = document.getElementById(`gameName${NumSection}`);
     const nameChange = document.getElementById('nameChangeIn');
     let NewName = nameChange.value;
     // Update game name display
-    if(NewName == 'Main' || NewName == ""){
-        sectionSpanName.textContent = `${saveData['saveDataName']} | ${datetime}`;
-        saveData['saveDataTime'] = datetime;
+    if (NewName == 'Main' || NewName == "") {
+        sectionSpanName.textContent = `${saveData['name']} | ${datetime}`;
+        saveData['LastSaved'] = datetime;
         sectionSpanName.style.color = 'yellow';
         console.log('still default name')
-    }else{
+    } else {
         sectionSpanName.textContent = `${NewName} | ${datetime}`;
-        saveData['saveDataTime'] = datetime;
-        saveData['saveDataName'] = NewName;
+        saveData['LastSaved'] = datetime;
+        saveData['name'] = NewName;
         console.log('new name')
     }
     SaveForest[`section${NumSection}`] = saveData;
     SaveForest['section0'] = saveData;
+    SaveForest.DefaultSaveData = saveData;
     localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
-    console.log(`Saving game ${saveData['saveDataName']}`);
+    sessionStorage.setItem('TempLatestSave', JSON.stringify(saveData));
+    console.log(`Saving game ${saveData['name']}`);
 }
 function loadGame(NumSection) {
-    SaveForest = JSON.parse(localStorage.getItem('SaveForest'));
-    saveData = SaveForest[`section${NumSection}`]
+    let SaveForest = JSON.parse(localStorage.getItem('SaveForest') || '{}');
+    let saveData = SaveForest[`section${NumSection}`]
+    if (!saveData) {
+        console.warn(`No save data found for section${NumSection}`);
+        return;
+    }
     if (CurrentPageNumber == 1) {
         console.log('Loading game id=0', NumSection);
         startScreen.dataset.visible = 'false';
@@ -678,14 +699,20 @@ function loadGame(NumSection) {
 }
 // Function to delete game
 function deleteGame(NumSection) {
-    SaveForest = JSON.parse(localStorage.getItem('SaveForest'));
-    saveData = SaveForest[`section${NumSection}`]
-    // Clear game name display
-    document.getElementById(`gameName${NumSection}`).textContent = '';
-    // Remove game data from localStorage
-    SaveForest[`section${NumSection}`] = undefined;
-    localStorage.setItem('SaveForest',JSON.stringify(SaveForest));
-    console.log(`Deleting game ${NumSection}`);
+    let SaveForest = JSON.parse(localStorage.getItem('SaveForest') || '{}');
+    if (SaveForest.hasOwnProperty(`section${NumSection}`)) {
+        saveData = SaveForest[`section${NumSection}`]
+        // Remove game data from localStorage
+        delete SaveForest[`section${NumSection}`];
+        // Clear UI
+        document.getElementById(`gameName${NumSection}`).textContent = '';
+        document.querySelector(`.Section${NumSection}_load_game`).disabled = true;
+        document.querySelector(`.Section${NumSection}_load_game`).classList.add('disable');
+
+        console.log(`Deleting game ${NumSection}`);
+    } else {
+        console.warn(`No saved game found in section${NumSection} to delete.`);
+    }
 }
 function mergeDefaultProperties(saveData) {
     // Define default properties with all expected properties and their default values

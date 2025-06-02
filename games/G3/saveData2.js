@@ -8,7 +8,7 @@ let saveData = {
     LastSafeScene: "0_0", // 0_1 for chapter 0, scene 1
     Player_character : undefined, // Was Player
     Buttons : [1,2,3,4,5,6,7],
-    currrentScene: "0_0", // 0_1 for chapter 0, scene 1
+    currentScene: "0_0", // 0_1 for chapter 0, scene 1
     safeScenes : {
         "0_0": true,
         "0_9": true,
@@ -25,15 +25,15 @@ let saveData = {
         Death : {
             chapterTitle: "Death",
             sceneName: "DeathScreen0",
-            sceneText: "You died because " + this.deathReason,
+            sceneText: "You died because ",
             ALT_Text: null,
             sceneID: -1,
             ButtonTitle: "",
             options: {
-                0 : {
+                1 : {
                     ButtonNumber: 4,
                     ButtonText: "Respawn at last checkpoint",
-                    next_scene: this.LastSafeScene,
+                    next_scene: '',
                 },
             },
             ALT_options: {},
@@ -72,14 +72,14 @@ let saveData = {
             ButtonTitle: "", 
             options: {
                 1: { ButtonNumber: 1, ButtonText: "Previously" },
-                2: { ButtonNumber: 2, ButtonText: "piercing blue" },
-                3: { ButtonNumber: 3, ButtonText: "deep brown" },
-                4: { ButtonNumber: 4, ButtonText: "striking green" },
-                5: { ButtonNumber: 5, ButtonText: "captivating hazel" },
-                6: { ButtonNumber: 6, ButtonText: "intense grey" },
+                2: { ButtonNumber: 2, ButtonText: "piercing blue", action: `characterMaker/2`},
+                3: { ButtonNumber: 3, ButtonText: "deep brown", action: `characterMaker/2`},
+                4: { ButtonNumber: 4, ButtonText: "striking green", action: `characterMaker/2`},
+                5: { ButtonNumber: 5, ButtonText: "captivating hazel", action: `characterMaker/2`},
+                6: { ButtonNumber: 6, ButtonText: "intense grey", action: `characterMaker/2`},
             },
             ALT_options: {
-                1: { ButtonNumber: 2, ButtonText: "blue" },
+                1: { ButtonNumber: 2, ButtonText: "blue"},
                 2: { ButtonNumber: 3, ButtonText: "brown" },
                 3: { ButtonNumber: 4, ButtonText: "green" },
                 4: { ButtonNumber: 5, ButtonText: "hazel" },
@@ -95,11 +95,11 @@ let saveData = {
             ButtonTitle: "", 
             options: {
                 1: {ButtonNumber: 1, ButtonText: "Previously"},
-                2: {ButtonNumber: 2, ButtonText: "cascading waves"},
-                3: {ButtonNumber: 3, ButtonText: "cropped short"},
-                4: {ButtonNumber: 4, ButtonText: "braided intricately"},
-                5: {ButtonNumber: 5, ButtonText: "sophisticated bun"},
-                6: {ButtonNumber: 6, ButtonText: "wild and free"}
+                2: {ButtonNumber: 2, ButtonText: "cascading waves", action: `characterMaker/3`},
+                3: {ButtonNumber: 3, ButtonText: "cropped short", action: `characterMaker/3`},
+                4: {ButtonNumber: 4, ButtonText: "braided intricately", action: `characterMaker/3`},
+                5: {ButtonNumber: 5, ButtonText: "sophisticated bun", action: `characterMaker/3`},
+                6: {ButtonNumber: 6, ButtonText: "wild and free", action: `characterMaker/3`}
             },
             ALT_options: {
                 1: {ButtonNumber: 2, ButtonText: "lightblue"},
@@ -118,11 +118,11 @@ let saveData = {
             ButtonTitle: "", 
             options: {
                 1: {ButtonNumber: 1, ButtonText: "Previously"},
-                2: {ButtonNumber: 2, ButtonText: "porcelain fair"},
-                3: {ButtonNumber: 3, ButtonText: "sun-kissed bronze"},
-                4: {ButtonNumber: 4, ButtonText: "Olive-toned"},
-                5: {ButtonNumber: 5, ButtonText: "Rosy-pink"},
-                6: {ButtonNumber: 6, ButtonText: "Deep ebony"}
+                2: {ButtonNumber: 2, ButtonText: "porcelain fair", action: `characterMaker/4`},
+                3: {ButtonNumber: 3, ButtonText: "sun-kissed bronze", action: `characterMaker/4`},
+                4: {ButtonNumber: 4, ButtonText: "Olive-toned", action: `characterMaker/4`},
+                5: {ButtonNumber: 5, ButtonText: "Rosy-pink", action: `characterMaker/4`},
+                6: {ButtonNumber: 6, ButtonText: "Deep ebony", action: `characterMaker/4`}
             },
             ALT_options: {
                 1:  {ButtonNumber: 2, ButtonText: "beige"},
@@ -141,11 +141,11 @@ let saveData = {
             ButtonTitle: "",
             options : {
                 1: {ButtonNumber: 1, ButtonText: "Previously"},
-                2: {ButtonNumber: 2, ButtonText: "Petite and delicate"},
-                3: {ButtonNumber: 3, ButtonText: "Tall and statuesque"},
-                4: {ButtonNumber: 4, ButtonText: "Somewhere in between"},
-                5: {ButtonNumber: 5, ButtonText: "Lean and athletic"},
-                6: {ButtonNumber: 6, ButtonText: "Muscular and imposing"}
+                2: {ButtonNumber: 2, ButtonText: "Petite and delicate", action: `characterMaker/5`},
+                3: {ButtonNumber: 3, ButtonText: "Tall and statuesque", action: `characterMaker/5`},
+                4: {ButtonNumber: 4, ButtonText: "Somewhere in between", action: `characterMaker/5`},
+                5: {ButtonNumber: 5, ButtonText: "Lean and athletic", action: `characterMaker/5`},
+                6: {ButtonNumber: 6, ButtonText: "Muscular and imposing", action: `characterMaker/5`}
             },
             ALT_options: {
                 1: {ButtonNumber: 2, ButtonText: "lightpink"},
@@ -164,8 +164,8 @@ let saveData = {
             sceneID: 6,
             options: {
                 1: {ButtonNumber: 1, ButtonText: "Previously"},
-                2: {ButtonNumber: 4, ButtonText: "Weathered and worn, marked by dirt and grime, reflecting a seasoned traveler"},
-                3: {ButtonNumber: 7, ButtonText: "Pristine and clean, untouched by the trials of the cavern, hinting at a recent arrival"}
+                2: {ButtonNumber: 4, ButtonText: "Weathered and worn, marked by dirt and grime, reflecting a seasoned traveler", action: `characterMaker/6`},
+                3: {ButtonNumber: 7, ButtonText: "Pristine and clean, untouched by the trials of the cavern, hinting at a recent arrival", action: `characterMaker/6`}
             },
             ALT_options: {
                 1: {ButtonNumber: 4, ButtonText: "darkgrey"},
@@ -181,8 +181,8 @@ let saveData = {
             ButtonTitle: "",
             options: {
                 1: {ButtonNumber: 1, ButtonText: "Previously"},
-                2: {ButtonNumber: 4, ButtonText: "Feminine"},
-                3: {ButtonNumber: 7, ButtonText: "Masculine"}
+                2: {ButtonNumber: 4, ButtonText: "Feminine", action: `characterMaker/7`},
+                3: {ButtonNumber: 7, ButtonText: "Masculine", action: `characterMaker/7`}
             },
             ALT_options: {
                 1: {ButtonNumber: 4,  ButtonText: "pink"},
@@ -223,7 +223,7 @@ let saveData = {
             sceneID: 10,
             ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                1: {ButtonNumber: 1, ButtonText: "Previously", next_scene: "0_9"},
                 2: {ButtonNumber: 2, ButtonText: "The Mossy Passage", next_scene: "1_1"},
                 3: {ButtonNumber: 3, ButtonText: "The Crystal Tunnel", next_scene: "1_2"},
                 4: {ButtonNumber: 4, ButtonText: "The Shadowed Corridor", next_scene: "1_3"},
@@ -266,7 +266,7 @@ let saveData = {
             sceneID: 13,
             ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                1: {ButtonNumber: 1, ButtonText: "Previously", next_scene: "1_0"},
                 2: {ButtonNumber: 7, ButtonText: "Next"},
             },
             ALT_options: {}
@@ -279,7 +279,7 @@ let saveData = {
             sceneID: 14,
             ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                1: {ButtonNumber: 1, ButtonText: "Previously", next_scene: "1_0"},
                 2: {ButtonNumber: 7, ButtonText: "Next"},
             },
             ALT_options: {}
@@ -292,7 +292,7 @@ let saveData = {
             sceneID: 15,
             ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonText: "Previously"},
+                1: {ButtonNumber: 1, ButtonText: "Previously", next_scene: "1_0"},
                 2: {ButtonNumber: 7, ButtonText: "Next"},
             },
             ALT_options: {}
@@ -306,12 +306,12 @@ let saveData = {
             sceneID: 16,
             ButtonTitle: "What shall you do",
             options: {
-                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed"},
-                2: {ButtonNumber: 2, ButtonText: "Investigate the hidden alcove."},
-                3: {ButtonNumber: 3, ButtonText: "Listen to the soothing melody of the flower."},
-                4: {ButtonNumber: 4, ButtonText: "Continue exploring the passage"},
-                5: {ButtonNumber: 5, ButtonText: "Sit quietly and observe the surroundings"},
-                6: {ButtonNumber: 6, ButtonText: "Feel the texture of the moss beneath your fingertips."},
+                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed", next_scene: "1_1"},
+                2: {ButtonNumber: 2, ButtonText: "Investigate the hidden alcove.", next_scene: "1_12"},
+                3: {ButtonNumber: 3, ButtonText: "Listen to the soothing melody of the flower.", action: 'rested/10/DeBuffParentFunction/Pacified,20,.choices_section/DeBuffParentFunction/Confusion,20,.choices_section'},
+                4: {ButtonNumber: 4, ButtonText: "Continue exploring the passage", next_scene: "1_11"},
+                5: {ButtonNumber: 5, ButtonText: "Sit quietly and observe the surroundings", action: 'rested/20'},
+                6: {ButtonNumber: 6, ButtonText: "Feel the texture of the moss beneath your fingertips.", action: 'createElement/br/manageHiddenInfo/true,0'},
             },
             ALT_options: {
                 1 : "Leave the area disturbed", 2 : "Investigate the hidden alcove.", 3 : "gain strenght by listening to the soothing melody of the flower.", 4 : "Continue exploring the passage", 5 : "Sit quietly and observe the surroundings", 6 : "gain extra lives by touching the mesmerising moss."
@@ -326,12 +326,12 @@ let saveData = {
             sceneID: 17,
             ButtonTitle: "What shall you do",
             options: {
-                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed"},
+                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed", next_scene: "1_2"},
                 2: {ButtonNumber: 2, ButtonText: "Approach the figure cautiously."},
                 3: {ButtonNumber: 3, ButtonText: "Sit quietly by the pool and observe."},
                 4: {ButtonNumber: 4, ButtonText: "Cast a stone into the pool."},
                 5: {ButtonNumber: 5, ButtonText: "Attempt to communicate with the figure."},
-                6: {ButtonNumber: 6, ButtonText: "Feel the cool crystal walls with your hands."},
+                6: {ButtonNumber: 6, ButtonText: "Feel the cool crystal walls with your hands.", action: 'damageAndDeath/15,of an ambiguous pond of glazend color'},
             },
             ALT_options: {},
         },
@@ -344,7 +344,7 @@ let saveData = {
             sceneID: 18,
             ButtonTitle: "What shall you do",
             options: {
-                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed"},
+                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed", next_scene: "1_3"},
                 2: {ButtonNumber: 2, ButtonText: "Reach out to touch the ancient runes."},
                 3: {ButtonNumber: 3, ButtonText: "Atempt to read the chant or incantation."},
                 4: {ButtonNumber: 4, ButtonText: "Continue down the corridor."},
@@ -362,7 +362,7 @@ let saveData = {
             sceneID: 19,
             ButtonTitle: "What shall you do",
             options: {
-                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed"},
+                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed", next_scene: "1_4"},
                 2: {ButtonNumber: 2, ButtonText: "Follow the stream to its source."},
                 3: {ButtonNumber: 3, ButtonText: "Offer a small offering of food to the fish."},
                 4: {ButtonNumber: 4, ButtonText: "Take a moment to admire the surroundings."},
@@ -380,7 +380,7 @@ let saveData = {
             sceneID: 20,
             ButtonTitle: "What shall you do",
             options: {
-                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed"},
+                1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed", next_scene: "1_5"},
                 2: {ButtonNumber: 2, ButtonText: "Sit amongst the mushrooms and observe."},
                 3: {ButtonNumber: 3, ButtonText: "Reach out to touch the mushrooms."},
                 4: {ButtonNumber: 4, ButtonText: "Inhale deeply, breathing in the aroma."},
@@ -412,8 +412,8 @@ let saveData = {
             sceneID: 22,
             ButtonTitle: "With careful hands, you consider the small, intricately carved wooden box half-buried in the moss. You have the option to:",
             options: {
-                1: {ButtonNumber: 1, ButtonText: "Leave the box undisturbed and leave the alcove"},
-                2: {ButtonNumber: 6, ButtonText: "Pick up the box and examine its contents"},
+                1: {ButtonNumber: 1, ButtonText: "Leave the box undisturbed and leave the alcove", next_scene: "1_6"},
+                2: {ButtonNumber: 6, ButtonText: "Pick up the box and examine its contents", action: 'manageHiddenInfo/undefined,undefined,4'},
             },
             ALT_options: {},
         },
@@ -871,6 +871,27 @@ let saveData = {
     ItemDescriptionText : {
 
     },
+    Items : [
+        //  { id: numberPlaceHolder , Name : "NamePlaceHolder", text : "TextPlaceHolder", quantity : 0, color : "ColorPlaceHolder", quality : "common"}, choose between common/uncomon/rare/unique/Legendary}
+        { id: 1 , Name : "Soul Redeemer", text : "You have discovered a Soul Redeemer, a legendary item that holds immense power.", quantity : 0, color : "Yellow", quality : "Legendary"},
+        { id: 2 , Name : "rock", text : "You have discovered a rock, a common item that can be used for various purposes.", quantity : 0, color : "Grey", quality : "common"},
+        { id: 3 , Name : "stick", text : "You have discovered a stick, a common item that can be used for various purposes.", quantity : 0, color : "Grey", quality : "common"},
+        { 
+            id: 4 ,
+            Name : "green gemstone",
+            text : "~You have found an uncommon green gemstone nestled within the intricately carved wooden box. Its hue is vibrant and captivating, catching the dim light with a mesmerizing sparkle. This discovery adds a unique and valuable treasure to your journey through the mossy passage.",
+            quantity : 0,
+            color : "green",
+            quality : "uncommon"},
+        { id: 5 , Name : "red gemstone", text : "You have discovered a red gemstone, an uncommon item that can be used for various purposes.", quantity : 0, color : "Green", quality : "uncommon"},
+        { id: 6 , Name : "blue gemstone", text : "You have discovered a blue gemstone, an uncommon item that can be used for various purposes.", quantity : 0, color : "Green", quality : "uncommon"},
+        { id: 7 , Name : "brown gemstone", text : "You have discovered a brown gemstone, an uncommon item that can be used for various purposes.", quantity : 0, color : "Green", quality : "uncommon"},
+        { id: 8 , Name : "white gemstone", text : "You have discovered a white gemstone, a rare item that can be used for various purposes.", quantity : 0, color : "Blue", quality : "rare"},
+        { id: 9 , Name : "dark gemstone", text : "You have discovered a dark gemstone, a rare item that can be used for various purposes.", quantity : 0, color : "Blue", quality : "rare"},
+        { id: 10 , Name : "purple gemstone", text : "You have discovered a purple gemstone, an epic item that can be used for various purposes.", quantity : 0, color : "Purple", quality : "epic"},
+
+       // : { id: "PlaceHolder", Name : "PlaceHolder", text : "PlaceHolder", quantity : "PlaceHolder" , color : "PlaceHolder", quality : "PlaceHolder"},
+    ],
     Inventory : [
         //  ID number : {"Name" : Name of item ,"quantity" : 0,"quality" : "common"}
         //   { id: 0 , Name : "PlaceHolder", quantity : 0, quality : "common"},

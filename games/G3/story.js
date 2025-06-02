@@ -1,46 +1,25 @@
 
 
-Render_Scene(saveData, true);
+// Render_Scene(saveData, true);
 
 function Render_Scene(saveData, isNew = false) {
-    if (isNew) {
-        impromptuSave(saveData);  //  save the game from latest version of saveData
-    } else {
-        saveData = JSON.parse(sessionStorage.getItem('TempLatestSave'));
-    }
-    /*
-    if (!saveData.ItemID) {
-        const {
-            current_storyLine_progress,
-            current_chapter_progress,
-            current_title_progress,
-            DeathReason,
-            Choices_Possible,
-            Buttons_section_title,
-            Choices_Made,
-            CurrentDebuffBar,
-            IsDead
-        } = saveData?? 0;
+    if ( isNew ) impromptuSave(saveData) /* save the game from latest version of saveData */
+    saveData = JSON.parse(sessionStorage.getItem('TempLatestSave'));
 
-        const currentScene = saveData.storyLine_progress[current_chapter_progress][current_storyLine_progress];
-        const currentTitle = saveData.title_progress[current_title_progress];
-        const currentSectionTitle = Buttons_section_title[current_chapter_progress][current_storyLine_progress];
-    }
-    */
-    const current_storyLine_progress = saveData.currrentScene.split('_')[1] || 0;
-    const current_chapter_progress = saveData.currrentScene.split('_')[0] || 0;
+    const current_storyLine_progress = saveData.currentScene.split('_')[1] || 0;
+    const current_chapter_progress = saveData.currentScene.split('_')[0] || 0;
     const current_title_progress = current_chapter_progress;
     const DeathReason = saveData.DeathReason;
-    const Choices_Possible = saveData.scenes[saveData.currrentScene].options; // its different
+    const Choices_Possible = saveData.scenes[saveData.currentScene].options; // its different
     //const Buttons_section_title = saveData.scenes[i].ButtonTitle;
     const Choices_Made = saveData.Choices_Made[current_chapter_progress];
     const CurrentDebuffBar = saveData.Debuff_SpashText_Final;
     const IsDead = saveData.IsDead;
 
-    const currentSceneText = saveData.scenes[saveData.currrentScene].sceneText;
-    const currentSceneName = saveData.scenes[saveData.currrentScene].sceneName;
-    const currentTitle = saveData.scenes[saveData.currrentScene].chapterTitle;
-    const currentSectionTitle = saveData.scenes[saveData.currrentScene].ButtonTitle;
+    const currentSceneText = saveData.scenes[saveData.currentScene].sceneText;
+    const currentSceneName = saveData.scenes[saveData.currentScene].sceneName;
+    const currentTitle = saveData.scenes[saveData.currentScene].chapterTitle;
+    const currentSectionTitle = saveData.scenes[saveData.currentScene].ButtonTitle;
     
     // --- UI Rendering ---
     // Render content in order
@@ -59,7 +38,9 @@ function Render_Scene(saveData, isNew = false) {
 function impromptuSave(saveData) {
     //  make a save of latest version of saveData
     if(!ResetFile){
-        SaveForest['section0'] = saveData;
+        let SaveForest = JSON.parse(localStorage.getItem('SaveForest') || '{}');
+        SaveForest.section0 = saveData;
+        SaveForest.DefaultSaveData = saveData; // optionally keep DefaultSaveData updated
         sessionStorage.setItem('TempLatestSave',JSON.stringify(saveData));
         localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
     }
@@ -67,17 +48,11 @@ function impromptuSave(saveData) {
 function getButtonValues(saveData) {
     const buttonValues = [];
     for (const buttonValue of saveData.Buttons) {
-        let currentScene = saveData.currrentScene.split('_')[1];
-        let currentChapter = saveData.currrentScene.split('_')[0];
-        let chapter = saveData.scenes[saveData.currrentScene];
+        let currentScene = saveData.currentScene.split('_')[1];
+        let currentChapter = saveData.currentScene.split('_')[0];
+        let chapter = saveData.scenes[saveData.currentScene];
         let scene = chapter.options[buttonValue]?.ButtonText;
-        let value;
-        if(saveData.isDead){
-            value = chapter[buttonValue];
-            
-        }else{
-            value = scene;
-        }
+        let value = scene;
         if (value) {
             console.log('value id=12 (buttonValue)',value)
             buttonValues.push(buttonValue);
@@ -89,15 +64,15 @@ function getButtonValues(saveData) {
 function buttonClickHandler(buttonValue, saveData) {
     return () => {
         console.log('Button ' + buttonValue + ' pressed'); // Log button press
-        if (!isCurrentlyPrinting) {
+        if (!isCurrentlyPrinting[".main_section"]) {
             //console.log('Pressed button ', buttonValue, ' with value ', value);
             console.log('Starting new scene id=4');
             stopTyping = false;
             switch (buttonValue) {
                 case 1:
-                    console.log("Choices_Made before change id=253 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
-                    saveData.Choices_Made[saveData.currrentScene.split('_')[0]].pop();
-                    console.log("Choices_Made after change id=254 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
+                    console.log("Choices_Made before change id=253 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
+                    saveData.Choices_Made[saveData.currentScene.split('_')[0]].pop();
+                    console.log("Choices_Made after change id=254 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
                     previousScene(saveData);
                     break;
                 case 2:
@@ -105,33 +80,33 @@ function buttonClickHandler(buttonValue, saveData) {
                 case 4:
                 case 5:
                 case 6:
-                    console.log("Choices_Made before change id=261 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
-                    saveData.Choices_Made[saveData.currrentScene.split('_')[0]].push(buttonValue);
-                    Choices_calculator(saveData);
-                    console.log("Choices_Made after change id=262 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
+                    console.log("Choices_Made before change id=261 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
+                    saveData.Choices_Made[saveData.currentScene.split('_')[0]].push(buttonValue);
+                    console.log("Choices_Made after change id=262 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
+                    nextScene(saveData);
                     break;
                 case 7:
-                    console.log("Choices_Made before change id=255 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
-                    saveData.Choices_Made[saveData.currrentScene.split('_')[0]].push(buttonValue);
-                    console.log("Choices_Made after change id=256 ", saveData.Choices_Made[saveData.currrentScene.split('_')[0]]);
+                    console.log("Choices_Made before change id=255 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
+                    saveData.Choices_Made[saveData.currentScene.split('_')[0]].push(buttonValue);
+                    console.log("Choices_Made after change id=256 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
                     nextScene(saveData);
                     break;
             }
         } else {
             stopTyping = true;
-            console.log('current_storyLine_progress id=8', saveData.currrentScene.split('_')[1]);
+            console.log('current_storyLine_progress id=8', saveData.currentScene.split('_')[1]);
             addTextFullFeature({
-                textBlock : saveData.scenes[saveData.currrentScene].sceneText,
+                textBlock : saveData.scenes[saveData.currentScene].sceneText,
                 elementId : '.main_section',
                 printImmediately : true,
             })
             addTextFullFeature({
-                textBlock : saveData.scenes[saveData.currrentScene].chapterTitle,
+                textBlock : saveData.scenes[saveData.currentScene].chapterTitle,
                 elementId : '.Quest_Title',
                 printImmediately : true,
             })
-            isCurrentlyPrinting = false;
-            console.log('Print everything for scene number ', saveData.currrentScene.split('_')[1]);
+            isCurrentlyPrinting[".main_section"] = false;
+            console.log('Print everything for scene number ', saveData.currentScene.split('_')[1]);
             
         }
     }
@@ -144,7 +119,7 @@ function ButtonPressed(saveData, infogetter) {
             // Get the value of the button from the scene
             // let chapter = infogetter[saveData.current_chapter_progress];
             // let scene = chapter[saveData.current_storyLine_progress];
-            let chapter = saveData.scenes[saveData.currrentScene];
+            let chapter = saveData.scenes[saveData.currentScene];
             let scene = chapter.options[buttonValue]?.ButtonText;
             let value;
             
@@ -164,8 +139,8 @@ function ButtonPressed(saveData, infogetter) {
     }
 }
 function manageHiddenInfo(saveData, revealInfo, HiddenTextID, ItemID) {
-    const current_storyLine = saveData.current_storyLine_progress;
-    const current_chapter = saveData.current_chapter_progress;
+    const current_storyLine = saveData.currentScene.split('_')[1];
+    const current_chapter = saveData.currentScene.split('_')[0];
     const itemDiscoveryText = getItemDiscoveryText(ItemID);
     // Check if Buttons_Hidden data exists for the current chapter and story line
     const Buttons_Hidden = saveData.Buttons_Hidden[current_chapter]?.[current_storyLine];
@@ -187,7 +162,7 @@ function manageHiddenInfo(saveData, revealInfo, HiddenTextID, ItemID) {
         console.log(`No hidden buttons defined for chapter ${current_chapter} and scene ${current_storyLine}`);
     }
     if(HiddenTextID){
-        const Text_Hidden = saveData.HiddenStoryLine[saveData.current_chapter_progress][saveData.current_storyLine_progress];
+        const Text_Hidden = saveData.HiddenStoryLine[current_chapter][current_storyLine];
         if(!saveData.Uncoverded.HiddenText[HiddenTextID]) {
             addTextFullFeature({
                 elementId : '.main_section',
@@ -214,29 +189,48 @@ function manageHiddenInfo(saveData, revealInfo, HiddenTextID, ItemID) {
         }
     }
 }
-function damageAndDeathParent(amount, atackMethod, instaKill = false){
-    function DeadCalculator() {
-        if (character.Health <= 0 || character.Health - amount <= 0 || instaKill) {
-            return true;
-        }
-    }
-    if (DeadCalculator()) {
-        saveData.DeathReason = atackMethod;
-        saveData.IsDead = true;
-        saveData.AtDeathScreen.AtDeath_storyLine_progress = saveData.current_storyLine_progress;
-        saveData.AtDeathScreen.AtDeath_Chapter_progress = saveData.current_chapter_progress;
-        saveData.AtDeathScreen.AtDeath_Title_progress = saveData.current_title_progress;
-        stopTyping = true;
-        nextScene(saveData);
-    } else if(!instaKill){
+function damageAndDeath(amount, method, instaKill = false) {
+    const isDead = instaKill || character.Health - amount <= 0;
+    if (isDead) {
+        handleDeath(method);
+    } else {
         character.getDamage(amount);
     }
 }
+function handleDeath(reason = "unknown") {
+    console.warn(`Player died: ${reason}`);
+
+    saveData.isDead = true;
+    saveData.deathReason = reason;
+
+    // Store where the player died
+    saveData.AtDeathScreen = {
+        AtDeath_storyLine_progress: saveData.currentScene.split('_')[1],
+        AtDeath_Chapter_progress: saveData.currentScene.split('_')[0],
+        AtDeath_Title_progress: saveData.currentScene.split('_')[0],
+    };
+
+    const deathScene = saveData.scenes["Death"];
+    deathScene.sceneText = `You died because ${reason}`;
+    deathScene.options[1].next_scene = saveData.LastSafeScene;
+
+    // Reset health if needed
+    if (typeof character?.Resurrect === "function") {
+        character.Resurrect();
+    }
+
+    // Move to the death screen
+    saveData.currentScene = "Death";
+
+    clearButtonContent();
+    Render_Scene(saveData, true);
+}
+
 function InventoryItemClickedHandler(item_id){
     switch(item_id){
         case 1:
             console.log('you died id=500')
-            damageAndDeathParent(undefined,'you used the soul redeemer',true)
+            damageAndDeath(undefined,'you used the soul redeemer',true)
             break;
         case 4:
             //  a green gemstone something
@@ -246,7 +240,7 @@ function InventoryItemClickedHandler(item_id){
 function character_Description(saveData, Choices_Made){
     //  check wat in Side-Menu2 is, if not the same as character_Description_Text_Final replace it with It
     Side_Menu2.dataset.visible = saveData.IsDead ? 'false' : 'true'; //  show or hide the character description
-    if (Side_Menu2.innerHTML !== saveData.character_Description_Text_Final && saveData.current_storyLine_progress >= 3 | saveData.current_chapter_progress >=1){
+    if (Side_Menu2.innerHTML !== saveData.character_Description_Text_Final && saveData.currentScene.split('_')[1] >= 3 | saveData.currentScene.split('_')[0] >=1){
         Side_Menu2.innerHTML = saveData.character_Description_Text_Final;
         console.log('saveData.character_Description_Text_Final', saveData.character_Description_Text_Final);
     }
@@ -290,8 +284,8 @@ function populateInventory(saveData,pageNumber) {
     });
     if (saveData.IsDead) document.getElementById('inventory').style.display = 'none'; // Hide inventory if player is dead
 }
-
-function addItemToInventory(saveData, itemId, newQuantity) {
+// FIXME : make all items stuff got to Items instead of ListOfAllItems
+function addItemToInventory(saveData, itemId, newQuantity = 1) {
     // Find the item in ListOfAllItems by itemId
     const itemToAdd = saveData.ListOfAllItems.find(item => item.id === itemId);
     if (itemToAdd) {
@@ -315,80 +309,54 @@ function addItemToInventory(saveData, itemId, newQuantity) {
         console.error(`Item with id ${itemId} not found in ListOfAllItems.`);
     }
 }
-function DeBuffParentFunction(effect, amount, saveData, elementId){
-    //character.applyDebuff(effect, amount, saveData, elementId)
-    deBuffEffectHandler(effect, amount, saveData, elementId);
-}
-function deBuffEffectHandler(effect, amount, saveData, element){
-    let Confused_Text = saveData.storyLine_progress_Confused[saveData.current_chapter_progress][saveData.current_storyLine_progress]["sceneText"];
-    let Confused_Title = saveData.storyLine_progress_Confused[saveData.current_chapter_progress][saveData.current_storyLine_progress]["sceneTitle"];
-    switch(effect){
-        case 'Weakened':
-            break;
-        case 'Slowed':
-            break;
-        case `Blinded`:
-            element.style.opacity = amount / 100;
-            break;
-        case 'Confused':
-            break;
-        case 'Silenced':
-            break;
-        case 'Crippled':
-            break;
-        case 'Vulnerable':
-            break;
-        case 'Disarmed':
-            break;
-        case 'Diseased':
-            break;
-        case 'Fear':
-            break;
-        case 'Stunned':
-            break;
-        case 'Hexed':
-            break;
-        case 'Drained':
-            break;
-        case 'Sapped':
-            break;
-        case 'Marked':
-            break;
-        case 'Burning':
-            break;
-        case 'Chilled':
-            break;
-        case 'Rooted':
-            break;
-        case "pacified":
+const effectHandlers = {
+    Blinded: ([_, amount, element]) => { element.style.opacity = amount / 100; },
+    pacified: () => {
             // not able to be agressief
             let IsPacified = true;
-            break;
-        case 'Cursed':
-            break;
-        case 'Fatigue':
-            break;
-        case 'Confusion':
-            // change text to confused text
-            console.log('activate confusion')
-            addTextFullFeature({
-                textBlock : Confused_Text,
-                elementId : '.main_section',
-                speed : 35,
-            })
-            addTextFullFeature({
-                textBlock : Confused_Title,
-                elementId : '.Quest_Title',
-            })
-
-            ButtonPressed(saveData, saveData.Choices_Possible_Confused);
-            break;
-        case 'MAXeffect':
-            break;
-    }
-}
+        },
+    Confusion: ([_, __, ___, Confused_Text, Confused_Title]) => {
+        // change text to confused text
+        console.log('activate confusion')
+        addTextFullFeature({
+            textBlock : Confused_Text,
+            elementId : '.main_section',
+            speed : 35,
+        })
+        addTextFullFeature({
+            textBlock : Confused_Title,
+            elementId : '.Quest_Title',
+        })
+        ButtonPressed(saveData, saveData.Choices_Possible_Confused);
+    },
+    Weakened : () => {},
+    Slowed : () => {},
+    // Confused : () => {},
+    Silenced : () => {},
+    Crippled : () => {},
+    Vulnerable : () => {},
+    Disarmed : () => {},
+    Diseased : () => {},
+    Fear : () => {},
+    Stunned : () => {},
+    Hexed : () => {},
+    Drained : () => {},
+    Sapped : () => {},
+    Marked : () => {},
+    Burning : () => {},
+    Chilled : () => {},
+    Rooted : () => {},
+    Cursed : () => {},
+    Fatigue : () => {},
+    MAXeffect : () => {}
+};
 function section_title_progress(current_section_title) {
-    choices_section_title.innerHTML = current_section_title;// print current scection title
+    // choices_section_title.innerHTML = current_section_title;// print current scection title
+    addTextFullFeature({
+        textBlock : current_section_title,
+        elementId : '.choices_section_title', // force error correct is elementId : '.choices_section_title',
+        printImmediately: true,
+    })
     console.log('current_section_title', current_section_title);
 }
 function title_progress(current_title,current_title_progress) {
@@ -400,36 +368,47 @@ function title_progress(current_title,current_title_progress) {
     console.log('current_title_progress', current_title_progress);
 }
 function scene_progress(currentSceneText,currentSceneName) {
-    let title_scene = currentSceneName;
-    let scene_text = currentSceneText;
     addTextFullFeature({
-        textBlock : scene_text,
+        textBlock : currentSceneText,
         elementId : '.main_section',
         speed : 35,
     })
     saveData.DeathReason = undefined;
-    console.log('currentSceneName', title_scene);
-    console.log('currentSceneText', scene_text);
+    console.log('currentSceneName', currentSceneName);
+    console.log('currentSceneText', currentSceneText);
 }
-function navigateStory(saveData, { direction = 'next', level = 'scene', isDead = false }) {
-    let [chapter, scene] = saveData.currrentScene.split('_').map(Number);
+function navigateStory(saveData, { direction = 'next', level = 'scene'}) {
+    let [chapter, scene] = saveData.currentScene.split('_').map(Number);
     if (chapter !== 'Death') {
         chapter = parseInt(chapter);
         scene = parseInt(scene);
     }
     // death handling
-    if (isDead) {
-        saveData.currrentScene = saveData.LastSafeScene || "0_0";
+    if (saveData.isDead) {
+        const [safeChapter, safeScene] = saveData.LastSafeScene.split('_').map(Number);
+        saveData.currentScene = saveData.LastSafeScene || "0_0";
+        Object.keys(saveData.Choices_Made).forEach((chapterKey) => {
+        const chapterNum = Number(chapterKey);
+        if (chapterNum > safeChapter) {
+            saveData.Choices_Made[chapterKey] = [];
+        } else if (chapterNum === safeChapter) {
+            // Optional: trim choices from the same chapter
+            saveData.Choices_Made[chapterKey] = saveData.Choices_Made[chapterKey].slice(0, safeScene);
+        }
+    });
+    saveData.isDead = false;
+    saveData.deathReason = null;
+    saveData.AtDeathScreen = ''
         clearButtonContent();
         Render_Scene(saveData, true);
         return;
     }
     // SaveScene handling
-    if (saveData.currrentScene == saveData.safeScenes?.[saveData.currrentScene]) saveData.LastSafeScene = `${chapter}_${scene}`;
+    if (saveData.currentScene == saveData.safeScenes?.[saveData.currentScene]) saveData.LastSafeScene = `${chapter}_${scene}`;
 
     let lastChoiceIndex = saveData.Choices_Made[chapter].length - 1;
-    let LastButtonPressed = saveData.Choices_Made[chapter][lastChoiceIndex];
-    
+    let LastButtonPressed = direction === 'next' ? saveData.Choices_Made[chapter][lastChoiceIndex] : 1;
+
 
     const sceneKeys = Object.keys(saveData.scenes)
         .filter(key => key.startsWith(`${chapter}_`))
@@ -437,33 +416,32 @@ function navigateStory(saveData, { direction = 'next', level = 'scene', isDead =
         .sort((a, b) => a - b);
 
     if (level === 'scene') {
-        const sceneData = saveData.scenes[saveData.currrentScene];
-        if (!Object.values(sceneData?.options)?.find(b => b.ButtonNumber === LastButtonPressed)) {
+        const sceneData = saveData.scenes[saveData.currentScene];
+        const options = Object.values(saveData.scenes[saveData.currentScene].options)?.find(b => b.ButtonNumber === LastButtonPressed);
+        if ((!Object.values(sceneData?.options)?.find(b => b.ButtonNumber === LastButtonPressed)) && direction !="previous") {
             console.warn("No valid options available.");
             return;
         }
         let currentIndex = sceneKeys.indexOf(scene);
-        const options = Object.values(saveData.scenes[saveData.currrentScene].options)?.find(b => b.ButtonNumber === LastButtonPressed);
+        
         if (direction === 'next') {
             if (currentIndex < sceneKeys.length - 1) {
-                
                 // Move to the next scene
                 scene = options.next_scene? options.next_scene.split('_')[1] : sceneKeys[currentIndex + 1];
                 // Perform custom action if specified
-                // if (options.action) performSceneAction(options.action, saveData);
-                // FIXME: need to fic probelm here with going back or wteverver
+                if (options.action) performSceneAction(options.action, saveData);
             } else {
                 return navigateStory(saveData, { direction: 'next', level: 'chapter' });
             }
         } else if (direction === 'previous') {
             if (currentIndex > 0) {
-                scene = options.next_scene? options.next_scene.split('_')[1] : sceneKeys[currentIndex + 1];
+                scene = options.next_scene? options.next_scene.split('_')[1] : sceneKeys[currentIndex - 1];
             } else {
                 return navigateStory(saveData, { direction: 'previous', level: 'chapter' });
             }
         }
 
-        saveData.currrentScene = `${chapter}_${scene}`;
+        saveData.currentScene = `${chapter}_${scene}`;
         saveData.current_storyLine_progress = scene;
     }
 
@@ -481,7 +459,7 @@ function navigateStory(saveData, { direction = 'next', level = 'scene', isDead =
 
         saveData.current_chapter_progress = chapter;
         saveData.current_storyLine_progress = scene;
-        saveData.currrentScene = `${chapter}_${scene}`;
+        saveData.currentScene = `${chapter}_${scene}`;
     }
 
     clearButtonContent();
@@ -495,172 +473,13 @@ function previousScene(saveData) {
     navigateStory(saveData, { direction: 'previous', level: 'scene' });
 }
 
-function nextChapter(saveData, isDead = false) {
-    navigateStory(saveData, { direction: 'next', level: 'chapter', isDead });
+function nextChapter(saveData) {
+    navigateStory(saveData, { direction: 'next', level: 'chapter'});
 }
 
 function previousChapter(saveData) {
     navigateStory(saveData, { direction: 'previous', level: 'chapter' });
 }
-
-/*
-function nextScene(saveData) {
-    // Increment the current scene progress only if there are more scenes available
-    // current place > next place
-    let [ChapterStr, SceneStr] =  saveData.currrentScene.split('_');
-    let Chapter = parseInt(ChapterStr);
-    let Scene = parseInt(SceneStr);
-    let current_storyLine_progress = Scene;
-    let current_chapter_progress = Chapter;
-    let lastChoiceIndex = saveData.Choices_Made[current_chapter_progress].length - 1;
-    let LastButtonPressed = saveData.Choices_Made[current_chapter_progress][lastChoiceIndex];
-    if (saveData.safeScenes[saveData.currrentScene]){
-        saveData.LastSafeScene = saveData.currrentScene;
-    }
-    if (saveData.isDead){
-        nextChapter(saveData, true);
-        return;
-    }else if(current_chapter_progress == 'Death'){
-        current_chapter_progress = saveData.LastSafeScene.split('_')[0];
-        current_storyLine_progress = saveData.LastSafeScene.split('_')[1];
-        saveData.currrentScene = saveData.LastSafeScene;
-        //saveData.Choices_Made[saveData.LastSafeChapter] = [undefined];    //  unsure about this
-        
-        character.Resurrect();
-        console.log('id=501 Reset to last safe place');
-        Render_Scene(saveData, true);
-    }
-    // DisplayDebuffTextWithColors(saveData, 'Fatigue', -1); // Display Controlbar text with color
-    // do check if scene is inside the chapter
-    if (saveData.scenes[saveData.currrentScene].sceneID < Object.keys(saveData.scenes).filter(sceneKey => sceneKey.startsWith(`0_`)).length -1 && current_chapter_progress == 0) {
-        // FIXME ^ here
-        saveData.current_storyLine_progress++;
-        saveData.currrentScene = `${current_chapter_progress}_${current_storyLine_progress+1}`;
-        console.log('pressed NextScene id=5')
-    }else if(saveData.scenes[saveData.currrentScene].sceneID < Object.keys(saveData.scenes).filter(sceneKey => sceneKey.startsWith(`1_`)).length && current_chapter_progress == 1){
-        switch(current_storyLine_progress){
-            case 0:
-                saveData.current_storyLine_progress = LastButtonPressed - 1; //from 1 to 5 are scene other area
-                saveData.currrentScene = `${current_chapter_progress}_${LastButtonPressed - 1}`;
-                break;
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-                saveData.current_storyLine_progress += 5;
-                saveData.currrentScene = `${current_chapter_progress}_${current_storyLine_progress+5}`;
-                break;
-            case 6:
-                if(LastButtonPressed == 2){
-                    saveData.current_storyLine_progress += 6;
-                    saveData.currrentScene = `${current_chapter_progress}_${current_storyLine_progress+6}`;
-                }else {
-                    saveData.current_storyLine_progress += 5;
-                    saveData.currrentScene = `${current_chapter_progress}_${current_storyLine_progress+5}`;
-                }
-                break;
-        }
-    } else {
-        // Handle the case when there are no more scenes in the current chapter
-        console.log('No more scenes available in this chapter');
-        nextChapter(saveData);
-        return;
-    }
-    // Re-render the story with updated saveData
-    console.log('id=9');
-    clearButtonContent();
-    Render_Scene(saveData, true);
-}
-
-function previousScene(saveData) {
-    // Decrement the current scene progress only if it's not the first scene
-    let [ChapterStr, SceneStr] =  saveData.currrentScene.split('_');
-    let Chapter = parseInt(ChapterStr);
-    let Scene = parseInt(SceneStr);
-    if (Scene > 0 && Chapter == 0) {
-        saveData.currrentScene = Chapter + '_' + ( Scene -1 );
-        console.log('pressed previousScene')
-    }else if(Scene > 0 && Chapter == 1){
-        switch(Scene){
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                Scene = 0;
-                saveData.currrentScene = `${Chapter}_0`;
-                break;
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-                Scene -= 5;
-                saveData.currrentScene = `${Chapter}_${ Scene -5 }`;
-                break;
-            case 12:
-                Scene -= 6;
-                saveData.currrentScene = `${Chapter}_${ Scene -6 }`;
-        }
-            
-    }else {
-        // Handle the case when it's already the first scene
-        console.log('Already at the beginning of the chapter');
-        previousChapter(saveData);
-    }
-    // Re-render the story with updated saveData
-    clearButtonContent();
-    Render_Scene(saveData, true);
-}
-
-function nextChapter(saveData, IsDead = false) {
-    // Increment the current chapter progress only if there are more chapters available
-    let [ChapterStr, SceneStr] =  saveData.currrentScene.split('_');
-    let Chapter = parseInt(ChapterStr);
-    let Scene = parseInt(SceneStr);
-    if(IsDead){
-        saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
-        saveData.current_chapter_progress = "Death";
-    }
-    if (Chapter < Object.keys(saveData.scenes).length - 1) {
-        saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the new chapter
-        saveData.current_chapter_progress++;
-        saveData.current_title_progress++;
-        saveData.currrentScene = ( Chapter + 1 ) + '_0';
-        //console.log('AllSafePlaces',saveData.AllSafePlaces[saveData.current_chapter_progress][saveData.current_storyLine_progress]);
-        if (saveData.safeScenes[saveData.currrentScene] == 1){
-            saveData.LastSafeChapter = saveData.currrentScene;
-        }
-        console.log('Next Chapter');
-    } else {
-        // Handle the case when there are no more chapters
-        console.log('No more chapters available or dying');
-    }
-    // Re-render the story with updated saveData
-    clearButtonContent();
-    Render_Scene(saveData,true);
-}
-
-function previousChapter(saveData) {
-    // Decrement the current chapter progress only if it's not the first chapter
-    if (saveData.current_chapter_progress > 0) {
-        saveData.current_chapter_progress--;
-        saveData.current_title_progress--;
-        saveData.current_storyLine_progress = 0; // Reset the scene progress to start of the previous chapter
-        console.log('Previous Chapter');
-    } else {
-        // Handle the case when it's already the first chapter
-        console.log('Already at the beginning of the story');
-    }
-    // Re-render the story with updated saveData
-    Render_Scene(saveData, true);
-}
-*/
 function getItemDiscoveryText(id){
     return saveData.ItemDiscoveryText.find(entry => entry.id === id);
 }
@@ -690,16 +509,6 @@ function characterMaker(saveData, lastChoiceIndex, value, valueS){
     // Evaluate it as a template literal
     const charachterDefining = new Function('value', 'valueSTRING', `return \`${templateString}\`;`)(value, valueSTRING);
 
-    
-    // Use `descriptionTemplate` with replacements
-    /*
-    let descriptionTemplate = saveData.character_Description_Text[lastChoiceIndex].charachterDefining;
-    let charachterDefining = descriptionTemplate
-    .replace(/{value}/g, value)
-    .replace(/{valueSTRING\[(\d+)\]}/g, (_, index) => {
-        return valueSTRING[parseInt(index, 10)];
-    });
-    */
     //  Display text to Side Menu
     Side_Menu2.innerHTML = charachterDefining;
 
@@ -711,195 +520,162 @@ function characterMaker(saveData, lastChoiceIndex, value, valueS){
     })
     saveData.character_Description_Text_Final = Side_Menu2.innerHTML;
 }
-function Choices_calculator(saveData){
-    let [ChapterStr, SceneStr] =  saveData.currrentScene.split('_');
-    let Chapter = parseInt(ChapterStr);
-    let Scene = parseInt(SceneStr);
+function performSceneAction(action, saveData) {
+    // get chapter and scene
+    const [ChapterStr, SceneStr] =  saveData.currentScene.split('_');
+    const Chapter = parseInt(ChapterStr);
+    const Scene = parseInt(SceneStr);
 
-    let current_storyLine_progress = Scene
-    let current_chapter = Chapter
-    let lastChoiceIndex = saveData.Choices_Made[Chapter].length - 1;
-    let LastButtonPressed = saveData.Choices_Made[Chapter][lastChoiceIndex];
-    let value;
-    let valueS;
-    let charachterDefining;
-    if(saveData.isDead){
-        value = Object.values(saveData.scenes[saveData.currrentScene].options)
-            .find(opt => opt.ButtonNumber === LastButtonPressed)?.ButtonText || '';
-        // value = saveData.Choices_Possible[current_chapter][LastButtonPressed];
-        // valueS = saveData.ALT_Choices_Possible[current_chapter][LastButtonPressed];
-        valueS = Object.values(saveData.scenes[saveData.currrentScene].ALT_options)
-            .find(opt => opt.ButtonNumber === LastButtonPressed)?.ButtonText || '';
-    }else{
-        // value = saveData.Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
-        value = Object.values(saveData.scenes[saveData.currrentScene].options)
-            .find(opt => opt.ButtonNumber === LastButtonPressed)?.ButtonText || '';
-        try{
-            // valueS = saveData.ALT_Choices_Possible[current_chapter][current_storyLine_progress][LastButtonPressed];
-            valueS = Object.values(saveData.scenes[saveData.currrentScene].ALT_options)
-                .find(opt => opt.ButtonNumber === LastButtonPressed)?.ButtonText || '';
+    let SplashText_Final = saveData.Debuff_SpashText_Final
+    let SplashText = saveData.Debuff_SpashText;
+    let Effect_Applied = saveData.CurrentDebuff_Effects;
+    let Effect_Debuff = saveData.Debuff_Effects;
+    let Effect_Buff = saveData.Buff_Effects;
+    let Items = saveData.Items;
 
-        }catch(error){
-            console.log('fuck valueS', error);
-        }
-        
+    //  
+    const options = Object.values(saveData.scenes[saveData.currentScene].options).find(a => a.action === action);
+    const optionsBtnNum = options?.ButtonNumber;
+    const ALT_options = Object.values(saveData.scenes[saveData.currentScene].ALT_options).find(BtnNum => BtnNum.ButtonNumber === optionsBtnNum);
+    
+
+    // get action command and attribute
+    const [actionCmd, actionAtr] =  action.split('/');
+    const actionAtrList =  actionAtr.split(',');
+    // do action 
+    // example: 'manageHiddenInfo/True,0,0/createElement/br'
+    switch (actionCmd) {
+        case 'characterMaker':
+            characterMaker(saveData, actionAtr[0], options?.ButtonText, ALT_options?.ButtonText)
+            break;
+        case 'rested':
+            character.rested(actionAtr[0]);
+            break;
+        case 'DeBuffParentFunction':
+            if (actionAtrList.length >= 3) {
+                // 0 effect, 1 amount, 2 element, 3 ConfusedText, 4 ConfusedTitle
+                const effectName = actionAtrList[0]
+                const handler = effectHandlers[effectName];
+                const Confused_Text = saveData.storyLine_progress_Confused[ChapterStr][SceneStr]["sceneText"];
+                const Confused_Title = saveData.storyLine_progress_Confused[ChapterStr][SceneStr]["sceneTitle"];
+                const argsList = [...actionAtrList, Confused_Text, Confused_Title];
+                if (handler) handler(argsList);
+                else console.log("Unknown effect: " + effect);
+            }
+            break;
+        case 'createElement':
+            main_section.appendChild(document.createElement(actionAtr[0]));
+            break;
+        case 'manageHiddenInfo':
+            if (actionAtrList.length >= 2) {
+                manageHiddenInfo(saveData, actionAtrList[0], actionAtrList[1],actionAtrList[2]);
+            }
+            break;
+        case 'damageAndDeath':
+            if (actionAtrList.length >= 2) {
+                damageAndDeath(actionAtr[0], actionAtr[1], actionAtr[2]);
+            }
+            break;
     }
-    switch (current_chapter){
-        case 'Death':
-            saveData.IsDead = false;
-            nextScene(saveData);
-            break;
-        case 0:
-            let descriptionTemplate = saveData.character_Description_Text[lastChoiceIndex].charachterDefining;
-            switch (lastChoiceIndex) {
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                    characterMaker(saveData, lastChoiceIndex, value, valueS)
-                    break;
-            }
-            
-            nextScene(saveData);
-            break;
-        case 1:
-            switch(current_storyLine_progress){
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                    nextScene(saveData)
-                    break;
-                case 6:
-                    switch(LastButtonPressed){
-                        case 2:
-                            //  Investigate the hidden alcove
-                            nextScene(saveData);//  I.E. scene 12
-                            break;
-                        case 3:
-                            character.rested(10);
-                            DeBuffParentFunction('Pacified', 20, saveData, ".choices_section")
-                            DeBuffParentFunction('Confusion', 20, saveData, ".choices_section")
-                            //  Listen to the soothing melody of the flower
-                            break;
-                        case 4:
-                            //  Continue exploring the passage
-                            nextScene(saveData);
-                            break;
-                        case 5:
-                            character.rested(20)
-                            break;
-                        case 6:
-                            //  Feel the texture of the moss beneath your fingertips
-                            main_section.appendChild(document.createElement('br'));
-                            manageHiddenInfo(saveData, true, 0)
-                            break;
-                            // TODO: FT savadata
-                    }
-                    break;
-                case 7:
-                    switch(LastButtonPressed){
-                        case 2:
-                            //  you fall in the water and die if requirement is not activated if it is aquire mysterious figure
-                            break;
-                        case 3:
-                            //  nothing happens
-                            break;
-                        case 4:
-                            //  the stone disolves in the water
-                            break;
-                        case 5:
-                            //  get silence back
-                            break;
-                        case 6:
-                            //  get damage
-                            damageAndDeathParent(15,'of an ambiguous pond of glazend color')
-                            break;
-                    }
-                    break;
-                case 8:
-                    switch(LastButtonPressed){
-                        case 2:
-                            //  feel drouwsy as not anouth mana ( player will not get info as comprehencion is to low )
-                            break;
-                        case 3:
-                            //  comprencion too low
-                            break;
-                        case 4:
-                            //  nextcene
-                            nextScene(saveData);
-                            break;
-                        case 5:
-                            //  +? in theoretical int
-                            break;
-                        case 6:
-                            //  +? in practical int
-                            break;
-                    }
-                    break;
-                case 9:
-                    switch(LastButtonPressed){
-                        case 2:
-                            //  Follow the stream to its source
-                            nextScene(saveData);
-                            break;
-                        case 3:
-                            //  
-                            break;
-                        case 4:
-                            //  
-                            break;
-                        case 5:
-                            //  
-                            break;
-                        case 6:
-                            //  
-                            break;
-                    }
-                    break;
-                case 10:
-                    switch(LastButtonPressed){
-                        case 2:
-                            //  
-                            break;
-                        case 3:
-                            //  
-                            break;
-                        case 4:
-                            //  
-                            break;
-                        case 5:
-                            //  
-                            break;
-                        case 6:
-                            //  
-                            break;
-                    }
-                    break;
-                case 11:
-                    break;
-                case 12:
-                    switch(LastButtonPressed){
-                        case 2:
-                            //  
-                            break;
-                        case 6:
-                            manageHiddenInfo(saveData, undefined, undefined, 4)
-                            break;
-                    }
-                    break;
-            }
-            break;
-            //  TODO add special sircumstances for 7 to 10 (sometimes go to other scene or add to inventory )
-            /*
-                7 : { 1 : "Leave the area undisturbed", 2 : "Approach the figure cautiously.", 3 : "Sit quietly by the pool and observe.", 4 : "Cast a stone into the pool.", 5 : "Attempt to communicate with the figure.", 6 : "Feel the cool crystal walls with your hands."},
-                8 : { 1 : "Leave the area undisturbed", 2 : "Reach out to touch the ancient runes.", 3 : "Atempt to read the chant or incantation.", 4 : "Continue down the corridor.", 5 : "Meditate in front of the runes.", 6 : "Feel the texture of the walls for any irregularities."},
-                9 : { 1 : "Leave the area undisturbed", 2 : "Follow the stream to its source.", 3 : "Offer a small offering of food to the fish.", 4 : "Take a moment to admire the surroundings.", 5 : "Feel the water with your hands.", 6 : "Listen to the soothing sound of the rushing stream."},
-                10 : { 1 : "Leave the area undisturbed", 2 : "Sit amongst the mushrooms and observe.", 3 : "Reach out to touch the mushrooms.", 4 : "Inhale deeply, breathing in the aroma.", 5 : "Feel the texture of the ground beneath your feet.", 6 : "Listen for any sounds emanating from the grove."},
-            */
+    // Handle chained actions if needed
+    if (actionAtrList.length > 1) {
+        for (let i = 1; i < actionAtrList.length; i++) {
+            const chainedAction = `${actionCmd}/${actionAtrList[i]}`;
+            performSceneAction(chainedAction, saveData);
+        }
     }
 }
+/**
+ * Helper to know Story actions
+ * chapter _ scene
+ * // TODO: make 1_7 and further
+ * Death => do death scene
+ * 0_2
+ * 0_3
+ * 0_4
+ * 0_5
+ * 0_6
+ * 0_7 => characterMaker(saveData, lastChoiceIndex, value, valueS)
+ * 1_6 => 
+        Btn 2:
+            //  Investigate the hidden alcove
+            nextScene(saveData);//  I.E. scene 12
+        Btn 3:
+            character.rested(10);
+            DeBuffParentFunction('Pacified', 20, saveData, ".choices_section")
+            DeBuffParentFunction('Confusion', 20, saveData, ".choices_section")
+            //  Listen to the soothing melody of the flower
+        Btn 4:
+            //  Continue exploring the passage
+            nextScene(saveData);
+        Btn 5:
+            character.rested(20)
+        Btn 6:
+            //  Feel the texture of the moss beneath your fingertips
+            main_section.appendChild(document.createElement('br'));
+            manageHiddenInfo(saveData, true, 0)
+ * 1_7 =>
+        Btn 2:
+            //  you fall in the water and die if requirement is not activated if it is aquire mysterious figure
+        Btn 3:
+            //  nothing happens
+        Btn 4:
+            //  the stone disolves in the water
+        Btn 5:
+            //  get silence back
+        Btn 6:
+            //  get damage
+            damageAndDeath(15,'of an ambiguous pond of glazend color')
+ * 1_8 =>
+        Btn 2:
+            //  feel drouwsy as not anouth mana ( player will not get info as comprehencion is to low )
+        Btn 3:
+            //  comprencion too low
+        Btn 4:
+            //  nextcene
+            nextScene(saveData);
+        Btn 5:
+            //  +? in theoretical int
+        Btn 6:
+            //  +? in practical int
+ * 1_9 =>
+        Btn 2:
+            //  Follow the stream to its source
+            nextScene(saveData);
+        Btn 3:
+            //  
+        Btn 4:
+            //  
+        Btn 5:
+            //  
+        Btn 6:
+            //  
+ * 1_10 =>
+        Btn 2:
+            //  
+        Btn 3:
+            //  
+        Btn 4:
+            //  
+        Btn 5:
+            //  
+        Btn 6:
+            //  
+ * 1_11 =>
+        Btn 2:
+ * 1_12 =>
+        Btn 2:
+            //
+        Btn 6:
+            manageHiddenInfo(saveData, undefined, undefined, 4)
+
+
+
+            // add special sircumstances for 7 to 10 (sometimes go to other scene or add to inventory )
+            
+            //    7 : { 1 : "Leave the area undisturbed", 2 : "Approach the figure cautiously.", 3 : "Sit quietly by the pool and observe.", 4 : "Cast a stone into the pool.", 5 : "Attempt to communicate with the figure.", 6 : "Feel the cool crystal walls with your hands."},
+            //    8 : { 1 : "Leave the area undisturbed", 2 : "Reach out to touch the ancient runes.", 3 : "Atempt to read the chant or incantation.", 4 : "Continue down the corridor.", 5 : "Meditate in front of the runes.", 6 : "Feel the texture of the walls for any irregularities."},
+            //    9 : { 1 : "Leave the area undisturbed", 2 : "Follow the stream to its source.", 3 : "Offer a small offering of food to the fish.", 4 : "Take a moment to admire the surroundings.", 5 : "Feel the water with your hands.", 6 : "Listen to the soothing sound of the rushing stream."},
+            //    10 : { 1 : "Leave the area undisturbed", 2 : "Sit amongst the mushrooms and observe.", 3 : "Reach out to touch the mushrooms.", 4 : "Inhale deeply, breathing in the aroma.", 5 : "Feel the texture of the ground beneath your feet.", 6 : "Listen for any sounds emanating from the grove."},
+            
+ */
