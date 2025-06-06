@@ -40,7 +40,7 @@ var datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1) + "/" + 
 let valueSTRING = [];   // Initialize the text of the player character set feature 
 let valueCOLOR = [];    // Initialize the color of the player character set feature 
 let isCurrentlyPrinting = {}; // set true if is printing and false if not
-let stopTyping = false;
+const previousText = {};
 let previousAmounts = [];
 let ResetFile = false;// if true can't save latest as session is reseting
 let CurrentPageNumber = 1;
@@ -165,8 +165,6 @@ function loadLatestGame(userConfirmed) {
 // newGame makes the prep for a new game
 function newGame(){
     console.log('new game');
-    try{saveData.Player_character = Player;}
-    catch(error){console.log('Can\'t set player because ',error);}
     let SaveForest = JSON.parse(localStorage.getItem('SaveForest')|| '{}');
     if (!SaveForest || Object.keys(SaveForest).length === 0) {
         SaveForest = {
@@ -177,6 +175,8 @@ function newGame(){
     else {
         SaveForest.DefaultSaveData = saveData;
     }
+    try{saveData.Player_character = Player;}
+    catch(error){console.log('Can\'t set player because ',error);}
     
     //console.log('SaveForest:',JSON.parse(SaveForest))
     localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
@@ -228,9 +228,9 @@ class Player {
         }
         console.log(`${this.Name} heals for ${amount} health.`);
     }
-    levelUp() {
+    levelUp(amount) {
         // Perform level up logic here
-        this.Level++;
+        this.Level += amount;
         console.log(`${this.Name} levels up to level ${this.Level}!`);
     }
     applyDebuff(effect, amount, saveData, elementId) {
@@ -372,8 +372,9 @@ let character = new Player({
 // Function to toggle visibility of the inventory
 function toggleInventory() {
     const inventory = document.getElementById('inventory');
-    const toggleInventoryText = document.getElementById('toggleInventoryText');
-    if (!saveData.IsDead) {
+    const SaveForest =  JSON.parse(localStorage.getItem('SaveForest'));
+    const saveData = SaveForest['section0'];
+    if (!saveData.isDead) {
         inventory.style.display = (inventory.style.display === 'none') ? 'block' : 'none';
     } else {
         console.log('Player is dead, inventory cannot be opened.');
@@ -383,6 +384,8 @@ function toggleInventory() {
 // Event listener for key press (I key)
 handleKeyPress();
 function handleKeyPress() {
+    const SaveForest =  JSON.parse(localStorage.getItem('SaveForest'));
+    const saveData = SaveForest['section0'];
     const Key = saveData.Settings.Controls.Inventory
     document.addEventListener('keydown', function(event) {
         if (event.key === Key.toLowerCase() || event.key === Key.toUpperCase()) {
@@ -497,18 +500,21 @@ function formatText(text) {
 }
 // utility:Set element Color
 function setElementColor(element, elementId, defaultColor) {
-    element.style.color = saveData.IsDead && elementId !== '.Quest_Title' ? 'red' : defaultColor;
+    const SaveForest =  JSON.parse(localStorage.getItem('SaveForest'));
+    const saveData = SaveForest['section0'];
+    element.style.color = saveData.isDead && elementId !== '.Quest_Title' ? 'red' : defaultColor;
 }
 // utility: print immediately
 async function handlePrintImmediately(element, textBlock, elementId) {
     element.innerHTML = formatText(textBlock);
     isCurrentlyPrinting[elementId] = false;
+    clearCursor();
 }
 // utility: Print Charackters Slowly
 async function PrintCharSlow({ textBlock, elementId, element, speed, cursor, currentTypingToken, token, output = ''}) {
     const formattedText = formatText(textBlock);
     for (let i = 0; i < formattedText.length; i++) {
-        if (currentTypingToken[elementId] !== token || stopTyping) {
+        if (currentTypingToken[elementId] !== token) {
             // If player clicked while printing
             handlePrintImmediately( element, textBlock );
             return;
@@ -523,6 +529,7 @@ async function PrintCharSlow({ textBlock, elementId, element, speed, cursor, cur
         // typingSound.play().catch(() => {}); // Play typing sound
         await new Promise(resolve => setTimeout(resolve, delayDuration)); // Delay next letter
     }
+    if ( cursor ) element.removeChild(cursor); // Remove cursor after typing
 }
 // utility: word coloring
 function applyWordColoring(element, textBlock, textAndColorArray) {
@@ -591,31 +598,37 @@ async function addTextFullFeature({
     ** 1. add sound to it just start when isCurrentlyPrinting is true and it will work
     */
     const token = {};
+    let cursor;
     currentTypingToken[elementId] = token;
     const element = document.querySelector(elementId);
     if (replace) element.innerHTML = ''; // Clear the content for replacement
+    const SaveForest =  JSON.parse(localStorage.getItem('SaveForest'));
+    const saveData = SaveForest['section0'];
 
     // Clear old cursors
     clearCursor();
     // Set text color based on death
     setElementColor( element, elementId, defaultColor );
 
+    
 
-    // If printing immediately or slow typing disabled
-    if (printImmediately || saveData.Settings.SlowTyping === false) {
+    // If printing immediately or slow typing disabled or previous typing is the same
+    if (printImmediately || saveData.Settings.SlowTyping === false || ( previousText[elementId] === textBlock )) {
         handlePrintImmediately( element, textBlock, elementId );
+        clearCursor();
         return;
     }
 
     // Prepare for typing
     element.innerHTML = '';
     isCurrentlyPrinting[elementId] = true;
-    stopTyping = false;
 
-    const cursor = createFakeCursor(); // Create a fake cursor
-    if (textAndColorArray.color.length == 0) {
-        element.appendChild(cursor)
-        // const typingSound = new Audio('path/to/typing-sound.mp3'); // Replace with actual sound file path when implemented
+    if (!printImmediately) {
+        cursor = createFakeCursor(); // Create a fake cursor
+        if (textAndColorArray.color.length == 0) {
+            element.appendChild(cursor)
+            // const typingSound = new Audio('path/to/typing-sound.mp3'); // Replace with actual sound file path when implemented
+        }
     }
 
     // If the word "ALL" is found in the textAndColorArray, set the color to textBlock instead of the word
@@ -634,10 +647,11 @@ async function addTextFullFeature({
     
 
 
-    if ( cursor) element.removeChild(cursor); // Remove cursor after typing
+    
     
     // Typing finished, clear token
     if (currentTypingToken[elementId] === token) {
+        previousText[elementId] = textBlock;
         delete currentTypingToken[elementId];
         isCurrentlyPrinting[elementId] = false;
     }
@@ -701,7 +715,6 @@ function loadGame(NumSection) {
 function deleteGame(NumSection) {
     let SaveForest = JSON.parse(localStorage.getItem('SaveForest') || '{}');
     if (SaveForest.hasOwnProperty(`section${NumSection}`)) {
-        saveData = SaveForest[`section${NumSection}`]
         // Remove game data from localStorage
         delete SaveForest[`section${NumSection}`];
         // Clear UI

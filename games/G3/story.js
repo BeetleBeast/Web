@@ -14,7 +14,7 @@ function Render_Scene(saveData, isNew = false) {
     //const Buttons_section_title = saveData.scenes[i].ButtonTitle;
     const Choices_Made = saveData.Choices_Made[current_chapter_progress];
     const CurrentDebuffBar = saveData.Debuff_SpashText_Final;
-    const IsDead = saveData.IsDead;
+    const isDead = saveData.isDead;
 
     const currentSceneText = saveData.scenes[saveData.currentScene].sceneText;
     const currentSceneName = saveData.scenes[saveData.currentScene].sceneName;
@@ -23,7 +23,7 @@ function Render_Scene(saveData, isNew = false) {
     
     // --- UI Rendering ---
     // Render content in order
-    ButtonPressed(saveData, Choices_Possible); // 1. Button's text , actions and visibility
+    ButtonRender(saveData, false); // 1. Button's text , actions and visibility
     manageHiddenInfo(saveData, false); // 2. Hide or show buttons
     title_progress(currentTitle, current_title_progress); // 3. Title
     scene_progress(currentSceneText, currentSceneName); // 4. Text content
@@ -31,7 +31,7 @@ function Render_Scene(saveData, isNew = false) {
     character_Description(saveData, Choices_Made); // 6. Character description if applicable
     Effect_Bar_progress(saveData, CurrentDebuffBar); // 7. Effect bar if applicable
     populateInventory(saveData, 1); // 8. Inventory ( only first page )
-    Side_Menu3.dataset.visible = IsDead ? 'false' : 'true'; // 9. Side menu ( show or hide the effects (debuffs) bar )
+    Side_Menu3.dataset.visible = isDead ? 'false' : 'true'; // 9. Side menu ( show or hide the effects (debuffs) bar )
     //DisplayDebuffTextWithColors(saveData,)
     return saveData;
 }
@@ -45,56 +45,75 @@ function impromptuSave(saveData) {
         localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
     }
 }
-function getButtonValues(saveData) {
+function ButtonRender(saveData, ISALT = false) {
+    const container = document.querySelector('.choices_section_choices');
+    const buttonValues = getButtonValues(saveData, ISALT);
+
+    // Clear previously created dynamic buttons (those beyond preset .Sh_1 to .Sh_7)
+    container.querySelectorAll('div[class^="Sh_"]').forEach(btn => {
+        const value = parseInt(btn.className.split('_')[1]);
+        if (value > 7) btn.remove();
+    });
+
+    for (const buttonValue of buttonValues) {
+        let button;
+        if (buttonValue.Value <= 7 ) {
+            button = document.querySelector('.Sh_' + buttonValue.Value);
+        }
+        if (buttonValue.Value > 7 ) {
+            button = document.createElement('div');
+            button.classList.add('Sh_' + buttonValue.Value);
+            container.appendChild(button);
+        }
+        if (button) {            
+            button.innerHTML = buttonValue.Text;
+            button.style.display = 'inline-block';
+
+            const handler = ClickHandler(buttonValue.Value, saveData);
+            button.removeEventListener("click", button.handlerReference);
+            button.addEventListener("click", handler);
+            button.handlerReference = handler;
+        }
+    }
+    console.log('Buttons Rendered ' + buttonValues); // Logging the addition of event listener
+}
+/**
+ * 
+ * @param {Object} saveData
+ * @param {boolean} ISALT - If true, retrieves values from ALT_options instead of options
+ * @returns values inside the button(s) of the current scene
+ * @description This function retrieves the button values from the saveData object for the current scene.
+ */
+function getButtonValues(saveData, ISALT = false) {
     const buttonValues = [];
-    for (const buttonValue of saveData.Buttons) {
-        let currentScene = saveData.currentScene.split('_')[1];
-        let currentChapter = saveData.currentScene.split('_')[0];
-        let chapter = saveData.scenes[saveData.currentScene];
-        let scene = chapter.options[buttonValue]?.ButtonText;
-        let value = scene;
-        if (value) {
-            console.log('value id=12 (buttonValue)',value)
-            buttonValues.push(buttonValue);
+    const options = saveData.scenes[saveData.currentScene][ISALT ? 'ALT_options' : 'options'];
+    for (const key in options) {
+        if ( options[key]?.ButtonText ) {
+            buttonValues.push({
+                Value: options[key]?.ButtonNumber,
+                Text: options[key]?.ButtonText,
+            });
         }
     }
     return buttonValues;
 }
-
-function buttonClickHandler(buttonValue, saveData) {
+function ClickHandler(buttonValue, saveData) {
     return () => {
         console.log('Button ' + buttonValue + ' pressed'); // Log button press
         if (!isCurrentlyPrinting[".main_section"]) {
-            //console.log('Pressed button ', buttonValue, ' with value ', value);
-            console.log('Starting new scene id=4');
-            stopTyping = false;
-            switch (buttonValue) {
-                case 1:
-                    console.log("Choices_Made before change id=253 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
-                    saveData.Choices_Made[saveData.currentScene.split('_')[0]].pop();
-                    console.log("Choices_Made after change id=254 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
-                    previousScene(saveData);
-                    break;
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                    console.log("Choices_Made before change id=261 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
-                    saveData.Choices_Made[saveData.currentScene.split('_')[0]].push(buttonValue);
-                    console.log("Choices_Made after change id=262 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
-                    nextScene(saveData);
-                    break;
-                case 7:
-                    console.log("Choices_Made before change id=255 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
-                    saveData.Choices_Made[saveData.currentScene.split('_')[0]].push(buttonValue);
-                    console.log("Choices_Made after change id=256 ", saveData.Choices_Made[saveData.currentScene.split('_')[0]]);
-                    nextScene(saveData);
-                    break;
+            // stopTyping = false;
+            if (buttonValue === 1) {
+                saveData.Choices_Made[saveData.currentScene.split('_')[0]].pop();
+                console.log( 'ClickHandler Back button ', saveData.Choices_Made[saveData.currentScene.split('_')[0]])
+                previousScene(saveData);
+            } else {
+                saveData.Choices_Made[saveData.currentScene.split('_')[0]].push(buttonValue);
+                console.log( 'ClickHandler Forward button ', saveData.Choices_Made[saveData.currentScene.split('_')[0]])
+                nextScene(saveData);
             }
         } else {
-            stopTyping = true;
-            console.log('current_storyLine_progress id=8', saveData.currentScene.split('_')[1]);
+            // stopTyping = true;
+            console.log('ClickHandler printImmediately, scene ', saveData.currentScene.split('_')[1]);
             addTextFullFeature({
                 textBlock : saveData.scenes[saveData.currentScene].sceneText,
                 elementId : '.main_section',
@@ -106,35 +125,7 @@ function buttonClickHandler(buttonValue, saveData) {
                 printImmediately : true,
             })
             isCurrentlyPrinting[".main_section"] = false;
-            console.log('Print everything for scene number ', saveData.currentScene.split('_')[1]);
             
-        }
-    }
-}
-function ButtonPressed(saveData, infogetter) {
-    const buttonValues = getButtonValues(saveData);
-    for (const buttonValue of buttonValues) {
-        const button = document.querySelector('.Sh_' + buttonValue);
-        if (button) {
-            // Get the value of the button from the scene
-            // let chapter = infogetter[saveData.current_chapter_progress];
-            // let scene = chapter[saveData.current_storyLine_progress];
-            let chapter = saveData.scenes[saveData.currentScene];
-            let scene = chapter.options[buttonValue]?.ButtonText;
-            let value;
-            
-            let Textvalue = scene;
-            let Namevalue = chapter.options[buttonValue]?.ButtonNumber;
-            
-            // Set the inner HTML of the button
-            button.innerHTML = Textvalue;
-            button.style.display = 'inline-block'; // Make the button visible
-            // Add event listener to the button
-            const handler = buttonClickHandler(Namevalue, saveData);
-            button.removeEventListener("click", button.handlerReference); // Remove previous listener to avoid duplicates
-            button.addEventListener("click", handler);
-            button.handlerReference = handler; // Store the reference to the handler function
-            console.log('Event listener added for button ' + Namevalue); // Logging the addition of event listener
         }
     }
 }
@@ -181,11 +172,11 @@ function manageHiddenInfo(saveData, revealInfo, HiddenTextID, ItemID) {
             addItemToInventory(saveData, ItemID, 1);
             addTextFullFeature({
                 elementId : '.main_section',
-                textBlock : itemDiscoveryText.text,
+                textBlock : itemDiscoveryText.Discoverytext,
                 replace : false,
                 textAndColorArray : { word : 'ALL', color : itemDiscoveryText.color},
             })
-            saveData.Uncoverded.ItemDiscovery[ItemID] = true;
+            saveData.Uncoverded.Items[ItemID] = true;
         }
     }
 }
@@ -239,15 +230,15 @@ function InventoryItemClickedHandler(item_id){
 }
 function character_Description(saveData, Choices_Made){
     //  check wat in Side-Menu2 is, if not the same as character_Description_Text_Final replace it with It
-    Side_Menu2.dataset.visible = saveData.IsDead ? 'false' : 'true'; //  show or hide the character description
-    if (Side_Menu2.innerHTML !== saveData.character_Description_Text_Final && saveData.currentScene.split('_')[1] >= 3 | saveData.currentScene.split('_')[0] >=1){
+    Side_Menu2.dataset.visible = saveData.isDead ? 'false' : 'true'; //  show or hide the character description
+    if (Side_Menu2.innerHTML !== saveData.character_Description_Text_Final && ( saveData.currentScene.split('_')[1] >= 3 || saveData.currentScene.split('_')[0] >=1 )){
         Side_Menu2.innerHTML = saveData.character_Description_Text_Final;
         console.log('saveData.character_Description_Text_Final', saveData.character_Description_Text_Final);
     }
 }
 function Effect_Bar_progress(saveData, CurrentDebuffBar){
     //  check wat in Side-Menu4 is, if not the same as Debuff_SpashText_Final replace it with It 
-    Side_Menu4.dataset.visible = saveData.IsDead ? 'false' : 'true'; //  show or hide the debuff bar
+    Side_Menu4.dataset.visible = saveData.isDead ? 'false' : 'true'; //  show or hide the debuff bar
     if (Side_Menu4.innerHTML !== saveData.Debuff_SpashText_Final) {
         Side_Menu4.innerHTML = saveData.Debuff_SpashText_Final;
         console.log('CurrentDebuffBar', saveData.Debuff_SpashText_Final);
@@ -282,12 +273,11 @@ function populateInventory(saveData,pageNumber) {
         pageContainer.appendChild(itemElement);
         number++;
     });
-    if (saveData.IsDead) document.getElementById('inventory').style.display = 'none'; // Hide inventory if player is dead
+    if (saveData.isDead) document.getElementById('inventory').style.display = 'none'; // Hide inventory if player is dead
 }
-// FIXME : make all items stuff got to Items instead of ListOfAllItems
 function addItemToInventory(saveData, itemId, newQuantity = 1) {
-    // Find the item in ListOfAllItems by itemId
-    const itemToAdd = saveData.ListOfAllItems.find(item => item.id === itemId);
+    // Find the item in Items by itemId
+    const itemToAdd = saveData.Items.find(item => item.id === itemId);
     if (itemToAdd) {
         // Check if the item is already in the Inventory
         const existingItemIndex = saveData.Inventory.findIndex(item => item.id === itemId);
@@ -300,20 +290,21 @@ function addItemToInventory(saveData, itemId, newQuantity = 1) {
                 id: itemToAdd.id,
                 Name: itemToAdd.Name,
                 quantity: newQuantity,
+                color: itemToAdd.color,
                 quality: itemToAdd.quality
             });
         }
         // Call function to update the inventory display
         populateInventory(saveData, 1);
     } else {
-        console.error(`Item with id ${itemId} not found in ListOfAllItems.`);
+        console.error(`Item with id ${itemId} not found in Items.`);
     }
 }
 const effectHandlers = {
     Blinded: ([_, amount, element]) => { element.style.opacity = amount / 100; },
     pacified: () => {
             // not able to be agressief
-            let IsPacified = true;
+            character.applyDebuff(pacified, undefined, saveData, elementId);
         },
     Confusion: ([_, __, ___, Confused_Text, Confused_Title]) => {
         // change text to confused text
@@ -327,7 +318,7 @@ const effectHandlers = {
             textBlock : Confused_Title,
             elementId : '.Quest_Title',
         })
-        ButtonPressed(saveData, saveData.Choices_Possible_Confused);
+        ButtonRender(saveData, true); //  re-render buttons
     },
     Weakened : () => {},
     Slowed : () => {},
@@ -388,17 +379,17 @@ function navigateStory(saveData, { direction = 'next', level = 'scene'}) {
         const [safeChapter, safeScene] = saveData.LastSafeScene.split('_').map(Number);
         saveData.currentScene = saveData.LastSafeScene || "0_0";
         Object.keys(saveData.Choices_Made).forEach((chapterKey) => {
-        const chapterNum = Number(chapterKey);
-        if (chapterNum > safeChapter) {
-            saveData.Choices_Made[chapterKey] = [];
-        } else if (chapterNum === safeChapter) {
-            // Optional: trim choices from the same chapter
-            saveData.Choices_Made[chapterKey] = saveData.Choices_Made[chapterKey].slice(0, safeScene);
-        }
-    });
-    saveData.isDead = false;
-    saveData.deathReason = null;
-    saveData.AtDeathScreen = ''
+            const chapterNum = Number(chapterKey);
+            if (chapterNum > safeChapter) {
+                saveData.Choices_Made[chapterKey] = [];
+            } else if (chapterNum === safeChapter) {
+                // Optional: trim choices from the same chapter
+                saveData.Choices_Made[chapterKey] = saveData.Choices_Made[chapterKey].slice(0, safeScene);
+            }
+        });
+        saveData.isDead = false;
+        saveData.deathReason = null;
+        saveData.AtDeathScreen = ''
         clearButtonContent();
         Render_Scene(saveData, true);
         return;
@@ -425,6 +416,11 @@ function navigateStory(saveData, { direction = 'next', level = 'scene'}) {
         let currentIndex = sceneKeys.indexOf(scene);
         
         if (direction === 'next') {
+            if (!options.next_scene && options.next_scene !== undefined) {
+                // if its an end point only do the action if it exist and go no-where
+                if (options.action) performSceneAction(options.action, saveData);
+                return;
+            }
             if (currentIndex < sceneKeys.length - 1) {
                 // Move to the next scene
                 scene = options.next_scene? options.next_scene.split('_')[1] : sceneKeys[currentIndex + 1];
@@ -434,8 +430,13 @@ function navigateStory(saveData, { direction = 'next', level = 'scene'}) {
                 return navigateStory(saveData, { direction: 'next', level: 'chapter' });
             }
         } else if (direction === 'previous') {
-            if (currentIndex > 0) {
+            if (!options.next_scene && options.next_scene !== undefined) {
+                // if its an end point only do the action if it exist and go no-where
+                if (options.action) performSceneAction(options.action, saveData);
+                return;
+            } else if (options.next_scene && options.next_scene !== undefined) {
                 scene = options.next_scene? options.next_scene.split('_')[1] : sceneKeys[currentIndex - 1];
+                if (options.action) performSceneAction(options.action, saveData);
             } else {
                 return navigateStory(saveData, { direction: 'previous', level: 'chapter' });
             }
@@ -481,7 +482,7 @@ function previousChapter(saveData) {
     navigateStory(saveData, { direction: 'previous', level: 'chapter' });
 }
 function getItemDiscoveryText(id){
-    return saveData.ItemDiscoveryText.find(entry => entry.id === id);
+    return saveData.Items.find(entry => entry.id === id);
 }
 function characterMaker(saveData, lastChoiceIndex, value, valueS){
     //  Update class value
@@ -520,70 +521,64 @@ function characterMaker(saveData, lastChoiceIndex, value, valueS){
     })
     saveData.character_Description_Text_Final = Side_Menu2.innerHTML;
 }
-function performSceneAction(action, saveData) {
+function performSceneAction(actionObj, saveData) {
     // get chapter and scene
     const [ChapterStr, SceneStr] =  saveData.currentScene.split('_');
-    const Chapter = parseInt(ChapterStr);
-    const Scene = parseInt(SceneStr);
+    const SplashText_Final = saveData.Debuff_SpashText_Final
+    const SplashText = saveData.Debuff_SpashText;
+    const Effect_Applied = saveData.CurrentDebuff_Effects;
+    const Effect_Debuff = saveData.Debuff_Effects;
+    const Effect_Buff = saveData.Buff_Effects;
+    const Items = saveData.Items;
 
-    let SplashText_Final = saveData.Debuff_SpashText_Final
-    let SplashText = saveData.Debuff_SpashText;
-    let Effect_Applied = saveData.CurrentDebuff_Effects;
-    let Effect_Debuff = saveData.Debuff_Effects;
-    let Effect_Buff = saveData.Buff_Effects;
-    let Items = saveData.Items;
-
+    const [{ type, effect, strength, value, target, tag, show, textID, itemID, text, instaKill }] = actionObj;
     //  
-    const options = Object.values(saveData.scenes[saveData.currentScene].options).find(a => a.action === action);
+    const options = Object.values(saveData.scenes[saveData.currentScene].options).find(a => a.action === actionObj);
     const optionsBtnNum = options?.ButtonNumber;
     const ALT_options = Object.values(saveData.scenes[saveData.currentScene].ALT_options).find(BtnNum => BtnNum.ButtonNumber === optionsBtnNum);
-    
+    const ALT_Text = saveData.scenes[saveData.currentScene].ALT_Text;
+    const ALT_Name = saveData.scenes[saveData.currentScene].ALT_Name;
 
-    // get action command and attribute
-    const [actionCmd, actionAtr] =  action.split('/');
-    const actionAtrList =  actionAtr.split(',');
-    // do action 
-    // example: 'manageHiddenInfo/True,0,0/createElement/br'
-    switch (actionCmd) {
+    switch (type) {
         case 'characterMaker':
-            characterMaker(saveData, actionAtr[0], options?.ButtonText, ALT_options?.ButtonText)
+            characterMaker(saveData, SceneStr, options?.ButtonText, ALT_options?.ButtonText)
             break;
         case 'rested':
-            character.rested(actionAtr[0]);
+            character.rested(value);
             break;
         case 'DeBuffParentFunction':
-            if (actionAtrList.length >= 3) {
+            if (effect && strength && target) {
                 // 0 effect, 1 amount, 2 element, 3 ConfusedText, 4 ConfusedTitle
-                const effectName = actionAtrList[0]
-                const handler = effectHandlers[effectName];
-                const Confused_Text = saveData.storyLine_progress_Confused[ChapterStr][SceneStr]["sceneText"];
-                const Confused_Title = saveData.storyLine_progress_Confused[ChapterStr][SceneStr]["sceneTitle"];
-                const argsList = [...actionAtrList, Confused_Text, Confused_Title];
+                const handler = effectHandlers[effect];
+                const argsList = [ effect, strength, target, ALT_Text, ALT_Name ];
                 if (handler) handler(argsList);
                 else console.log("Unknown effect: " + effect);
             }
             break;
         case 'createElement':
-            main_section.appendChild(document.createElement(actionAtr[0]));
+            if (tag) {
+                main_section.appendChild(document.createElement(tag));
+            }
             break;
         case 'manageHiddenInfo':
-            if (actionAtrList.length >= 2) {
-                manageHiddenInfo(saveData, actionAtrList[0], actionAtrList[1],actionAtrList[2]);
+            if (show) {
+                manageHiddenInfo( saveData, show, textID, itemID );
             }
             break;
         case 'damageAndDeath':
-            if (actionAtrList.length >= 2) {
-                damageAndDeath(actionAtr[0], actionAtr[1], actionAtr[2]);
+            if (text && ( value || instaKill )) {
+                damageAndDeath( value, text, instaKill );
             }
             break;
     }
     // Handle chained actions if needed
-    if (actionAtrList.length > 1) {
-        for (let i = 1; i < actionAtrList.length; i++) {
-            const chainedAction = `${actionCmd}/${actionAtrList[i]}`;
-            performSceneAction(chainedAction, saveData);
+    if (actionObj.length > 1) {
+        for (let i = 1; i < actionObj.length; i++) {
+            const RemovedAction = actionObj.shift();
+            performSceneAction(actionObj, saveData);
         }
     }
+    // options.forEach(action => performSceneAction(action, saveData));
 }
 /**
  * Helper to know Story actions
