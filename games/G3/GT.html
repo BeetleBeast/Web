@@ -60,11 +60,11 @@
                 <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
                     <div class="Side-Influences_Bar Stress Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>            
-                <div class="Side-Influences_Titl Side-Menu_Class Side_Menu_Colapse InfluencesAll"><span class="TraumaTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
+                <div class="Side-Influences_Title Side-Menu_Class Side_Menu_Colapse InfluencesAll"><span class="TraumaTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
                 <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
                     <div class="Side-Influences_Bar Trauma Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>            
-                <div class="Side-Influences_Titl Side-Menu_Class Side_Menu_Colapse InfluencesAll"><span class="AddictionTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
+                <div class="Side-Influences_Title Side-Menu_Class Side_Menu_Colapse InfluencesAll"><span class="AddictionTitle Side-Menu_Class Side_Menu_Colapse"></span></div>
                 <div class="Side-Influences Side-Menu_Class Side_Menu_Colapse InfluencesAll">
                     <div class="Side-Influences_Bar Addiction Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>            
@@ -81,7 +81,7 @@
                     <div class="Side-Influences_Bar Control Side-Menu_Class Side_Menu_Colapse InfluencesAll"></div>
                 </div>
             </div>
-            <div id="Side-Menu5" class="Side-Menu_Class Side_Menu_Colapse">
+            <div class="Side-Menu5" class="Side-Menu_Class Side_Menu_Colapse">
                 <div class="bottom-links Side-Menu_Class Side_Menu_Colapse">
                     <a href="/index.html"><button class="settings Side-Menu_Class Side_Menu_Colapse">Exit</button></a>
                     <button type="button" class="settings Side-Menu_Class Side_Menu_Colapse" onclick="openSettings(1)">Load</button>
@@ -100,15 +100,8 @@
                 <div class="main">
                     <div class="main_section"></div>
                     <p class="second_section"></p>
-                    <canvas class="content-canvas" ref="contentCanvas"></canvas>
-                    <div class="startParentParent">
-                        <div class="startParent">
-                            <button type="button" onclick="startup(1)" id="Continue-Game" class="startscreen">continue</button>
-                            <button type="button" onclick="startup(2)" id="NewGame" class="startscreen">start</button>
-                            <button type="button" onclick="openSettings(1)" id="LoadGame" class="startscreen">load</button>
-                            <button type="button" onclick="openSettings(3)" id="Settings" class="startscreen">settings</button>
-                        </div>
-                    </div>
+                    <canvas class="content-canvas" id="gameMap" ref="contentCanvas"></canvas>
+                    <canvas class="map-canvas" id="gameMap2" ref="mapCanvas"></canvas>
                     <div class="choices_section">
                         <div class="choices_section_title"></div>
                         <br>
@@ -224,7 +217,10 @@
 </body>
 <script src="/games/G3/saveData.js"></script>
 <script src="/games/G3/saveData2.js"></script>
-<!--<script src="/games/G3/scripts.js"></script>-->
+<script src="./TextHandler.js"></script> <!--  script module for Text display for All-->
+<script src="./map.js"></script> <!-- script module for map inside GameScripts and story-->
+<script src="./QTE.js"></script> <!-- script module for QTE inside GameScripts and story-->
 <script src="/games/G3/GameScript.js"></script>
 <script src="./story.js"></script>
+<script src="./ActionEffectHandlers.js"></script> <!-- script module for effects inside story-->
 </html>

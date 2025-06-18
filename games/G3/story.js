@@ -6,32 +6,20 @@ function Render_Scene(saveData, isNew = false) {
     if ( isNew ) impromptuSave(saveData) /* save the game from latest version of saveData */
     saveData = JSON.parse(sessionStorage.getItem('TempLatestSave'));
 
-    const current_storyLine_progress = saveData.currentScene.split('_')[1] || 0;
-    const current_chapter_progress = saveData.currentScene.split('_')[0] || 0;
-    const current_title_progress = current_chapter_progress;
-    const DeathReason = saveData.DeathReason;
-    const Choices_Possible = saveData.scenes[saveData.currentScene].options; // its different
-    //const Buttons_section_title = saveData.scenes[i].ButtonTitle;
-    const Choices_Made = saveData.Choices_Made[current_chapter_progress];
-    const CurrentDebuffBar = saveData.Debuff_SpashText_Final;
-    const isDead = saveData.isDead;
-
-    const currentSceneText = saveData.scenes[saveData.currentScene].sceneText;
-    const currentSceneName = saveData.scenes[saveData.currentScene].sceneName;
-    const currentTitle = saveData.scenes[saveData.currentScene].chapterTitle;
-    const currentSectionTitle = saveData.scenes[saveData.currentScene].ButtonTitle;
-    
-    // --- UI Rendering ---
     // Render content in order
-    ButtonRender(saveData, false); // 1. Button's text , actions and visibility
-    manageHiddenInfo(saveData, false); // 2. Hide or show buttons
-    title_progress(currentTitle, current_title_progress); // 3. Title
-    scene_progress(currentSceneText, currentSceneName); // 4. Text content
-    section_title_progress(currentSectionTitle); // 5. button's title
-    character_Description(saveData, Choices_Made); // 6. Character description if applicable
-    Effect_Bar_progress(saveData, CurrentDebuffBar); // 7. Effect bar if applicable
+
+    // --- UI Rendering Main ---
+    ButtonRender(saveData, !saveData.CurrentDebuff_Effects.filter(effect => effect === 'confused')); // 1. Button's and teir Visibility, Text's Visibility, Item's Visibility and actions, 
+    populateText(saveData); // 2. Populate text in main section
+    // --- UI Rendering Side-Menu ---
+    // GameCicle // 3. day & night cicle
+    character_Description(saveData, saveData.Choices_Made[saveData.currentScene.split('_')[0] || 0]); // 4. Character description if applicable
+    Side_Menu3.dataset.visible =  saveData.isDead ? 'false' : 'true'; // 5. Side menu ( show or hide the effects (debuffs) bar )
+    Effect_Bar_progress(saveData, saveData.Debuff_SpashText_Final); // 6. Effect bar if applicable
+    // --- UI Rendering Map ---
+    if (saveData.currentScene.split('_')[0] >= 1) saveData.Map.forEach(MapList => CreateMap(MapList));
+    // --- UI Rendering Inventory ---
     populateInventory(saveData, 1); // 8. Inventory ( only first page )
-    Side_Menu3.dataset.visible = isDead ? 'false' : 'true'; // 9. Side menu ( show or hide the effects (debuffs) bar )
     //DisplayDebuffTextWithColors(saveData,)
     return saveData;
 }
@@ -45,9 +33,10 @@ function impromptuSave(saveData) {
         localStorage.setItem('SaveForest', JSON.stringify(SaveForest));
     }
 }
-function ButtonRender(saveData, ISALT = false) {
+function ButtonRender(saveData, ISALT = false, revealInfo = false) {
+    let FreshsaveData = JSON.parse(sessionStorage.getItem('TempLatestSave'));
     const container = document.querySelector('.choices_section_choices');
-    const buttonValues = getButtonValues(saveData, ISALT);
+    const buttonValues = getButtonValues(FreshsaveData, ISALT);
 
     // Clear previously created dynamic buttons (those beyond preset .Sh_1 to .Sh_7)
     container.querySelectorAll('div[class^="Sh_"]').forEach(btn => {
@@ -69,13 +58,14 @@ function ButtonRender(saveData, ISALT = false) {
             button.innerHTML = buttonValue.Text;
             button.style.display = 'inline-block';
 
-            const handler = ClickHandler(buttonValue.Value, saveData);
+            const handler = ClickHandler(buttonValue.Value, FreshsaveData);
             button.removeEventListener("click", button.handlerReference);
             button.addEventListener("click", handler);
             button.handlerReference = handler;
         }
     }
-    console.log('Buttons Rendered ' + buttonValues); // Logging the addition of event listener
+    manageHiddenInfo({saveData : FreshsaveData});
+    console.log('Buttons Rendered ' + toString(buttonValues)); // Logging the addition of event listener
 }
 /**
  * 
@@ -129,56 +119,106 @@ function ClickHandler(buttonValue, saveData) {
         }
     }
 }
-function manageHiddenInfo(saveData, revealInfo, HiddenTextID, ItemID) {
-    const current_storyLine = saveData.currentScene.split('_')[1];
-    const current_chapter = saveData.currentScene.split('_')[0];
+/**
+ * Manages the visibility and discovery of hidden game elements using a modern object parameter approach.
+ * Handles three main types of hidden content discovery mechanics with improved flexibility:
+ * 
+ * 1. **Hidden Buttons**: Toggles button visibility based on current state or explicit button data
+ * 2. **Hidden Text**: Reveals additional narrative content when triggered by specific conditions
+ * 3. **Hidden Items**: Discovers items, adds to inventory, and displays discovery feedback
+ * 
+ * @param {Object} params - Configuration object for hidden element management
+ * @param {Object} params.saveData - The main game save data object containing all game state
+ * @param {string|number} [params.TextID] - ID of hidden text to reveal (undefined = skip text discovery)
+ * @param {string|number} [params.ItemID] - ID of item to discover and add to inventory (undefined = skip item discovery)
+ * @param {Array<Object>} [params.Btn] - Array of button objects with BtnID and IsVisible properties for explicit control
+ * @param {number} params.Btn[].BtnID - Button identifier for DOM selection
+ * @param {boolean} params.Btn[].IsVisible - Current visibility state (will be toggled)
+ * 
+ * @description
+ * **Button Logic**: 
+ * - If Btn array provided: Toggles each button's visibility and updates save state
+ * - If no Btn array: Falls back to scene's existing hidden button data
+ * 
+ * **Text Discovery**: Reveals hidden narrative with blue styling, prevents duplicate reveals
+ * 
+ * **Item Discovery**: Adds to inventory with colored discovery text, prevents duplicates
+ * 
+ * @example
+ * // Toggle specific buttons
+ * manageHiddenInfo({
+ *   saveData,
+ *   Btn: [
+ *     { BtnID: 5, IsVisible: false },
+ *     { BtnID: 6, IsVisible: true }
+ *   ]
+ * });
+ * 
+ * // Discover hidden text
+ * manageHiddenInfo({ saveData, TextID: 'secret_passage' });
+ * 
+ * // Discover item
+ * manageHiddenInfo({ saveData, ItemID: 42 });
+ * 
+ * // Combined discovery
+ * manageHiddenInfo({ 
+ *   saveData, 
+ *   TextID: 'treasure_found', 
+ *   ItemID: 15,
+ *   Btn: [{ BtnID: 3, IsVisible: false }]
+ * });
+ */
+function manageHiddenInfo({
+    saveData, 
+    TextID, 
+    ItemID, 
+    Btn
+    }) {
     const itemDiscoveryText = getItemDiscoveryText(ItemID);
-    // Check if Buttons_Hidden data exists for the current chapter and story line
-    const Buttons_Hidden = saveData.Buttons_Hidden[current_chapter]?.[current_storyLine];
-    if (Buttons_Hidden) {
-        // Iterate over the hidden button values for the current scene
-        Buttons_Hidden.forEach(buttonValue => {
-            const button = document.querySelector('.Sh_' + buttonValue);
-            if(saveData.Uncoverded.HiddenButton[buttonValue]){
-                button.style.display = "block";
-                return;
-            }
-            if (button) {
-                // Set button display based on revealInfo condition
-                button.style.display = revealInfo ? "block" : "none";
-                saveData.Uncoverded.HiddenButton[buttonValue] = !!revealInfo;
-            }
-        });
-    } else {
-        console.log(`No hidden buttons defined for chapter ${current_chapter} and scene ${current_storyLine}`);
+    const FirstScanBtn = saveData.Uncoverded.HiddenButton.find(item => item.sceneID === saveData.scenes[saveData.currentScene].sceneID)
+    if (Btn || FirstScanBtn) {
+        Btn !== undefined ?
+            Btn.forEach(CountedBtn => {
+                const MakeVisible = CountedBtn.IsVisible === true ? false : true;
+                const button = document.querySelector('.Sh_' + CountedBtn.BtnID);
+                if (button) {
+                    button.style.display = MakeVisible ? "block" : "none";
+                    saveData.Uncoverded.HiddenButton.find(item => item.sceneID === saveData.scenes[saveData.currentScene].sceneID)[CountedBtn.BtnID] = MakeVisible;
+                }
+            }) :
+            document.querySelector('.Sh_' + FirstScanBtn.BtnID).style.display = FirstScanBtn.Show ? "block" : "none"
     }
-    if(HiddenTextID){
-        const Text_Hidden = saveData.HiddenStoryLine[current_chapter][current_storyLine];
-        if(!saveData.Uncoverded.HiddenText[HiddenTextID]) {
+    if(TextID !== undefined){
+        if(!saveData.Uncoverded.HiddenText[TextID]) {
             addTextFullFeature({
                 elementId : '.main_section',
-                textBlock : Text_Hidden[HiddenTextID],
+                textBlock : saveData.scenes[saveData.currentScene]?.ALT_Text['Hidden'],
+                printImmediately: true,
+                tempColorDuration:  1,
+                addSpan : true,
                 replace : false,
                 textAndColorArray : { word : 'ALL', color : 'blue'},
             })
-            saveData.Uncoverded.HiddenText[HiddenTextID] = true;
-        }else{
-            //main_section.textContent += Text_Hidden[HiddenTextID];
+            saveData.Uncoverded.HiddenText[TextID] = true;
         }
     }
-    if(ItemID){
+    if(ItemID !== undefined){
         //  add the item to the inventory and show the text if it is not already discovered
         if (itemDiscoveryText && !saveData.Uncoverded.Items[ItemID]) {
             addItemToInventory(saveData, ItemID, 1);
             addTextFullFeature({
                 elementId : '.main_section',
                 textBlock : itemDiscoveryText.Discoverytext,
+                printImmediately: true,
+                tempColorDuration:  1,
+                addSpan : true,
                 replace : false,
                 textAndColorArray : { word : 'ALL', color : itemDiscoveryText.color},
             })
             saveData.Uncoverded.Items[ItemID] = true;
         }
     }
+    return saveData;
 }
 function damageAndDeath(amount, method, instaKill = false) {
     const isDead = instaKill || character.Health - amount <= 0;
@@ -300,47 +340,6 @@ function addItemToInventory(saveData, itemId, newQuantity = 1) {
         console.error(`Item with id ${itemId} not found in Items.`);
     }
 }
-const effectHandlers = {
-    Blinded: ([_, amount, element]) => { element.style.opacity = amount / 100; },
-    pacified: () => {
-            // not able to be agressief
-            character.applyDebuff(pacified, undefined, saveData, elementId);
-        },
-    Confusion: ([_, __, ___, Confused_Text, Confused_Title]) => {
-        // change text to confused text
-        console.log('activate confusion')
-        addTextFullFeature({
-            textBlock : Confused_Text,
-            elementId : '.main_section',
-            speed : 35,
-        })
-        addTextFullFeature({
-            textBlock : Confused_Title,
-            elementId : '.Quest_Title',
-        })
-        ButtonRender(saveData, true); //  re-render buttons
-    },
-    Weakened : () => {},
-    Slowed : () => {},
-    // Confused : () => {},
-    Silenced : () => {},
-    Crippled : () => {},
-    Vulnerable : () => {},
-    Disarmed : () => {},
-    Diseased : () => {},
-    Fear : () => {},
-    Stunned : () => {},
-    Hexed : () => {},
-    Drained : () => {},
-    Sapped : () => {},
-    Marked : () => {},
-    Burning : () => {},
-    Chilled : () => {},
-    Rooted : () => {},
-    Cursed : () => {},
-    Fatigue : () => {},
-    MAXeffect : () => {}
-};
 function section_title_progress(current_section_title) {
     // choices_section_title.innerHTML = current_section_title;// print current scection title
     addTextFullFeature({
@@ -349,6 +348,19 @@ function section_title_progress(current_section_title) {
         printImmediately: true,
     })
     console.log('current_section_title', current_section_title);
+}
+// TODO: make it more dynamic, so it can handle more than 1 text block
+function populateText(saveData) {
+    //  populate text in main section
+    const current_title_progress = saveData.currentScene.split('_')[0] || 0;
+    const currentSceneText = saveData.scenes[saveData.currentScene].sceneText;
+    const currentSceneName = saveData.scenes[saveData.currentScene].sceneName;
+    const currentTitle = saveData.scenes[saveData.currentScene].chapterTitle;
+    const currentSectionTitle = saveData.scenes[saveData.currentScene].ButtonTitle;
+    title_progress(currentTitle, current_title_progress);
+    scene_progress(currentSceneText, currentSceneName);
+    section_title_progress(currentSectionTitle); // 5. button's title
+
 }
 function title_progress(current_title,current_title_progress) {
     addTextFullFeature({
@@ -434,16 +446,13 @@ function navigateStory(saveData, { direction = 'next', level = 'scene'}) {
                 // if its an end point only do the action if it exist and go no-where
                 if (options.action) performSceneAction(options.action, saveData);
                 return;
-            } else if (options.next_scene && options.next_scene !== undefined) {
-                scene = options.next_scene? options.next_scene.split('_')[1] : sceneKeys[currentIndex - 1];
-                if (options.action) performSceneAction(options.action, saveData);
-            } else {
-                return navigateStory(saveData, { direction: 'previous', level: 'chapter' });
             }
-        }
+            scene = options.next_scene? options.next_scene.split('_')[1] : sceneKeys[currentIndex - 1];
+            chapter = options.next_scene? options.next_scene.split('_')[0] : chapter;
+            if (options.action) performSceneAction(options.action, saveData);
 
+        }
         saveData.currentScene = `${chapter}_${scene}`;
-        saveData.current_storyLine_progress = scene;
     }
 
     if (level === 'chapter') {
@@ -453,13 +462,11 @@ function navigateStory(saveData, { direction = 'next', level = 'scene'}) {
         } else if (direction === 'previous' && chapter > 0) {
             chapter -= 1;
             scene = 0;
+            console.warn('NOT Used anymore')
         } else {
             console.log('No more chapters in this direction.');
             return;
         }
-
-        saveData.current_chapter_progress = chapter;
-        saveData.current_storyLine_progress = scene;
         saveData.currentScene = `${chapter}_${scene}`;
     }
 
@@ -482,7 +489,8 @@ function previousChapter(saveData) {
     navigateStory(saveData, { direction: 'previous', level: 'chapter' });
 }
 function getItemDiscoveryText(id){
-    return saveData.Items.find(entry => entry.id === id);
+    const ID = Number(id);
+    return saveData.Items.find(entry => entry.id === ID);
 }
 function characterMaker(saveData, lastChoiceIndex, value, valueS){
     //  Update class value
@@ -531,52 +539,42 @@ function performSceneAction(actionObj, saveData) {
     const Effect_Buff = saveData.Buff_Effects;
     const Items = saveData.Items;
 
-    const [{ type, effect, strength, value, target, tag, show, textID, itemID, text, instaKill }] = actionObj;
-    //  
     const options = Object.values(saveData.scenes[saveData.currentScene].options).find(a => a.action === actionObj);
     const optionsBtnNum = options?.ButtonNumber;
     const ALT_options = Object.values(saveData.scenes[saveData.currentScene].ALT_options).find(BtnNum => BtnNum.ButtonNumber === optionsBtnNum);
-    const ALT_Text = saveData.scenes[saveData.currentScene].ALT_Text;
-    const ALT_Name = saveData.scenes[saveData.currentScene].ALT_Name;
-
-    switch (type) {
-        case 'characterMaker':
-            characterMaker(saveData, SceneStr, options?.ButtonText, ALT_options?.ButtonText)
-            break;
-        case 'rested':
-            character.rested(value);
-            break;
-        case 'DeBuffParentFunction':
-            if (effect && strength && target) {
-                // 0 effect, 1 amount, 2 element, 3 ConfusedText, 4 ConfusedTitle
-                const handler = effectHandlers[effect];
-                const argsList = [ effect, strength, target, ALT_Text, ALT_Name ];
-                if (handler) handler(argsList);
-                else console.log("Unknown effect: " + effect);
-            }
-            break;
-        case 'createElement':
-            if (tag) {
-                main_section.appendChild(document.createElement(tag));
-            }
-            break;
-        case 'manageHiddenInfo':
-            if (show) {
-                manageHiddenInfo( saveData, show, textID, itemID );
-            }
-            break;
-        case 'damageAndDeath':
-            if (text && ( value || instaKill )) {
-                damageAndDeath( value, text, instaKill );
-            }
-            break;
+    const ALT_Text = saveData.scenes[saveData.currentScene]?.ALT_Text?.['default'];
+    const ALT_Name = saveData.scenes[saveData.currentScene]?.ALT_Name;
+    
+    const { type, effect, strength, value, target, tag, textID, itemID, Btn, text, instaKill } = actionObj[0];
+    //
+    
+    // effectHandlers, ActionHandlers
+    const handler = ActionHandlers[type];
+    if (handler) {
+        handler({
+            saveData,
+            SceneStr,
+            effect,
+            strength,
+            value,
+            target,
+            tag,
+            textID,
+            itemID,
+            Btn,
+            text,
+            instaKill,
+            optionsText: options?.ButtonText,
+            altOptionsText: ALT_options?.ButtonText,
+            ALT_Text,
+            ALT_Name,
+        })
+    } else {
+        console.warn("Unknown action type: " + type);
     }
     // Handle chained actions if needed
     if (actionObj.length > 1) {
-        for (let i = 1; i < actionObj.length; i++) {
-            const RemovedAction = actionObj.shift();
-            performSceneAction(actionObj, saveData);
-        }
+        performSceneAction(actionObj.slice(1), saveData);
     }
     // options.forEach(action => performSceneAction(action, saveData));
 }

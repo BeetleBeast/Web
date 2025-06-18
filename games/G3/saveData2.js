@@ -7,7 +7,6 @@ let saveData = {
     deathReason: null,
     LastSafeScene: "0_0", // 0_1 for chapter 0, scene 1
     Player_character : undefined, // Was Player
-    Buttons : [1,2,3,4,5,6,7],
     currentScene: "0_0", // 0_1 for chapter 0, scene 1
     safeScenes : {
         "0_0": true,
@@ -197,8 +196,7 @@ let saveData = {
             sceneID: 8,
             ButtonTitle: "",
             options: {
-                1: {ButtonNumber: 1, ButtonText: "Previously"},
-                2: {ButtonNumber: 7, ButtonText: "Next"}
+                1: {ButtonNumber: 7, ButtonText: "Next"}
             },
             ALT_options: {}
         },
@@ -302,9 +300,17 @@ let saveData = {
             sceneName: "Mossy1",
             sceneText: "As you traverse the mossy passage, you stumble upon a hidden alcove where a delicate flower blooms amidst the verdant foliage. Its petals shimmer with an otherworldly glow, emitting a faint, melodic hum. The flower seems to beckon to you, offering a sense of peace and serenity amidst the chaos of the cave.",
             ALT_Name: "Finding an exit?",
-            ALT_Text: "You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.",
+            ALT_Text: {
+                default : "As you traverse the mossy passage, you stumble upon a hidden alcove where a delicate flower blooms amidst the verdant foliage. Its petals shimmer with an otherworldly glow, emitting a faint, melodic hum. The flower seems to beckon to you, offering a sense of peace and serenity amidst the chaos of the cave.",
+                Hidden : "~You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.",
+                Confusion : ""
+            },
             sceneID: 16,
             ButtonTitle: "What shall you do",
+            Buttons_Hidden: [{
+                ButtonNumber: 2,
+                Default: 'hidden',
+            }],
             options: {
                 1: {ButtonNumber: 1, ButtonText: "Leave the area undisturbed", next_scene: "1_1"},
                 2: {ButtonNumber: 2, ButtonText: "Investigate the hidden alcove.", next_scene: "1_12"},
@@ -348,7 +354,11 @@ let saveData = {
                     {
                         type: 'manageHiddenInfo',
                         show: 'true',
-                        textID: '0'
+                        textID: 0,
+                        Btn: [{
+                            BtnID: 2,
+                            IsVisible: false,
+                        }]
                     }],
                 }
             },
@@ -462,15 +472,23 @@ let saveData = {
             ALT_Text: null,
             sceneID: 22,
             ButtonTitle: "With careful hands, you consider the small, intricately carved wooden box half-buried in the moss. You have the option to:",
+            Buttons_Hidden: [{
+                ButtonNumber: 6,
+                Default: 'visible',
+            }],
             options: {
                 1: {ButtonNumber: 1, ButtonText: "Leave the box undisturbed and leave the alcove", next_scene: "1_6"},
                 2: {ButtonNumber: 6, ButtonText: "Pick up the box and examine its contents",
                     next_scene: false,
                     action: [{
                         type: 'manageHiddenInfo',
-                        show: 'undefined',
-                        textID: 'undefined',
-                        itemID: '4'
+                        show: 'true',
+                        textID: 1,
+                        itemID: 4,
+                        Btn: [{
+                            BtnID: 6,
+                            IsVisible: true,
+                        }]
                     }],
                 }
             },
@@ -504,7 +522,50 @@ let saveData = {
         2 : {},
         3 : {},
         4 : {},
-    },      
+    },
+    Canvas : {
+        //  chapterID_sceneID : {  canvasID : [  canvas elements ]  }
+        PlayerPosition : '',// chapterID_sceneID
+        map : [
+            {
+                sceneID: "0_0",
+                canvasID: "canvas0",
+            }
+        ],
+    },
+    Map : [
+        /*
+        {
+            canvasElement: '.content-canvas',
+            canvasPosition: undefined,
+            nodes: [
+                {status: 'available', id: 1, title: 'Home', x: 50, y: 50},
+                {status: 'completed', id: 2, title: 'Home Street', y: 350, x: 250},
+                {status: 'locked', id: 3, title: 'Park', x: 600, y: 350}
+            ],
+            playerProgress: 'scene',
+            isClickable: true
+        },
+        */
+        {
+            canvasElement: '.map-canvas',
+            canvasPosition: {width: 100, height: 1000},
+            nodes: [
+                {id: 0, title: 'Bottomless-lake', status: 'locked', x: 50, y: 980},
+                {id: 1, title: 'Cavern', status: 'completed', x: 50, y: 880},
+                {id: 2, title: 'Base', status: 'available', x: 50, y: 780},
+                {id: 3, title: 'Broken World', status: 'locked', x: 50, y: 680},
+                {id: 4, title: 'Dunguon', status: 'locked', x: 50, y: 580},
+                {id: 5, title: 'Step-up', status: 'locked', x: 50, y: 480},
+                {id: 6, title: 'New-World', status: 'locked', x: 50, y: 380},
+                {id: 7, title: 'Sky-Breaker', status: 'locked', x: 50, y: 280},
+                {id: 8, title: '9-sky', status: 'locked', x: 50, y: 180},
+                {id: 9, title: 'Heaven?', status: 'locked', x: 50, y: 80}
+            ],
+            playerProgress: 'chapter',
+            isClickable: false
+        }
+    ],
     Choices_Made : {
         Death : [],
         0 : [], 
@@ -522,25 +583,22 @@ let saveData = {
         //  type of hidden piece : {    ID of said piece    }
         HiddenText : {
             0 : false,
+            1 : true,
         },
-        HiddenButton : {
-            2 : false,
-        },
+        HiddenButton : [
+            {
+                BtnID: 2,
+                Show: false,
+                sceneID: 16,
+            },{
+                BtnID: 6,
+                Show: true,
+                sceneID : 22,
+            }
+        ],
         Items : {
             0 : false,
             4 : false,
-        },
-    },
-    HiddenStoryLine : {
-        //  chapter : {     scene : {   Id : `PlaceHolder`}}
-        1 : {
-            6 : {0 : `You have discovered a hidden alcove nestled within the mossy passage, its entrance partially obscured by verdant foliage.`},
-        },
-    },
-    Buttons_Hidden : {
-        //  chapter number : {  scene number  : [  button numbers wich chould be hidden ]  }
-        1 : {
-            6 : [2],
         },
     },
     character_Description_Text: {

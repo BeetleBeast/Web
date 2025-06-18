@@ -110,6 +110,29 @@
 }
 
 /*--Main-Canvas--*/
+.content-canvas {
+
+}
+.map-canvas {
+	background-color: var(--DarkBlue);
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: hidden; /* Prevents overflow of content */
+}
+#tooltip {
+	/* Tooltip styles */
+	position: absolute;
+	padding: 4px 8px;
+	background: rgba(0, 0, 0, 0.8);
+	color: white;
+	font-size: 12px;
+	border-radius: 4px;
+	pointer-events: none;
+	visibility: hidden;
+	z-index: 1000;
+}
+
 body{
 	position: relative;
     display: flex;
@@ -224,7 +247,7 @@ body{
 	white-space: pre-wrap;
 }
 .choices_section{
-	position: relative;
+	position: absolute;
     color: var(--DefaultColor0);
 	z-index: auto;
 	text-align: center;
@@ -232,8 +255,12 @@ body{
 	padding-bottom: 20px;
 
 	height: 5em;
-	
 	bottom: 0;
+	left: 0;
+	right: 0;
+	width: fit-content;
+	margin: 0 auto;
+
 
 	background-color: var(--mainColor)
 }
@@ -242,7 +269,7 @@ body{
 	text-align: center;
 	justify-content: center; /* Center content horizontally */
 	align-items: center; /* Center content vertically */
-	flex-wrap: wrap; /* Allow wrapping of buttons if needed */
+	/* flex-wrap: wrap; /* Allow wrapping of buttons if needed */
 	gap: 30px; /* Spacing between buttons */
 	color: var(--DefaultColor0);
 	background-color: var(--mainColor)
@@ -289,7 +316,7 @@ body{
 }
 /*	Inventory	*/
 #inventory {
-    position: relative;
+    position: absolute;
 	margin-bottom: auto 12em;
     width: 100%; /* Full width */
 	height: 100%;
@@ -299,6 +326,7 @@ body{
     box-sizing: border-box;
     z-index: 999; /* Ensure it's on top of other content */
     overflow: auto; /* Allow scrolling if inventory content exceeds height */
+	left: 10em;
 }
 
 .pages {
@@ -411,7 +439,7 @@ body{
     flex-direction: column;
     justify-content: center; /* this will create space between the elements */
 	color: var(--DefaultColor0);
-	margin-top: auto 15px;
+	margin-bottom: 15px;
 }
 .Side-Menu3 {
 	/*background-color: var(--side-Color);*/
@@ -604,11 +632,11 @@ body{
 	visibility: visible;
 	opacity: 1;
 }
-  .Side-more-ul[data-visible=true] > * {
+.Side-more-ul[data-visible=true] > * {
 	visibility: visible;
 	opacity: 1;
 }
-  .Save-ul[data-visible=true] > * {
+.Save-ul[data-visible=true] > * {
 	visibility: visible;
 	opacity: 1;
 }

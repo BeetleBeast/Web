@@ -52,13 +52,69 @@ window.onload = function () {
     LoadedSaves()
     setEventListener()
 };
+// Function to create the initial elements and content for the game
+function setStartUpContnent() {
+    const main = document.querySelector('.main');
+    const startParentParent = document.createElement('div');
+    const startParent = document.createElement('div');
+    const continueBtn = document.createElement('button');
+    const newGameBtn = document.createElement('button');
+    const loadGameBtn = document.createElement('button');
+    const settingsBtn = document.createElement('button');
 
+    startParentParent.classList.add('startParentParent');
+
+    startParent.classList.add('startParent');
+    startParent.dataset.visible = 'true';
+    
+    continueBtn.classList.add('startscreen');
+    continueBtn.textContent = 'Continue';
+    continueBtn.id = 'Continue-Game';
+    continueBtn.type = 'button';
+    continueBtn.addEventListener('click', () => startup(1));
+
+    
+    newGameBtn.classList.add('startscreen');
+    newGameBtn.textContent = 'start';
+    newGameBtn.id = 'NewGame';
+    newGameBtn.type = 'button';
+    newGameBtn.addEventListener('click', () => startup(2));
+    
+    loadGameBtn.classList.add('startscreen');
+    loadGameBtn.textContent = 'load';
+    loadGameBtn.id = 'LoadGame';
+    loadGameBtn.type = 'button';
+    loadGameBtn.addEventListener('click', () => openSettings(1));
+
+    settingsBtn.classList.add('startscreen');
+    settingsBtn.textContent = 'settings';
+    settingsBtn.id = 'Settings';
+    settingsBtn.type = 'button';
+    settingsBtn.addEventListener('click', () => openSettings(3));
+
+
+    startParent.append( continueBtn, newGameBtn, loadGameBtn, settingsBtn );
+    startParentParent.appendChild(startParent);
+    main.appendChild(startParentParent);
+
+    SetLoadingScreen(false)
+}
+// Clean up and remove start screen
+function removeStartUpContent() {
+    const main = document.querySelector('.main');
+    const startParentParent = main.querySelector('.startParentParent');
+
+    if (startParentParent) {
+        startParentParent.remove();
+    }
+}
 
 // Function to start up or load the game
 function startup(userConfirmed) {
+    SetLoadingScreen(true);
     userConfirmed === 1 ? console.log('Continue story') : console.log('start new story');
     Title.innerHTML = 'Gatcha tower';
-    startScreen.dataset.visible = 'true';
+    if (userConfirmed !== 1 && userConfirmed !== 2) setStartUpContnent();
     Side_Menu4.dataset.visible = 'false';
     let SaveForest = JSON.parse(localStorage.getItem('SaveForest')|| '{}');
     let TempLatestSave = JSON.parse(sessionStorage.getItem('TempLatestSave'));
@@ -66,24 +122,35 @@ function startup(userConfirmed) {
     if ( TempLatestSave == null) {
         if (userConfirmed === 1) {
             console.log("User confirmed to load last save.");
-            startScreen.dataset.visible = 'false';
-            //load_S.dataset.visible = 'true';
+            removeStartUpContent();
             loadLatestGame(0);
         }else if(userConfirmed === 2){
             console.log("User declined to load last save. Starting a new game.");
-            startScreen.dataset.visible = 'false';
+            removeStartUpContent();
             newGame();
         }
     }else{
         console.log('checking last Session')
+        removeStartUpContent();
         loadLatestGame(1)
     }
 }
+/**
+ * Loads and displays saved game data from localStorage.
+ * 
+ * Iterates through 6 possible save sections, updating the UI with save information:
+ * - Enables/disables load game buttons based on save availability
+ * - Displays save name and last saved timestamp
+ * - Highlights the most recently saved game in green
+ * - Handles color coding for different save types (e.g., 'Main' save in yellow)
+ * 
+ * @returns {void} Updates the DOM with save information, logs save details to console
+ */
 function LoadedSaves() {
     const saveForestString = localStorage.getItem('SaveForest');
     let lastbigesttime = 0;
     let LatestSpan = null;
-    if (!saveForestString) console.log('SaveForest does not exist');
+    if (!saveForestString) { console.warn('SaveForest does not exist'); return; };
     //let saveData = {}; // Initialize saveData object
     let SaveForest = JSON.parse(saveForestString);
     for (let i = 0; i < 6; i++) {
@@ -93,8 +160,6 @@ function LoadedSaves() {
             document.querySelector(`.Section${i}_load_game`).disabled = false;
             document.querySelector(`.Section${i}_load_game`).classList.remove('disable');
             sectionSpanName.textContent = `${saveData['name']} | ${saveData['LastSaved']}`;
-            console.log('Game data loaded from localStorage('+i+').');
-            
             let formattedTime = saveData['LastSaved'].replace(/[/:| ]/g, '');
             let timeAsNumber = parseInt(formattedTime);
 
@@ -104,19 +169,29 @@ function LoadedSaves() {
                 lastbigesttime = timeAsNumber;
                 LatestSpan = sectionSpanName;
             }
-            
-            
-
         } else {
             sectionSpanName.innerHTML = ''; // Clear empty slots
             document.querySelector(`.Section${i}_load_game`).disabled = true;
             document.querySelector(`.Section${i}_load_game`).classList.add('disable');
-            console.log('No save for '+i+' available');
         }
     }
+    console.log('Game data loaded from localStorage with ' + ((Object.keys(SaveForest).filter(key => key.includes('section'))).length - 1) + ' saves. | [ ' + 
+        Object.keys(SaveForest).filter(key => key.includes('section'))+ ' ].'
+    );
     if ( LatestSpan) LatestSpan.style.color = 'green';
     
 }
+/** 
+ * Loads and displays saved game data from localStorage.
+ * 
+ * Iterates through 6 possible save sections, updating the UI with save information:
+ * - Enables/disables load game buttons based on save availability
+ * - Displays save name and last saved timestamp
+ * - Highlights the most recently saved game in green
+ * - Handles color coding for different save types (e.g., 'Main' save in yellow)
+ * 
+ * @returns {void} Updates the DOM with save information, logs save details to console
+*/
 function setEventListener(){
     // Add event listener for Side Menu Colapse Button click
     Side_Menu_ColapseButton.addEventListener("click", Side_Menu_ColapseButtonClickHandler);
@@ -133,7 +208,6 @@ function setEventListener(){
 
 // Function to load the game from localStorage
 function loadLatestGame(userConfirmed) {
-    startScreen.dataset.visible = 'false';// 0 = continue == local  1 = load == session
     try {
         let SaveForest = JSON.parse(localStorage.getItem('SaveForest') || '{}');
         let TempLatestSave = JSON.parse(sessionStorage.getItem('TempLatestSave') || '{}');
@@ -148,13 +222,16 @@ function loadLatestGame(userConfirmed) {
         ResetEffectBarToDefault(saveData);
         // Call the mergeDefaultProperties function to ensure saveData has all expected properties
         mergeDefaultProperties(saveData);
+        SetLoadingScreen(false)
         Render_Scene(saveData, true);
     } catch (error) {
         if(error == TypeError){
             console.error('Error in SaveData:', error);
+            SetLoadingScreen(false)
             Render_Scene(saveData, true);
         }else{
             console.error('Unkown Error by parsing SaveForest:', error);
+            SetLoadingScreen(false)
             newGame(); // Fallback to starting a new game if loading fails
         }
         
@@ -184,10 +261,73 @@ function newGame(){
 
     // start story
     ResetEffectBarToDefault(saveData)
+    SetLoadingScreen(false)
     Render_Scene(saveData, true);
 
 }
 
+function SetLoadingScreen(StartLoadingScreen, EndLoadingScreen){
+    // Set the loading screen
+    if(StartLoadingScreen === undefined) {
+        let shouldLoadingScreenBeShown = EndLoadingScreen === true;
+        return shouldLoadingScreenBeShown;
+    }
+    if (StartLoadingScreen) {
+        showLoader();
+    }
+    if (!StartLoadingScreen) {
+        hideLoader();
+    }
+}
+// Function to create and show a spinning loader
+function showLoader() {
+    // Create loader container
+    const loaderContainer = document.createElement('div');
+    loaderContainer.id = 'gameLoader';
+    loaderContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    `;
+
+    // Create spinner element
+    const spinner = document.createElement('div');
+    spinner.style.cssText = `
+        width: 50px;
+        height: 50px;
+        border: 5px solid #333;
+        border-top: 5px solid #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    `;
+
+    // Add CSS animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    loaderContainer.appendChild(spinner);
+    document.body.appendChild(loaderContainer);
+}
+// Function to hide the loader
+function hideLoader() {
+    const loader = document.getElementById('gameLoader');
+    if (loader) {
+        loader.remove();
+    }
+}
 
 class Player {
     constructor({ Name, Race, Gender, Age, Profession, Level, Strength, Intelligence, Charisma, Agility, Luck, Health, MaxHealth }) {
@@ -367,8 +507,90 @@ let character = new Player({
     character.rested(amount);
 */
 
-
-
+// Example usage of runQTESequence function
+/*
+runQTESequence(3, 2000, 'Space', 3, [{
+    DefaultbarWidth : 500,
+    DefaultbarHeight : 30,
+    qtewrapper : {
+        width : '100%',
+        textAlign : 'center',
+        marginTop : '100px',
+        position: 'absolute',
+        // left: '100',
+        top: '200',
+        right: '150',
+        // bottom: '500',
+        transform: 'rotate(45deg)',
+    },
+    bar : {
+        position : 'relative',
+        width : '500px',
+        height : '30px',
+        backgroundColor : '#333',
+        margin : '0 auto',
+        borderRadius : '15px',
+        overflow : 'hidden',
+    },
+    perfectZone : {
+        position : 'absolute',
+        left : '250px',
+        width : '100px',
+        height : '100%',
+        backgroundColor : 'green',
+        opacity : '0.6',
+    },
+    successZone : {
+        position : 'absolute',
+        left : '275px',
+        width : '50px',
+        height : '100%',
+        backgroundColor : 'lime',
+        opacity : 1,
+    },
+    marker : {
+        position : 'absolute',
+        width : '10px',
+        height : '100%',
+        backgroundColor : 'white',
+        left : '0px',
+        transition : 'none',
+    },
+    resultText : {
+        fontSize : '24px',
+        marginTop : '20px',
+    },
+},{
+    DefaultbarWidth : 500,
+    DefaultbarHeight : 30,
+    qtewrapper : {
+        width : '100%',
+        textAlign : 'center',
+        marginTop : '100px',
+        position: 'absolute',
+        // left: '100',
+        top: '200',
+        right: '150',
+        // bottom: '500',
+        transform: 'rotate(60deg)',
+    },
+},{
+        DefaultbarWidth : 500,
+    DefaultbarHeight : 30,
+    qtewrapper : {
+        width : '100%',
+        textAlign : 'center',
+        marginTop : '100px',
+        position: 'absolute',
+        // left: '100',
+        top: '200',
+        right: '150',
+        // bottom: '500',
+        transform: 'rotate(-60deg)',
+    },
+}
+]);
+*/
 // Function to toggle visibility of the inventory
 function toggleInventory() {
     const inventory = document.getElementById('inventory');
@@ -475,194 +697,6 @@ function DisplayDebuffTextWithColors(saveData, EffectId, BarLength) {
     }
     saveData.Debuff_SpashText_Final = Side_Menu4.innerHTML; // Save the final text of the debuff splash text
 }
-// Utility: Formats the text for spaces and breaks (~ = double break)
-function formatText(text) {
-    let formatted = '';
-    let spaceIndex = 0;
-
-    for (let i = 0; i < text.length; i++) {
-        let char = text[i];
-
-        if (char === ' ') {
-            formatted += ' ';
-            spaceIndex++;
-        } else if (spaceIndex >= 20 && (char === '.' || char === ',') && text[i + 1]) {
-            formatted += char + '<br>';
-            spaceIndex = 0;
-        } else if (char === '~') {
-            formatted += '<br><br>';
-            spaceIndex = 0;
-        } else {
-            formatted += char;
-        }
-    }
-    return formatted;
-}
-// utility:Set element Color
-function setElementColor(element, elementId, defaultColor) {
-    const SaveForest =  JSON.parse(localStorage.getItem('SaveForest'));
-    const saveData = SaveForest['section0'];
-    element.style.color = saveData.isDead && elementId !== '.Quest_Title' ? 'red' : defaultColor;
-}
-// utility: print immediately
-async function handlePrintImmediately(element, textBlock, elementId) {
-    element.innerHTML = formatText(textBlock);
-    isCurrentlyPrinting[elementId] = false;
-    clearCursor();
-}
-// utility: Print Charackters Slowly
-async function PrintCharSlow({ textBlock, elementId, element, speed, cursor, currentTypingToken, token, output = ''}) {
-    const formattedText = formatText(textBlock);
-    for (let i = 0; i < formattedText.length; i++) {
-        if (currentTypingToken[elementId] !== token) {
-            // If player clicked while printing
-            handlePrintImmediately( element, textBlock );
-            return;
-        }
-        let char = formattedText[i];
-        output += char;
-        element.innerHTML = output;
-        element.appendChild(cursor); // Append cursor after each character
-        // add a longer pause after dot or comma
-        const delayDuration = (char === '.' || char === ',') ? 400 : speed;
-        // typingSound.currentTime = 0; // Reset sound to start
-        // typingSound.play().catch(() => {}); // Play typing sound
-        await new Promise(resolve => setTimeout(resolve, delayDuration)); // Delay next letter
-    }
-    if ( cursor ) element.removeChild(cursor); // Remove cursor after typing
-}
-// utility: word coloring
-function applyWordColoring(element, textBlock, textAndColorArray) {
-    let remainingText = textBlock;
-    for (let i = 0; i < textAndColorArray.word.length; i++) {
-        const word = textAndColorArray.word[i];
-        const color = textAndColorArray.color[i];
-        const index = remainingText.indexOf(word);
-        if (index !== -1) {
-            element.append(document.createTextNode(remainingText.substring(0, index)));
-            const span = document.createElement("span");
-            span.textContent = word;
-            span.style.color = color;
-            element.append(span);
-            remainingText = remainingText.substring(index + word.length);
-        }
-    }
-    if (remainingText.length > 0) {
-        element.append(document.createTextNode(remainingText));
-    }
-}
-// utility: delay
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-// utility: clear Cursor
-function clearCursor() {
-    document.querySelectorAll('.fake-cursor').forEach(c => c.remove());
-}
-// Utility: Create a fake blinking cursor
-function createFakeCursor() {
-    const cursor = document.createElement('span');
-    cursor.classList.add('fake-cursor');
-    cursor.innerHTML = '|';
-    /*
-    if (!document.getElementById('fake-cursor-style')) {
-        const style = document.createElement('style');
-        style.id = 'fake-cursor-style';
-        style.textContent = `
-            .fake-cursor {
-                display: inline-block;
-                animation: blink 1s step-start infinite;
-                color: inherit;
-            }
-            @keyframes blink {
-                50% { opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    */
-    return cursor;
-}
-// Core Function to simulate slow typing effect for text
-async function addTextFullFeature({
-    elementId,
-    textBlock,
-    textAndColorArray = {word : [], color : []}, // array of { word: string, color: string }
-    speed = 200, 
-    printImmediately = false, 
-    replace = false,
-    tempColorDuration = 0,
-    defaultColor = 'azure',
-}) {
-    /* TODO
-    ** 1. add sound to it just start when isCurrentlyPrinting is true and it will work
-    */
-    const token = {};
-    let cursor;
-    currentTypingToken[elementId] = token;
-    const element = document.querySelector(elementId);
-    if (replace) element.innerHTML = ''; // Clear the content for replacement
-    const SaveForest =  JSON.parse(localStorage.getItem('SaveForest'));
-    const saveData = SaveForest['section0'];
-
-    // Clear old cursors
-    clearCursor();
-    // Set text color based on death
-    setElementColor( element, elementId, defaultColor );
-
-    
-
-    // If printing immediately or slow typing disabled or previous typing is the same
-    if (printImmediately || saveData.Settings.SlowTyping === false || ( previousText[elementId] === textBlock )) {
-        handlePrintImmediately( element, textBlock, elementId );
-        clearCursor();
-        return;
-    }
-
-    // Prepare for typing
-    element.innerHTML = '';
-    isCurrentlyPrinting[elementId] = true;
-
-    if (!printImmediately) {
-        cursor = createFakeCursor(); // Create a fake cursor
-        if (textAndColorArray.color.length == 0) {
-            element.appendChild(cursor)
-            // const typingSound = new Audio('path/to/typing-sound.mp3'); // Replace with actual sound file path when implemented
-        }
-    }
-
-    // If the word "ALL" is found in the textAndColorArray, set the color to textBlock instead of the word
-    const allColorEntry = textAndColorArray.word == 'ALL';
-    if (allColorEntry) element.style.color = allColorEntry.color;
-
-
-    // handle text and color array when it is not empty or "ALL" is not found
-    if (textAndColorArray.word.length > 0 && textAndColorArray.word[0] !== 'ALL') {
-        // Handle text and color array
-        applyWordColoring( element, textBlock, textAndColorArray );
-        return;
-    }
-    // Slow typing character by character
-    await PrintCharSlow({ textBlock, elementId, element, speed, cursor, currentTypingToken, token })
-    
-
-
-    
-    
-    // Typing finished, clear token
-    if (currentTypingToken[elementId] === token) {
-        previousText[elementId] = textBlock;
-        delete currentTypingToken[elementId];
-        isCurrentlyPrinting[elementId] = false;
-    }
-
-    // Reset color after a delay if tempColorDuration is greater than 0
-    if(tempColorDuration > 0){
-        setTimeout(() => {
-            element.style.color = defaultColor;
-        }, tempColorDuration);
-    }
-}
 function saveGame(NumSection){
     currentdate = new Date();
     const datetime = currentdate.getDate() + "/" + (currentdate.getMonth()+1)+ "/" +
@@ -701,7 +735,7 @@ function loadGame(NumSection) {
     }
     if (CurrentPageNumber == 1) {
         console.log('Loading game id=0', NumSection);
-        startScreen.dataset.visible = 'false';
+        removeStartUpContent();
         openSettings(1);
         clearButtonContent();
         ResetEffectBarToDefault(saveData);
@@ -753,6 +787,7 @@ function Side_Menu_ColapseButtonClickHandler(){
     const Side_Menu_Colapse = document.querySelector('.Side_Menu_Colapse');
     const arrowChanger = document.getElementById('arrowChanger');
     const hr = document.querySelectorAll('hr');
+    const button = Side_Menu_Colapse.querySelectorAll('button');
     const SideMenus = [Side_Menu_Colapse, Side_Menu2, Side_Menu3, Side_Menu4, Side_Menu5, ...hr]
     if (Side_Menu.style.width == '15em' || Side_Menu.style.width == "") {
         Side_Menu.style.width = '35px';

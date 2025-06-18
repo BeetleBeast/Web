@@ -46,3 +46,64 @@ Balanced Challenge: Provide a balanced level of challenge to keep players engage
 Atmospheric Sound and Music: Even in a text-based game, ambient sound effects or music can enhance the atmosphere and emotional impact of key moments.
 
 Iterate and Playtest: Continuously refine and playtest your game. Solicit feedback from players to identify areas for improvement and polish the experience.
+
+
+
+make multiple type of text
+also in savedata
+
+each chapter is a floor or a secret floor
+
+
+
+TODO: add enemy's
+
+TODO Multiple Text
+
+TODO: loot screen with inventory
+
+FIXME at 1_12 remove Button Text and add it to main
+
+Player Controller
+
+Input handling (keyboard, mouse, touch).
+
+Movement logic and interaction.
+
+Enemy/AI System
+
+Behavior trees or state machines for non-player characters.
+
+Spawning, pathfinding (A*), targeting logic.
+
+Combat or Interaction System
+
+Hit detection, damage calculation, cooldowns.
+
+Spell/weapon logic if applicable.
+
+Inventory and Equipment System
+
+Managing items, pickups, gear, consumables.
+
+Economy/Currency System
+
+Gold/coins, premium currency, shop system.
+
+Pricing, balance, and sinks.
+
+Quests or Objectives System
+
+Tracks progress, offers goals, and rewards.
+
+Can be linear, branching, or open-ended.
+
+Leveling / Progression System
+
+XP, skill trees, stat upgrades, unlockables.
+
+Save/Load System
+
+LocalStorage, IndexedDB, or cloud sync.
+
+Autosave and manual save functionality.
